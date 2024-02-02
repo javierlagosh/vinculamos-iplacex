@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="text-center" style="border-radius: 50px; margin: 0 auto; margin-top:5%;">
-                        <img src="{{ asset('/img/logo-CFT-PUCV-con-catolica.png') }}" alt="Imagen" class="img-fluid">
+                        <img src="{{ asset('/img/logo-iplacex.svg') }}" alt="Imagen" class="img-fluid">
                     </div>
                 </div>
             </div>

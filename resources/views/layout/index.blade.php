@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="{{ asset('/css/custom.css') }}">
 
                                                                     {{-- TODO: IMAGEN DE LA PESTAÑA --}}
-    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('/img/logochico.jpg') }}" />
+    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('/img/logo-iplacex.svg') }}" />
 
 </head>
 
@@ -62,13 +62,11 @@
                         </li>
                     </ul>
                 </div>
-                <ul class="navbar-nav navbar-right" style="margin-top: 0px;">
-                    <div class="sidebar-brand">
-                        <a href="javascript:void(0)"> <img alt="image" src="{{ asset('/img/logo-CFT-PUCV-con-catolica.png') }}" {{-- Logo esquina superior derecha --}}
-                                class="header-logo" style="transform: scale(0.25);transform-origin: right;position: fixed;
-                                top: -90px;
-                                right: 25px;" />
-                            <span class="logo-name" style="font-size: 15px;"></span>
+                <ul class="navbar-nav navbar-right">
+                    <div class="sidebar-brand text-right">
+                        <a href="javascript:void(0)">
+                            <img alt="image" src="{{ asset('/img/logo-iplacex.svg') }}" class="header-logo img-fluid"
+                                style="max-width: 100%; height: auto; width: 3cm" />
                         </a>
                     </div>
                 </ul>

@@ -20,7 +20,7 @@
 
 <body>
     <div style="text-align: center;">
-        <img src="https://cftpucv.vinculamos.org/img/logo-CFT-PUCV-con-catolica.png" alt="logo cftpucv" style="width:293px;heigh:81px;">
+        <img src="https://cftpucv.vinculamos.org/img/img/logo-iplacex.svg" alt="logo cftpucv" style="width:293px;heigh:81px;">
       </div>
 
     {{-- {{dd($odsValues)}} --}}

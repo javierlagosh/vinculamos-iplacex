@@ -49,12 +49,12 @@
                     data-feather="command"></i><span>Parámetros</span></a>
             <ul class="dropdown-menu">
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.sedes")}}">Sedes</a></li>
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.escuelas")}}">Áreas</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.escuelas")}}">Escuelas</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.carreras")}}">Carreras</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Contribución</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitosaccion")}}">Ambitos Acción</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.componente")}}">Componentes</a></li>
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tipoact")}}">Tipos de actividad</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tipoact")}}">Instrumentos</a></li>
                 {{-- <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.programas")}}">Programas</a></li> --}}
                 <li style="padding-bottom: 1px;line-height: 15px;margin-top:5px;"><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.convenios")}}">Documento de colaboración</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.socios")}}">Socios Comunitarios</a></li>

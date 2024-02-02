@@ -41,7 +41,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h4>Listado de Tipos de actividad</h4>
+                            <h4>Listado de Instrumentos</h4>
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#modalCrearTipoact"><i class="fas fa-plus"></i> Nuevo Tipo de
