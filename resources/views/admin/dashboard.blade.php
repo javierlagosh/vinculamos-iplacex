@@ -1075,7 +1075,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card card">
                         <div class="card-header">
@@ -1084,15 +1084,15 @@
                                 <select class="form-control select2" id="select_componente" name="select_componente"
                                     onchange="cargarComponente()" style="width: 100%">
                                     <option value="" disabled style="font-size: 40%">Seleccione
-                                        componente ...</option>
+                                        componente ...</option> --}}
                                     {{-- <option value="all">Todas las sedes</option> --}}
-                                    @forelse ($tcomponentes as $comp)
+                                    {{-- @forelse ($tcomponentes as $comp)
                                         <option value="{{ $comp->comp_codigo }}">
                                             {{ $comp->comp_nombre }}</option>
                                     @empty
                                         <option value="-1">No existen registros</option>
-                                    @endforelse
-                                </select>
+                                    @endforelse --}}
+                                {{-- </select>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1114,10 +1114,10 @@
                             </div>
 
                             {{-- <div id="componentes_quest"></div> --}}
-                        </div>
+                        {{-- </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
     </section>

@@ -51,7 +51,7 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.sedes")}}">Sedes</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.escuelas")}}">Escuelas</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.carreras")}}">Carreras</a></li>
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Contribución</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Impactos</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitosaccion")}}">Ambitos Acción</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.componente")}}">Componentes</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tipoact")}}">Instrumentos</a></li>
@@ -76,14 +76,14 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ods")}}">Agenda 2030</a></li>
             </ul>
         </li>
-        <li class="dropdown">
+        {{-- <li class="dropdown">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="bar-chart-2"></i><span>Análisis de datos</span></a>
-        </li>
-        <li class="dropdown">
+        </li> --}}
+        {{-- <li class="dropdown">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="arrow-left-circle"></i><span>Extracción de datos</span></a>
-        </li>
+        </li> --}}
         <li class="dropdown">
             <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown"><i data-feather="users"></i><span>Usuarios</span></a>
             <ul class="dropdown-menu">

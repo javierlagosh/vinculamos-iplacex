@@ -79,7 +79,7 @@
                         <li class="dropdown">
                             <a href="{{route('auth.cerrar')}}" class="nav-link">
                                 <i data-feather="external-link" style="color:red;">exit_to_app</i><span
-                                    style="color:red;">Cerrar sessión</span></a>
+                                    style="color:red;">Cerrar sesión</span></a>
                         </li>
                         {{-- <li class="{{
                                 Route::is('superadmin.categoriacl.listar') ||

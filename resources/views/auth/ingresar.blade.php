@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/reset.password.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/estilos.css') }}">
-    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('/img/logochico.jpg') }}" />
+    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('/img/logo-iplacex.svg') }}" />
     {{-- Logito de la pestaña --}}
 
 </head>
 
 <body
 {{-- url({{ asset('/img/fonologin.jpg') }}) --}}
-    style=" background-color: #515151;border-color: #515151; background:  url({{ asset('/img/fonologin.jpg') }})  ;background-size:cover; background-repeat:repeat;background-attachment: fixed;background-position: center;">
+    style=" background-color: #515151;border-color: #515151; background:  url({{ asset('/img/iplacex.jpg') }})  ;background-size:cover; background-repeat:repeat;background-attachment: fixed;background-position: center;">
     <section class="ftco-section" style="margin-right: 1%; display: flex; align-items:center;">
         <div class="container" style="background: rgba(255,255,255,0.50);  border-radius: 50px; width:500px;">
             <div class="row">

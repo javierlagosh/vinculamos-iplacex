@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>VINCULAMOS CFTPUCV</title>
+    <title>VINCULAMOS IPLACEX</title>
     <!-- General CSS Files -->
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/social.css') }}" rel="stylesheet">
@@ -109,7 +109,7 @@
                     <li class="dropdown">
                         <a href="{{ route('auth.cerrar') }}" class="nav-link">
                             <i data-feather="external-link" style="color:red;"></i><span style="color:red;">Cerrar
-                                sessión</span></a>
+                                sesión</span></a>
                     </li>
                     </ul>
                 </aside>
