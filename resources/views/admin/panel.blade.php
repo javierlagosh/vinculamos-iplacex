@@ -71,7 +71,7 @@
         </li>
         <li class="dropdown">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                    data-feather="star"></i><span>Contribuciones <br> Externas</span></a>
+                    data-feather="star"></i><span>Impactos Externos</span></a>
             <ul class="dropdown-menu">
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ods")}}">Agenda 2030</a></li>
             </ul>

@@ -59,23 +59,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        $contador = 0;
-                                        ?>
-
                                         @foreach ($tipoact as $tiac)
-                                            <?php
-                                            $contador = $contador + 1;
-                                            ?>
                                             <tr>
-                                                <td>{{ $contador }}</td>
+                                                <td>{{ $tiac->tiac_codigo }}</td>
                                                 <td>{{ $tiac->tiac_nombre }}</td>
 
                                                 <td>
-                                                    <a href="javascript:void(0)" class="btn btn-icon btn-danger"
-                                                        onclick="eliminarTipoact({{ $tiac->tiac_codigo }})"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Eliminar grupos de interés"><i class="fas fa-trash"></i></a>
 
 
                                                     <a href="javascript:void(0)" class="btn btn-icon btn-warning"
@@ -83,6 +72,10 @@
                                                         data-toggle="tooltip" data-placement="top" title="Editar"><i
                                                             class="fas fa-edit"></i></a>
 
+                                                    <a href="javascript:void(0)" class="btn btn-icon btn-danger"
+                                                        onclick="eliminarTipoact({{ $tiac->tiac_codigo }})"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Eliminar grupos de interés"><i class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -127,7 +120,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Componente asociado</label>
                             <div class="input-group">
                                 <select class="form-control @error('componente') is-invalid @enderror" id="componente"
@@ -146,22 +139,23 @@
                                     </div>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label for="mecanismos">Mecanismos asociados</label>
                             <div class="input-group">
                                 <select name="mecanismos[]" id="mecasnimos" class="form-control select2" style="width: 100%"
                                     multiple>
                                     @forelse ($mecanismos as $mecanismo)
-                                        <option value="{{$mecanismo->meca_codigo}}" {{ collect(old('mecanismos'), [])->contains($mecanismo->meca_codigo) ? 'selected' : '' }}>
-                                        {{ $mecanismo->meca_nombre }}</option>
+                                        <option value="{{ $mecanismo->meca_codigo }}"
+                                            {{ collect(old('mecanismos'), [])->contains($mecanismo->meca_codigo) ? 'selected' : '' }}>
+                                            {{ $mecanismo->meca_nombre }}</option>
                                     @empty
                                         <option value="">No hay registros...</option>
                                     @endforelse
                                 </select>
                             </div>
                         </div>
-                        <label style="display: block; text-align: center; width: 100%;">METAS POR SEDE</label>
+                        {{-- <label style="display: block; text-align: center; width: 100%;">METAS POR SEDE</label>
                         <div class="row">
                             @foreach ($sedes as $sede)
                                 <div class="col-6 col-md-6 col-lg-6">
@@ -185,7 +179,7 @@
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
+                        </div> --}}
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary waves-effect">Guardar</button>
@@ -231,7 +225,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>Componente asociado</label>
                                 <div class="input-group">
                                     <select class="form-control @error('componente') is-invalid @enderror" id="componente"
@@ -252,7 +246,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label for="mecanismos">Mecanismos asociados</label>
                                 <div class="input-group">
@@ -269,8 +263,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <label style="display: block; text-align: center; width: 100%;">METAS POR SEDE</label>
-                            <div class="row">
+                            {{-- <label style="display: block; text-align: center; width: 100%;">METAS POR SEDE</label> --}}
+                            {{-- <div class="row">
                                 @foreach ($sedes as $sede)
                                     <div class="col-6 col-md-6 col-lg-6">
                                         <div class="form-group">
@@ -304,7 +298,7 @@
                                         </div>
                                     </div>
                                 @endforeach
-                            </div>
+                            </div> --}}
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
@@ -334,7 +328,7 @@
                     </div>
                     <div class="modal-body text-center">
                         <i class="fas fa-ban text-danger" style="font-size: 50px; color"></i>
-                        <h6 class="mt-2">El impacto dejará de existir dentro del sistema. <br> ¿Desea continuar
+                        <h6 class="mt-2">El instrumento dejará de existir dentro del sistema. <br> ¿Desea continuar
                             de todos
                             modos?</h6>
                         <input type="hidden" id="tiac_codigo" name="tiac_codigo" value="">
@@ -357,14 +351,14 @@
         function editarTipoact(tiac_codigo) {
             $('#modalEditartiac-' + tiac_codigo).modal('show');
         }
-    </script>
 
-    <script>
         function eliminartiac(tiac_codigo) {
             $('#tiac_codigo').val(tiac_codigo);
             $('#modalEliminatiacram').modal('show');
         }
+    </script>
 
+    {{-- <script>
         function editartiac(tiac_codigo) {
             $('#modalEditartiacramas-' + tiac_codigo).modal('show');
         }
@@ -408,7 +402,7 @@
             const inputMetaEgresados = document.querySelector('#div_egresados input');
             inputMetaEgresados.value = '';
         }
-    </script>
+    </script> --}}
 
 
 

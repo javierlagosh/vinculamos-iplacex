@@ -295,6 +295,7 @@ Route::middleware('verificar.admin')->group(function () {
     // Route::post('admin/iniciativas/obtener-escuelas',[IniciativasController::class,'escuelasBySede']);
     Route::post('admin/iniciativas/obtener-escuelas/paso2', [IniciativasController::class, 'escuelasBySedesPaso2']);
     Route::post('admin/iniciativas/obtener-actividades', [IniciativasController::class, 'actividadesByMecanismos']);
+    Route::post('admin/iniciativas/obtener-mecanismos', [IniciativasController::class, 'mecanismoByActividades']);
     Route::post('admin/iniciativas/obtener-socio/paso2', [IniciativasController::class, 'sociosBySubgrupos']);
     Route::post('admin/iniciativas/obtener-pais', [IniciativasController::class, 'paisByTerritorio']);
     Route::post('admin/iniciativas/obtener-comunas', [IniciativasController::class, 'comunasByRegiones']);

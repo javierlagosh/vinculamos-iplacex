@@ -57,7 +57,7 @@ class IniciativasController extends Controller
     {
         $iniciativas = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', 'iniciativas.meca_codigo')
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
-            ->leftjoin('componentes','componentes.comp_codigo','tipo_actividades.comp_codigo')
+            ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
             ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
@@ -74,7 +74,7 @@ class IniciativasController extends Controller
                 // DB::raw('GROUP_CONCAT(DISTINCT carreras.care_nombre SEPARATOR ", ") as carreras'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             )
-            ->groupBy('iniciativas.inic_codigo','componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado') // Agregamos inic_creado al GROUP BY
+            ->groupBy('iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado') // Agregamos inic_creado al GROUP BY
             ->orderBy('inic_creado', 'desc'); // Ordenar por fecha de creación formateada en orden descendente
         // ->where('iniciativas.inic_anho','2023')
 
@@ -239,25 +239,25 @@ class IniciativasController extends Controller
             )
             ->where('iniciativas.inic_codigo', $inic_codigo)
             ->first();
-            //TODO: FIXEAR PARA QUE MUESTRE LOS ODS CORRESPONDIENTES Y NO REPETIDOS
-            $odsValues = PivoteOds::join('ods', 'pivote_ods.id_ods', '=', 'ods.id_ods')
+        //TODO: FIXEAR PARA QUE MUESTRE LOS ODS CORRESPONDIENTES Y NO REPETIDOS
+        $odsValues = PivoteOds::join('ods', 'pivote_ods.id_ods', '=', 'ods.id_ods')
             ->join('metas_inic', 'metas_inic.inic_codigo', '=', 'pivote_ods.inic_codigo')
             ->where('pivote_ods.inic_codigo', '=', $inic_codigo)
             ->select('pivote_ods.inic_codigo', 'pivote_ods.id_ods', 'ods.nombre_ods', 'metas_inic.desc_meta', 'metas_inic.fundamento')
             ->orderBy('pivote_ods.id_ods') // Ordenar por la columna id_ods
             ->get()
             ->unique('id_ods');
-            // dd($odsValues);
+        // dd($odsValues);
 
-            //Con la inic_codigo obtener el fundamento de la tabla fundamento_inic
-            // $fundamentos = FundamentoInic::select('fund_ods')->where('inic_codigo', $inic_codigo)->get();
+        //Con la inic_codigo obtener el fundamento de la tabla fundamento_inic
+        // $fundamentos = FundamentoInic::select('fund_ods')->where('inic_codigo', $inic_codigo)->get();
 
-            //Con la inic_codigo obtener las metas de la tabla metas_inic
-            $metas = MetasInic::select('*')->where('inic_codigo', $inic_codigo)->get();
-            //Con la inic_codigo obtener las metas de la tabla metas_inic
-            // $metas = MetasInic::where('inic_codigo', $inic_codigo)
-            // ->orderByRaw('CAST(meta_ods AS DECIMAL(10,2)) ASC')
-            // ->get();
+        //Con la inic_codigo obtener las metas de la tabla metas_inic
+        $metas = MetasInic::select('*')->where('inic_codigo', $inic_codigo)->get();
+        //Con la inic_codigo obtener las metas de la tabla metas_inic
+        // $metas = MetasInic::where('inic_codigo', $inic_codigo)
+        // ->orderByRaw('CAST(meta_ods AS DECIMAL(10,2)) ASC')
+        // ->get();
 
 
         $pdf = Pdf::loadView('admin.iniciativas.pdf', compact('iniciativa', 'inic_codigo', 'odsValues', 'metas'));
@@ -724,21 +724,21 @@ class IniciativasController extends Controller
         $odsMetasDescValues = $request->ods_metas_desc_values ?? [];
         $fundamentoOds = $request->ods_fundamentos_values ?? [];
 
-         //Eliminar valores nulos de los arreglo
+        //Eliminar valores nulos de los arreglo
         $odsValues = array_filter($odsValues, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         $odsMetasValues = array_filter($odsMetasValues, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         $odsMetasDescValues = array_filter($odsMetasDescValues, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         $fundamentoOds = array_filter($fundamentoOds, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         // Eliminar duplicados de $fundamentoOds
@@ -806,12 +806,13 @@ class IniciativasController extends Controller
         return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
     }
 
-    public function saveODS(Request $request, $inic_codigo){
+    public function saveODS(Request $request, $inic_codigo)
+    {
         //Guardar en la tabla pivote_ods, los ods seleccionados en el arreglo, junto al $inic_codigo
         $odsValues = $request->ods_values ?? [];
         //Eliminar valores nulos del arreglo
         $odsValues = array_filter($odsValues, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         foreach ($odsValues as $ods) {
@@ -825,19 +826,20 @@ class IniciativasController extends Controller
         return redirect()->route('admin.iniciativas.detalles', $inic_codigo);
     }
 
-    public function mostrarOds($inic_codigo){
+    public function mostrarOds($inic_codigo)
+    {
         //Obtener las id para los ODS registrados en la tabla pivote_ods
         $ods = pivoteOds::select('id_ods')->where('inic_codigo', $inic_codigo)->get();
         //Con la ID obtener desde la tabla ODS, el nombre del ods que corresponde
-        $odsValues = Ods::select('id_ods','nombre_ods')->whereIn('id_ods', $ods)->get();
+        $odsValues = Ods::select('id_ods', 'nombre_ods')->whereIn('id_ods', $ods)->get();
 
         //Con la inic_codigo obtener el fundamento de la tabla fundamento_inic
         // $fundamentos = FundamentoInic::select('fund_ods')->where('inic_codigo', $inic_codigo)->get();
 
         //Con la inic_codigo obtener las metas de la tabla metas_inic
         $metas = MetasInic::where('inic_codigo', $inic_codigo)
-        ->orderByRaw('CAST(meta_ods AS DECIMAL(10,2)) ASC')
-        ->get();
+            ->orderByRaw('CAST(meta_ods AS DECIMAL(10,2)) ASC')
+            ->get();
         // dd($metas);
 
 
@@ -891,13 +893,13 @@ class IniciativasController extends Controller
         // dd($iniciativaData);
 
         $odsData = DB::table('pivote_ods')
-        ->join('ods', 'pivote_ods.id_ods', '=', 'ods.id_ods')
-        ->where('pivote_ods.inic_codigo', $inic_codigo)
-        ->select(
-            'ods.id_ods',
-            'ods.nombre_ods'
-        )
-        ->get();
+            ->join('ods', 'pivote_ods.id_ods', '=', 'ods.id_ods')
+            ->where('pivote_ods.inic_codigo', $inic_codigo)
+            ->select(
+                'ods.id_ods',
+                'ods.nombre_ods'
+            )
+            ->get();
 
         $metasData = DB::table('pivote_ods')
             ->join('metas_inic', 'pivote_ods.inic_codigo', '=', 'metas_inic.inic_codigo')
@@ -1110,28 +1112,28 @@ class IniciativasController extends Controller
         // Eliminar registros existentes
 
         $odsValues = array_filter($odsValues, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         $odsMetasValues = array_filter($odsMetasValues, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         $odsMetasDescValues = array_filter($odsMetasDescValues, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         $fundamentoOds = array_filter($fundamentoOds, function ($value) {
-            return $value!==null;
+            return $value !== null;
         });
 
         // dd($odsMetasValues);
         //Verifica si viene en request existe el campo ods_values, ods_metas_values, ods_metas_desc_values, ods_fundamentos_values tienen valores asignados, si no los tienen no se actualizan
-        if(empty($odsValues) && empty($odsMetasValues) && empty($odsMetasDescValues) && empty($fundamentoOds)){
-        // if(empty($request->ods_values) && empty($request->ods_metas_values) && empty($request->ods_metas_desc_values) && empty($request->ods_fundamentos_values)){
+        if (empty($odsValues) && empty($odsMetasValues) && empty($odsMetasDescValues) && empty($fundamentoOds)) {
+            // if(empty($request->ods_values) && empty($request->ods_metas_values) && empty($request->ods_metas_desc_values) && empty($request->ods_fundamentos_values)){
             // dd('estoy aca');
             return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se actualizaron correctamente');
-        }else{
+        } else {
             // dd('estoy aqui');
 
             //Verifica si existen registros con el inic_codigo en la tabla pivote_ods y metas_inic, si existen los elimina
@@ -1572,6 +1574,15 @@ class IniciativasController extends Controller
             ->where('mecanismos_actividades.meca_codigo', '=', $request->mecanismo)
             ->get();
         return response()->json($actividades);
+    }
+
+    public function mecanismoByActividades(Request $request)
+    {
+        $mecanismos = MecanismosActividades::select('mecanismos.meca_codigo', 'mecanismos.meca_nombre')
+            ->join('mecanismos', 'mecanismos.meca_codigo', '=', 'mecanismos_actividades.meca_codigo')
+            ->where('mecanismos_actividades.tiac_codigo', '=', $request->actividad)
+            ->get();
+        return response()->json($mecanismos);
     }
 
     public function paisByTerritorio(Request $request)
