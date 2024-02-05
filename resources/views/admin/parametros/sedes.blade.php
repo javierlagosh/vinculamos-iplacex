@@ -8,25 +8,21 @@
                     <div class="row">
                         <div class="col-3"></div>
                         <div class="col-6">
-                            @if (
-                                $errors->has('sede_nombre') ||
-                                $errors->has('sede_meta_estudiantes') ||
-                                $errors->has('sede_meta_docentes')
-                                )
-                            <div class="alert alert-warning alert-dismissible show fade mb-4 text-center">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                    @if ($errors->has('sede_nombre'))
-                                        <strong>{{ $errors->first('sede_nombre') }}</strong><br>
-                                    @endif
-                                    @if ($errors->has('sede_meta_estudiantes'))
-                                        <strong>{{ $errors->first('sede_meta_estudiantes') }}</strong><br>
-                                    @endif
-                                    @if ($errors->has('sede_meta_docentes'))
-                                        <strong>{{ $errors->first('sede_meta_docentes') }}</strong><br>
-                                    @endif
+                            @if ($errors->has('sede_nombre') || $errors->has('sede_meta_estudiantes') || $errors->has('sede_meta_docentes'))
+                                <div class="alert alert-warning alert-dismissible show fade mb-4 text-center">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        @if ($errors->has('sede_nombre'))
+                                            <strong>{{ $errors->first('sede_nombre') }}</strong><br>
+                                        @endif
+                                        @if ($errors->has('sede_meta_estudiantes'))
+                                            <strong>{{ $errors->first('sede_meta_estudiantes') }}</strong><br>
+                                        @endif
+                                        @if ($errors->has('sede_meta_docentes'))
+                                            <strong>{{ $errors->first('sede_meta_docentes') }}</strong><br>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
                             @endif
 
                             @if (Session::has('exitoSede'))
@@ -141,7 +137,7 @@
                             @enderror
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <a class="btn btn-primary" data-toggle="collapse" href="#div_iniciativas"
@@ -290,7 +286,7 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         {{-- <div class="form-group">
                             <label>Meta Socios</label>
@@ -373,9 +369,8 @@
                                             <i class="fas fa-map-marker-alt"></i>
                                         </div>
                                     </div>
-                                    <input type="text" class="form-control" id="direccion"
-                                        name="direccion" value="{{ $sede->sede_direccion }}"
-                                        autocomplete="off">
+                                    <input type="text" class="form-control" id="direccion" name="direccion"
+                                        value="{{ $sede->sede_direccion }}" autocomplete="off">
                                 </div>
                             </div>
                             {{-- <div class="form-group">
@@ -385,7 +380,7 @@
                                 </div>
                             </div> --}}
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label>Meta Iniciativas</label>
@@ -396,8 +391,8 @@
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="meta_iniciativas"
-                                                name="meta_iniciativas" value="{{ $sede->sede_meta_iniciativas }}" placeholder="NO APLICA"
-                                                autocomplete="off">
+                                                name="meta_iniciativas" value="{{ $sede->sede_meta_iniciativas }}"
+                                                placeholder="NO APLICA" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -412,8 +407,8 @@
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="meta_estudiantes"
-                                                name="meta_estudiantes" value="{{ $sede->sede_meta_estudiantes }}" placeholder="NO APLICA"
-                                                autocomplete="off">
+                                                name="meta_estudiantes" value="{{ $sede->sede_meta_estudiantes }}"
+                                                placeholder="NO APLICA" autocomplete="off">
                                         </div>
                                         @error('meta_estudiantes')
                                             <div class="text-danger">{{ $message }}</div>
@@ -433,8 +428,8 @@
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="meta_docentes"
-                                                name="meta_docentes" value="{{ $sede->sede_meta_docentes }}" placeholder="NO APLICA"
-                                                autocomplete="off">
+                                                name="meta_docentes" value="{{ $sede->sede_meta_docentes }}"
+                                                placeholder="NO APLICA" autocomplete="off">
                                         </div>
                                         @error('meta_docentes')
                                             <div class="text-danger">{{ $message }}</div>
@@ -452,8 +447,8 @@
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="meta_socios"
-                                                name="meta_socios" value="{{ $sede->sede_meta_socios }}" placeholder="NO APLICA"
-                                                autocomplete="off">
+                                                name="meta_socios" value="{{ $sede->sede_meta_socios }}"
+                                                placeholder="NO APLICA" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -470,8 +465,8 @@
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="meta_beneficiarios"
-                                                name="meta_beneficiarios" value="{{ $sede->sede_meta_beneficiarios }}" placeholder="NO APLICA"
-                                                autocomplete="off">
+                                                name="meta_beneficiarios" value="{{ $sede->sede_meta_beneficiarios }}"
+                                                placeholder="NO APLICA" autocomplete="off">
                                         </div>
                                         @error('meta_beneficiarios')
                                             <div class="text-danger">{{ $message }}</div>
@@ -488,12 +483,12 @@
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="meta_egresados"
-                                                name="meta_egresados" value="{{ $sede->sede_meta_egresados }}" placeholder="NO APLICA"
-                                                autocomplete="off">
+                                                name="meta_egresados" value="{{ $sede->sede_meta_egresados }}"
+                                                placeholder="NO APLICA" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
@@ -542,58 +537,60 @@
         function editarSede(sede_codigo) {
             $('#modalEditarsedes-' + sede_codigo).modal('show');
         }
+
+        function eliminarsede(sede_codigo) {
+            $('#sede_codigo').val(sede_codigo);
+            $('#modalEliminasederam').modal('show');
+        }
     </script>
 
-<script>
-    function eliminarsede(sede_codigo) {
-        $('#sede_codigo').val(sede_codigo);
-        $('#modalEliminasederam').modal('show');
-    }
+    {{-- <script>
 
-    function editarsede(sede_codigo) {
-        $('#modalEditarsederamas-' + sede_codigo).modal('show');
-    }
 
-    function limpiarInputSocio() {
-        const inputMetaSocios = document.querySelector('#div_socios input');
-        inputMetaSocios.value = '';
-    }
+        function editarsede(sede_codigo) {
+            $('#modalEditarsederamas-' + sede_codigo).modal('show');
+        }
 
-    function limpiarInputIni() {
-        const inputMetaIniciativas = document.querySelector('#div_iniciativas input');
-        inputMetaIniciativas.value = '';
-    }
+        function limpiarInputSocio() {
+            const inputMetaSocios = document.querySelector('#div_socios input');
+            inputMetaSocios.value = '';
+        }
 
-    function limpiarInputCarre() {
-        const inputMetaCarreras = document.querySelector('#div_carreras input');
-        inputMetaCarreras.value = '';
-    }
+        function limpiarInputIni() {
+            const inputMetaIniciativas = document.querySelector('#div_iniciativas input');
+            inputMetaIniciativas.value = '';
+        }
 
-    function limpiarInputAsig() {
-        const inputMetaAsignatura = document.querySelector('#div_asignaturas input');
-        inputMetaAsignatura.value = '';
-    }
+        function limpiarInputCarre() {
+            const inputMetaCarreras = document.querySelector('#div_carreras input');
+            inputMetaCarreras.value = '';
+        }
 
-    function limpiarInputEstu() {
-        const inputMetaEstudiantes = document.querySelector('#div_estudiantes input');
-        inputMetaEstudiantes.value = '';
-    }
+        function limpiarInputAsig() {
+            const inputMetaAsignatura = document.querySelector('#div_asignaturas input');
+            inputMetaAsignatura.value = '';
+        }
 
-    function limpiarInputDoce() {
-        const inputMetaDocentes = document.querySelector('#div_docentes input');
-        inputMetaDocentes.value = '';
-    }
+        function limpiarInputEstu() {
+            const inputMetaEstudiantes = document.querySelector('#div_estudiantes input');
+            inputMetaEstudiantes.value = '';
+        }
 
-    function limpiarInputBene() {
-        const inputMetaBeneficiarios = document.querySelector('#div_beneficiarios input');
-        inputMetaBeneficiarios.value = '';
-    }
+        function limpiarInputDoce() {
+            const inputMetaDocentes = document.querySelector('#div_docentes input');
+            inputMetaDocentes.value = '';
+        }
 
-    function limpiarInputEgre() {
-        const inputMetaEgresados = document.querySelector('#div_egresados input');
-        inputMetaEgresados.value = '';
-    }
-</script>
+        function limpiarInputBene() {
+            const inputMetaBeneficiarios = document.querySelector('#div_beneficiarios input');
+            inputMetaBeneficiarios.value = '';
+        }
+
+        function limpiarInputEgre() {
+            const inputMetaEgresados = document.querySelector('#div_egresados input');
+            inputMetaEgresados.value = '';
+        }
+    </script> --}}
 
 
     {{-- <link rel="stylesheet" href="{{ asset('/bundles/datatables/datatables.min.css') }}">

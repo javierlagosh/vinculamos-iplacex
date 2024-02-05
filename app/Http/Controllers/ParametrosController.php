@@ -634,18 +634,18 @@ class ParametrosController extends Controller
         // Validar los datos enviados en el formulario
         $validatedData = $request->validate([
             'sede_nombre' => 'required|string',
-            'meta_estudiantes' => 'required|numeric',
-            'meta_docentes' => 'required|numeric',
+            // 'meta_estudiantes' => 'required|numeric',
+            // 'meta_docentes' => 'required|numeric',
             /* 'sede_meta_socios' => 'required|numeric',
             'sede_meta_iniciativas' => 'required|numeric', */
         ], [
             'sede_nombre.required' => 'El campo Nombre de la sede es requerido.',
-            'meta_estudiantes.required' => 'El campo Estudiantes es requerido.',
-            'meta_docentes.required' => 'El campo Docentes es requerido.',
+            // 'meta_estudiantes.required' => 'El campo Estudiantes es requerido.',
+            // 'meta_docentes.required' => 'El campo Docentes es requerido.',
             /* 'sede_meta_socios.required' => 'El campo Socios es requerido.', */
             /* 'sede_meta_iniciativas.required' => 'El campo Iniciativas es requerido.', */
-            'meta_estudiantes.numeric' => 'El campo Estudiantes debe ser numérico.',
-            'meta_docentes.numeric' => 'El campo Docentes debe ser numérico.',
+            // 'meta_estudiantes.numeric' => 'El campo Estudiantes debe ser numérico.',
+            // 'meta_docentes.numeric' => 'El campo Docentes debe ser numérico.',
             /* 'sede_meta_socios.numeric' => 'El campo Socios debe ser numérico.',
             'sede_meta_iniciativas.numeric' => 'El campo Iniciativas debe ser numérico.', */
         ]);
@@ -703,18 +703,18 @@ class ParametrosController extends Controller
         // Validar los datos enviados en el formulario
         $validatedData = $request->validate([
             'sede_nombre' => 'required|string',
-            'meta_estudiantes' => 'required|numeric',
-            'meta_docentes' => 'required|numeric',
+            // 'meta_estudiantes' => 'required|numeric',
+            // 'meta_docentes' => 'required|numeric',
             /* 'sede_meta_socios' => 'required|numeric',
             'sede_meta_iniciativas' => 'required|numeric', */
         ], [
             'sede_nombre.required' => 'El campo Nombre de la sede es requerido.',
-            'meta_estudiantes.required' => 'El campo Estudiantes es requerido.',
-            'meta_docentes.required' => 'El campo Docentes es requerido.',
+            // 'meta_estudiantes.required' => 'El campo Estudiantes es requerido.',
+            // 'meta_docentes.required' => 'El campo Docentes es requerido.',
             /* 'sede_meta_socios.required' => 'El campo Socios es requerido.',
             'sede_meta_iniciativas.required' => 'El campo Iniciativas es requerido.', */
-            'meta_estudiantes.numeric' => 'El campo Estudiantes debe ser numérico.',
-            'meta_docentes.numeric' => 'El campo Docentes debe ser numérico.',
+            // 'meta_estudiantes.numeric' => 'El campo Estudiantes debe ser numérico.',
+            // 'meta_docentes.numeric' => 'El campo Docentes debe ser numérico.',
             /* 'sede_meta_socios.numeric' => 'El campo Socios debe ser numérico.',
             'sede_meta_iniciativas.numeric' => 'El campo Iniciativas debe ser numérico.', */
         ]);
