@@ -1384,7 +1384,7 @@ class ParametrosController extends Controller
         $procoCrear = MecanismosActividades::insert($mecanismo_actividades);
         $insertar_metas = TipoActividadesMetas::insert($sedess);
 
-        return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El Tipo de actividad se creó correctamente.');
+        return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El instrumento se creó correctamente.');
     }
 
     public function actualizarTipoact(Request $request, $tiac_codigo)
@@ -1395,7 +1395,7 @@ class ParametrosController extends Controller
 
         $tipoact = TipoActividades::find($tiac_codigo);
         if (!$tipoact) {
-            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'Tipo de actividad no encontrado.');
+            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'Instrumento no encontrado.');
         }
 
         $tipoact->update([
@@ -1440,7 +1440,7 @@ class ParametrosController extends Controller
         $procoCrear = MecanismosActividades::insert($mecanismo_actividades);
         $insertar_metas = TipoActividadesMetas::insert($sedess);
 
-        return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El Tipo de actividad se actualizó correctamente.');
+        return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El instrumento se actualizó correctamente.');
     }
 
     public function eliminarTipoact(Request $request)
@@ -1451,18 +1451,18 @@ class ParametrosController extends Controller
 
         $tipoact = TipoActividades::find($request->input('tiac_codigo'));
         if (!$tipoact) {
-            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'Tipo de actividad no encontrado.');
+            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'Instrumento no encontrado.');
         }
         $dropMecaActi = MecanismosActividades::where('tiac_codigo', $request->tiac_codigo)->delete();
         $drop = TipoActividadesMetas::where('tiac_codigo', $request->input('tiac_codigo'))->delete();
         /* $verificar = Iniciativas::select('tiac_codigo')->where('tiac_codigo', $request->tiac_codigo);
         if ($verificar) {
-            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'No es posible eliminar, el tipo de actividad está siendo utilizado en una iniciativa');
+            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'No es posible eliminar, el Instrumento está siendo utilizado en una iniciativa');
         } */
 
         $tipoact->delete();
 
-        return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El Tipo de actividad se eliminó correctamente.');
+        return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El instrumento se eliminó correctamente.');
     }
 
     //TODO: funciones de tematicas
