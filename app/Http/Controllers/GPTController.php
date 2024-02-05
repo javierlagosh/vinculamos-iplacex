@@ -18,7 +18,7 @@ class GPTController extends Controller
     public function sendMessage(Request $request)
     {
         $mensaje = $request->message;
-        $OPENAI_API_KEY = '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';
+        $OPENAI_API_KEY = env('CHATGPT_API_KEY');
 
         // Realiza la solicitud utilizando HttpClient de Laravel
         $response = Http::withHeaders([
@@ -144,7 +144,7 @@ class GPTController extends Controller
     public function revisarObjetivo(Request $request)
     {
         $mensaje = $request->message;
-        $OPENAI_API_KEY = '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';
+        $OPENAI_API_KEY = env('CHATGPT_API_KEY');
 
         // Realiza la solicitud utilizando HttpClient de Laravel
         $response = Http::withHeaders([
