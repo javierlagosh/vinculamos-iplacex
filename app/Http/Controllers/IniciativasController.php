@@ -868,7 +868,7 @@ class IniciativasController extends Controller
         // $programas = Programas::all();
         $mecanismos = MecanismosActividades::join('mecanismos', 'mecanismos.meca_codigo', 'mecanismos_actividades.meca_codigo')
             ->join('tipo_actividades', 'tipo_actividades.tiac_codigo', 'mecanismos_actividades.tiac_codigo')
-            ->select('tipo_actividades.tiac_codigo', 'tipo_actividades.tiac_nombre', 'mecanismos.meca_codigo','mecanismo.meca_nombre')
+            ->select('tipo_actividades.tiac_codigo', 'tipo_actividades.tiac_nombre', 'mecanismos.meca_codigo','mecanismos.meca_nombre')
             ->where('tipo_actividades.tiac_codigo', $iniciativaData[0]->tiac_codigo)
             ->distinct()
             ->get();
