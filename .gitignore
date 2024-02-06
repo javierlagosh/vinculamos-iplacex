@@ -1,6 +1,7 @@
 # Laravel-specific
 /node_modules
 /public/hot
+/public/files
 /public/storage
 /storage/*.key
 /vendor
