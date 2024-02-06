@@ -994,7 +994,7 @@
                                             @if (isset($iniciativa) && $editar)
                                                 @forelse ($tipoActividad as $actividad)
                                                     <option value="{{ $actividad->tiac_codigo }}"
-                                                        {{ $iniciativas->tiac_codigo == $actividad->tiac_codigo ? 'selected' : '' }}>
+                                                        {{ $iniciativa->tiac_codigo == $actividad->tiac_codigo ? 'selected' : '' }}>
                                                         {{ $actividad->tiac_nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
