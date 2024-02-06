@@ -286,6 +286,7 @@ class IniciativasController extends Controller
                 'iniciativas.inic_estado',
                 'mecanismos.meca_nombre',
                 'tipo_actividades.tiac_nombre',
+                'convenios.conv_nombre'
             )
             ->where('iniciativas.inic_codigo', $inic_codigo)
             ->first();
@@ -857,18 +858,18 @@ class IniciativasController extends Controller
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
 
-        $iniciativaData = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', '=', 'iniciativas.meca_codigo')
+        $iniciativaData = Iniciativas::join('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
             ->where('inic_codigo', $inic_codigo)
             ->get();
 
         $sedes = Sedes::all();
-        $mecanismos = Mecanismos::all();
+        $tipoActividad = TipoActividades::all();
         $convenios = Convenios::all();
         // $programas = Programas::all();
-        $tipoActividad = MecanismosActividades::join('mecanismos', 'mecanismos.meca_codigo', 'mecanismos_actividades.meca_codigo')
+        $mecanismos = MecanismosActividades::join('mecanismos', 'mecanismos.meca_codigo', 'mecanismos_actividades.meca_codigo')
             ->join('tipo_actividades', 'tipo_actividades.tiac_codigo', 'mecanismos_actividades.tiac_codigo')
-            ->select('tipo_actividades.tiac_codigo', 'tipo_actividades.tiac_nombre', 'mecanismos.meca_codigo')
-            ->where('mecanismos.meca_codigo', $iniciativaData[0]->meca_codigo)
+            ->select('tipo_actividades.tiac_codigo', 'tipo_actividades.tiac_nombre', 'mecanismos.meca_codigo','mecanismo.mecanombre')
+            ->where('tipo_actividades.tiac_codigo', $iniciativaData[0]->tiac_codigo)
             ->distinct()
             ->get();
         $paises = Pais::all();
@@ -1349,6 +1350,7 @@ class IniciativasController extends Controller
         IniciativasRegiones::where('inic_codigo', $request->inic_codigo)->delete();
         IniciativasTematicas::where('inic_codigo', $request->inic_codigo)->delete();
         ParticipantesInternos::where('inic_codigo', $request->inic_codigo)->delete();
+        IniciativasEvidencias::where('inic_codigo', $request->inic_codigo)->delete();
         Iniciativas::where('inic_codigo', $request->inic_codigo)->delete();
 
 

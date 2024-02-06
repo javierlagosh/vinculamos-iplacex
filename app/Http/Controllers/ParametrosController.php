@@ -862,7 +862,7 @@ class ParametrosController extends Controller
     {
         $verificarDrop = Escuelas::where('escu_codigo', $request->escu_codigo)->first();
         if (!$verificarDrop) {
-            return redirect()->route('admin.listar.escuelas')->with('error', 'El área no se encuentra registrada en el sistema.');
+            return redirect()->route('admin.listar.escuelas')->with('error', 'La escuela no se encuentra registrada en el sistema.');
         }
         /*
                 $verificar = Carreras::select('escu_codigo')->where('escu_codigo', $request->escu_codigo);
@@ -873,10 +873,10 @@ class ParametrosController extends Controller
 
         $Drop = Escuelas::where('escu_codigo', $request->escu_codigo)->delete();
         if (!$Drop) {
-            return redirect()->back()->with('error', 'El área no se pudo eliminar, intente más tarde.');
+            return redirect()->back()->with('error', 'La escuela no se pudo eliminar, intente más tarde.');
         }
 
-        return redirect()->route('admin.listar.escuelas')->with('exito', 'El área fue eliminada correctamente.');
+        return redirect()->route('admin.listar.escuelas')->with('exito', 'La escuela fue eliminada correctamente.');
     }
 
     public function actualizarEscuelas(Request $request, $escu_codigo)
@@ -887,7 +887,7 @@ class ParametrosController extends Controller
 
         // Verificar si la escuela existe
         if (!$escuela) {
-            return redirect()->back()->with('error', 'El área no se encuentra registrada en el sistema.');
+            return redirect()->back()->with('error', 'La escuela no se encuentra registrada en el sistema.');
         }
 
         // Validar los campos del formulario
@@ -927,7 +927,7 @@ class ParametrosController extends Controller
         }
 
         $relacCrear = SedesEscuelas::insert($sed);
-        return redirect()->back()->with('exito', 'El área ha sido actualizada correctamente.');
+        return redirect()->back()->with('exito', 'La escuela ha sido actualizada correctamente.');
     }
 
 
@@ -946,7 +946,7 @@ class ParametrosController extends Controller
             ]
         );
         if (!$validacion)
-            return redirect()->route('admin.listar.escuelas')->with('error', 'Problemas al crear el área.');
+            return redirect()->route('admin.listar.escuelas')->with('error', 'Problemas al crear la escuela.');
 
         //$escuela = new Escuelas();
         ///* $escuela->escu_codigo = Escuelas::count() + 1; *///TODO: ERROR DE ESCUELA
@@ -995,7 +995,7 @@ class ParametrosController extends Controller
 
         $relacCrear = SedesEscuelas::insert($sed);
 
-        return redirect()->back()->with('exito', 'El área fue creada existosamente');
+        return redirect()->back()->with('exito', 'La escuela fue creada existosamente');
     }
 
     //TODO: Parametro Sociso COmunitarios

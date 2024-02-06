@@ -217,12 +217,12 @@
                                             </tr>
 
                                             <tr>
-                                                <td><strong>Programas</strong></td>
+                                                <td><strong>Mecanismo</strong></td>
                                                 <td>{{ $iniciativa->meca_nombre }}</td>
                                             </tr>
 
                                             <tr>
-                                                <td><strong>Tipo de actividad</strong></td>
+                                                <td><strong>Instrumento</strong></td>
                                                 <td>
                                                     {{$iniciativa->tiac_nombre}}
                                                 </td>

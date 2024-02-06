@@ -812,7 +812,7 @@
                                                     if (contadorerror >= 10) {
                                                         alert(
                                                             'Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.'
-                                                            );
+                                                        );
                                                     } else {
                                                         contadorerror++;
 
@@ -835,7 +835,7 @@
                                                 if (contadorerror >= 10) {
                                                     alert(
                                                         'Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.'
-                                                        );
+                                                    );
                                                 } else {
                                                     contadorerror++;
 
@@ -991,10 +991,10 @@
                                         <select class="form-control select2" id="tactividad" name="tactividad"
                                             style="width: 100%">
                                             <option value="" selected disabled>Seleccione...</option>
-                                            @if (isset($iniciativaData) && $editar)
+                                            @if (isset($iniciativa) && $editar)
                                                 @forelse ($tipoActividad as $actividad)
                                                     <option value="{{ $actividad->tiac_codigo }}"
-                                                        {{ $iniciativaData->tiac_codigo == $actividad->tiac_codigo ? 'selected' : '' }}>
+                                                        {{ $iniciativas->tiac_codigo == $actividad->tiac_codigo ? 'selected' : '' }}>
                                                         {{ $actividad->tiac_nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
@@ -1028,6 +1028,23 @@
                                         <select class="form-control select2" id="mecanismos" name="mecanismos"
                                             style="width: 100%">
                                             <option value="" selected disabled>Seleccione...</option>
+                                            @if (isset($iniciativaData) && $editar)
+                                                @forelse ($mecanismo as $mecanismo)
+                                                    <option value="{{ $mecanismo->meca_codigo }}"
+                                                        {{ $iniciativaData->meca_codigo == $mecanismo->meca_codigo ? 'selected' : '' }}>
+                                                        {{ $mecanismo->meca_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                @forelse ($mecanismo as $mecanismo)
+                                                    <option value="{{ $mecanismo->meca_codigo }}"
+                                                        {{ old('mecanismos') == $mecanismo->meca_codigo ? 'selected' : '' }}>
+                                                        {{ $mecanismo->meca_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
                                         </select>
 
 
