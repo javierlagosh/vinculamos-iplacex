@@ -17,12 +17,25 @@
 @endif
 @extends('admin.panel')
 @section('contenido')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <section class="section">
         <div class="section-body">
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="row"></div>
+                    <div class="row">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
+                            @if (Session::has('errorIniciativa'))
+                                <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
+                                    <div class="alert-body">
+                                        <strong>{{ Session::get('errorIniciativa') }}</strong>
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-xl-3"></div>
+                    </div>
 
                     <div class="card">
                         <div class="card-header">
@@ -42,10 +55,76 @@
                                                 class="fas fa-file-signature"></i>Ingresar evaluación</a>
                                     </div>
                                 </div> --}}
-                                <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
-                                    class="btn btn-icon btn-primary icon-left" data-toggle="tooltip"
-                                    data-placement="top" title="Editar iniciativa"><i class="fas fa-edit"></i>Editar
-                                    Iniciativa</a>
+
+
+                                <div class="dropdown d-inline">
+
+                                    <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton2"
+                                        data-toggle="dropdown"> Iniciativas</button>
+                                    <div class="dropdown-menu dropright">
+
+
+                                        <a href="javascript:void(0)" class="dropdown-item has-icon"
+                                            data-toggle="tooltip" data-placement="top" title="Calcular INVI"
+                                            onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
+                                                class="fas fa-tachometer-alt"></i> INVI</a>
+
+                                        <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip"
+                                            data-placement="top" title="Editar iniciativa"><i class="fas fa-edit"></i>
+                                            Editar
+                                            Iniciativa</a>
+
+                                        <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip"
+                                            data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i>
+                                            Adjuntar evidencia</a>
+
+                                        <a href="javascript:void(0)" class="dropdown-item has-icon" data-toggle="tooltip"
+                                            onclick="eliminarIniciativa({{ $iniciativa->inic_codigo }})"
+                                            data-placement="top" title="Eliminar iniciativa"><i class="fas fa-trash"></i>
+                                            Eliminar</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown d-inline">
+
+                                    <button class="btn btn-warning dropdown-toggle" id="dropdownMenuButton2"
+                                        data-toggle="dropdown"> Agenda 2030</button>
+                                    <div class="dropdown-menu dropright">
+                                        @if ($ods_array->isEmpty())
+                                        @else
+                                            <a href="{{ route('admin.iniciativas.agendaods', $iniciativa->inic_codigo) }}"
+                                                class="dropdown-item has-icon" data-toggle="tooltip"
+                                                data-placement="top" title="Agenda 2030"><i
+                                                    class="fas  fa-star-half"></i> Contribucion externa</a>
+
+                                            <a href="{{ route('admin.iniciativas.pdf', $iniciativa->inic_codigo) }}"
+                                                class="dropdown-item has-icon" data-toggle="tooltip"
+                                                data-placement="top" title="Agenda 2030"><i
+                                                    class="fas  fa-file-pdf"></i> Generar
+                                                pdf con ODS</a>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="dropdown d-inline">
+
+                                    <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
+                                        data-toggle="dropdown"> <i class="fas fa-plus-circle"></i> Ingresar</button>
+                                    <div class="dropdown-menu dropright">
+                                        <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
+
+                                        <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Ingresar resultado"><i class="fas fa-flag"></i> Ingresar resultado/s</a>
+
+                                        <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Evaluar iniciativa"><i class="fas fa-file-signature"></i> Evaluar iniciativa</a>
+                                    </div>
+                                </div>
 
                                 <div class="dropdown d-inline">
 
@@ -58,7 +137,8 @@
                                             <input type="hidden" name="state" value="3">
                                             <a href="javascript:void(0);" onclick="this.closest('form').submit();"
                                                 class="dropdown-item has-icon" style="display: flex; align-items: center;">
-                                                <i class="fas fa-check" style="margin-right: 8px;"></i> Aprobar iniciativa
+                                                <i class="fas fa-check" style="margin-right: 8px;"></i> Aprobar
+                                                iniciativa
                                             </a>
                                         </form>
 
@@ -92,7 +172,8 @@
                                             @csrf
                                             <input type="hidden" name="state" value="5">
                                             <a href="javascript:void(0);" onclick="this.closest('form').submit();"
-                                                class="dropdown-item has-icon" style="display: flex; align-items: center;">
+                                                class="dropdown-item has-icon"
+                                                style="display: flex; align-items: center;">
                                                 <i class="fas fa-lock" style="margin-right: 8px;"></i> Cerrar iniciativa
                                             </a>
                                         </form>
@@ -102,8 +183,10 @@
                                             @csrf
                                             <input type="hidden" name="state" value="6">
                                             <a href="javascript:void(0);" onclick="this.closest('form').submit();"
-                                                class="dropdown-item has-icon" style="display: flex; align-items: center;">
-                                                <i class="fas fa-times" style="margin-right: 8px;"></i> Finalizar Iniciativa
+                                                class="dropdown-item has-icon"
+                                                style="display: flex; align-items: center;">
+                                                <i class="fas fa-times" style="margin-right: 8px;"></i> Finalizar
+                                                Iniciativa
                                             </a>
                                         </form>
 
@@ -134,53 +217,24 @@
 
 
 
-                                <a href="javascript:void(0)" class="btn btn-icon btn-info icon-left"
-                                    data-toggle="tooltip" data-placement="top" title="Calcular INVI"
-                                    onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
-                                        class="fas fa-tachometer-alt"></i>INVI</a>
+
 
                                 {{-- Comprueba si no tiene ods asociado --}}
-                                @if($ods_array->isEmpty())
 
-                                @else
-                                <a href="{{ route('admin.iniciativas.agendaods', $iniciativa->inic_codigo)}}" class="btn btn-icon btn-info icon-left"
-                                    data-toggle="tooltip" data-placement="top" title="Agenda 2030"><i
-                                        class="fas  fa-star-half"></i>Contribucion externa</a>
 
-                                        <a href="{{ route('admin.iniciativas.pdf', $iniciativa->inic_codigo)}}" class="btn btn-icon btn-success icon-left"
-                                            data-toggle="tooltip" data-placement="top" title="Agenda 2030"><i
-                                                class="fas  fa-file-pdf"></i>Generar pdf con ODS</a>
-                                @endif
 
-                                <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
-                                    class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                    data-placement="top" title="Adjuntar evidencia"><i
-                                        class="fas fa-paperclip"></i>Evidencias</a>
 
-                                <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
-                                                class="btn btn-icon btn-success icon-left" data-toggle="tooltip" data-placement="top"
-                                                title="Ingresar cobertura"><i class="fas fa-users"></i>Cobertura</a>
 
-                                <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
-                                    class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                    data-placement="top" title="Ingresar resultado"><i
-                                        class="fas fa-flag"></i>Resultado/s</a>
 
-                                <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
-                                    class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                    data-placement="top" title="Evaluar iniciativa"><i
-                                        class="fas fa-file-signature"></i>Evaluar</a>
 
-                                <a href="javascript:void(0)" class="btn btn-danger icon-left" data-toggle="tooltip" onclick="eliminarIniciativa({{ $iniciativa->inic_codigo }})"
-                                    data-placement="top" title="Eliminar iniciativa"><i class="fas fa-trash"></i>Eliminar</a>
                                 {{-- <a href="javascript:void(0)" class="dropdown-item has-icon"
                                     onclick="eliminarIniciativa({{ $iniciativa->inic_codigo }})" data-toggle="tooltip"
                                     data-placement="top" title="Eliminar">Eliminar Iniciativa<i
                                         class="fas fa-trash"></i></a> --}}
-                                        <a href="{{ route('admin.iniciativa.listar') }}"
-                                        class="btn btn-primary mr-1 waves-effect icon-left" type="button">
-                                        <i class="fas fa-angle-left"></i> Volver a listado
-                                    </a>
+                                <a href="{{ route('admin.iniciativa.listar') }}"
+                                    class="btn btn-primary mr-1 waves-effect icon-left" type="button">
+                                    <i class="fas fa-angle-left"></i> Volver a listado
+                                </a>
 
                             </div>
                         </div>
@@ -217,14 +271,14 @@
                                             </tr>
 
                                             <tr>
-                                                <td><strong>Programas</strong></td>
+                                                <td><strong>Mecanismo</strong></td>
                                                 <td>{{ $iniciativa->meca_nombre }}</td>
                                             </tr>
 
                                             <tr>
-                                                <td><strong>Tipo de actividad</strong></td>
+                                                <td><strong>Instrumento</strong></td>
                                                 <td>
-                                                    {{$iniciativa->tiac_nombre}}
+                                                    {{ $iniciativa->tiac_nombre }}
                                                 </td>
 
                                             </tr>
@@ -241,35 +295,37 @@
                                                 @else
                                                 @endif
                                                 <td>
-                                                @forelse ($ods_array as $ods)
-                                                <!-- Código para mostrar ODS -->
-                                                    <img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-{{$ods->id_ods}}.png" alt="Ods {{ $ods->id_ods }}" style="width: 100px; height: 100px;">
+                                                    @forelse ($ods_array as $ods)
+                                                        <!-- Código para mostrar ODS -->
+                                                        <img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-{{ $ods->id_ods }}.png"
+                                                            alt="Ods {{ $ods->id_ods }}"
+                                                            style="width: 100px; height: 100px;">
 
-                                                {{-- <div style="display: inline-block; margin: 0; padding: 0;">
+                                                        {{-- <div style="display: inline-block; margin: 0; padding: 0;">
                                                 <td>
                                                         <img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-{{$ods->id_ods}}.png" alt="Ods {{ $ods->id_ods }}" style="width: 100px; height: 100px;">
                                                 </td>
                                                 </div> --}}
-                                                {{-- @if($ods_array->isEmpty()) --}}
-                                                @empty
-                                                    {{-- <!-- Agrega el campo oculto para almacenar la descripción de la iniciativa -->
+                                                        {{-- @if ($ods_array->isEmpty()) --}}
+                                                    @empty
+                                                        {{-- <!-- Agrega el campo oculto para almacenar la descripción de la iniciativa -->
                                                     <input type="hidden" id="descripcion_iniciativa" value="{{ $iniciativa->inic_descripcion }}">
 
                                                     <!-- Agrega el botón "Evaluar ODS" -->
                                                     <button id="send-button" class="btn btn-primary mr-1 text-white mt-2">Asociar ODS</button>
                                                     <div class="mt-3" id="fotosods"></div>
                                                     {{-- <div type="hidden" id="ods-values"></div> --}}
-                                                    {{-- <form action="{{ route('admin.iniciativas.odsGuardar', ['inic_codigo' => $iniciativa->inic_codigo]) }}" method="POST">
+                                                        {{-- <form action="{{ route('admin.iniciativas.odsGuardar', ['inic_codigo' => $iniciativa->inic_codigo]) }}" method="POST">
                                                         @csrf
                                                         <button id="confirmar-ods-button" class="btn btn-success mt-2" style="display: none;">Confirmar ODS</button>
                                                         <input type="hidden" name="ods_values[]" id="ods-hidden-field" value="">
                                                     </form> --}}
 
 
-                                                    <!-- Agrega los elementos donde se mostrarán las imágenes y valores de ODS -->
+                                                        <!-- Agrega los elementos donde se mostrarán las imágenes y valores de ODS -->
 
-                                                    <!-- Script JavaScript -->
-                                                    {{-- <script defer>
+                                                        <!-- Script JavaScript -->
+                                                        {{-- <script defer>
                                                     $(document).ready(function() {
                                                         $('#send-button').click(function(e) {
                                                             e.preventDefault(); // Previene el comportamiento predeterminado del formulario
@@ -355,7 +411,7 @@
                                                         }
                                                     });
                                                     </script> --}}
-                                                @endforelse
+                                                    @endforelse
                                                 </td>
                                             </tr>
                                             <tr>
@@ -587,10 +643,12 @@
                                                                 @endforeach
                                                                 <tr>
                                                                     <td>Total General</td>
-                                                                    <td>${{ number_format($totalDinero, 0, ',', '.') }}</td>
+                                                                    <td>${{ number_format($totalDinero, 0, ',', '.') }}
+                                                                    </td>
                                                                     <td>${{ number_format($totalInfraestructura, 0, ',', '.') }}
                                                                     </td>
-                                                                    <td>${{ number_format($totalRrhh, 0, ',', '.') }}</td>
+                                                                    <td>${{ number_format($totalRrhh, 0, ',', '.') }}
+                                                                    </td>
                                                                 </tr>
 
                                                             </tbody>
@@ -701,6 +759,5 @@
             $('#inic_codigo').val(inic_codigo);
             $('#modalEliminaIniciativa').modal('show');
         }
-
     </script>
 @endsection

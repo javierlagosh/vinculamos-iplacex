@@ -90,40 +90,52 @@
 
                             <div class="card-header-action">
                                 <div class="dropdown d-inline">
-                                    <a href="{{ route('admin.iniciativas.detalles', $iniciativa[0]->inic_codigo) }}"
-                                        class="btn btn-icon btn-warning icon-left" data-toggle="tooltip"
-                                        data-placement="top" title="Ver detalles de la iniciativa"><i
-                                            class="fas fa-eye"></i>Ver detalle</a>
+                                    <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton2"
+                                        data-toggle="dropdown"title="Iniciativa">
+                                        Iniciativa</button>
+                                    <div class="dropdown-menu dropright">
+                                        <a href="{{ route('admin.iniciativas.detalles', $iniciativa[0]->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Ver detalles de la iniciativa"><i class="fas fa-eye"></i> Ver detalle</a>
 
-                                    <a href="{{ route('admin.editar.paso1', $iniciativa[0]->inic_codigo) }}"
-                                        class="btn btn-icon btn-primary icon-left" data-toggle="tooltip"
-                                        data-placement="top" title="Editar iniciativa"><i class="fas fa-edit"></i>Editar
-                                        Iniciativa</a>
+                                        <a href="{{ route('admin.editar.paso1', $iniciativa[0]->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Editar iniciativa"><i class="fas fa-edit"></i> Editar
+                                            Iniciativa</a>
 
-                                    <a href="javascript:void(0)" class="btn btn-icon btn-info icon-left"
-                                        data-toggle="tooltip" data-placement="top" title="Calcular INVI"
-                                        onclick="calcularIndice({{ $iniciativa[0]->inic_codigo }})"><i
-                                            class="fas fa-tachometer-alt"></i>INVI</a>
+                                        <a href="javascript:void(0)" class="dropdown-item has-icon" data-toggle="tooltip"
+                                            data-placement="top" title="Calcular INVI"
+                                            onclick="calcularIndice({{ $iniciativa[0]->inic_codigo }})"><i
+                                                class="fas fa-tachometer-alt"></i> INVI</a>
 
-                                    <a href="{{ route('admin.evidencias.listar', $iniciativa[0]->inic_codigo) }}"
-                                        class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                        data-placement="top" title="Adjuntar evidencia"><i
-                                            class="fas fa-paperclip"></i>Evidencias</a>
+                                        <a href="{{ route('admin.evidencias.listar', $iniciativa[0]->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Adjuntar evidencia</a>
+                                    </div>
 
-                                    <a href="{{ route('admin.cobertura.index', $iniciativa[0]->inic_codigo) }}"
-                                        class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                        data-placement="top" title="Ingresar cobertura"><i
-                                            class="fas fa-users"></i>Cobertura</a>
+                                </div>
+                                <div class="dropdown d-inline">
+                                    <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
+                                        data-toggle="dropdown"title="Iniciativa">
+                                        <i class="fas fa-plus-circle"></i> Ingresar</button>
+                                    <div class="dropdown-menu dropright">
 
-                                    <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
-                                        class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                        data-placement="top" title="Ingresar resultado"><i
-                                            class="fas fa-flag"></i>Resultado/s</a>
+                                        <a href="{{ route('admin.cobertura.index', $iniciativa[0]->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
 
-                                    {{-- <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa[0]->inic_codigo) }}"
-                                            class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                            data-placement="top" title="Evaluar iniciativa"><i
-                                                class="fas fa-file-signature"></i>Evaluar</a> --}}
+                                        <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Ingresar resultado"><i class="fas fa-flag"></i> Ingresar resultado/s</a>
+
+                                        {{-- <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa[0]->inic_codigo) }}"
+                                                        class="dropdown-item has-icon" data-toggle="tooltip"
+                                                        data-placement="top" title="Evaluar iniciativa"><i
+                                                            class="fas fa-file-signature"></i>Evaluar</a> --}}
+                                    </div>
+
+
+
 
                                     <a href="{{ route('admin.iniciativa.listar') }}"
                                         class="btn btn-primary mr-1 waves-effect icon-left" type="button">
@@ -801,7 +813,8 @@
             <div class="card">
                 <div class="card-header">
                     <a class="btn btn-primary collapsed" data-toggle="collapse" href="#collapseExample" role="button"
-                        aria-expanded="false" aria-controls="collapseExample" onclick="listarEval({{ $iniciativa[0]->inic_codigo }})">
+                        aria-expanded="false" aria-controls="collapseExample"
+                        onclick="listarEval({{ $iniciativa[0]->inic_codigo }})">
                         Evaluaciones creadas
                     </a>
                 </div>
@@ -823,7 +836,8 @@
                                         <div class="padding-20">
                                             <div class="text-right">
                                                 <h3 class="font-light mb-0">
-                                                    <i class="ti-arrow-up text-success"></i> <label id="N_evaluacion"></label>
+                                                    <i class="ti-arrow-up text-success"></i> <label
+                                                        id="N_evaluacion"></label>
                                                 </h3>
                                                 <span class="text-muted">Evaluaciones</span>
                                             </div>
@@ -840,7 +854,8 @@
                                         <div class="padding-20">
                                             <div class="text-right">
                                                 <h3 class="font-light mb-0">
-                                                    <i class="ti-arrow-up text-success"></i> <label id="P_evaluacion"></label>
+                                                    <i class="ti-arrow-up text-success"></i> <label
+                                                        id="P_evaluacion"></label>
                                                 </h3>
                                                 <span class="text-muted">Puntaje Promedio</span>
                                             </div>
@@ -981,7 +996,8 @@
                         <h6 class="mt-2">La evaluación dejará de existir dentro del sistema. <br> ¿Desea continuar de
                             todos modos? <br> Considere que su decición influirá en el valor del indicador INVI</h6>
                         <input type="hidden" id="eval_codigo" name="eval_codigo" value="">
-                        <input type="hidden" id="inic_codigo" name="inic_codigo" value="{{ $iniciativa[0]->inic_codigo }}">
+                        <input type="hidden" id="inic_codigo" name="inic_codigo"
+                            value="{{ $iniciativa[0]->inic_codigo }}">
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
                         <button type="submit" class="btn btn-primary">Continuar</button>
@@ -1262,7 +1278,8 @@
                     datos_evaluaciones.forEach(registro => {
                         contador = contador + 1;
                         ptj = ptj + registro.eval_puntaje;
-                        let evaluacionTipo = registro.eval_evaluador === 2 ? 'Evaluación Interna' : 'Evaluación Externa';
+                        let evaluacionTipo = registro.eval_evaluador === 2 ? 'Evaluación Interna' :
+                            'Evaluación Externa';
 
                         fila = `<tr>
                             <td>${contador}</td>

@@ -67,6 +67,7 @@ class IniciativasController extends Controller
                 'iniciativas.inic_nombre',
                 'iniciativas.inic_estado',
                 'iniciativas.inic_anho',
+                'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
                 'componentes.comp_nombre',
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
@@ -74,7 +75,7 @@ class IniciativasController extends Controller
                 // DB::raw('GROUP_CONCAT(DISTINCT carreras.care_nombre SEPARATOR ", ") as carreras'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             )
-            ->groupBy('iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado') // Agregamos inic_creado al GROUP BY
+            ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado') // Agregamos inic_creado al GROUP BY
             ->orderBy('inic_creado', 'desc'); // Ordenar por fecha de creación formateada en orden descendente
         // ->where('iniciativas.inic_anho','2023')
 
@@ -82,8 +83,8 @@ class IniciativasController extends Controller
             $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
         }
 
-        if ($request->componente != 'all' && $request->componente != null) {
-            $iniciativas = $iniciativas->where('componentes.comp_codigo', $request->componente);
+        if ($request->mecanismo != 'all' && $request->mecanismo != null) {
+            $iniciativas = $iniciativas->where('mecanismos.meca_codigo', $request->mecanismo);
         }
 
         if ($request->anho != 'all' && $request->anho != null) {
@@ -99,10 +100,11 @@ class IniciativasController extends Controller
 
         $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
         // $carreras = Carreras::select('care_codigo', 'care_nombre')->orderBy('care_nombre', 'asc')->get();
-        $componentes = DB::table('componentes')->select('comp_codigo', 'comp_nombre')->orderBy('comp_nombre', 'asc')->get();
+        // $componentes = DB::table('componentes')->select('comp_codigo', 'comp_nombre')->orderBy('comp_nombre', 'asc')->get();
+        $mecanismos = Mecanismos::select('meca_codigo','meca_nombre')->get();
         $anhos = Iniciativas::select('inic_anho')->distinct('inic_anho')->orderBy('inic_anho', 'asc')->get();
 
-        return view('admin.iniciativas.listar', compact('iniciativas', 'componentes', 'anhos', 'sedes'));
+        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes'));
     }
 
 
@@ -286,6 +288,7 @@ class IniciativasController extends Controller
                 'iniciativas.inic_estado',
                 'mecanismos.meca_nombre',
                 'tipo_actividades.tiac_nombre',
+                'convenios.conv_nombre'
             )
             ->where('iniciativas.inic_codigo', $inic_codigo)
             ->first();
@@ -864,18 +867,18 @@ class IniciativasController extends Controller
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
 
-        $iniciativaData = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', '=', 'iniciativas.meca_codigo')
+        $iniciativaData = Iniciativas::join('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
             ->where('inic_codigo', $inic_codigo)
             ->get();
 
         $sedes = Sedes::all();
-        $mecanismos = Mecanismos::all();
+        $tipoActividad = TipoActividades::all();
         $convenios = Convenios::all();
         // $programas = Programas::all();
-        $tipoActividad = MecanismosActividades::join('mecanismos', 'mecanismos.meca_codigo', 'mecanismos_actividades.meca_codigo')
+        $mecanismos = MecanismosActividades::join('mecanismos', 'mecanismos.meca_codigo', 'mecanismos_actividades.meca_codigo')
             ->join('tipo_actividades', 'tipo_actividades.tiac_codigo', 'mecanismos_actividades.tiac_codigo')
-            ->select('tipo_actividades.tiac_codigo', 'tipo_actividades.tiac_nombre', 'mecanismos.meca_codigo')
-            ->where('mecanismos.meca_codigo', $iniciativaData[0]->meca_codigo)
+            ->select('tipo_actividades.tiac_codigo', 'tipo_actividades.tiac_nombre', 'mecanismos.meca_codigo','mecanismos.meca_nombre')
+            ->where('tipo_actividades.tiac_codigo', $iniciativaData[0]->tiac_codigo)
             ->distinct()
             ->get();
         $paises = Pais::all();
@@ -1356,6 +1359,7 @@ class IniciativasController extends Controller
         IniciativasRegiones::where('inic_codigo', $request->inic_codigo)->delete();
         IniciativasTematicas::where('inic_codigo', $request->inic_codigo)->delete();
         ParticipantesInternos::where('inic_codigo', $request->inic_codigo)->delete();
+        IniciativasEvidencias::where('inic_codigo', $request->inic_codigo)->delete();
         Iniciativas::where('inic_codigo', $request->inic_codigo)->delete();
 
 

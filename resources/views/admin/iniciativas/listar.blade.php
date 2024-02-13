@@ -24,8 +24,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-xl-3"></div>
-                        <div class="col-xl-6">
+                        <div class="col-xl-12">
                             @if (Session::has('exitoIniciativa'))
                                 <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -34,8 +33,7 @@
                                     </div>
                                 </div>
                             @endif
-                        </div>
-                        <div class="col-xl-6">
+
                             @if (Session::has('errorIniciativa'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -45,7 +43,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-xl-3"></div>
+
                     </div>
 
                     <div class="card">
@@ -59,7 +57,7 @@
                                         <div class="form-group"><label for="sede">Sedes</label>
                                             <select name="sede" id="sede" class="form-control select2"
                                                 style="width: 100%">
-                                                <option value=""  selected>Seleccione...</option>
+                                                <option value="" selected>Seleccione...</option>
                                                 <option value="all">Todas</option>
                                                 @forelse ($sedes as $sede)
                                                     <option value="{{ $sede->sede_codigo }}"
@@ -73,15 +71,15 @@
                                     </div>
 
                                     <div class="col-xl-4 col-md-4 col-lg-4">
-                                        <div class="form-group"><label for="componente">Componentes</label>
-                                            <select name="componente" id="componente" class="form-control select2"
+                                        <div class="form-group"><label for="mecanismo">Mecanismos</label>
+                                            <select name="mecanismo" id="mecanismo" class="form-control select2"
                                                 style="width: 100%">
-                                                <option value=""  selected>Seleccione...</option>
+                                                <option value="" selected>Seleccione...</option>
                                                 <option value="all">Todos</option>
-                                                @forelse ($componentes as $componente)
-                                                    <option value="{{ $componente->comp_codigo }}"
-                                                        {{ Request::get('componente') == $componente->comp_codigo ? 'selected' : '' }}>
-                                                        {{ $componente->comp_nombre }}</option>
+                                                @forelse ($mecanismos as $mecanismo)
+                                                    <option value="{{ $mecanismo->meca_codigo }}"
+                                                        {{ Request::get('mecanismo') == $mecanismo->meca_codigo ? 'selected' : '' }}>
+                                                        {{ $mecanismo->meca_nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
@@ -93,7 +91,7 @@
                                         <div class="form-group"><label for="anho">Año</label>
                                             <select name="anho" id="anho" class="form-control select2"
                                                 style="width: 100%">
-                                                <option value=""  selected>Seleccione...</option>
+                                                <option value="" selected>Seleccione...</option>
                                                 <option value="all">Todos</option>
                                                 @forelse ($anhos as $anho)
                                                     <option value="{{ $anho->inic_anho }}"
@@ -106,22 +104,14 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-6 col-md-6 col-lg-6">
-                                        <div class="form-group">
-                                            <div class="mb-4">
-                                                <button type="submit" class="btn btn-warning mr-1 waves-effect"
-                                                    {{--  onclick="Filtro()" --}} style="width: 100%;color:white"><i
-                                                        class="fas fa-search"></i> Filtrar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-md-6 col-lg-6">
-                                        <div class="form-group">
-                                            <div class="mb-4">
-                                                <a type="button" class="btn btn-primary mr-1 waves-effect"
-                                                    href="{{ route($role . '.iniciativa.listar') }}"
-                                                    style="width: 100%;color:white"><i class="fas fa-broom"></i> Limpiar</a>
-                                            </div>
+                                    <div class="col-xl-12 col-sm-4 col-md-4 col-lg-4">
+                                        <div class="mb-4 text-right">
+
+                                            <button type="submit" class="btn btn-primary mr-1 waves-effect"
+                                                {{--  onclick="Filtro()" --}}><i class="fas fa-search"></i> Filtrar</button>
+                                            <a href="{{ route($role . '.iniciativa.listar') }}" type="button"
+                                                class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
+                                                Limpiar</a>
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +122,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Nombre</th>
-                                            <th>Componente</th>
+                                            <th>Mecanismos</th>
                                             <th>Año</th>
                                             <th>Sedes</th>
                                             {{-- <th>Carreras</th> --}}
@@ -146,7 +136,7 @@
                                             <tr>
                                                 <td>{{ $iniciativa->inic_codigo }}</td>
                                                 <td>{{ $iniciativa->inic_nombre }}</td>
-                                                <td>{{ $iniciativa->comp_nombre }}</td>
+                                                <td>{{ $iniciativa->meca_nombre }}</td>
                                                 <td>{{ $iniciativa->inic_anho }}</td>
                                                 <td>
                                                     @php

@@ -103,7 +103,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Nueva área</h5>
+                    <h5 class="modal-title" id="formModal">Nueva escuela</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -112,7 +112,7 @@
                     <form action="{{ route('admin.crear.escuelas') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Nombre del área</label>
+                            <label>Nombre del escuela</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -222,7 +222,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditarEscuela">Editar área</h5>
+                        <h5 class="modal-title" id="modalEditarEscuela">Editar escuela</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -233,7 +233,7 @@
                             @csrf
 
                             <div class="form-group">
-                                <label>Nombre del área</label>
+                                <label>Nombre del escuela</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -314,7 +314,7 @@
                     </div>
                     <div class="modal-body text-center">
                         <i class="fas fa-ban text-danger" style="font-size: 50px; color"></i>
-                        <h6 class="mt-2">El área dejará de existir dentro del sistema. <br> ¿Desea continuar de todos
+                        <h6 class="mt-2">La escuela dejará de existir dentro del sistema. <br> ¿Desea continuar de todos
                             modos?</h6>
                         <input type="hidden" id="escu_codigo" name="escu_codigo" value="">
                     </div>
