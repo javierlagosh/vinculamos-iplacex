@@ -759,25 +759,32 @@ class IniciativasController extends Controller
 
         $fundamentoOds = array_values($fundamentoOds);
 
-        $fundamentosNew = explode('.', ($fundamentoOds[0]));
-
-
-
-        $fundamentosNew = array_map('trim', $fundamentosNew);
-
-
-
-        //quitar elemento si es ""
-        foreach ($fundamentosNew as $key => $value) {
-            if ($value == "") {
-                unset($fundamentosNew[$key]);
+        for ($i=0; $i < 100; $i++) {
+            try {
+                $fundamentosNew = explode('.', ($fundamentoOds[$i]));
+                break;
+            } catch (\Throwable $th) {
+                //
             }
+        }
+
+        try {
+            $fundamentosNew = array_map('trim', $fundamentosNew);
+            //quitar elemento si es ""
+            foreach ($fundamentosNew as $key => $value) {
+                if ($value == "") {
+                    unset($fundamentosNew[$key]);
+                }
+
+            $fundamentosNew = array_values($fundamentosNew);
+        }
+        } catch (\Throwable $th) {
+            //
         }
 
         //indexar todos los arreglos para las metas
         $odsMetasValues = array_values($odsMetasValues);
         $odsMetasDescValues = array_values($odsMetasDescValues);
-        $fundamentosNew = array_values($fundamentosNew);
 
 
         //TODO: QUE LOS FUNDAMENTOS SE GUARDEN EN LA DB (CREA UNA COLUMNA EN metas_inic LLAMADA 'fundamento' varchar(4096))
