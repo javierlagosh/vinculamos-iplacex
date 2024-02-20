@@ -18,7 +18,7 @@
 
 <body
 {{-- url({{ asset('/img/fonologin.jpg') }}) --}}
-    style=" background-color: #515151;border-color: #515151; background:  url({{ asset('/img/iplacex.jpg') }})  ;background-size:cover; background-repeat:repeat;background-attachment: fixed;background-position: center;">
+    style=" background-color: #515151;border-color: #515151; background:  url({{ asset('/img/iplacex.webp') }})  ;background-size:cover; background-repeat:repeat;background-attachment: fixed;background-position: center;">
     <section class="ftco-section" style="margin-right: 1%; display: flex; align-items:center;">
         <div class="container" style="background: rgba(255,255,255,0.50);  border-radius: 50px; width:500px;">
             <div class="row">

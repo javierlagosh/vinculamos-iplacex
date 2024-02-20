@@ -20,7 +20,7 @@
 
 <body>
     <div style="text-align: center;">
-        <img src="https://cftpucv.vinculamos.org/img/img/logo-iplacex.svg" alt="logo cftpucv" style="width:293px;heigh:81px;">
+        <img src="https://iplacex.vinculamos.org/img/logo-iplacex.svg" alt="logo iplacex" style="width:293px;heigh:81px;">
       </div>
 
     {{-- {{dd($odsValues)}} --}}
@@ -110,7 +110,7 @@
     </table>
 
     <footer>
-        <p>PDF generado en: https://cftpucv.vinculamos.org/ | CFTPUCV  </p>
+        <p>PDF generado en: https://iplacex.vinculamos.org/ | Iplacex  </p>
     </footer>
 </body>
 
