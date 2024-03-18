@@ -1448,21 +1448,37 @@ class ParametrosController extends Controller
         $request->validate([
             'tiac_codigo' => 'required|numeric',
         ]);
+        try {
 
-        $tipoact = TipoActividades::find($request->input('tiac_codigo'));
-        if (!$tipoact) {
-            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'Instrumento no encontrado.');
+
+            $tipoact = TipoActividades::find($request->input('tiac_codigo'));
+            if (!$tipoact) {
+                return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'Instrumento no encontrado.');
+            }
+            $dropMecaActi = MecanismosActividades::where('tiac_codigo', $request->tiac_codigo)->delete();
+            $drop = TipoActividadesMetas::where('tiac_codigo', $request->input('tiac_codigo'))->delete();
+            /* $verificar = Iniciativas::select('tiac_codigo')->where('tiac_codigo', $request->tiac_codigo);
+            if ($verificar) {
+                return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'No es posible eliminar, el Instrumento está siendo utilizado en una iniciativa');
+            } */
+
+            $tipoact->delete();
+
+            return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El instrumento se eliminó correctamente.');
+        } catch (\Throwable $th) {
+            $codigo_tiac = $request->input('tiac_codigo');
+            $iniciativasVinculadas = Iniciativas::where('tiac_codigo', $codigo_tiac)->get();
+            //obtener id de las iniciativas vinculadas y mostrarlas en el mensaje
+            $errorMessage = 'El instrumento no se puede eliminar porque se encuentra asociado a las siguientes iniciativas con ID: ';
+            foreach ($iniciativasVinculadas as $iniciativa) {
+                $errorMessage .= $iniciativa->inic_codigo . ', ';
+            }
+            $errorMessage = substr($errorMessage, 0, -2) . '.';
+
+            $errorMessage .= ' Por favor, elimine las iniciativas vinculadas antes de eliminar el instrumento.';
+
+            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', $errorMessage);
         }
-        $dropMecaActi = MecanismosActividades::where('tiac_codigo', $request->tiac_codigo)->delete();
-        $drop = TipoActividadesMetas::where('tiac_codigo', $request->input('tiac_codigo'))->delete();
-        /* $verificar = Iniciativas::select('tiac_codigo')->where('tiac_codigo', $request->tiac_codigo);
-        if ($verificar) {
-            return redirect()->route('admin.listar.tipoact')->with('errorTipoact', 'No es posible eliminar, el Instrumento está siendo utilizado en una iniciativa');
-        } */
-
-        $tipoact->delete();
-
-        return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El instrumento se eliminó correctamente.');
     }
 
     //TODO: funciones de tematicas
