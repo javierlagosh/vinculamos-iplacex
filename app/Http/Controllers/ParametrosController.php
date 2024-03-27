@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Actividades;
 use App\Models\Ambitos;
 use App\Models\AmbitosAccion;
+use App\Models\AreaEspecialidad;
 use App\Models\Carreras;
 use App\Models\Comuna;
 use App\Models\Convenios;
@@ -740,12 +741,43 @@ class ParametrosController extends Controller
     {
         $carreras = Carreras::orderBy('care_codigo', 'asc')->get();
         $escuelas = Escuelas::orderBy('escu_codigo', 'asc')->get();
+        $aes = AreaEspecialidad::orderBy('aes_codigo', 'asc')->get();
 
         return view('admin.parametros.carreras', [
             'carreras' => $carreras,
-            'escuelas' => $escuelas
+            'escuelas' => $escuelas,
+            'aes' => $aes
         ]);
     }
+
+    public function listarAes()
+    {
+        $carreras = Carreras::orderBy('care_codigo', 'asc')->get();
+        $escuelas = Escuelas::orderBy('escu_codigo', 'asc')->get();
+
+        $aes = AreaEspecialidad::orderBy('aes_codigo', 'asc')->get();
+
+        return view('admin.parametros.areaespecialidad', [
+            'carreras' => $carreras,
+            'escuelas' => $escuelas,
+            'aes' => $aes
+        ]);
+    }
+    public function eliminarAes(Request $request)
+    {
+        $verificarDrop = AreaEspecialidad::where('aes_codigo', $request->aes_codigo)->first();
+
+        if (!$verificarDrop) {
+            return redirect()->route('admin.listar.aespecialidad')->with('errorCarrera', 'El área no se encuentra registrada en el sistema.');
+        }
+        $Drop = AreaEspecialidad::where('aes_codigo', $request->aes_codigo)->delete();
+        if (!$Drop) {
+            return redirect()->back()->with('errorCarrera', 'El área no se pudo eliminar, intente más tarde.');
+        }
+
+        return redirect()->route('admin.listar.aespecialidad')->with('exitoCarrera', 'El área fue eliminada correctamente.');
+    }
+
 
     public function eliminarCarreras(Request $request)
     {
@@ -794,6 +826,7 @@ class ParametrosController extends Controller
         $carrera->care_nombre = $request->input('care_nombre');
         $carrera->care_descripcion = $request->input('care_descripcion');
         $carrera->escu_codigo = $request->input('escu_codigo');
+        $carrera->aes_codigo = $request->input('aes_codigo');
         $carrera->care_meta_estudiantes = $request->input('meta_estudiantes');
         $carrera->care_meta_docentes = $request->input('meta_docentes');
         $carrera->care_meta_soc_comunitarios = $request->input('meta_comunitarios');
@@ -804,6 +837,33 @@ class ParametrosController extends Controller
         $carrera->save();
 
         return redirect()->back()->with('exitoCarrera', 'La carrera ha sido actualizada correctamente.');
+    }
+
+    public function actualizarAes(Request $request, $aes_codigo)
+    {
+        // Obtener la carrera por su código
+        $aes = AreaEspecialidad::where('aes_codigo', $aes_codigo)->first();
+
+        // Verificar si la carrera existe
+        if (!$aes) {
+            return redirect()->back()->with('errorCarrera', 'El área de especialidad no se encuentra registrada en el sistema.');
+        }
+
+        $validacion = $request->validate([
+            'aes_nombre' => 'required|max:255',
+        ], [
+            'aes_nombre.required' => 'El nombre es requerido.',
+            'aes_nombre.max' => 'El nombre excede el máximo de caracteres permitidos (255).'
+        ]);
+
+        if (!$validacion) {
+            return redirect()->back()->with('errorCarrera', 'Problemas al actualizar el área.');
+        }
+
+        $aes->aes_nombre = $request->input('aes_nombre');
+        $aes->save();
+
+        return redirect()->back()->with('exitoCarrera', 'El área ha sido actualizada correctamente.');
     }
 
 
@@ -832,6 +892,7 @@ class ParametrosController extends Controller
         $carrera->care_nombre = $request->input('care_nombre');
         $carrera->care_descripcion = $request->input('care_descripcion');
         $carrera->escu_codigo = $request->input('escu_codigo');
+        $carrera->aes_codigo = $request->input('aes_codigo');
         $carrera->care_meta_estudiantes = $request->input('meta_estudiantes');
         $carrera->care_meta_docentes = $request->input('meta_docentes');
         $carrera->care_meta_soc_comunitarios = $request->input('meta_comunitarios');
@@ -844,6 +905,28 @@ class ParametrosController extends Controller
         $carrera->save();
 
         return redirect()->back()->with('exitoCarrera', 'Carrera creada exitosamente');
+    }
+
+    public function crearAes(Request $request)
+    {
+        $validacion = $request->validate([
+            'aes_nombre' => 'required|max:255',
+        ], [
+            'aes_nombre.required' => 'El nombre es requerido.',
+            'aes_nombre.max' => 'El nombre excede el máximo de caracteres permitidos (255).'
+        ]);
+
+        if (!$validacion) {
+            return redirect()->route('admin.listar.escuelas')->with('errorEscuela', 'Problemas al crear el área.');
+        }
+
+        $aes = new AreaEspecialidad();
+        $aes->aes_nombre = $request->input('aes_nombre');
+
+        // Guardar la aes en la base de datos
+        $aes->save();
+
+        return redirect()->back()->with('exitoCarrera', 'Área creada exitosamente');
     }
 
 

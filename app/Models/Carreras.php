@@ -18,6 +18,7 @@ class Carreras extends Model
     protected $fillable = [
         'care_codigo',
         'escu_codigo',
+        'aes_codigo',
         'care_nombre',
         'care_descripcion',
         'care_director',

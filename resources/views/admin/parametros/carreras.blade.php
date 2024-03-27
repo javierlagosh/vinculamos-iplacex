@@ -154,7 +154,7 @@
                             </div>
                         </div> --}}
                             <div class="form-group">
-                                <label>Área</label>
+                                <label>Escuela</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -166,6 +166,24 @@
                                             <option value="{{ $escuela->escu_codigo }}"
                                                 {{ $care->escu_codigo == $escuela->escu_codigo ? 'selected' : '' }}>
                                                 {{ $escuela->escu_nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Área de especialidad</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </div>
+                                    <select class="form-control" id="aes_codigo" name="aes_codigo">
+                                        @foreach ($aes as $area)
+                                            <option value="{{ $area->aes_codigo }}"
+                                                {{ $care->aes_codigo == $area->aes_codigo ? 'selected' : '' }}>
+                                                {{ $area->aes_nombre }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -372,7 +390,7 @@
                             </div>
                         </div> --}}
                         <div class="form-group">
-                            <label>Área</label>
+                            <label>Escuela</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -382,6 +400,31 @@
                                 <select class="form-control" id="escu_codigo" name="escu_codigo">
                                     @foreach ($escuelas as $escuela)
                                         <option value="{{ $escuela->escu_codigo }}">{{ $escuela->escu_nombre }}</option>
+                                    @endforeach
+                                </select>
+
+                                @if ($errors->has('escu_codigo'))
+                                    <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                        style="width:100%">
+                                        <div class="alert-body">
+                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                            <strong>{{ $errors->first('escu_codigo') }}</strong>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Área de especialidad</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                </div>
+                                <select class="form-control" id="aes_codigo" name="aes_codigo">
+                                    @foreach ($aes as $area)
+                                        <option value="{{ $area->aes_codigo }}">{{ $area->aes_nombre }}</option>
                                     @endforeach
                                 </select>
 

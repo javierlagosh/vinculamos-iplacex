@@ -50,6 +50,7 @@
             <ul class="dropdown-menu">
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.sedes")}}">Sedes</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.escuelas")}}">Escuelas</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.aespecialidad")}}">Áreas de especialidad</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.carreras")}}">Carreras</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Impactos</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitosaccion")}}">Ambitos Acción</a></li>

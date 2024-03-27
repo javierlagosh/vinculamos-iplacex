@@ -124,10 +124,13 @@ Route::middleware('verificar.admin')->group(function () {
 
     //Carreras
     Route::get('admin/listar-carreras', [ParametrosController::class, 'listarCarreras'])->name('admin.listar.carreras');
+    Route::get('admin/listar-area-especialidad', [ParametrosController::class, 'listarAes'])->name('admin.listar.aespecialidad');
     Route::delete('admin/eliminar-carreras/', [ParametrosController::class, 'eliminarCarreras'])->name('admin.eliminar.carreras');
+    Route::delete('admin/eliminar-aes/', [ParametrosController::class, 'eliminarAes'])->name('admin.eliminar.aes');
     Route::put('admin/editar-carreras/{care_codigo}', [ParametrosController::class, 'actualizarCarreras'])->name('admin.actualizar.carreras');
+    Route::put('admin/editar-aes/{aes_codigo}', [ParametrosController::class, 'actualizarAes'])->name('admin.actualizar.aes');
     Route::post('admin/crear-carreras/', [ParametrosController::class, 'crearCarreras'])->name('admin.crear.carreras');
-
+    Route::post('admin/crear-aes/', [ParametrosController::class, 'crearAes'])->name('admin.crear.aes');
     //Escuelas
     Route::get('admin/listar-escuelas', [ParametrosController::class, 'listarEscuelas'])->name('admin.listar.escuelas');
     Route::delete('admin/eliminar-escuelas/', [ParametrosController::class, 'eliminarEscuelas'])->name('admin.eliminar.escuelas');
