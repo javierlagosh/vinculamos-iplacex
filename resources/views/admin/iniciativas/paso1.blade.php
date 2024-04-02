@@ -87,6 +87,10 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Sección 1 - Antecedentes generales</h4>
+                        </div>
+
+                        <div class="card-header">
+
                             @if (isset($iniciativa) && $editar)
                                 <div class="card-header-action">
                                     <div class="dropdown d-inline">
@@ -162,10 +166,10 @@
                                         <label style="font-size: 110%">Nombre de iniciativa</label> <label for=""
                                             style="color: red;">*</label>
                                         @if (isset($iniciativa) && $editar)
-                                            <input type="text" class="form-control" id="nombre" name="nombre"
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="nombre" name="nombre"
                                                 value="{{ old('nombre') ?? @$iniciativa->inic_nombre }}">
                                         @else
-                                            <input type="text" class="form-control" id="nombre" name="nombre"
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="nombre" name="nombre"
                                                 value="{{ old('nombre') }}">
                                         @endif
                                         @if ($errors->has('nombre'))
