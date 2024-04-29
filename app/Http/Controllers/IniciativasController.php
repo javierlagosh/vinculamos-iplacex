@@ -15,11 +15,13 @@ use App\Models\TipoRRHH;
 use App\Models\Convenios;
 use App\Models\Entidades;
 use App\Models\MetasInic;
+use App\Models\Asignaturas;
 use App\Models\pivoteOds;
 use App\Models\Programas;
 use App\Models\Tematicas;
 use App\Models\CostosRrhh;
 use App\Models\Evaluacion;
+
 use App\Models\Mecanismos;
 use App\Models\Resultados;
 use App\Models\Iniciativas;
@@ -565,6 +567,7 @@ class IniciativasController extends Controller
         $sedes = Sedes::all();
         $comunas = Comuna::all();
         $carreras = Carreras::all();
+        $asignaturas = Asignaturas::all();
 
 
         return view('admin.iniciativas.paso1', [
@@ -581,14 +584,16 @@ class IniciativasController extends Controller
             'escuelas' => $escuelas,
             'comunas' => $comunas,
             'carreras' => $carreras,
+            'asignaturas' => $asignaturas
         ]);
     }
 
     public function verificarPaso1(Request $request)
     {
+        //TODO: LAS ASIGNATURAS SE DEBERIAN GUARDAR EN UNA NUEVA COLUMNA DE PARTICIPANTES_INTERNOS
+        //PREGUNTAR COMO VA LA COSA PORQUE PAIN DOCENTES Y PAIN ESTUDIANTES SON POR CARRERA Y NO POR ASIGNATURA POR LO QUE UNA CARRERA TIENE MÁS DOCENTES Y ESTUDIANTES QUE UNA ASIGNATURA
         $request->validate([
             'nombre' => 'required|max:255',
-            'anho' => 'required',
             'inic_formato' => 'required',
             'description' => 'required',
             'carreras' => 'required',
@@ -612,11 +617,19 @@ class IniciativasController extends Controller
             /* 'territorio.required' => 'Especifique si la iniciativa es a nivel nacional o internacional.',
             'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
         ]);
-
+        $anho = Carbon::parse($request->desde)->format('Y');
         $inicCrear = Iniciativas::insertGetId([
             'inic_nombre' => $request->nombre,
-            'inic_anho' => $request->anho,
+            'inic_anho' => $anho,
+            'inic_desde' => $request->desde,
+            'inic_hasta' => $request->hasta,
+            'inic_responsable' => $request->inic_responsable,
+            'inic_bimestre' => $request->inic_bimestre,
+            'inic_escuela_ejecutora' => $request->inic_escuela_ejecutora,
+            'inic_macrozona' => $request->inic_macrozona,
             'inic_formato' => $request->inic_formato,
+            'inic_brecha' => $request->brecha,
+            'inic_diagnostico' => $request->diagnostico,
             'inic_descripcion' => $request->description,
             'conv_codigo' => $request->convenio,
             'meca_codigo' => $request->mecanismos,
@@ -981,11 +994,18 @@ class IniciativasController extends Controller
             'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
         ]);
 
+        //obtener el anho del request date y convertirlo a number
+        $anho = Carbon::parse($request->desde)->format('Y');
+
         $inicActualizar = Iniciativas::where('inic_codigo', $inic_codigo)->update([
             'inic_nombre' => $request->nombre,
-            'inic_anho' => $request->anho,
+            'inic_anho' => $anho,
             'inic_formato' => $request->inic_formato,
             'inic_descripcion' => $request->description,
+            'inic_brecha' => $request->brecha,
+            'inic_diagnostico' => $request->diagnostico,
+            'inic_desde' => $request->desde,
+            'inic_hasta' => $request->hasta,
             'conv_codigo' => $request->convenio,
             'meca_codigo' => $request->mecanismos,
             'tiac_codigo' => $request->tactividad,

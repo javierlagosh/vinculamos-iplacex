@@ -47,6 +47,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
+use App\Models\Asignaturas;
+use App\Models\CarrerasAsignaturas;
 
 class ParametrosController extends Controller
 {
@@ -734,6 +736,87 @@ class ParametrosController extends Controller
         $sede->save(); // Guardar los cambios en la base de datos
 
         return redirect()->route('admin.listar.sedes')->with('exitoSede', 'El campus fue actualizado correctamente.');
+    }
+
+    //TODO: Parametro asignaturas
+    public function listarAsignaturas()
+    {
+        $asignaturas = Asignaturas::orderBy('id', 'asc')->get();
+        $carreras = Carreras::orderBy('care_codigo', 'asc')->get();
+
+        $carrerasAsignaturas = CarrerasAsignaturas::all();
+
+        return view('admin.parametros.asignaturas', [
+            'asignaturas' => $asignaturas,
+            'carreras' => $carreras,
+            'carrerasAsignaturas' => $carrerasAsignaturas
+        ]);
+    }
+
+    public function crearAsignatura(Request $request)
+    {
+        if($request->asignatura_nombre == null){
+            return redirect()->back()->with('errorAsignatura', 'El nombre de la asignatura es requerido.');
+        }
+
+        $asignatura = new Asignaturas();
+        $asignatura->nombre = $request->asignatura_nombre;
+        $asignatura->descripcion = $request->descripcion;
+        $asignatura->save();
+        $idAsignatura = $asignatura->id;
+
+        foreach ($request->carreras as $carrera) {
+
+            $carrerasAsignaturas = new CarrerasAsignaturas();
+            $carrerasAsignaturas->care_codigo = $carrera;
+            $carrerasAsignaturas->asignatura_id = $idAsignatura;
+            $carrerasAsignaturas->save();
+        }
+        return redirect()->back()->with('exitoAsignatura', 'Asignatura creada exitosamente');
+    }
+
+    public function actualizarAsignatura(Request $request , $asignatura_id)
+    {
+
+        $asignatura = Asignaturas::where('id', $asignatura_id)->first();
+        $carrerasAsignaturas = CarrerasAsignaturas::where('asignatura_id', $asignatura_id)->get();
+        //eliminar carreras asignaturas
+        foreach ($carrerasAsignaturas as $carreraAsignatura) {
+            $carreraAsignatura->delete();
+        }
+        //acturalizar carreras asignaturas
+        foreach ($request->carreras as $carrera) {
+            $carrerasAsignaturas = new CarrerasAsignaturas();
+            $carrerasAsignaturas->care_codigo = $carrera;
+            $carrerasAsignaturas->asignatura_id = $asignatura_id;
+            $carrerasAsignaturas->save();
+        }
+        //actualizar asignatura
+        $asignatura->nombre = $request->asignatura_nombre;
+        $asignatura->descripcion = $request->descripcion;
+        $asignatura->save();
+
+        return redirect()->back()->with('exitoAsignatura', 'Asignatura actualizada exitosamente');
+
+    }
+
+    public function eliminarAsignatura(Request $request)
+    {
+        $asignatura = Asignaturas::where('id', $request->asignatura_id)->first();
+        $carrerasAsignaturas = CarrerasAsignaturas::where('asignatura_id', $request->asignatura_id)->get();
+
+        if (!$asignatura) {
+            return redirect()->route('admin.listar.asignaturas')->with('errorAsignatura', 'La asignatura no se encuentra registrada en el sistema.');
+        }
+        //se eliminan las carreras asociadas a esa asignatura
+        foreach ($carrerasAsignaturas as $carreraAsignatura) {
+            $carreraAsignatura->delete();
+        }
+        //se elimina la asignatura
+        $asignatura->delete();
+
+
+        return redirect()->route('admin.listar.asignaturas')->with('exitoAsignatura', 'La asignatura fue eliminada correctamente.');
     }
 
     //TODO: Parametro Carreras

@@ -65,6 +65,7 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <section class="section" style="font-size: 115%;">
         <div class="section-body">
 
@@ -183,7 +184,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                {{-- <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Año</label> <label for=""
                                             style="color: red;">*</label>
@@ -210,6 +211,39 @@
                                                 </div>
                                             </div>
                                         @endif
+                                    </div>
+                                </div> --}}
+                                <div class="col-xl-3">
+                                    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
+                                    <script src="assets/plugins/global/plugins.bundle.js"></script>
+                                    <div class="form-group">
+                                        <div class="mb-0">
+                                            <label style="font-size: 110%">Desde</label> <label for="desde"
+                                            style="color: red;">*</label>
+                                            <br>
+
+                                            @if (isset($iniciativa) && $editar)
+                                                <input type="date" name="desde" id="desde" class="form-control" value="{{ old('inic_desde') ?? @$iniciativa->inic_desde }}">
+                                            @else
+                                                <input type="date" name="desde" id="desde" class="form-control" value="{{ old('inic_desde')}}">
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3">
+                                    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
+                                    <script src="assets/plugins/global/plugins.bundle.js"></script>
+                                    <div class="form-group">
+                                        <div class="mb-0">
+                                            <label style="font-size: 110%">Hasta</label> <label for="hasta"
+                                            style="color: red;">*</label>
+                                            <br>
+                                            @if (isset($iniciativa) && $editar)
+                                                <input type="date" name="hasta" id="hasta" class="form-control" value="{{ old('inic_hasta') ?? @$iniciativa->inic_hasta }}">
+                                            @else
+                                                <input type="date" name="hasta" id="hasta" class="form-control" value="{{ old('inic_hasta')}}">
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-md-3 col-lg-3">
@@ -256,7 +290,139 @@
 
 
                                 </div>
+                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Responsable</label> <label for=""
+                                            style="color: red;">*</label>
+                                        @if (isset($iniciativa) && $editar)
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                                value="{{ old('inic_responsable') ?? @$iniciativa->inic_responsable }}">
+                                        @else
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                                value="{{ old('inic_responsable') }}">
+                                        @endif
+                                        @if ($errors->has('inic_responsable'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_responsable') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-3 col-lg-3">
 
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Bimestre</label> <label
+                                            for="" style="color: red;">*</label>
+
+                                        <select class="form-control select2" id="inic_bimestre" name="inic_bimestre"
+                                            style="width: 100%">
+                                            <option disabled selected>Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                <option value="Enero y febrero"
+                                                    {{ $iniciativa->inic_bimestre == 'Enero y febrero' ? 'selected' : '' }}>
+                                                    Enero y febrero
+                                                </option>
+                                                <option value="Marzo y abril"
+                                                    {{ $iniciativa->inic_bimestre == 'Marzo y abril' ? 'selected' : '' }}>
+                                                    Marzo y abril
+                                                </option>
+                                                <option value="Mayo y junio"
+                                                    {{ $iniciativa->inic_bimestre == 'Mayo y junio' ? 'selected' : '' }}>
+                                                    Mayo y junio
+                                                </option>
+                                                <option value="Julio y agosto"
+                                                    {{ $iniciativa->inic_bimestre == 'Julio y agosto' ? 'selected' : '' }}>
+                                                    Julio y agosto
+                                                </option>
+                                                <option value="Septiembre y octubre"
+                                                    {{ $iniciativa->inic_bimestre == 'Septiembre y octubre' ? 'selected' : '' }}>
+                                                    Septiembre y octubre
+                                                </option>
+                                                <option value="Noviembre y diciembre"
+                                                    {{ $iniciativa->inic_bimestre == 'Noviembre y diciembre' ? 'selected' : '' }}>
+                                                    Noviembre y diciembre
+                                                </option>
+                                            @else
+                                                <option value="Enero y febrero" {{ old('inic_bimestre') == 'Enero y febrero' ? 'selected' : '' }}>
+                                                    Enero y febrero
+                                                </option>
+                                                <option value="Marzo y abril" {{ old('inic_bimestre') == 'Marzo y abril' ? 'selected' : '' }}>
+                                                    Marzo y abril
+                                                </option>
+                                                <option value="Mayo y junio" {{ old('inic_bimestre') == 'Mayo y junio' ? 'selected' : '' }}>
+                                                    Mayo y junio
+                                                </option>
+                                                <option value="Julio y agosto" {{ old('inic_bimestre') == 'Julio y agosto' ? 'selected' : '' }}>
+                                                    Julio y agosto
+                                                </option>
+                                                <option value="Septiembre y octubre" {{ old('inic_bimestre') == 'Septiembre y octubre' ? 'selected' : '' }}>
+                                                    Septiembre y octubre
+                                                </option>
+                                                <option value="Noviembre y diciembre" {{ old('inic_bimestre') == 'Noviembre y diciembre' ? 'selected' : '' }}>
+                                                    Noviembre y diciembre
+                                                </option>
+                                            @endif
+                                        </select>
+                                        @if ($errors->has('inic_bimestre'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_bimestre') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label style="font-size: 110%">Brecha</label> <label for=""
+                                        style="color: red;">*</label>
+                                        <div class="input-group">
+                                            @if (isset($iniciativa) && $editar)
+                                                <textarea class="formbold-form-input" id="brecha" name="brecha" rows="5" style="width: 100%;">{{ old('brecha') ?? @$iniciativa->inic_brecha }}</textarea>
+                                            @else
+                                                <textarea class="formbold-form-input" id="brecha" name="brecha" rows="5" style="width: 100%;">{{ old('brecha') }}</textarea>
+                                            @endif
+                                        </div>
+                                        @if ($errors->has('brecha'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('brecha') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label style="font-size: 110%">Diagnóstico</label> <label for=""
+                                        style="color: red;">*</label>
+                                        <div class="input-group">
+                                            @if (isset($iniciativa) && $editar)
+                                                <textarea class="formbold-form-input" id="diagnostico" name="diagnostico" rows="5" style="width: 100%;">{{ old('diagnostico') ?? @$iniciativa->inic_diagnostico }}</textarea>
+                                            @else
+                                                <textarea class="formbold-form-input" id="diagnostico" name="diagnostico" rows="5" style="width: 100%;">{{ old('diagnostico') }}</textarea>
+                                            @endif
+                                        </div>
+                                        @if ($errors->has('diagnostico'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('diagnostico') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                             <div class="">
                                 <div class="form-group">
@@ -913,12 +1079,63 @@
                                         @endif
                                     </div>
                                 </div>
+                                {{-- TODO: CREAR TABLA ESCUELA EJECUTORA  Y PASARLO A SELECT --}}
+                                <div class="col-xl-3 col-md-3 col-lg-3">
+
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Escuela ejecutora</label> <label
+                                            for="" style="color: red;">*</label>
+
+                                        <select class="form-control select2" id="inic_escuela_ejecutora" name="inic_escuela_ejecutora"
+                                            style="width: 100%">
+                                            <option disabled selected>Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                @foreach ($escuelas as $escuela)
+                                                    @if ($escuela->escu_codigo == $iniciativa->inic_escuela_ejecutora)
+                                                        <option value="{{ $escuela->escu_codigo }}"
+                                                            {{ old('inic_escuela_ejecutora', $iniciativa->inic_escuela_ejecutora) == $escuela->escu_codigo ? 'selected' : '' }}>
+                                                            {{ $escuela->escu_nombre }}</option>
+                                                    @else
+                                                        <option value="{{ $escuela->escu_codigo }}">{{ $escuela->escu_nombre }}
+                                                        </option>
+                                                    @endif
+
+
+                                                @endforeach
+                                            @else
+                                            @foreach ($escuelas as $escuela)
+                                                <option value="{{$escuela->escu_codigo}}">{{$escuela->escu_nombre}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                        @if ($errors->has('inic_macrozona'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_macrozona') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+
+                                </div>
+
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Escuelas</label> <label for=""
-                                            style="color: red;">*</label>
-                                        <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
-                                            for="selectAllEscuelas">Todas</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label style="font-size: 110%">Escuelas Colaboradoras</label>
+                                                <label for="" style="color: red;">*</label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="checkbox" id="selectAllEscuelas">
+                                                <label for="selectAllEscuelas">Todas</label>
+                                            </div>
+                                        </div>
+
+
                                         <select class="form-control select2" name="escuelas[]" multiple=""
                                             style="width: 100%" id="escuelas">
                                             @if (isset($iniciativa) && $editar)
@@ -992,6 +1209,49 @@
 
                                     </div>
                                 </div>
+                                {{-- TODO: CREAR TABLA ASIGNATURA --}}
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Asignaturas</label> <label for=""
+                                            style="color: red;">*</label><input type="checkbox" id="selectAllCarreras"
+                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label>
+
+                                        <select class="form-control select2" multiple="" id="carreras"
+                                            name="carreras[]" style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                estoy aca
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($asignaturas as $asignatura)
+                                                    <option value="{{ $asignatura->id }}"
+                                                        {{ in_array($asignatura->nombre, old('asignaturas', [])) || in_array($asignatura->id, $asigSec) ? 'selected' : '' }}>
+                                                        {{ $asignatura->nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($asignaturas as $asignatura)
+                                                    <option value="{{ $asignatura->id }}"
+                                                        {{ collect(old('asignaturas'))->contains($asignatura->id) ? 'selected' : '' }}>
+                                                        {{ $asignatura->nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('asignaturas'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('asignaturas') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                </div>
 
 
 
@@ -1036,6 +1296,45 @@
                                         @endif
                                     </div>
                                 </div>
+                                {{-- TODO: CREAR TABLA DISPOSITIVO --}}
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+
+                                        <label style="font-size: 110%">Dispositivo</label> <label for=""
+                                            style="color: red;">*</label>
+                                        <select class="form-control select2" id="tactividad" name="tactividad"
+                                            style="width: 100%">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                @forelse ($tipoActividad as $actividad)
+                                                    <option value="{{ $actividad->tiac_codigo }}"
+                                                        {{ $iniciativa->tiac_codigo == $actividad->tiac_codigo ? 'selected' : '' }}>
+                                                        {{ $actividad->tiac_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                @forelse ($tipoActividad as $actividad)
+                                                    <option value="{{ $actividad->tiac_codigo }}"
+                                                        {{ old('tactividad') == $actividad->tiac_codigo ? 'selected' : '' }}>
+                                                        {{ $actividad->tiac_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('programas'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <strong>{{ $errors->first('tactividad') }}</strong>
+                                                </div>
+                                            </div>
+                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        @endif
+                                    </div>
+                                </div>
+
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
@@ -1117,6 +1416,60 @@
                             </div>
 
                             <div class="row">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
+
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Macrozona</label> <label
+                                            for="" style="color: red;">*</label>
+
+                                        <select class="form-control select2" id="inic_macrozona" name="inic_macrozona"
+                                            style="width: 100%">
+                                            <option disabled selected>Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                <option value="Zona Norte"
+                                                    {{ $iniciativa->inic_macrozona == 'Zona Norte' ? 'selected' : '' }}>
+                                                    Zona Norte
+                                                </option>
+                                                <option value="Zona Central"
+                                                    {{ $iniciativa->inic_macrozona == 'Zona Central' ? 'selected' : '' }}>
+                                                    Zona Central
+                                                </option>
+                                                <option value="Zona Sur"
+                                                    {{ $iniciativa->inic_macrozona == 'Zona Sur' ? 'selected' : '' }}>
+                                                    Zona Sur
+                                                </option>
+                                                <option value="Zona Austral"
+                                                    {{ $iniciativa->inic_macrozona == 'Zona Austral' ? 'selected' : '' }}>
+                                                    Zona Austral
+                                                </option>
+                                            @else
+                                                <option value="Zona Norte" {{ old('inic_macrozona') == 'Zona Norte' ? 'selected' : '' }}>
+                                                    Zona Norte
+                                                </option>
+                                                <option value="Zona Central" {{ old('inic_macrozona') == 'Zona Central' ? 'selected' : '' }}>
+                                                    Zona Central
+                                                </option>
+                                                <option value="Zona Sur" {{ old('inic_macrozona') == 'Zona Sur' ? 'selected' : '' }}>
+                                                    Zona Sur
+                                                </option>
+                                                <option value="Zona Austral" {{ old('inic_macrozona') == 'Zona Austral' ? 'selected' : '' }}>
+                                                    Zona Austral
+                                                </option>
+                                            @endif
+                                        </select>
+                                        @if ($errors->has('inic_macrozona'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_macrozona') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+
+                                </div>
 
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
