@@ -303,7 +303,7 @@ class IniciativasController extends Controller
             ->first();
 
             $escuelaEjecutora = Escuelas::where('escu_codigo', $iniciativa->inic_escuela_ejecutora)->first();
-            $escuelaEjecutora = $escuelaEjecutora->escu_nombre;
+            $escuelaEjecutora = $escuelaEjecutora->escu_nombre ?? "No especificado";
 
 
         // return $iniciativa;

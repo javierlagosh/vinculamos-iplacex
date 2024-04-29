@@ -1426,34 +1426,41 @@
                                             style="width: 100%">
                                             <option disabled selected>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
-                                                <option value="Zona Norte"
-                                                    {{ $iniciativa->inic_macrozona == 'Zona Norte' ? 'selected' : '' }}>
-                                                    Zona Norte
+                                                <option value="Macrozona Norte"
+                                                    {{ $iniciativa->inic_macrozona == 'Macrozona Norte' ? 'selected' : '' }}>
+                                                    Macrozona Norte
                                                 </option>
-                                                <option value="Zona Central"
-                                                    {{ $iniciativa->inic_macrozona == 'Zona Central' ? 'selected' : '' }}>
-                                                    Zona Central
+                                                <option value="Macrozona Central"
+                                                    {{ $iniciativa->inic_macrozona == 'Macrozona Central' ? 'selected' : '' }}>
+                                                    Macrozona Central
                                                 </option>
-                                                <option value="Zona Sur"
-                                                    {{ $iniciativa->inic_macrozona == 'Zona Sur' ? 'selected' : '' }}>
-                                                    Zona Sur
+                                                <option value="Macrozona Centro Sur"
+                                                    {{ $iniciativa->inic_macrozona == 'Macrozona Centro Sur' ? 'selected' : '' }}>
+                                                    Macrozona Centro Sur
                                                 </option>
-                                                <option value="Zona Austral"
-                                                    {{ $iniciativa->inic_macrozona == 'Zona Austral' ? 'selected' : '' }}>
-                                                    Zona Austral
+                                                <option value="Macrozona Sur"
+                                                    {{ $iniciativa->inic_macrozona == 'Macrozona Sur' ? 'selected' : '' }}>
+                                                    Macrozona Sur
+                                                </option>
+                                                <option value="Macrozona Austral"
+                                                    {{ $iniciativa->inic_macrozona == 'Macrozona Austral' ? 'selected' : '' }}>
+                                                    Macrozona Austral
                                                 </option>
                                             @else
-                                                <option value="Zona Norte" {{ old('inic_macrozona') == 'Zona Norte' ? 'selected' : '' }}>
-                                                    Zona Norte
+                                                <option value="Macrozona Norte" {{ old('inic_macrozona') == 'Macrozona Norte' ? 'selected' : '' }}>
+                                                    Macrozona Norte
                                                 </option>
-                                                <option value="Zona Central" {{ old('inic_macrozona') == 'Zona Central' ? 'selected' : '' }}>
-                                                    Zona Central
+                                                <option value="Macrozona Central" {{ old('inic_macrozona') == 'Macrozona Central' ? 'selected' : '' }}>
+                                                    Macrozona Central
                                                 </option>
-                                                <option value="Zona Sur" {{ old('inic_macrozona') == 'Zona Sur' ? 'selected' : '' }}>
-                                                    Zona Sur
+                                                <option value="Macrozona Centro Sur" {{ old('inic_macrozona') == 'Macrozona Centro Sur' ? 'selected' : '' }}>
+                                                    Macrozona Centro Sur
                                                 </option>
-                                                <option value="Zona Austral" {{ old('inic_macrozona') == 'Zona Austral' ? 'selected' : '' }}>
-                                                    Zona Austral
+                                                <option value="Macrozona Sur" {{ old('inic_macrozona') == 'Macrozona Sur' ? 'selected' : '' }}>
+                                                    Macrozona Sur
+                                                </option>
+                                                <option value="Macrozona Austral" {{ old('inic_macrozona') == 'Macrozona Austral' ? 'selected' : '' }}>
+                                                    Macrozona Austral
                                                 </option>
                                             @endif
                                         </select>
