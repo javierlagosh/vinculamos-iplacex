@@ -460,6 +460,14 @@
                                             </tr>
                                             <tr>
                                                 <td>
+                                                    <strong>Dispositivo</strong>
+                                                </td>
+                                                <td>
+                                                    {{ $dispositivos->nombre ?? 'No registrado' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
                                                     <strong>Asignatura(s)</strong>
                                                 </td>
                                                 <td>

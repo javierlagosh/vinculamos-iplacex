@@ -280,6 +280,10 @@ class IniciativasController extends Controller
         // $ods = Ods::select('nombre_ods')->whereIn('id_ods', $ods)->get();
 
         // dd($ods);
+        $dispositivos = Dispositivos::join('iniciativas', 'dispositivo.id', 'iniciativas.dispositivo_id')
+            ->where('inic_codigo', $inic_codigo)
+            ->get()
+            ->first();
 
         $iniciativas_asignaturas = IniciativasAsignaturas::join('asignaturas', 'asignaturas.id', 'iniciativas_asignaturas.asignatura_id')
             ->where('inic_codigo', $inic_codigo)
@@ -390,7 +394,8 @@ class IniciativasController extends Controller
             'entidades' => $entidadesRecursos,
             'ods_array' => $ods,
             'escuelaEjecutora' => $escuelaEjecutora,
-            'iniciativas_asignaturas' => $iniciativas_asignaturas
+            'iniciativas_asignaturas' => $iniciativas_asignaturas,
+            'dispositivos' => $dispositivos
         ]);
     }
 
