@@ -290,10 +290,21 @@ class IniciativasController extends Controller
                 'iniciativas.inic_estado',
                 'mecanismos.meca_nombre',
                 'tipo_actividades.tiac_nombre',
-                'convenios.conv_nombre'
+                'convenios.conv_nombre',
+                'iniciativas.inic_brecha',
+                'iniciativas.inic_diagnostico',
+                'iniciativas.inic_macrozona',
+                'iniciativas.inic_bimestre',
+                'iniciativas.inic_desde',
+                'iniciativas.inic_hasta',
+                'iniciativas.inic_escuela_ejecutora',
             )
             ->where('iniciativas.inic_codigo', $inic_codigo)
             ->first();
+
+            $escuelaEjecutora = Escuelas::where('escu_codigo', $iniciativa->inic_escuela_ejecutora)->first();
+            $escuelaEjecutora = $escuelaEjecutora->escu_nombre;
+
 
         // return $iniciativa;
         $participantes = ParticipantesInternos::join('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
@@ -371,6 +382,7 @@ class IniciativasController extends Controller
             'recursoRrhh' => $corhListar,
             'entidades' => $entidadesRecursos,
             'ods_array' => $ods,
+            'escuelaEjecutora' => $escuelaEjecutora
         ]);
     }
 

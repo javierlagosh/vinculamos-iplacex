@@ -254,12 +254,56 @@
 
                                             <tr>
                                                 <td>
-                                                    <strong>Año</strong>
+                                                    <strong>Escuela ejecutora</strong>
                                                 </td>
                                                 <td>
-                                                    {{ $iniciativa->inic_anho }}
+                                                    {{ $escuelaEjecutora ?? 'No registrado' }}
                                                 </td>
                                             </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <strong>Desde</strong>
+                                                </td>
+                                                <td>
+                                                    {{ $iniciativa->inic_desde ?? 'No registrado' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Hasta</strong>
+                                                </td>
+                                                <td>
+                                                    {{ $iniciativa->inic_hasta ?? 'No registrado' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Bimestre</strong>
+                                                </td>
+                                                <td>
+                                                    {{ $iniciativa->inic_bimestre ?? 'No registrado' }}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <strong>Brecha</strong>
+                                                </td>
+                                                <td>
+                                                    {{ $iniciativa->inic_brecha ?? 'No registrado' }}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <strong>Diagnóstico</strong>
+                                                </td>
+                                                <td>
+                                                    {{ $iniciativa->inic_diagnostico ?? 'No registrado' }}
+                                                </td>
+                                            </tr>
+
 
                                             <tr>
                                                 <td>
@@ -412,6 +456,14 @@
                                                     });
                                                     </script> --}}
                                                     @endforelse
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Macrozona</strong>
+                                                </td>
+                                                <td>
+                                                    {{ $iniciativa->inic_macrozona ?? 'No registrado' }}
                                                 </td>
                                             </tr>
                                             <tr>
