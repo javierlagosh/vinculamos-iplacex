@@ -23,6 +23,7 @@
                 <li><a class="nav-link" href="">Sedes</a></li>
                 <li><a class="nav-link" href="">Áreas</a></li>
                 <li><a class="nav-link" href="">Carreras</a></li>
+                <li><a class="nav-link" href="">Asignaturas</a></li>
                 <li><a class="nav-link" href="">Ambitos de Contribución</a></li>
                 <li><a class="nav-link" href="">Programas</a></li>
                 <li><a class="nav-link" href="">Convenios</a></li>
