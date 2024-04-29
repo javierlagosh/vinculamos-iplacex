@@ -779,7 +779,8 @@ class IniciativasController extends Controller
             }
         }
 
-        $odsValues = $request->ods_values ?? [];
+        try {
+            $odsValues = $request->ods_values ?? [];
         $odsMetasValues = $request->ods_metas_values ?? [];
         $odsMetasDescValues = $request->ods_metas_desc_values ?? [];
         $fundamentoOds = $request->ods_fundamentos_values ?? [];
@@ -856,6 +857,9 @@ class IniciativasController extends Controller
                 'fundamento' => $fundamentosNew[$i],
             ]);
         }
+        } catch (\Throwable $th) {
+            $errorODS = 'Ocurrió un error durante el registro de los ODS, intente más tarde.';
+        }
 
         // foreach ($fundamentoOds as $fundamentoValue){
         //     FundamentoInic::create([
@@ -869,7 +873,9 @@ class IniciativasController extends Controller
             ParticipantesInternos::where('inic_codigo', $inic_codigo)->delete();
             return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de las unidades, intente más tarde.')->withInput();
         }
-
+        if (isset($errorODS)) {
+            return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente, Lamentablemente ocurrió un error al registrar los ODS, por favor intente nuevamente...');
+        }
         return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
     }
 

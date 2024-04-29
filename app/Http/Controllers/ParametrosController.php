@@ -1569,10 +1569,20 @@ class ParametrosController extends Controller
             'tiac_nombre' => 'required|max:255',
         ]);
 
+
+
         $tiac_creado = TipoActividades::insertGetId([
             'comp_codigo' => $request->input('componente'),
             'tiac_nombre' => $request->input('tiac_nombre'),
             'tiac_meta' => $request->input('meta'),
+            'meta_adm' => $request->input('meta_adm') ?? null,
+            'meta_edu' => $request->input('meta_edu') ?? null,
+            'meta_salud' => $request->input('meta_salud') ?? null,
+            'meta_tec' => $request->input('meta_tec') ?? null,
+            'meta_gastr' => $request->input('meta_gastr') ?? null,
+            'meta_inf' => $request->input('meta_inf') ?? null,
+            'meta_const' => $request->input('meta_const') ?? null,
+            'meta_desa' => $request->input('meta_desa') ?? null,
             'tiac_visible' => 1,
             'tiac_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'tiac_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -1630,6 +1640,14 @@ class ParametrosController extends Controller
             'comp_codigo' => $request->input('componente'),
             'tiac_nombre' => $request->input('tiac_nombre'),
             'tiac_meta' => $request->input('meta'),
+            'meta_adm' => $request->input('meta_adm') ?? null,
+            'meta_edu' => $request->input('meta_edu') ?? null,
+            'meta_salud' => $request->input('meta_salud') ?? null,
+            'meta_tec' => $request->input('meta_tec') ?? null,
+            'meta_gastr' => $request->input('meta_gastr') ?? null,
+            'meta_inf' => $request->input('meta_inf') ?? null,
+            'meta_const' => $request->input('meta_const') ?? null,
+            'meta_desa' => $request->input('meta_desa') ?? null,
             'tiac_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'tiac_nickname_mod' => Session::get('admin')->usua_nickname,
             'tiac_rol_mod' => Session::get('admin')->rous_codigo,

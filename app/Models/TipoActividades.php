@@ -30,7 +30,15 @@ class TipoActividades extends Model
         'tiac_creado',
         'tiac_actualizado',
         'tiac_nickname_mod',
-        'tick_rol_mod'
+        'tick_rol_mod',
+        'meta_adm',
+        'meta_edu',
+        'meta_salud',
+        'meta_tec',
+        'meta_gastr',
+        'meta_inf',
+        'meta_const',
+        'meta_desa',
     ];
 
     protected $attributes = [
