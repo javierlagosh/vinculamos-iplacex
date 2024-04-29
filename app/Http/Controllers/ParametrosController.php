@@ -17,6 +17,8 @@ use App\Models\Pais;
 use App\Models\Regiones;
 use App\Models\Programas;
 use App\Models\ProgramasContribuciones;
+use App\Models\Dispositivos;
+use App\Models\IniciativasDispositivos;
 use App\Models\Sedes;
 use App\Models\SedesSocios;
 use App\Models\SedesEscuelas;
@@ -49,6 +51,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 use App\Models\Asignaturas;
 use App\Models\CarrerasAsignaturas;
+use App\Models\DispositivosTiac;
 
 class ParametrosController extends Controller
 {
@@ -738,6 +741,61 @@ class ParametrosController extends Controller
         return redirect()->route('admin.listar.sedes')->with('exitoSede', 'El campus fue actualizado correctamente.');
     }
 
+    //TODO: Parametro Dispositivo
+
+    public function listarDispositivos()
+    {
+        $asignaturas = Asignaturas::orderBy('id', 'asc')->get();
+        $carreras = Carreras::orderBy('care_codigo', 'asc')->get();
+
+        $carrerasAsignaturas = CarrerasAsignaturas::all();
+        $instrumentos = TipoActividades::orderBy('tiac_codigo', 'asc')->get();
+        $dispositivosTiac = DispositivosTiac::all();
+
+        $dispositivos = Dispositivos::orderBy('id', 'asc')->get();
+        return view('admin.parametros.dispositivos', [
+            'dispositivos' => $dispositivos,
+            'asignaturas' => $asignaturas,
+            'carreras' => $carreras,
+            'carrerasAsignaturas' => $carrerasAsignaturas,
+            'instrumentos' => $instrumentos,
+            'dispositivosTiac' => $dispositivosTiac,
+
+
+        ]);
+    }
+    public function crearDispositivo(Request $request){
+        $request->validate([
+            'dispositivo_nombre' => 'required|max:255',
+        ], [
+            'dispositivo_nombre.required' => 'El nombre del dispositivo es requerido.',
+            'dispositivo_nombre.max' => 'El nombre del dispositivo excede el máximo de caracteres permitidos (255).',
+        ]);
+
+        $dispositivo = new Dispositivos();
+        $dispositivo->nombre = $request->dispositivo_nombre;
+        $dispositivo->tiac_codigo = $request->tiac_codigo;
+        $dispositivo->save();
+
+        return redirect()->back()->with('exitoDispositivo', 'Dispositivo creado exitosamente');
+    }
+
+    public function  actualizarDispositivo(Request $request, $dispositivo_id){
+        $dispositivo = Dispositivos::where('id', $dispositivo_id)->first();
+        $dispositivo->nombre = $request->asignatura_nombre;
+        $dispositivo->tiac_codigo = $request->tiac_codigo;
+        $dispositivo->save();
+
+        return redirect()->back()->with('exitoDispositivo', 'Dispositivo actualizado exitosamente');
+    }
+
+    public function eliminarDispositivo(Request $request){
+        $dispositivo = Dispositivos::where('id', $request->dispositivo_id)->first();
+        $dispositivo->delete();
+        return redirect()->route('admin.listar.dispositivos')->with('exitoDispositivo', 'Dispositivo eliminado correctamente.');
+
+    }
+
     //TODO: Parametro asignaturas
     public function listarAsignaturas()
     {
@@ -746,12 +804,16 @@ class ParametrosController extends Controller
 
         $carrerasAsignaturas = CarrerasAsignaturas::all();
 
+
+
         return view('admin.parametros.asignaturas', [
             'asignaturas' => $asignaturas,
             'carreras' => $carreras,
-            'carrerasAsignaturas' => $carrerasAsignaturas
+            'carrerasAsignaturas' => $carrerasAsignaturas,
         ]);
     }
+
+
 
     public function crearAsignatura(Request $request)
     {

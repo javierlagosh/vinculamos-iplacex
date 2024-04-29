@@ -1216,14 +1216,14 @@
                                             style="color: red;">*</label><input type="checkbox" id="selectAllCarreras"
                                             style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label>
 
-                                        <select class="form-control select2" multiple="" id="carreras"
-                                            name="carreras[]" style="width: 100%">
+                                        <select class="form-control select2" multiple="" id="asignaturas"
+                                            name="asignaturas[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 estoy aca
                                                 {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
                                                 @forelse ($asignaturas as $asignatura)
                                                     <option value="{{ $asignatura->id }}"
-                                                        {{ in_array($asignatura->nombre, old('asignaturas', [])) || in_array($asignatura->id, $asigSec) ? 'selected' : '' }}>
+                                                        {{ in_array($asignatura->nombre, old('asignaturas', [])) || in_array($asignatura->id, $asignaturaSec) ? 'selected' : '' }}>
                                                         {{ $asignatura->nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
@@ -1302,32 +1302,32 @@
 
                                         <label style="font-size: 110%">Dispositivo</label> <label for=""
                                             style="color: red;">*</label>
-                                        <select class="form-control select2" id="tactividad" name="tactividad"
+                                        <select class="form-control select2" id="dispositivo_id" name="dispositivo_id"
                                             style="width: 100%">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
-                                                @forelse ($tipoActividad as $actividad)
-                                                    <option value="{{ $actividad->tiac_codigo }}"
-                                                        {{ $iniciativa->tiac_codigo == $actividad->tiac_codigo ? 'selected' : '' }}>
-                                                        {{ $actividad->tiac_nombre }}</option>
+                                                @forelse ($dispositivos as $dispositivo)
+                                                    <option value="{{ $dispositivo->id }}"
+                                                        {{ $iniciativa->dispositivo_id == $dispositivo->id ? 'selected' : '' }}>
+                                                        {{ $dispositivo->nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
                                             @else
-                                                @forelse ($tipoActividad as $actividad)
-                                                    <option value="{{ $actividad->tiac_codigo }}"
-                                                        {{ old('tactividad') == $actividad->tiac_codigo ? 'selected' : '' }}>
-                                                        {{ $actividad->tiac_nombre }}</option>
+                                                @forelse ($dispositivos as $dispositivo)
+                                                    <option value="{{ $dispositivo->id }}"
+                                                        {{ old('dispositivo_id') == $dispositivo->id ? 'selected' : '' }}>
+                                                        {{ $dispositivo->nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
                                             @endif
                                         </select>
 
-                                        @if ($errors->has('programas'))
+                                        @if ($errors->has('dispositivo_id'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
-                                                    <strong>{{ $errors->first('tactividad') }}</strong>
+                                                    <strong>{{ $errors->first('dispositivo_id') }}</strong>
                                                 </div>
                                             </div>
                                             <button class="close" data-dismiss="alert"><span>&times;</span></button>

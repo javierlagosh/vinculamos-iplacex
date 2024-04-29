@@ -21,7 +21,9 @@ use App\Models\Programas;
 use App\Models\Tematicas;
 use App\Models\CostosRrhh;
 use App\Models\Evaluacion;
-
+use App\Models\IniciativasAsignaturas;
+use App\Models\Dispositivos;
+use App\Models\IniciativasDispositivos;
 use App\Models\Mecanismos;
 use App\Models\Resultados;
 use App\Models\Iniciativas;
@@ -279,6 +281,11 @@ class IniciativasController extends Controller
 
         // dd($ods);
 
+        $iniciativas_asignaturas = IniciativasAsignaturas::join('asignaturas', 'asignaturas.id', 'iniciativas_asignaturas.asignatura_id')
+            ->where('inic_codigo', $inic_codigo)
+            ->get();
+
+
         $iniciativa = Iniciativas::leftjoin('convenios', 'convenios.conv_codigo', '=', 'iniciativas.conv_codigo')
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
             ->leftjoin('mecanismos', 'mecanismos.meca_codigo', '=', 'iniciativas.meca_codigo')
@@ -382,7 +389,8 @@ class IniciativasController extends Controller
             'recursoRrhh' => $corhListar,
             'entidades' => $entidadesRecursos,
             'ods_array' => $ods,
-            'escuelaEjecutora' => $escuelaEjecutora
+            'escuelaEjecutora' => $escuelaEjecutora,
+            'iniciativas_asignaturas' => $iniciativas_asignaturas
         ]);
     }
 
@@ -566,8 +574,6 @@ class IniciativasController extends Controller
     public function crearPaso1()
     {
 
-
-
         $iniciativa = Iniciativas::all();
         $mecanismo = Mecanismos::all();
         $tipoActividad = TipoActividades::all();
@@ -580,6 +586,7 @@ class IniciativasController extends Controller
         $comunas = Comuna::all();
         $carreras = Carreras::all();
         $asignaturas = Asignaturas::all();
+        $dispositivos = Dispositivos::all();
 
 
         return view('admin.iniciativas.paso1', [
@@ -589,6 +596,7 @@ class IniciativasController extends Controller
             'mecanismo' => $mecanismo,
             'tipoActividad' => $tipoActividad,
             'convenios' => $convenios,
+            'dispositivos' => $dispositivos,
             'programas' => $programas,
             'paises' => $paises,
             'regiones' => $regiones,
@@ -602,6 +610,9 @@ class IniciativasController extends Controller
 
     public function verificarPaso1(Request $request)
     {
+
+
+
         //TODO: LAS ASIGNATURAS SE DEBERIAN GUARDAR EN UNA NUEVA COLUMNA DE PARTICIPANTES_INTERNOS
         //PREGUNTAR COMO VA LA COSA PORQUE PAIN DOCENTES Y PAIN ESTUDIANTES SON POR CARRERA Y NO POR ASIGNATURA POR LO QUE UNA CARRERA TIENE MÁS DOCENTES Y ESTUDIANTES QUE UNA ASIGNATURA
         $request->validate([
@@ -638,6 +649,7 @@ class IniciativasController extends Controller
             'inic_responsable' => $request->inic_responsable,
             'inic_bimestre' => $request->inic_bimestre,
             'inic_escuela_ejecutora' => $request->inic_escuela_ejecutora,
+            'dispositivo_id' => $request->dispositivo_id,
             'inic_macrozona' => $request->inic_macrozona,
             'inic_formato' => $request->inic_formato,
             'inic_brecha' => $request->brecha,
@@ -658,6 +670,19 @@ class IniciativasController extends Controller
             return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de los datos de la iniciativa, intente más tarde.')->withInput();
 
         $inic_codigo = $inicCrear;
+
+        $asignaturas = $request->input('asignaturas', []);
+        if (empty($asignaturas))
+        {
+            return redirect()->back()->with('errorPaso1', 'Es necesario que seleccione al menos una asignatura para la iniciativa.')->withInput();
+        }else{
+            foreach ($asignaturas as $asignatura) {
+                    $IniciativasAsignaturas = new IniciativasAsignaturas();
+                    $IniciativasAsignaturas->inic_codigo = $inic_codigo;
+                    $IniciativasAsignaturas->asignatura_id = $asignatura;
+                    $IniciativasAsignaturas->save();
+            }
+        }
 
         IniciativasPais::create([
             'inic_codigo' => $inic_codigo,
@@ -713,6 +738,8 @@ class IniciativasController extends Controller
             IniciativasComunas::where('inic_codigo', $inic_codigo)->delete();
             return redirect()->back()->with('comuError', 'Ocurrió un error durante el registro de las comunas, intente más tarde.')->withInput();
         }
+
+
 
         $pain = [];
         $sedes = $request->input('sedes', []);
@@ -891,6 +918,7 @@ class IniciativasController extends Controller
     public function editarPaso1($inic_codigo)
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
+        $asignaturas = Asignaturas::all();
 
         $iniciativaData = Iniciativas::join('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
             ->where('inic_codigo', $inic_codigo)
@@ -920,6 +948,7 @@ class IniciativasController extends Controller
 
 
         $sedeSecCod = $sedeSec->pluck('sede_codigo')->toArray();
+        $asignaturaSecCod = $asignaturas->pluck('asignatura_id')->toArray();
         $escuSecCod = $escuSec->pluck('escu_codigo')->toArray();
         $careSecCod = $careSec->pluck('care_codigo')->toArray();
         $regiSec = $iniciativaRegion->pluck('regi_codigo')->toArray();
@@ -950,6 +979,7 @@ class IniciativasController extends Controller
             ->get();
 
         // dd($metasData);
+        $dispositivos = Dispositivos::all();
 
         return view('admin.iniciativas.paso1', [
             'editar' => true,
@@ -964,10 +994,13 @@ class IniciativasController extends Controller
             'comunas' => $comunas,
             'convenios' => $convenios,
             'mecanismo' => $mecanismos,
+            'asignaturas' => $asignaturas,
             'paises' => $paises,
             'regiones' => $regiones,
             'escuelas' => $escuelas,
             'sedeSec' => $sedeSecCod,
+            'dispositivos' => $dispositivos,
+            'asignaturaSec' => $asignaturaSecCod,
             'escuSec' => $escuSecCod,
             'careSec' => $careSecCod,
             'carreras' => $carreras,

@@ -122,6 +122,12 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/editar/sedes/{sede_codigo}', [ParametrosController::class, 'editarSedes'])->name('admin.editar.sedes');
     Route::put('admin/actualizar/sedes/{sede_codigo}', [ParametrosController::class, 'actualizarSedes'])->name('admin.actualizar.sedes');
 
+    //Dispositivos
+    Route::get('admin/listar-dispositivos', [ParametrosController::class, 'listarDispositivos'])->name('admin.listar.dispositivos');
+    Route::post('admin/crear-dispositivo/', [ParametrosController::class, 'crearDispositivo'])->name('admin.crear.dispositivo');
+    Route::put('admin/editar-carreras/{dispositivo_id}', [ParametrosController::class, 'actualizarDispositivo'])->name('admin.actualizar.dispositivo');
+    Route::delete('admin/eliminar-dispositivo/', [ParametrosController::class, 'eliminarDispositivo'])->name('admin.eliminar.dispositivo');
+
     //Asignaturas
     Route::get('admin/listar-asignaturas', [ParametrosController::class, 'listarAsignaturas'])->name('admin.listar.asignaturas');
     Route::post('admin/crear-asignatura/', [ParametrosController::class, 'crearAsignatura'])->name('admin.crear.asignatura');
