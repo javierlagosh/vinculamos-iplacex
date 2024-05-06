@@ -35,7 +35,7 @@
         <div class="valor">
             <p style="font-size: 10"><strong>ID: </strong><span>{{$iniciativa->inic_codigo}}</span></p>
             <p style="font-size: 10"><strong>Año: </strong><span>{{$iniciativa->inic_anho}}</span></p>
-            <p style="font-size: 10"><strong>Programas: </strong><span>{{$iniciativa->meca_nombre}}</span></p>
+            <p style="font-size: 10"><strong>Mecanismo: </strong><span>{{$iniciativa->meca_nombre}}</span></p>
             <p style="font-size: 10"><strong>Tipo de actividades: </strong><span>{{$iniciativa->tiac_nombre}}</span></p>
         </div>
         <div class="valor"></div>
