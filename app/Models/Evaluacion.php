@@ -17,6 +17,8 @@ class Evaluacion extends Model
         'eval_codigo',
         'inic_codigo',
         'eval_evaluador',
+        'eval_email',
+        'evatotal_codigo',
         'eval_conocimiento_1',
         'eval_conocimiento_2',
         'eval_conocimiento_3',

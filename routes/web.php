@@ -56,6 +56,7 @@ Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPass
 Route::get('admin/iniciativa/invi/datos', [IniciativasController::class, 'datosIndice']);
 /* Route::post('admin/iniciativa/invi/actualizar', [IniciativasController::class, 'actualizarIndice']); */
 
+//Evaluacion de las iniciativas
 Route::get('admin/iniciativa/listar-evaluaciones', [IniciativasController::class, 'listarEvaluaciones']);
 Route::delete('admin/eliminar-evaluacion/', [IniciativasController::class, 'eliminarEvaluacion'])->name('admin.eliminar.evaluacion');
 
@@ -83,6 +84,26 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/home', function () {
         return view('admin.home');
     })->name('admin.home');
+
+    //TODO: Evaluacion de evidenciavinculam_demo_v2
+    Route::get('admin/iniciativas/{inic_codigo}/evaluar', [IniciativasController::class, 'evaluarIniciativa'])->name('admin.evaluar.iniciativa');
+    Route::get('admin/iniciativas/{inic_codigo}/evaluar/invitar', [IniciativasController::class, 'evaluarIniciativaInvitar'])->name('admin.evaluar.iniciativa.invitar');
+    Route::post('admin/iniciativas/invitar-evaluacion', [IniciativasController::class, 'invitarEvaluacion'])->name('admin.invitar.evaluacion');
+    //Primer paso de la creacion de evaluacion
+    Route::post('admin/iniciativas/crear-evaluacion', [IniciativasController::class, 'crearEvaluacion'])->name('admin.crear.evaluacion');
+    Route::post('admin/iniciativas/eliminar-evaluacion', [IniciativasController::class, 'eliminarEvaluacionInciativa'])->name('admin.eliminar.evaluacion.iniciativa');
+    Route::post('admin/eliminar-invitado/{evainv_codigo}', [IniciativasController::class, 'eliminarInvitadoEvaluacion'])->name('admin.eliminar.invitacion');
+    Route::delete('admin/eliminar-invitado-docente/{evainv_codigo}', [IniciativasController::class, 'eliminarInvitadoEvaluacionDocente'])->name('admin.eliminar.invitacion.docente');
+    Route::delete('admin/eliminar-invitado-externo/{evainv_codigo}', [IniciativasController::class, 'eliminarInvitadoEvaluacionExterno'])->name('admin.eliminar.invitacion.externo');
+    Route::post('admin/iniciativas/carga-individual-evaluacion', [IniciativasController::class, 'cargaIndividualEvaluacion'])->name('admin.iniciativa.evaluar.enviar.cargaIndividual');
+    //Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarArchivo'])->name('procesarArchivo');
+    Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
+    //ver resultados de la evaluacion
+    Route::get('admin/iniciativas/{inic_codigo}/evaluacion/resultados/{invitado}', [IniciativasController::class, 'verEvaluacion'])->name('admin.ver.evaluacion');
+
+    Route::get('admin/iniciativas/{inic_codigo}/evaluar2', [IniciativasController::class, 'evaluarIniciativa2'])->name('admin.evaluar.iniciativa2');
+    Route::get('admin/iniciativas/evaluar', [IniciativasController::class, 'guardarEvaluacion']);
+    Route::get('admin/iniciativas/ingresoEvaluacion', [IniciativasController::class, 'guardarEvaluacion2']);
     // TODO: inicio rutas para gestionar parametros
 
     Route::get('admin/chat', [GPTController::class, 'index'])->name('admin.chat.index');
@@ -316,7 +337,14 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/iniciativas/obtener-comunas', [IniciativasController::class, 'comunasByRegiones']);
     Route::post('admin/inicitiativa/eliminar-externo', [IniciativasController::class, 'eliminarExterno']);
 
-
+    //TODO: Evaluacion de evidenciavinculam_demo_v2
+    Route::get('admin/iniciativas/{inic_codigo}/evaluar', [IniciativasController::class, 'evaluarIniciativa'])->name('admin.evaluar.iniciativa');
+    Route::post('admin/iniciativas/evaluar', [IniciativasController::class, 'guardarEvaluacion'])->name('admin.guardar.evaluacion');
+    // ruta evaluacion invitar
+    Route::get('admin/iniciativas/{inic_codigo}/evaluar/invitar/{invitado}', [IniciativasController::class, 'iniciativaEvaluarInvitar'])->name('admin.iniciativa.evaluar.invitar');
+    // ruta evaluacion correo
+    Route::get('admin/iniciativas/{inic_codigo}/evaluar/invitar/{invitado}/correo', [IniciativasController::class, 'iniciativaEvaluarInvitarCorreo'])->name('admin.iniciativa.evaluar.invitar.correo');
+    Route::post('admin/iniciativas/evaluar/correo/enviar', [IniciativasController::class, 'iniciativaEvaluarEnviarCorreo'])->name('admin.iniciativa.evaluar.enviar.correo');
     //fin de rutas para iniciativas
 
     // TODO: inicio rutas para gestionar usuarios
@@ -345,3 +373,16 @@ Route::middleware('verificar.admin')->group(function () {
 
     //fin de rutas para ODS
 });
+
+
+//ruta para evaluacion de iniciativas
+Route::get('/{evatotal_encriptado}/unirse', [IniciativasController::class, 'AutoInvitacionEvaluacion']);
+Route::post('/evaluaciones/unirse', [IniciativasController::class, 'guardarInvitacion'])->name('evaluacion.auto.invitarse');
+
+Route::get('/evaluaciones/{evatotal_encriptado}', [IniciativasController::class, 'evaluaEstudiante']);
+Route::post('/evaluaciones/guardar', [IniciativasController::class, 'guardarEvaluacionEstudiante'])->name('evaluacion.guardar.estudiante');
+
+use App\Http\Controllers\EmailController;
+
+Route::post('/send-email-estudiante', [IniciativasController::class, 'sendEmailEstudiante'])->name('send.email');
+//fin de rutas para evaluacion de iniciativas
