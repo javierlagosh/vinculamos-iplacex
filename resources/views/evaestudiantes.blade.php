@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  
+
   <title>Encuesta de @if ($tipo == 0) Estudiante @elseif ($tipo == 1) Docente/Directivo @elseif ($tipo == 2) Agente externo @endif</title>
 </head>
 <body style="background: #6777ef;">
   <div class="mt-5 w-100">
-    
+
     <div class="container bg-white w-100 p-5 rounded-bottom">
         <div class="center-block">
-            <img  style="display: block; margin-left: auto; margin-right: auto;" width="300px" alt="Logo" src="{{ asset('/img/logos/logo_vg_color.png') }}" class="header-logo">
-            
+            <img  style="display: block; margin-left: auto; margin-right: auto;" width="300px" alt="Logo" src="{{ asset('/img/logos/logo1.png') }}" class="header-logo">
+
             <hr style="margin-left: 20%; margin-right: 20%;
             border: 0;
             background-color: white;
@@ -44,12 +44,12 @@
         <form action="{{ route('evaluacion.guardar.estudiante') }}" method="POST">
             @csrf
         <div class="row w-100">
-          
+
           <br>
-          <div> 
+          <div>
             <div >
               <div class="card-body">
-                <div class="col-md-6 "> 
+                <div class="col-md-6 ">
                     <input type="text" hidden name="inic_codigo" id="inic_codigo" value="{{$inic_codigo}}">
                     <label style="text-align: center;" id="email-label" for="email">Correo Electrónico:</label>
                     <input class="form form-control" type="email" name="correo"  id="correo" class="form-control" placeholder="hola@ejemplo.com" required>
@@ -58,16 +58,16 @@
                   <br>
                   <div class="row">
                       <div class="col-12 col-md-6 col-lg-6">
-                        
+
                           <div class="card card-primary">
                               <div class="card-header" style="background-color: rgb(103,119,239);">
                                   <h4 style="color:aliceblue">Conocimiento de la evaluación</h4>
                               </div>
                               <div class="card-body">
-                                
+
                                   <div class="table-responsive">
                                       <table class="table table-striped">
-                                        
+
                                           <tbody>
                                               <tr>
                                                   <th>¿Sabía usted que el propósito de ésta
@@ -620,8 +620,8 @@
           </div>
         </div>
         <div class="row">
-          
-        </div>    
+
+        </div>
       </form>
     </div>
   </div>
