@@ -2736,13 +2736,16 @@ class IniciativasController extends Controller
         foreach ($destinatarios as $destinatario) {
             // Validar cada dirección de correo electrónico antes de enviar el correo
             $email = trim($destinatario);
-            $invitado = EvaluacionInvitado::where('evainv_correo', $email)->first();
+            $invitado = EvaluacionInvitado::where('evainv_correo', $email)
+            ->where('evaluacion_invitado.inic_codigo', $request->iniciativa_codigo)
+            ->first();
             if ($invitado) {
                 if ($invitado->evainv_estado == 0) {
-                    $invitado->evainv_estado = 1;
-                    $invitado->save();
+
                     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         Mail::to($email)->send(new ContactFormMail($email, 'test', 'test', 'test', 'test', $html));
+                        $invitado->evainv_estado = 1;
+                        $invitado->save();
                     } else {
                         // Si la dirección de correo electrónico no es válida, manejar el error adecuadamente
                         return redirect()->back()->with('error', '¡"La dirección de correo electrónico $email no es válida"!');
