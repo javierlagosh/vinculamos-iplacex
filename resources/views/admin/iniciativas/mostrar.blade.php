@@ -87,13 +87,14 @@
                                     </div>
                                 </div>
 
-                                <div class="dropdown d-inline">
 
-                                    <button class="btn btn-warning dropdown-toggle" id="dropdownMenuButton2"
-                                        data-toggle="dropdown"> Agenda 2030</button>
-                                    <div class="dropdown-menu dropright">
                                         @if ($ods_array->isEmpty())
                                         @else
+                                        <div class="dropdown d-inline">
+
+                                            <button class="btn btn-warning dropdown-toggle" id="dropdownMenuButton2"
+                                                data-toggle="dropdown"> Agenda 2030</button>
+                                            <div class="dropdown-menu dropright">
                                             <a href="{{ route('admin.iniciativas.agendaods', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                 data-placement="top" title="Agenda 2030"><i
@@ -104,9 +105,10 @@
                                                 data-placement="top" title="Agenda 2030"><i
                                                     class="fas  fa-file-pdf"></i> Generar
                                                 pdf con ODS</a>
+                                            </div>
+                                        </div>
                                         @endif
-                                    </div>
-                                </div>
+
                                 <div class="dropdown d-inline">
 
                                     <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
@@ -334,10 +336,8 @@
                                             <tr>
 
                                                 {{-- {{json_encode($ods_array)}} --}}
-                                                @if (count($ods_array) > 0)
                                                     <td><strong>ODS</strong></td>
-                                                @else
-                                                @endif
+
                                                 <td>
                                                     @forelse ($ods_array as $ods)
                                                         <!-- Código para mostrar ODS -->
@@ -352,6 +352,7 @@
                                                 </div> --}}
                                                         {{-- @if ($ods_array->isEmpty()) --}}
                                                     @empty
+                                                        <p>Está iniciativa no cuenta con ODS asociados.</p> <a href="{{route('admin.editar.paso1', $iniciativa->inic_codigo)}}">Asociar aquí.</a>
                                                         {{-- <!-- Agrega el campo oculto para almacenar la descripción de la iniciativa -->
                                                     <input type="hidden" id="descripcion_iniciativa" value="{{ $iniciativa->inic_descripcion }}">
 

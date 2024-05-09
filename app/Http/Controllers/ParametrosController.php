@@ -775,6 +775,14 @@ class ParametrosController extends Controller
         $dispositivo = new Dispositivos();
         $dispositivo->nombre = $request->dispositivo_nombre;
         $dispositivo->tiac_codigo = $request->tiac_codigo;
+        $dispositivo->meta_adm = $request->input('meta_adm') ?? null;
+        $dispositivo->meta_edu = $request->input('meta_edu') ?? null;
+        $dispositivo->meta_salud = $request->input('meta_salud') ?? null;
+        $dispositivo->meta_tec = $request->input('meta_tec') ?? null;
+        $dispositivo->meta_gastr = $request->input('meta_gastr') ?? null;
+        $dispositivo->meta_inf = $request->input('meta_inf') ?? null;
+        $dispositivo->meta_const = $request->input('meta_const') ?? null;
+        $dispositivo->meta_desa = $request->input('meta_desa') ?? null;
         $dispositivo->save();
 
         return redirect()->back()->with('exitoDispositivo', 'Dispositivo creado exitosamente');
@@ -784,6 +792,14 @@ class ParametrosController extends Controller
         $dispositivo = Dispositivos::where('id', $dispositivo_id)->first();
         $dispositivo->nombre = $request->asignatura_nombre;
         $dispositivo->tiac_codigo = $request->tiac_codigo;
+        $dispositivo->meta_adm = $request->input('meta_adm') ?? null;
+        $dispositivo->meta_edu = $request->input('meta_edu') ?? null;
+        $dispositivo->meta_salud = $request->input('meta_salud') ?? null;
+        $dispositivo->meta_tec = $request->input('meta_tec') ?? null;
+        $dispositivo->meta_gastr = $request->input('meta_gastr') ?? null;
+        $dispositivo->meta_inf = $request->input('meta_inf') ?? null;
+        $dispositivo->meta_const = $request->input('meta_const') ?? null;
+        $dispositivo->meta_desa = $request->input('meta_desa') ?? null;
         $dispositivo->save();
 
         return redirect()->back()->with('exitoDispositivo', 'Dispositivo actualizado exitosamente');

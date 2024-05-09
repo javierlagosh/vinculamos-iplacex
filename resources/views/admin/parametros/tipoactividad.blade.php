@@ -75,7 +75,7 @@
                                                     <a href="javascript:void(0)" class="btn btn-icon btn-danger"
                                                         onclick="eliminarTipoact({{ $tiac->tiac_codigo }})"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Eliminar grupos de interés"><i class="fas fa-trash"></i></a>
+                                                        title="Eliminar instrumento"><i class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -156,7 +156,7 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div hidden>
                         {{-- Metas --}}
                         <strong>Metas por escuela</strong>
                         <div class="row">
@@ -291,6 +291,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                         {{-- <label style="display: block; text-align: center; width: 100%;">METAS POR SEDE</label>
                         <div class="row">
                             @foreach ($sedes as $sede)
@@ -399,8 +400,12 @@
                                     </select>
                                 </div>
                             </div>
+                            <div hidden>
                             {{-- Metas --}}
                         <strong>Metas por escuela</strong>
+
+
+
                         <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
@@ -533,6 +538,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                             {{-- <label style="display: block; text-align: center; width: 100%;">METAS POR SEDE</label> --}}
                             {{-- <div class="row">
                                 @foreach ($sedes as $sede)

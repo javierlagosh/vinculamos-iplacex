@@ -16,6 +16,14 @@ class Dispositivos extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'nombre'
+        'nombre',
+        'meta_adm',
+        'meta_edu',
+        'meta_salud',
+        'meta_tec',
+        'meta_gastr',
+        'meta_inf',
+        'meta_const',
+        'meta_desa',
     ];
 }
