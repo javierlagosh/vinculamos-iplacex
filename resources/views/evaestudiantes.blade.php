@@ -13,7 +13,7 @@
 
     <div class="container bg-white w-100 p-5 rounded-bottom">
         <div class="center-block">
-            <img  style="display: block; margin-left: auto; margin-right: auto;" width="300px" alt="Logo" src="{{ asset('/img/logos/logo1.png') }}" class="header-logo">
+            <img  style="display: block; margin-left: auto; margin-right: auto;" width="300px" alt="Logo" src="{{ asset('/img/logos/logo1.webp') }}" class="header-logo">
 
             <hr style="margin-left: 20%; margin-right: 20%;
             border: 0;
