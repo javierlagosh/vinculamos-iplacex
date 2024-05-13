@@ -320,7 +320,13 @@
                             <tbody>
                                 <tr>
                                     <td><strong>Mecanismo</strong></td>
+                                    @if ($iniciativa->meca_nombre != null)
+                                    <td>{{ $iniciativa->meca_nombre }}</td>
+                                    @else
                                     <td id="mecanismo-nombre"></td>
+                                    @endif
+
+
                                     <td id="mecanismo-puntaje"></td>
                                 </tr>
                                 <tr>
