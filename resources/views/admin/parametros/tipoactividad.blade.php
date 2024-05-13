@@ -59,9 +59,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $i = 1; ?>
                                         @foreach ($tipoact as $tiac)
                                             <tr>
-                                                <td>{{ $tiac->tiac_codigo }}</td>
+                                                <td><?php
+                                                    echo $i;
+                                                    $i++;
+                                                    ?>
+                                                </td>
                                                 <td>{{ $tiac->tiac_nombre }}</td>
 
                                                 <td>
