@@ -659,31 +659,31 @@ class IniciativasController extends Controller
 
         //TODO: LAS ASIGNATURAS SE DEBERIAN GUARDAR EN UNA NUEVA COLUMNA DE PARTICIPANTES_INTERNOS
         //PREGUNTAR COMO VA LA COSA PORQUE PAIN DOCENTES Y PAIN ESTUDIANTES SON POR CARRERA Y NO POR ASIGNATURA POR LO QUE UNA CARRERA TIENE MÁS DOCENTES Y ESTUDIANTES QUE UNA ASIGNATURA
-        // $request->validate([
-        //     'nombre' => 'required|max:255',
-        //     'inic_formato' => 'required',
-        //     'description' => 'required',
-        //     'carreras' => 'required',
-        //     'escuelas' => 'required',
-        //     'mecanismos' => 'required',
-        //     'tactividad' => 'required',
-        //     'convenio' => 'required',
-        //     'territorio' => 'required',
-        //     // 'pais' => 'required'
-        // ], [
-        //     'nombre.required' => 'El nombre de la iniciativa es requerido.',
-        //     'nombre.max' => 'El nombre de la iniciativa no puede superar los 250 carácteres.',
-        //     /* 'anho.required' => 'Es necesario ingresar un año para la iniciativa.',
-        //     'inic_formato.required' => 'Es necesario que seleccione un formato para la iniciativa.',
-        //     'description.required' => 'La Descripción es requerida.',
-        //     'carreras.required' => 'Es necesario que seleccione al menos una Carrera en donde se ejecutará la iniciativa.',
-        //     'escuelas.required' => 'Es necesario que seleccione al menos una Escuela en donde se ejecutará la iniciativa.',
-        //     'tactividad.required' => 'Es necesario que seleccione un tipo de actividad para la iniciativa.',
-        //     'mecanismos.required' => 'Es necesario que seleccione un programa.', */
-        //     /* 'convenio.required' => 'Es necesario que escoja un convenio para asociar la iniciativa.', */
-        //     /* 'territorio.required' => 'Especifique si la iniciativa es a nivel nacional o internacional.',
-        //     'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
-        // ]);
+        $request->validate([
+            'nombre' => 'required|max:255',
+            'inic_formato' => 'required',
+            'description' => 'required',
+            'carreras' => 'required',
+            'escuelas' => 'required',
+            'mecanismos' => 'required',
+            'tactividad' => 'required',
+            'convenio' => 'required',
+            'territorio' => 'required',
+            // 'pais' => 'required'
+        ], [
+            'nombre.required' => 'El nombre de la iniciativa es requerido.',
+            'nombre.max' => 'El nombre de la iniciativa no puede superar los 250 carácteres.',
+            /* 'anho.required' => 'Es necesario ingresar un año para la iniciativa.',
+            'inic_formato.required' => 'Es necesario que seleccione un formato para la iniciativa.',
+            'description.required' => 'La Descripción es requerida.',
+            'carreras.required' => 'Es necesario que seleccione al menos una Carrera en donde se ejecutará la iniciativa.',
+            'escuelas.required' => 'Es necesario que seleccione al menos una Escuela en donde se ejecutará la iniciativa.',
+            'tactividad.required' => 'Es necesario que seleccione un tipo de actividad para la iniciativa.',
+            'mecanismos.required' => 'Es necesario que seleccione un programa.', */
+            /* 'convenio.required' => 'Es necesario que escoja un convenio para asociar la iniciativa.', */
+            /* 'territorio.required' => 'Especifique si la iniciativa es a nivel nacional o internacional.',
+            'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
+        ]);
         $anho = Carbon::parse($request->desde)->format('Y');
         $inicCrear = Iniciativas::insertGetId([
             'inic_nombre' => $request->nombre,
@@ -1132,32 +1132,32 @@ class IniciativasController extends Controller
 
     public function actualizarPaso1(Request $request, $inic_codigo)
     {
-        // $request->validate([
-        //     'nombre' => 'required|max:255',
-        //     /* 'anho' => 'required',
-        //     'inic_formato' => 'required',
-        //     'description' => 'required',
-        //     'carreras' => 'required',
-        //     'escuelas' => 'required',
-        //     'mecanismos' => 'required',
-        //     'tactividad' => 'required', */
-        //     /* 'convenio' => 'required', */
-        //     /* 'territorio' => 'required',
-        //     'pais' => 'required' */
-        // ], [
-        //     'nombre.required' => 'El nombre de la iniciativa es requerido.',
-        //     'nombre.max' => 'El nombre de la iniciativa no puede superar los 250 carácteres.',
-        //     /* 'anho.required' => 'Es necesario ingresar un año para la iniciativa.',
-        //     'inic_formato.required' => 'Es necesario que seleccione un formato para la iniciativa.',
-        //     'description.required' => 'La Descripción es requerida.',
-        //     'carreras.required' => 'Es necesario que seleccione al menos una Carrera en donde se ejecutará la iniciativa.',
-        //     'escuelas.required' => 'Es necesario que seleccione al menos una Escuela en donde se ejecutará la iniciativa.',
-        //     'mecanismos.required' => 'Es necesario que seleccione un programa.',
-        //     'tactividad.required' => 'Es necesario que seleccione el tipo de actividad a realizar.', */
-        //     /* 'convenio.required' => 'Es necesario que escoja un convenio para asociar la iniciativa.', */
-        //     /* 'territorio.required' => 'Especifique si la iniciativa es a nivel nacional o internacional.',
-        //     'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
-        // ]);
+        $request->validate([
+            'nombre' => 'required|max:255',
+            /* 'anho' => 'required',
+            'inic_formato' => 'required',
+            'description' => 'required',
+            'carreras' => 'required',
+            'escuelas' => 'required',
+            'mecanismos' => 'required',
+            'tactividad' => 'required', */
+            /* 'convenio' => 'required', */
+            /* 'territorio' => 'required',
+            'pais' => 'required' */
+        ], [
+            'nombre.required' => 'El nombre de la iniciativa es requerido.',
+            'nombre.max' => 'El nombre de la iniciativa no puede superar los 250 carácteres.',
+            /* 'anho.required' => 'Es necesario ingresar un año para la iniciativa.',
+            'inic_formato.required' => 'Es necesario que seleccione un formato para la iniciativa.',
+            'description.required' => 'La Descripción es requerida.',
+            'carreras.required' => 'Es necesario que seleccione al menos una Carrera en donde se ejecutará la iniciativa.',
+            'escuelas.required' => 'Es necesario que seleccione al menos una Escuela en donde se ejecutará la iniciativa.',
+            'mecanismos.required' => 'Es necesario que seleccione un programa.',
+            'tactividad.required' => 'Es necesario que seleccione el tipo de actividad a realizar.', */
+            /* 'convenio.required' => 'Es necesario que escoja un convenio para asociar la iniciativa.', */
+            /* 'territorio.required' => 'Especifique si la iniciativa es a nivel nacional o internacional.',
+            'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
+        ]);
 
         //obtener el anho del request date y convertirlo a number
         $anho = Carbon::parse($request->desde)->format('Y');
