@@ -298,14 +298,16 @@ class IniciativasController extends Controller
             ->get()
             ->first();
 
-        $subgrupos = SubGruposInteres::join('iniciativas', 'sub_grupos_interes.inic_codigo', 'iniciativas.inic_codigo')
-            ->get()
-            ->first();
 
         $iniciativas_asignaturas = IniciativasAsignaturas::join('asignaturas', 'asignaturas.id', 'iniciativas_asignaturas.asignatura_id')
             ->where('inic_codigo', $inic_codigo)
             ->get();
 
+        $impactosInternos = IniciativasAmbitos::join('ambito', 'iniciativas_ambitos.amb_codigo', 'ambito.amb_codigo')
+            ->where('inic_codigo', $inic_codigo)
+            ->where('ambito.amb_tipo', 'interno')
+            ->get();
+        dd($impactosInternos);
 
         $iniciativa = Iniciativas::leftjoin('convenios', 'convenios.conv_codigo', '=', 'iniciativas.conv_codigo')
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
@@ -1034,6 +1036,8 @@ class IniciativasController extends Controller
         $asignaturaSecCod2 = IniciativasAsignaturas::select('asignatura_id')->where('inic_codigo', $inic_codigo)->get();
         $asignaturaSecCod = $asignaturaSecCod2->pluck('asignatura_id')->toArray();
         $csSecCod = $centro_simulacion->pluck('cs_codigo')->toArray();
+
+        $impactosInternosSec = [];
         $impactosInternosSec2 = IniciativasAmbitos::select('iniciativas_ambitos.amb_codigo')->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
         ->leftjoin('ambito', 'ambito.amb_codigo', 'iniciativas_ambitos.amb_codigo')
         ->where('ambito.amb_descripcion', 'Impacto Interno')
@@ -1046,6 +1050,7 @@ class IniciativasController extends Controller
         ->leftjoin('ambito', 'ambito.amb_codigo', 'iniciativas_ambitos.amb_codigo')
         ->where('ambito.amb_descripcion', 'Impacto Externo')
         ->get();
+        $impactosExternosSec = [];
         foreach ($impactosExternosSec2 as $key => $value) {
             $impactosExternosSec[$key] = $value->amb_codigo;
         }
@@ -1114,8 +1119,9 @@ class IniciativasController extends Controller
             'centro_simulacion' => $centro_simulacion,
             'impactosInternos' => $impactosInternos,
             'impactosExternos' => $impactosExternos,
+            'impactosExternosSec' => $impactosExternosSec,
             'impactosInternosSec' => $impactosInternosSec,
-            'impactosExternosSec' => $impactosExternosSec
+
         ]);
 
     }
