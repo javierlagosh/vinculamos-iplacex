@@ -824,14 +824,10 @@ class IniciativasController extends Controller
             return redirect()->back()->with('comuError', 'Ocurrió un error durante el registro de las comunas, intente más tarde.')->withInput();
         }
 
-
-
         $pain = [];
-        $sedes = $request->input('sedes', []);
         $sedes = $request->input('sedes', []);
         $escuelas = $request->input('escuelas', []);
         $carreras = $request->input('carreras', []);
-
 
         foreach ($sedes as $sede) {
             foreach ($escuelas as $escuela) {

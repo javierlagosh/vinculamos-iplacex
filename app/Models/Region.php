@@ -17,6 +17,7 @@ class Region extends Model
         'regi_codigo',
         'pais_codigo',
         'regi_nombre',
+        'regi_macrozona',
         'regi_creado',
         'regi_actualizado',
         'regi_nickname_mod',
