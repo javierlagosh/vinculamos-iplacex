@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-2 col-md-2 col-lg-3">
+                                <div class="col-2 col-md-2 col-lg-3" hidden>
                                     <div class="form-group">
                                         <label style="font-size: 110%">Subgrupos</label> <label for=""
                                             style="color: red;">*</label>
@@ -209,14 +209,28 @@
                                         @endif
                                     </div>
                                 </div>
+                                <div class="col-xl-2 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Acciones</label>
+                                        <div class="d-flex">
+                                            <div >
+                                                <button class="btn btn-primary waves-effect"
+                                                onclick="AgregarParticipantesExternos()"><i class="fas fa-plus"></i>
+                                                Agregar</button>
+                                            </div>
+                                            &nbsp;
+                                            <div >
+                                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                            data-target="#modalCrearSocio"><i class="fas fa-plus"></i> Nuevo socio/a
+                                            comunitario/a</button>
+                                            </div>
+                                        </div>
 
-                                <div class="col-xl-2 col-md-2 col-lg-2" style="position: relative;">
-
-                                    <button class="btn btn-primary mr-1 waves-effect"
-                                        onclick="AgregarParticipantesExternos()"><i class="fas fa-plus"></i>
-                                        Agregar</button>
-
+                                    </div>
                                 </div>
+
+                                    </div>
+
 
                             </div>
                             <div class="row">
@@ -270,7 +284,7 @@
                                 </div>
                                 <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Áreas</label> <label for=""
+                                        <label style="font-size: 110%">Escuelas</label> <label for=""
                                             style="color: red;">*</label>
                                         <select class="form-control select2" id="escuelas" name="escuelas"
                                             style="width: 100%">
@@ -380,7 +394,7 @@
                                                 <table class="table table-bored table-md">
                                                     <thead>
                                                         <th>Sedes</th>
-                                                        <th>Áreas</th>
+                                                        <th>Escuelas</th>
                                                         <th>Carreras</th>
                                                         <th>Estudiantes</th>
                                                         <th>Docentes</th>
@@ -473,105 +487,64 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Nuevo Socio</h5>
+                    <h5 class="modal-title" id="formModal">Nuevo socio/a comunitario/a</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.iniciativas.crear.socio') }} " method="POST">
+                    <form action="{{ route('admin.crear.socios') }} " method="POST">
                         @csrf
-
                         <div class="form-group">
-                            <label>Nombre del socio</label>
+                            <label>Nombre del socio/a comunitario/a</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
-                                        <i class="fas fa-user"></i>
+                                        <i class="fas fa-pen-nib"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder=""
+                                <input type="text" class="form-control" id="nombre" name="nombre" value=""
                                     autocomplete="off">
-                                @if ($errors->has('nombre'))
-                                    <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
-                                        style="width:100%">
-                                        <div class="alert-body">
-                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                            <strong>{{ $errors->first('nombre') }}</strong>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
-
-                            <label>Nombre de contraparte</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-user"></i>
+                            @if ($errors->has('nombre'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                    style="width:100%">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('nombre') }}</strong>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" id="nombrec" name="nombrec" placeholder=""
-                                    autocomplete="off">
-                                @if ($errors->has('nombrec'))
-                                    <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
-                                        style="width:100%">
-                                        <div class="alert-body">
-                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                            <strong>{{ $errors->first('nombrec') }}</strong>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <label>Teléfono contraparte</label>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label>Grupo de interés</label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-phone"></i>
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" id="telefono" name="telefono"
-                                    placeholder="" autocomplete="off">
-                                @if ($errors->has('telefono'))
-                                    <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
-                                        style="width:100%">
-                                        <div class="alert-body">
-                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                            <strong>{{ $errors->first('telefono') }}</strong>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <label>Email contraparte</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                </div>
-                                <input type="email" class="form-control" id="emailc" name="emailc" placeholder=""
-                                    autocomplete="off">
-                                @if ($errors->has('emailc'))
-                                    <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
-                                        style="width:100%">
-                                        <div class="alert-body">
-                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                            <strong>{{ $errors->first('emailc') }}</strong>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <label>Subgrupo</label>
-                            <div class="input-group">
-                                <select class="form-control select2" style="width: 100%" id="subgrupo" name="subgrupo"
-                                    style="width: 100%">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                    @foreach ($subgrupos as $subgrupo)
-                                        <option value="{{ $subgrupo->sugr_codigo }}">{{ $subgrupo->sugr_nombre }}
+                                <select class="form-control select2" style="width: 100%" id="grupointres" name="grupo" onchange="cargarSubgrupos()">
+                                    <option value="" disabled selected>Seleccione...</option>
+                                    @foreach ($grupos as $grupo)
+                                        <option value="{{ $grupo->grin_codigo }}">
+                                            {{ $grupo->grin_nombre }}
                                         </option>
                                     @endforeach
+                                </select>
+                                @if ($errors->has('grupo'))
+                                    <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                        style="width:100%">
+                                        <div class="alert-body">
+                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                            <strong>{{ $errors->first('grupo') }}</strong>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subgrupo de interés</label>
+                            <div class="input-group">
+                                <select class="form-control select2" style="width: 100%" id="subgrupo2" name="subgrupo2">
+                                    <option value="" disabled selected>Seleccione...</option>
+
                                 </select>
                                 @if ($errors->has('subgrupo'))
                                     <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
@@ -583,31 +556,122 @@
                                     </div>
                                 @endif
                             </div>
-
-                            <label>Áreas Asociadas</label>
-                            <div class="input-group">
-                                <select class="form-control select2" style="width: 100%" id="escuelasT"
-                                    name="escuelasT[]" style="width: 100%" multiple>
-                                    <option value="" disabled>Seleccione...</option>
-                                    @foreach ($escuelasTotales as $escuela)
-                                        <option value="{{ $escuela->escu_codigo }}">{{ $escuela->escu_nombre }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('escuelasT'))
-                                    <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
-                                        style="width:100%">
-                                        <div class="alert-body">
-                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                            <strong>{{ $errors->first('escuelasT') }}</strong>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
                         </div>
 
+                        <div class="form-group" style="">
+                            <label>Domicilio del socio/a comunitario/a</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" id="domicilio" name="domicilio"
+                                    value="" autocomplete="off">
+                            </div>
+                            @if ($errors->has('domicilio'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                    style="width:100%">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('domicilio') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre de la contraparte</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-pen-nib"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" id="nombre_contraparte"
+                                    name="nombre_contraparte" value="" autocomplete="off">
+                            </div>
+                            @if ($errors->has('nombre_contraparte'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                    style="width:100%">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('nombre_contraparte') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono de la contraparte</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" id="telefono" name="telefono"
+                                    value="" autocomplete="off">
+                            </div>
+                            @if ($errors->has('telefono'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                    style="width:100%">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('telefono') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label>Correo de la contraparte</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-envelope"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" id="email" name="email" value=""
+                                    autocomplete="off">
+                            </div>
+                            @if ($errors->has('email'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                    style="width:100%">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        {{-- <label>Sedes Asociadas</label>
+                        <div class="input-group">
+                            <select class="form-control select2" style="width: 100%" id="sedesT" name="sedesT[]"
+                                multiple>
+                                <option value="" disabled>Seleccione...</option>
+                                @foreach ($sedesT as $sede)
+                                    <option value="{{ $sede->sede_codigo }}">{{ $sede->sede_nombre }}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('sedesT'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                    style="width:100%">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('sedesT') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="form-group" style="width: 100%">
+                            <div class="pretty p-switch p-fill">
+                                <input type="checkbox" id="nacional" name="nacional" />
+                                <div class="state p-success">
+                                    <label><strong>Asociar a todas las sedes (Socio nacional)</strong></label>
+                                </div>
+                            </div>
+                        </div> --}}
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary waves-effect"><i class="fas fa-save"></i>
-                                Guardar</button>
+                            <button type="submit" class="btn btn-primary waves-effect"
+                                style="margin-top: 20px">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -674,6 +738,55 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
     <script>
+        function cargarSubgrupos() {
+            var grupo = $('#grupointres').val()
+            $.ajax({
+                url: `${window.location.origin}/admin/socios/listar-subgrupos`,
+                type: 'POST',
+                dataType: 'json',
+
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    grin_codigo: grupo
+                },
+                success: function(data) {
+                    console.log('subgrupos');
+                    console.log(data)
+                    $('#subgrupo2').empty();
+                    $.each(data, function(key, value) {
+                        $('#subgrupo2').append(
+                            `<option value="${value.sugr_codigo}">${value.sugr_nombre}</option>`
+                        );
+                    });
+                }
+            });
+
+
+        }
+        function cargarSubgrupos2() {
+            var grupo = $('#grupo').val()
+            $.ajax({
+                url: `${window.location.origin}/admin/socios/listar-subgrupos`,
+                type: 'POST',
+                dataType: 'json',
+
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    grin_codigo: grupo
+                },
+                success: function(data) {
+                    console.log(data)
+                    $('#subgrupo2').empty();
+                    $.each(data, function(key, value) {
+                        $('#subgrupo2').append(
+                            `<option value="${value.sugr_codigo}">${value.sugr_nombre}</option>`
+                        );
+                    });
+                }
+            });
+
+
+        }
         $(document).ready(function() {
             $('#idIniciativa').hide();
             escuelasBySedesPaso2();
@@ -938,7 +1051,6 @@
                 data: {
                     _token: '{{ csrf_token() }}',
                     inic_codigo: $("#idIniciativa").text(),
-                    sugr_codigo: $("#subgrupo").val(),
                     soco_codigo: $("#socio").val(),
                     inpr_total: $("#npersonas").val(),
 

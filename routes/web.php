@@ -155,6 +155,12 @@ Route::middleware('verificar.admin')->group(function () {
     Route::put('admin/editar-carreras/{asignatura_id}', [ParametrosController::class, 'actualizarAsignatura'])->name('admin.actualizar.asignatura');
     Route::delete('admin/eliminar-asignatura/', [ParametrosController::class, 'eliminarAsignatura'])->name('admin.eliminar.asignatura');
 
+    //Centro de simulacion
+    Route::get('admin/listar-centro-simulacion', [ParametrosController::class, 'listarCentroSimulacion'])->name('admin.listar.centro-simulacion');
+    Route::post('admin/crear-centro-simulacion/', [ParametrosController::class, 'crearCentroSimulacion'])->name('admin.crear.centro-simulacion');
+    Route::put('admin/editar-centro-simulacion/{cs_codigo}', [ParametrosController::class, 'actualizarCentroSimulacion'])->name('admin.actualizar.centro-simulacion');
+    Route::delete('admin/eliminar-centro-simulacion/', [ParametrosController::class, 'eliminarCentroSimulacion'])->name('admin.eliminar.centro-simulacion');
+
     //Carreras
     Route::get('admin/listar-carreras', [ParametrosController::class, 'listarCarreras'])->name('admin.listar.carreras');
     Route::get('admin/listar-area-especialidad', [ParametrosController::class, 'listarAes'])->name('admin.listar.aespecialidad');

@@ -50,8 +50,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 use App\Models\Asignaturas;
+use App\Models\CentroSimulacion;
+use App\Models\IniciativasCentroSimulacion;
 use App\Models\CarrerasAsignaturas;
 use App\Models\DispositivosTiac;
+use App\Models\TipoActividadAmbitoAccion;
 
 class ParametrosController extends Controller
 {
@@ -897,6 +900,62 @@ class ParametrosController extends Controller
         return redirect()->route('admin.listar.asignaturas')->with('exitoAsignatura', 'La asignatura fue eliminada correctamente.');
     }
 
+    //TODO: Parametro asignaturas
+    public function listarCentroSimulacion()
+    {
+        $centroSimulacion = CentroSimulacion::orderBy('cs_codigo', 'asc')->get();
+        return view('admin.parametros.centroSimulacion', [
+            'centroSimulacion' => $centroSimulacion,
+        ]);
+    }
+
+
+
+    public function crearCentroSimulacion(Request $request)
+    {
+        if($request->cs_nombre == null){
+            return redirect()->back()->with('errorAsignatura', 'El nombre del centro de simulacion es requerido.');
+        }
+
+        $centroSimulacion = new CentroSimulacion();
+        $centroSimulacion->cs_nombre = $request->cs_nombre;
+        $centroSimulacion->save();
+        return redirect()->back()->with('exitoAsignatura', 'Centro de simulación creado exitosamente');
+    }
+
+    public function actualizarCentroSimulacion(Request $request , $cs_codigo)
+    {
+
+        $centroSimulacion = CentroSimulacion::where('cs_codigo', $cs_codigo)->first();
+
+        //actualizar asignatura
+        $centroSimulacion->cs_nombre = $request->cs_nombre;
+        $centroSimulacion->save();
+
+        return redirect()->back()->with('exitoAsignatura', 'Centro de simulación actualizado exitosamente');
+
+    }
+
+    public function eliminarCentroSimulacion(Request $request)
+    {
+
+        $centroSimulacion = CentroSimulacion::where('cs_codigo', $request->cs_codigo)->first();
+        $InciativasCentroSimulacion = IniciativasCentroSimulacion::where('cs_codigo', $request->cs_codigo)->get();
+
+        if (!$centroSimulacion) {
+            return redirect()->route('admin.listar.centro-simulacion')->with('errorAsignatura', 'El centro de simulación no se encuentra registrada en el sistema.');
+        }
+        //se eliminan las carreras asociadas a esa asignatura
+        foreach ($InciativasCentroSimulacion as $cs) {
+            $cs->delete();
+        }
+        //se elimina la asignatura
+        $centroSimulacion->delete();
+
+
+        return redirect()->route('admin.listar.centro-simulacion')->with('exitoAsignatura', 'El centro de simulación fue eliminado correctamente.');
+    }
+
     //TODO: Parametro Carreras
     public function listarCarreras()
     {
@@ -1364,7 +1423,7 @@ class ParametrosController extends Controller
             ]
         );
         if (!$validacion)
-            return redirect()->route('admin.listar.socios')->with('errorSocio', 'Problemas al crear el socio comunitario.');
+            return redirect()->route('admin.listar.socios')->with('error', 'Problemas al crear el socio comunitario.');
 
         $MacaActi = SociosComunitarios::insertGetId([
             'soco_nombre_socio' => $request->nombre,
@@ -1373,7 +1432,7 @@ class ParametrosController extends Controller
             'soco_telefono_contraparte' => $request->telefono,
             'soco_email_contraparte' => $request->email,
             'grin_codigo' => $request->grupo,
-            'sugr_codigo' => $request->subgrupo,
+            'sugr_codigo' => $request->subgrupo ?? $request->subgrupo2,
         ]);
 
 
@@ -1568,14 +1627,22 @@ class ParametrosController extends Controller
         $componentes = Componentes::all();
         $tiac_metas = TipoActividadesMetas::all();
         $mecanismos = Mecanismos::all();
+        $ambito_accion = AmbitosAccion::all();
         $mecanismos_actividades = [];
         foreach ($tipoact as $actividad) {
             $mecanismos_actividades[$actividad->tiac_codigo] = MecanismosActividades::where('tiac_codigo', $actividad->tiac_codigo)
                 ->pluck('meca_codigo')
                 ->toArray();
         }
+
+        $tiac_amac = [];
+        foreach ($tipoact as $actividad) {
+            $tiac_amac[$actividad->tiac_codigo] = TipoActividadAmbitoAccion::where('tiac_codigo', $actividad->tiac_codigo)
+                ->pluck('amac_codigo')
+                ->toArray();
+        }
         // return $mecanismos_actividades;
-        return view('admin.parametros.tipoactividad', compact('tipoact', 'sedes', 'componentes', 'tiac_metas', 'mecanismos', 'mecanismos_actividades'));
+        return view('admin.parametros.tipoactividad', compact('tipoact', 'sedes', 'componentes', 'tiac_metas', 'mecanismos', 'mecanismos_actividades', 'ambito_accion', 'tiac_amac'));
     }
 
 
@@ -1622,6 +1689,20 @@ class ParametrosController extends Controller
             ]);
         }
         $tiac_codigo = $tiac_creado;
+
+        $ambito_accion = $request->input('ambito_accion', []);
+
+        $tiac_ambito = [];
+
+        foreach ($ambito_accion as $ambitoaccion) {
+            array_push($tiac_ambito, [
+                'amac_codigo' => $ambitoaccion,
+                'tiac_codigo' => $tiac_codigo,
+            ]);
+        }
+        $tiacamacCrear = TipoActividadAmbitoAccion::insert($tiac_ambito);
+
+
         $mecanismos = $request->input('mecanismos', []);
         $mecanismo_actividades = [];
 
@@ -1700,6 +1781,18 @@ class ParametrosController extends Controller
             ]);
         }
         $procoCrear = MecanismosActividades::insert($mecanismo_actividades);
+
+
+        $ambito_accion = $request->input('ambito_accion', []);
+        $tiac_amac = [];
+
+        foreach ($ambito_accion as $ambitoaccion) {
+            array_push($tiac_amac, [
+                'amac_codigo' => $ambitoaccion,
+                'tiac_codigo' => $tiac_codigo,
+            ]);
+        }
+        $tiac_amac_Crear = TipoActividadAmbitoAccion::insert($tiac_amac);
         $insertar_metas = TipoActividadesMetas::insert($sedess);
 
         return redirect()->route('admin.listar.tipoact')->with('exitoTipoact', 'El instrumento se actualizó correctamente.');

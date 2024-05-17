@@ -136,7 +136,7 @@
                                     <tr>
                                         <th></th>
                                         <th class="text-center">Dinero</th>
-                                        <th class="text-center">Infraestructura</th>
+                                        <th class="text-center">Infraestructura + equipamiento</th>
                                         <th class="text-center">Recursos Humanos</th>
                                         <th class="text-center">Total</th>
                                     </tr>

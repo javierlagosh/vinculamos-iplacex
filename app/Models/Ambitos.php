@@ -19,6 +19,7 @@ class Ambitos extends Model
         'amb_codigo',
         'amb_nombre',
         'amb_descripcion',
+        'amb_tipo',
         'amb_director',
         'amb_creado',
         'amb_actualizado',

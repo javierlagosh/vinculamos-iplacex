@@ -149,12 +149,28 @@
                         <div class="form-group">
                             <label for="mecanismos">Mecanismos asociados</label>
                             <div class="input-group">
-                                <select name="mecanismos[]" id="mecasnimos" class="form-control select2" style="width: 100%"
+                                <select name="mecanismos[]" id="mecanismos" class="form-control select2" style="width: 100%"
                                     multiple>
                                     @forelse ($mecanismos as $mecanismo)
                                         <option value="{{ $mecanismo->meca_codigo }}"
                                             {{ collect(old('mecanismos'), [])->contains($mecanismo->meca_codigo) ? 'selected' : '' }}>
                                             {{ $mecanismo->meca_nombre }}</option>
+                                    @empty
+                                        <option value="">No hay registros...</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ambito_accion">Ámbitos asociados</label>
+                            <div class="input-group">
+                                <select name="ambito_accion[]" id="ambito_accion" class="form-control select2" style="width: 100%"
+                                    multiple>
+                                    @forelse ($ambito_accion as $ambitoaccion)
+                                        <option value="{{ $ambitoaccion->amac_codigo }}"
+                                            {{ collect(old('ambito_accion'), [])->contains($ambitoaccion->amac_codigo) ? 'selected' : '' }}>
+                                            {{ $ambitoaccion->amac_nombre }}</option>
                                     @empty
                                         <option value="">No hay registros...</option>
                                     @endforelse
@@ -398,6 +414,23 @@
                                             <option value='{{ $mecanismo->meca_codigo }}'
                                                 {{ in_array($mecanismo->meca_codigo, $mecanismos_actividades[$tiac->tiac_codigo] ?? []) ? 'selected' : '' }}>
                                                 {{ $mecanismo->meca_nombre }}</option>
+
+                                        @empty
+                                            <option value=""> No hay datos </option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ambito_accion">Mecanismos asociados</label>
+                                <div class="input-group">
+                                    <select name="ambito_accion[]" id="ambito_accion" class="form-control select2"
+                                        style="width: 100%" multiple>
+                                        @forelse ($ambito_accion as $ambitoaccion)
+                                            <option value='{{ $ambitoaccion->amac_codigo }}'
+                                                {{ in_array($ambitoaccion->amac_codigo, $tiac_amac[$tiac->tiac_codigo] ?? []) ? 'selected' : '' }}>
+                                                {{ $ambitoaccion->amac_nombre }}</option>
 
                                         @empty
                                             <option value=""> No hay datos </option>

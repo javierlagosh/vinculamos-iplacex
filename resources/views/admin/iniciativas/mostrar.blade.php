@@ -279,7 +279,7 @@
                                                     {{ $iniciativa->inic_hasta ?? 'No registrado' }}
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr hidden>
                                                 <td>
                                                     <strong>Bimestre</strong>
                                                 </td>

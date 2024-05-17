@@ -32,6 +32,7 @@
             Route::is('admin.listar.ambitos')||
             Route::is('admin.listar.ambitosaccion')||
             Route::is('admin.listar.componente')||
+            Route::is('admin.listar.centro-simulacion')||
             /* Route::is('admin.listar.programas')|| */
             Route::is('admin.listar.convenios')||
             Route::is('admin.listar.socios')||
@@ -52,6 +53,7 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.escuelas")}}">Escuelas</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.aespecialidad")}}">Áreas de especialidad</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.carreras")}}">Carreras</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.centro-simulacion")}}">Centros de Simulación</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.dispositivos")}}">Dispositivos</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.asignaturas")}}">Asignaturas</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Impactos</a></li>

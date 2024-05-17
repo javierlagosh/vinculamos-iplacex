@@ -122,7 +122,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Nombre</th>
-                                            <th>Mecanismos</th>
+                                            <th>Dispositivo</th>
                                             <th>Año</th>
                                             <th>Sedes</th>
                                             {{-- <th>Carreras</th> --}}
@@ -136,7 +136,7 @@
                                             <tr>
                                                 <td>{{ $iniciativa->inic_codigo }}</td>
                                                 <td>{{ $iniciativa->inic_nombre }}</td>
-                                                <td>{{ $iniciativa->meca_nombre }}</td>
+                                                <td>{{ $iniciativa->dispositivo }}</td>
                                                 <td>{{ $iniciativa->inic_anho }}</td>
                                                 <td>
                                                     @php

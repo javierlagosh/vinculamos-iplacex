@@ -53,6 +53,11 @@ use Illuminate\Support\Facades\Session;
 use App\Models\IniciativasParticipantes;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use App\Models\GruposInteres;
+use App\Models\CentroSimulacion;
+use App\Models\IniciativasCentroSimulacion;
+use App\Models\Ambitos;
+use App\Models\IniciativasAmbitos;
 //evaluacion
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormMail;
@@ -69,6 +74,7 @@ class IniciativasController extends Controller
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
             ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
             ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
+            ->leftjoin('dispositivo', 'dispositivo.id', 'iniciativas.dispositivo_id')
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
             ->leftjoin('escuelas', 'escuelas.escu_codigo', 'participantes_internos.escu_codigo')
@@ -79,13 +85,14 @@ class IniciativasController extends Controller
                 'iniciativas.inic_anho',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
+                'dispositivo.nombre as dispositivo',
                 'componentes.comp_nombre',
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
                 // DB::raw('GROUP_CONCAT(DISTINCT escuelas.escu_nombre SEPARATOR "/ ") as escuelas'),
                 // DB::raw('GROUP_CONCAT(DISTINCT carreras.care_nombre SEPARATOR ", ") as carreras'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             )
-            ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado') // Agregamos inic_creado al GROUP BY
+            ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado', 'dispositivo.nombre') // Agregamos inic_creado al GROUP BY
             ->orderBy('inic_creado', 'desc'); // Ordenar por fecha de creación formateada en orden descendente
         // ->where('iniciativas.inic_anho','2023')
 
@@ -291,6 +298,10 @@ class IniciativasController extends Controller
             ->get()
             ->first();
 
+        $subgrupos = SubGruposInteres::join('iniciativas', 'sub_grupos_interes.inic_codigo', 'iniciativas.inic_codigo')
+            ->get()
+            ->first();
+
         $iniciativas_asignaturas = IniciativasAsignaturas::join('asignaturas', 'asignaturas.id', 'iniciativas_asignaturas.asignatura_id')
             ->where('inic_codigo', $inic_codigo)
             ->get();
@@ -299,6 +310,7 @@ class IniciativasController extends Controller
         $iniciativa = Iniciativas::leftjoin('convenios', 'convenios.conv_codigo', '=', 'iniciativas.conv_codigo')
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
             ->leftjoin('mecanismos', 'mecanismos.meca_codigo', '=', 'iniciativas.meca_codigo')
+            ->leftjoin('sub_grupos_interes', 'sub_grupos_interes.sugr_codigo', '=', 'iniciativas.sugr_codigo')
             ->select(
                 'iniciativas.inic_codigo',
                 'iniciativas.inic_nombre',
@@ -310,6 +322,7 @@ class IniciativasController extends Controller
                 'convenios.conv_nombre',
                 'iniciativas.inic_brecha',
                 'iniciativas.inic_diagnostico',
+                'sub_grupos_interes.sugr_nombre',
                 'iniciativas.inic_macrozona',
                 'iniciativas.inic_bimestre',
                 'iniciativas.inic_desde',
@@ -594,10 +607,16 @@ class IniciativasController extends Controller
         $regiones = Region::all();
         $escuelas = Escuelas::all();
         $sedes = Sedes::all();
+        $centro_simulacion = CentroSimulacion::all();
         $comunas = Comuna::all();
         $carreras = Carreras::all();
         $asignaturas = Asignaturas::all();
         $dispositivos = Dispositivos::all();
+        $subgrupos = SubGruposInteres::all();
+
+        $impactosInternos = Ambitos::where('amb_descripcion', 'Impacto Interno')->get();
+        $impactosExternos = Ambitos::where('amb_descripcion', 'Impacto Externo')->get();
+
 
 
         return view('admin.iniciativas.paso1', [
@@ -615,7 +634,11 @@ class IniciativasController extends Controller
             'escuelas' => $escuelas,
             'comunas' => $comunas,
             'carreras' => $carreras,
-            'asignaturas' => $asignaturas
+            'asignaturas' => $asignaturas,
+            'subgrupos' => $subgrupos,
+            'centro_simulacion' => $centro_simulacion,
+            'impactosInternos' => $impactosInternos,
+            'impactosExternos' => $impactosExternos
         ]);
     }
 
@@ -662,6 +685,7 @@ class IniciativasController extends Controller
             'inic_escuela_ejecutora' => $request->inic_escuela_ejecutora,
             'dispositivo_id' => $request->dispositivo_id,
             'inic_macrozona' => $request->inic_macrozona,
+            'sugr_codigo' => $request->sugr_codigo,
             'inic_formato' => $request->inic_formato,
             'inic_brecha' => $request->brecha,
             'inic_diagnostico' => $request->diagnostico,
@@ -692,6 +716,46 @@ class IniciativasController extends Controller
                     $IniciativasAsignaturas->inic_codigo = $inic_codigo;
                     $IniciativasAsignaturas->asignatura_id = $asignatura;
                     $IniciativasAsignaturas->save();
+            }
+        }
+
+        $impactosInternos = $request->input('impactosInternos', []);
+
+        if (empty($impactosInternos))
+        {
+            //
+        }else{
+            foreach ($impactosInternos as $impactosInterno) {
+                    $IniciativasAmbitos = new IniciativasAmbitos();
+                    $IniciativasAmbitos->inic_codigo = $inic_codigo;
+                    $IniciativasAmbitos->amb_codigo = $impactosInterno;
+                    $IniciativasAmbitos->save();
+            }
+        }
+
+        $impactosExternos = $request->input('impactosExternos', []);
+        if (empty($impactosExternos))
+        {
+            //
+        }else{
+            foreach ($impactosExternos as $impactosExterno) {
+                    $IniciativasAmbitos2 = new IniciativasAmbitos();
+                    $IniciativasAmbitos2->inic_codigo = $inic_codigo;
+                    $IniciativasAmbitos2->amb_codigo = $impactosExterno;
+                    $IniciativasAmbitos2->save();
+            }
+        }
+
+        $centro_simulacion = $request->input('centro_simulacion', []);
+        if (empty($centro_simulacion))
+        {
+            //
+        }else{
+            foreach ($centro_simulacion as $cs) {
+                    $IniciativasCentroSimulacion = new IniciativasCentroSimulacion();
+                    $IniciativasCentroSimulacion->inic_codigo = $inic_codigo;
+                    $IniciativasCentroSimulacion->cs_codigo = $cs;
+                    $IniciativasCentroSimulacion->save();
             }
         }
 
@@ -754,8 +818,10 @@ class IniciativasController extends Controller
 
         $pain = [];
         $sedes = $request->input('sedes', []);
+        $sedes = $request->input('sedes', []);
         $escuelas = $request->input('escuelas', []);
         $carreras = $request->input('carreras', []);
+
 
         foreach ($sedes as $sede) {
             foreach ($escuelas as $escuela) {
@@ -962,16 +1028,36 @@ class IniciativasController extends Controller
         $iniciativaPais = IniciativasPais::where('inic_codigo', $inic_codigo)->get();
         $iniciativaRegion = IniciativasRegiones::select('regi_codigo')->where('inic_codigo', $inic_codigo)->get();
         $iniciativaComuna = IniciativasComunas::select('comu_codigo')->where('inic_codigo', $inic_codigo)->get();
-
+        $centro_simulacion = CentroSimulacion::all();
 
         $sedeSecCod = $sedeSec->pluck('sede_codigo')->toArray();
-        $asignaturaSecCod = $asignaturas->pluck('asignatura_id')->toArray();
+        $asignaturaSecCod2 = IniciativasAsignaturas::select('asignatura_id')->where('inic_codigo', $inic_codigo)->get();
+        $asignaturaSecCod = $asignaturaSecCod2->pluck('asignatura_id')->toArray();
+        $csSecCod = $centro_simulacion->pluck('cs_codigo')->toArray();
+        $impactosInternosSec2 = IniciativasAmbitos::select('iniciativas_ambitos.amb_codigo')->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
+        ->leftjoin('ambito', 'ambito.amb_codigo', 'iniciativas_ambitos.amb_codigo')
+        ->where('ambito.amb_descripcion', 'Impacto Interno')
+        ->get();
+        foreach ($impactosInternosSec2 as $key => $value) {
+            $impactosInternosSec[$key] = $value->amb_codigo;
+        }
+
+        $impactosExternosSec2 = IniciativasAmbitos::select('iniciativas_ambitos.amb_codigo')->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
+        ->leftjoin('ambito', 'ambito.amb_codigo', 'iniciativas_ambitos.amb_codigo')
+        ->where('ambito.amb_descripcion', 'Impacto Externo')
+        ->get();
+        foreach ($impactosExternosSec2 as $key => $value) {
+            $impactosExternosSec[$key] = $value->amb_codigo;
+        }
         $escuSecCod = $escuSec->pluck('escu_codigo')->toArray();
         $careSecCod = $careSec->pluck('care_codigo')->toArray();
         $regiSec = $iniciativaRegion->pluck('regi_codigo')->toArray();
         $comuSec = $iniciativaComuna->pluck('comu_codigo')->toArray();
+        $subgrupos = SubGruposInteres::all();
 
         // dd($iniciativaData);
+        $impactosInternos = Ambitos::where('amb_descripcion', 'Impacto Interno')->get();
+        $impactosExternos = Ambitos::where('amb_descripcion', 'Impacto Externo')->get();
 
         $odsData = DB::table('pivote_ods')
             ->join('ods', 'pivote_ods.id_ods', '=', 'ods.id_ods')
@@ -1020,9 +1106,16 @@ class IniciativasController extends Controller
             'asignaturaSec' => $asignaturaSecCod,
             'escuSec' => $escuSecCod,
             'careSec' => $careSecCod,
+            'csSec' => $csSecCod,
             'carreras' => $carreras,
             'ods' => $odsData,
             'metas' => $metasData,
+            'subgrupos' => $subgrupos,
+            'centro_simulacion' => $centro_simulacion,
+            'impactosInternos' => $impactosInternos,
+            'impactosExternos' => $impactosExternos,
+            'impactosInternosSec' => $impactosInternosSec,
+            'impactosExternosSec' => $impactosExternosSec
         ]);
 
     }
@@ -1068,6 +1161,7 @@ class IniciativasController extends Controller
             'inic_diagnostico' => $request->diagnostico,
             'inic_desde' => $request->desde,
             'inic_hasta' => $request->hasta,
+            'sugr_codigo' => $request->sugr_codigo,
             'conv_codigo' => $request->convenio,
             'meca_codigo' => $request->mecanismos,
             'tiac_codigo' => $request->tactividad,
@@ -1088,8 +1182,52 @@ class IniciativasController extends Controller
         $escuelas = $request->input('escuelas', []);
         $carreras = $request->input('carreras', []);
 
+        //eliminar asignaturas asociadas
+        IniciativasAsignaturas::where('inic_codigo', $inic_codigo)->delete();
 
 
+        $asignaturas = $request->input('asignaturas', []);
+        if (empty($asignaturas))
+        {
+            return redirect()->back()->with('errorPaso1', 'Es necesario que seleccione al menos una asignatura para la iniciativa.')->withInput();
+        }else{
+            foreach ($asignaturas as $asignatura) {
+                    $IniciativasAsignaturas = new IniciativasAsignaturas();
+                    $IniciativasAsignaturas->inic_codigo = $inic_codigo;
+                    $IniciativasAsignaturas->asignatura_id = $asignatura;
+                    $IniciativasAsignaturas->save();
+            }
+        }
+
+        // eliminar impactos internos y externos asociados
+        IniciativasAmbitos::where('inic_codigo', $inic_codigo)->delete();
+
+        $impactosInternos = $request->input('impactosInternos', []);
+
+        if (empty($impactosInternos))
+        {
+            //
+        }else{
+            foreach ($impactosInternos as $impactosInterno) {
+                    $IniciativasAmbitos = new IniciativasAmbitos();
+                    $IniciativasAmbitos->inic_codigo = $inic_codigo;
+                    $IniciativasAmbitos->amb_codigo = $impactosInterno;
+                    $IniciativasAmbitos->save();
+            }
+        }
+
+        $impactosExternos = $request->input('impactosExternos', []);
+        if (empty($impactosExternos))
+        {
+            //
+        }else{
+            foreach ($impactosExternos as $impactosExterno) {
+                    $IniciativasAmbitos2 = new IniciativasAmbitos();
+                    $IniciativasAmbitos2->inic_codigo = $inic_codigo;
+                    $IniciativasAmbitos2->amb_codigo = $impactosExterno;
+                    $IniciativasAmbitos2->save();
+            }
+        }
 
         $existentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)->get();
 
@@ -1339,7 +1477,8 @@ class IniciativasController extends Controller
         $socios = SociosComunitarios::all();
         $escuelasTotales = Escuelas::all();
         $carrerasTotales = Carreras::all();
-
+        $grupos = GruposInteres::orderBy('grin_codigo', 'asc')->get();
+        $subgrupos = SubGruposInteres::all();
 
         $grupoIniCod = [];
 
@@ -1369,6 +1508,8 @@ class IniciativasController extends Controller
             'escuelasTotales' => $escuelasTotales,
             'carrerasTotales' => $carrerasTotales,
             'socios' => $socios,
+            'grupos' => $grupos,
+            'subgrupos' => $subgrupos
 
         ]);
 
@@ -1516,23 +1657,35 @@ class IniciativasController extends Controller
 
     public function agregarExternos(Request $request)
     {
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        } elseif (Session::has('observador')) {
+            $rolePrefix = 'observador';
+        } elseif (Session::has('supervisor')) {
+            $rolePrefix = 'supervisor';
+        }
+
+
         $validar = IniciativasParticipantes::where(
             [
                 "inic_codigo" => $request->inic_codigo,
-                "sugr_codigo" => $request->sugr_codigo,
                 "soco_codigo" => $request->soco_codigo
             ]
         )->first();
+
+        $sugr_codigo = SociosComunitarios::where('soco_codigo', $request->soco_codigo)->value('sugr_codigo');
         if (!$validar) {
             $externosCrear = IniciativasParticipantes::insertGetId([
                 'inic_codigo' => $request->inic_codigo,
-                'sugr_codigo' => $request->sugr_codigo,
                 'soco_codigo' => $request->soco_codigo,
+                'sugr_codigo' => $sugr_codigo,
                 'inpr_total' => $request->inpr_total,
-                'inpr_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'inpr_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'inpr_nickname_mod' => Session::get('admin')->usua_nickname,
-                'inpr_rol_mod' => Session::get('admin')->rous_codigo,
+                'inpr_creado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                'inpr_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                'inpr_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
+                'inpr_rol_mod' => Session::get($rolePrefix)->rous_codigo,
             ]);
 
         } else {
@@ -1546,9 +1699,9 @@ class IniciativasController extends Controller
             )
                 ->update([
                     'inpr_total' => $request->inpr_total,
-                    'inpr_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'inpr_nickname_mod' => Session::get('admin')->usua_nickname,
-                    'inpr_rol_mod' => Session::get('admin')->rous_codigo,
+                    'inpr_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                    'inpr_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
+                    'inpr_rol_mod' => Session::get($rolePrefix)->rous_codigo,
                 ]);
 
         }

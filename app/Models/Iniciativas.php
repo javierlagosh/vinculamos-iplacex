@@ -23,6 +23,7 @@ class Iniciativas extends Model
         'inic_nombre',
         'inic_territorio',
         'inic_brecha',
+        'sugr_codigo',
         'inic_bimestre',
         'inic_macrozona',
         'inic_escuela_ejecutora',
