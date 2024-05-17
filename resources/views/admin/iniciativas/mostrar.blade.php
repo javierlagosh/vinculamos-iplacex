@@ -492,7 +492,7 @@
                                                 <td>
                                                     <ul>
                                                         @if ($impactosInternos->isEmpty())
-                                                            <li>No hay asignaturas registradas</li>
+                                                            <li>No hay impactos internos registrados</li>
                                                         @else
                                                         @foreach ($impactosInternos as $impactosInterno)
                                                             <li>{{ $impactosInterno->amb_nombre }}</li>
@@ -510,7 +510,7 @@
                                                 <td>
                                                     <ul>
                                                         @if ($impactosExternos->isEmpty())
-                                                            <li>No hay asignaturas registradas</li>
+                                                            <li>No hay impactos externos registrados</li>
                                                         @else
                                                         @foreach ($impactosExternos as $impactosExterno)
                                                             <li>{{ $impactosExterno->amb_nombre }}</li>
