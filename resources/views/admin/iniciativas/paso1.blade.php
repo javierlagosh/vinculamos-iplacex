@@ -184,6 +184,28 @@
                                         @endif
                                     </div>
                                 </div>
+                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Responsable</label> <label for=""
+                                            style="color: red;">*</label>
+                                        @if (isset($iniciativa) && $editar)
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                                value="{{ old('inic_responsable') ?? @$iniciativa->inic_responsable }}">
+                                        @else
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                                value="{{ old('inic_responsable') }}">
+                                        @endif
+                                        @if ($errors->has('inic_responsable'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_responsable') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
                                 {{-- <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Año</label> <label for=""
@@ -290,28 +312,7 @@
 
 
                                 </div>
-                                <div class="col-xl-3 col-md-3 col-lg-3">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Responsable</label> <label for=""
-                                            style="color: red;">*</label>
-                                        @if (isset($iniciativa) && $editar)
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
-                                                value="{{ old('inic_responsable') ?? @$iniciativa->inic_responsable }}">
-                                        @else
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
-                                                value="{{ old('inic_responsable') }}">
-                                        @endif
-                                        @if ($errors->has('inic_responsable'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('inic_responsable') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
+
                                 <div class="col-xl-3 col-md-3 col-lg-3">
 
                                     <div class="form-group" hidden>
