@@ -1186,11 +1186,7 @@ class IniciativasController extends Controller
         if (!$inicActualizar)
             return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante la actualización de los datos de la iniciativa, intente más tarde.')->withInput();
 
-        // ParticipantesInternos::where('inic_codigo', $inic_codigo)->delete();
-        $pain = [];
-        $sedes = $request->input('sedes', []);
-        $escuelas = $request->input('escuelas', []);
-        $carreras = $request->input('carreras', []);
+
 
         //eliminar asignaturas asociadas
         IniciativasAsignaturas::where('inic_codigo', $inic_codigo)->delete();
@@ -1238,6 +1234,15 @@ class IniciativasController extends Controller
                     $IniciativasAmbitos2->save();
             }
         }
+        // ParticipantesInternos::where('inic_codigo', $inic_codigo)->delete();
+        // ParticipantesInternos::where('inic_codigo', $inic_codigo)->delete();
+        $pain = [];
+        $sedes = $request->input('sedes', []);
+        $escuelas = $request->input('escuelas', []);
+        $carreras = $request->input('carreras', []);
+
+
+
 
         $existentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)->get();
 
