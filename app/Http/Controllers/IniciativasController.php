@@ -58,6 +58,7 @@ use App\Models\CentroSimulacion;
 use App\Models\IniciativasCentroSimulacion;
 use App\Models\Ambitos;
 use App\Models\IniciativasAmbitos;
+use App\Models\SubUnidades;
 //evaluacion
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormMail;
@@ -621,7 +622,7 @@ class IniciativasController extends Controller
         $carreras = Carreras::all();
         $asignaturas = Asignaturas::all();
         $dispositivos = Dispositivos::all();
-        $subgrupos = sub_unidades::all();
+        $subgrupos = SubUnidades::all();
 
         $impactosInternos = Ambitos::where('amb_descripcion', 'Impacto Interno')->get();
         $impactosExternos = Ambitos::where('amb_descripcion', 'Impacto Externo')->get();
@@ -1065,7 +1066,7 @@ class IniciativasController extends Controller
         $careSecCod = $careSec->pluck('care_codigo')->toArray();
         $regiSec = $iniciativaRegion->pluck('regi_codigo')->toArray();
         $comuSec = $iniciativaComuna->pluck('comu_codigo')->toArray();
-        $subgrupos = SubGruposInteres::all();
+        $subgrupos = SubUnidades::all();
 
         // dd($iniciativaData);
         $impactosInternos = Ambitos::where('amb_descripcion', 'Impacto Interno')->get();
