@@ -423,7 +423,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="ambito_accion">Mecanismos asociados</label>
+                                <label for="ambito_accion">Ámbitos asociados</label>
                                 <div class="input-group">
                                     <select name="ambito_accion[]" id="ambito_accion" class="form-control select2"
                                         style="width: 100%" multiple>

@@ -621,7 +621,7 @@ class IniciativasController extends Controller
         $carreras = Carreras::all();
         $asignaturas = Asignaturas::all();
         $dispositivos = Dispositivos::all();
-        $subgrupos = SubGruposInteres::all();
+        $subgrupos = sub_unidades::all();
 
         $impactosInternos = Ambitos::where('amb_descripcion', 'Impacto Interno')->get();
         $impactosExternos = Ambitos::where('amb_descripcion', 'Impacto Externo')->get();

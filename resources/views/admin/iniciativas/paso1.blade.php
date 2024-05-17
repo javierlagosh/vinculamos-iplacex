@@ -1182,12 +1182,12 @@
                                             <option disabled selected>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
                                                 @foreach ($subgrupos as $subgrupo)
-                                                    @if ($subgrupo->sugr_codigo == $iniciativa->sugr_codigo)
-                                                        <option value="{{ $subgrupo->sugr_codigo }}"
-                                                            {{ old('sugr_codigo', $iniciativa->sugr_codigo) == $subgrupo->sugr_codigo ? 'selected' : '' }}>
-                                                            {{ $subgrupo->sugr_nombre }}</option>
+                                                    @if ($subgrupo->suni_codigo == $iniciativa->sugr_codigo)
+                                                        <option value="{{ $subgrupo->suni_codigo }}"
+                                                            {{ old('suni_codigo', $iniciativa->sugr_codigo) == $subgrupo->suni_codigo ? 'selected' : '' }}>
+                                                            {{ $subgrupo->suni_nombre }}</option>
                                                     @else
-                                                        <option value="{{ $subgrupo->sugr_codigo }}">{{ $subgrupo->sugr_nombre }}
+                                                        <option value="{{ $subgrupo->suni_codigo }}">{{ $subgrupo->suni_nombre }}
                                                         </option>
                                                     @endif
 
@@ -1195,7 +1195,7 @@
                                                 @endforeach
                                             @else
                                             @foreach ($subgrupos as $subgrupo)
-                                                <option value="{{$subgrupo->sugr_codigo}}">{{$subgrupo->sugr_nombre}}</option>
+                                                <option value="{{$subgrupo->suni_codigo}}">{{$subgrupo->suni_nombre}}</option>
                                             @endforeach
                                             @endif
                                         </select>
