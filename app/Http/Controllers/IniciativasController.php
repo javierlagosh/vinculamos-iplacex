@@ -304,10 +304,15 @@ class IniciativasController extends Controller
             ->get();
 
         $impactosInternos = IniciativasAmbitos::join('ambito', 'iniciativas_ambitos.amb_codigo', 'ambito.amb_codigo')
-            ->where('inic_codigo', $inic_codigo)
-            ->where('ambito.amb_tipo', 'interno')
+            ->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
+            ->where('ambito.amb_descripcion', 'Impacto Interno')
             ->get();
-        dd($impactosInternos);
+
+
+        $impactosExternos = IniciativasAmbitos::join('ambito', 'iniciativas_ambitos.amb_codigo', 'ambito.amb_codigo')
+            ->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
+            ->where('ambito.amb_descripcion', 'Impacto Externo')
+            ->get();
 
         $iniciativa = Iniciativas::leftjoin('convenios', 'convenios.conv_codigo', '=', 'iniciativas.conv_codigo')
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
@@ -416,7 +421,9 @@ class IniciativasController extends Controller
             'ods_array' => $ods,
             'escuelaEjecutora' => $escuelaEjecutora,
             'iniciativas_asignaturas' => $iniciativas_asignaturas,
-            'dispositivos' => $dispositivos
+            'dispositivos' => $dispositivos,
+            'impactosInternos' => $impactosInternos,
+            'impactosExternos' => $impactosExternos
         ]);
     }
 

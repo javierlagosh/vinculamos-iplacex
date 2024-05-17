@@ -484,6 +484,42 @@
                                                     </ul>
                                                 </td>
                                             </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <strong>Impacto(s) interno(s)</strong>
+                                                </td>
+                                                <td>
+                                                    <ul>
+                                                        @if ($impactosInternos->isEmpty())
+                                                            <li>No hay asignaturas registradas</li>
+                                                        @else
+                                                        @foreach ($impactosInternos as $impactosInterno)
+                                                            <li>{{ $impactosInterno->amb_nombre }}</li>
+                                                        @endforeach
+                                                        @endif
+
+                                                    </ul>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <strong>Impacto(s) Externos(s)</strong>
+                                                </td>
+                                                <td>
+                                                    <ul>
+                                                        @if ($impactosExternos->isEmpty())
+                                                            <li>No hay asignaturas registradas</li>
+                                                        @else
+                                                        @foreach ($impactosExternos as $impactosExterno)
+                                                            <li>{{ $impactosExterno->amb_nombre }}</li>
+                                                        @endforeach
+                                                        @endif
+
+                                                    </ul>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td>
                                                     <strong>Macrozona</strong>
