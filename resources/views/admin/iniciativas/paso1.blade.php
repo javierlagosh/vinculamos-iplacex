@@ -1120,7 +1120,7 @@
                                     $(document).ready(function() {
                                         $('#sedes').change(function() {
                                             var sedes = $('#sedes').val();
-                                            if (sedes.includes('6')) {
+                                            if (sedes.includes('13')) {
                                                 $('#prueba').removeAttr('hidden');
                                             } else {
                                                 $('#prueba').attr('hidden', 'hidden');
