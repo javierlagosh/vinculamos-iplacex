@@ -258,12 +258,12 @@
                             </div>
 
 
-                            <div class="row">
+                            <div class="row p-4">
                                 <div class="col-xl-6 col-md-6 col-lg-6">
                                     <h5>Sección 3 - Participantes internos</h5>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row p-4">
                                 <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Sedes</label> <label for=""
@@ -411,7 +411,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row p-4">
                                 <div class="col-xl-6 col-md-6 col-lg-6">
                                     <h6>Resultados esperados</h6>
                                     <div class="row mt-3">
@@ -458,7 +458,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row p-4">
                                 <div class="col-xl-12 col-md-12 col-log-12">
                                     <div class="text-right">
                                         <strong>
