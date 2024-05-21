@@ -694,6 +694,7 @@ class IniciativasController extends Controller
             'inic_responsable' => $request->inic_responsable,
             'inic_bimestre' => $request->inic_bimestre,
             'inic_escuela_ejecutora' => $request->inic_escuela_ejecutora,
+            'inic_asignaturas' => $request->inic_asignaturas,
             'dispositivo_id' => $request->dispositivo_id,
             'inic_macrozona' => $request->inic_macrozona,
             'sugr_codigo' => $request->sugr_codigo,
@@ -717,18 +718,18 @@ class IniciativasController extends Controller
 
         $inic_codigo = $inicCrear;
 
-        $asignaturas = $request->input('asignaturas', []);
-        if (empty($asignaturas))
-        {
-            //
-        }else{
-            foreach ($asignaturas as $asignatura) {
-                    $IniciativasAsignaturas = new IniciativasAsignaturas();
-                    $IniciativasAsignaturas->inic_codigo = $inic_codigo;
-                    $IniciativasAsignaturas->asignatura_id = $asignatura;
-                    $IniciativasAsignaturas->save();
-            }
-        }
+        // $asignaturas = $request->input('asignaturas', []);
+        // if (empty($asignaturas))
+        // {
+        //     //
+        // }else{
+        //     foreach ($asignaturas as $asignatura) {
+        //             $IniciativasAsignaturas = new IniciativasAsignaturas();
+        //             $IniciativasAsignaturas->inic_codigo = $inic_codigo;
+        //             $IniciativasAsignaturas->asignatura_id = $asignatura;
+        //             $IniciativasAsignaturas->save();
+        //     }
+        // }
 
         $impactosInternos = $request->input('impactosInternos', []);
 
@@ -1038,8 +1039,8 @@ class IniciativasController extends Controller
         $centro_simulacion = CentroSimulacion::all();
 
         $sedeSecCod = $sedeSec->pluck('sede_codigo')->toArray();
-        $asignaturaSecCod2 = IniciativasAsignaturas::select('asignatura_id')->where('inic_codigo', $inic_codigo)->get();
-        $asignaturaSecCod = $asignaturaSecCod2->pluck('asignatura_id')->toArray();
+        // $asignaturaSecCod2 = IniciativasAsignaturas::select('asignatura_id')->where('inic_codigo', $inic_codigo)->get();
+        // $asignaturaSecCod = $asignaturaSecCod2->pluck('asignatura_id')->toArray();
         $csSecCod = $centro_simulacion->pluck('cs_codigo')->toArray();
 
         $impactosInternosSec = [];
@@ -1107,13 +1108,13 @@ class IniciativasController extends Controller
             'comunas' => $comunas,
             'convenios' => $convenios,
             'mecanismo' => $mecanismos,
-            'asignaturas' => $asignaturas,
+            //'asignaturas' => $asignaturas,
             'paises' => $paises,
             'regiones' => $regiones,
             'escuelas' => $escuelas,
             'sedeSec' => $sedeSecCod,
             'dispositivos' => $dispositivos,
-            'asignaturaSec' => $asignaturaSecCod,
+            //'asignaturaSec' => $asignaturaSecCod,
             'escuSec' => $escuSecCod,
             'careSec' => $careSecCod,
             'csSec' => $csSecCod,
@@ -1171,6 +1172,7 @@ class IniciativasController extends Controller
             'inic_brecha' => $request->brecha,
             'inic_diagnostico' => $request->diagnostico,
             'inic_desde' => $request->desde,
+            'inic_asignaturas' => $request->inic_asignaturas,
             'inic_hasta' => $request->hasta,
             'sugr_codigo' => $request->sugr_codigo,
             'conv_codigo' => $request->convenio,
@@ -1193,18 +1195,18 @@ class IniciativasController extends Controller
         IniciativasAsignaturas::where('inic_codigo', $inic_codigo)->delete();
 
 
-        $asignaturas = $request->input('asignaturas', []);
-        if (empty($asignaturas))
-        {
-            return redirect()->back()->with('errorPaso1', 'Es necesario que seleccione al menos una asignatura para la iniciativa.')->withInput();
-        }else{
-            foreach ($asignaturas as $asignatura) {
-                    $IniciativasAsignaturas = new IniciativasAsignaturas();
-                    $IniciativasAsignaturas->inic_codigo = $inic_codigo;
-                    $IniciativasAsignaturas->asignatura_id = $asignatura;
-                    $IniciativasAsignaturas->save();
-            }
-        }
+        // $asignaturas = $request->input('asignaturas', []);
+        // if (empty($asignaturas))
+        // {
+        //     return redirect()->back()->with('errorPaso1', 'Es necesario que seleccione al menos una asignatura para la iniciativa.')->withInput();
+        // }else{
+        //     foreach ($asignaturas as $asignatura) {
+        //             $IniciativasAsignaturas = new IniciativasAsignaturas();
+        //             $IniciativasAsignaturas->inic_codigo = $inic_codigo;
+        //             $IniciativasAsignaturas->asignatura_id = $asignatura;
+        //             $IniciativasAsignaturas->save();
+        //     }
+        // }
 
         // eliminar impactos internos y externos asociados
         IniciativasAmbitos::where('inic_codigo', $inic_codigo)->delete();

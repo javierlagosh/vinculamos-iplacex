@@ -1310,29 +1310,12 @@
                                             {{-- <input type="checkbox" id="selectAllCarreras"
                                             style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
-                                        <select class="form-control select2" multiple="" id="asignaturas"
-                                            name="asignaturas[]" style="width: 100%">
+
                                             @if (isset($iniciativa) && $editar)
-                                                estoy aca
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($asignaturas as $asignatura)
-                                                    <option value="{{ $asignatura->id }}"
-                                                        {{ in_array($asignatura->nombre, old('asignaturas', [])) || in_array($asignatura->id, $asignaturaSec) ? 'selected' : '' }}>
-                                                        {{ $asignatura->nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
+                                                <input type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control" value="{{$iniciativa->inic_asignaturas}}">
                                             @else
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($asignaturas as $asignatura)
-                                                    <option value="{{ $asignatura->id }}"
-                                                        {{ collect(old('asignaturas'))->contains($asignatura->id) ? 'selected' : '' }}>
-                                                        {{ $asignatura->nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
+                                                <input type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control">
                                             @endif
-                                        </select>
 
                                         @if ($errors->has('asignaturas'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
