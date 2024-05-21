@@ -167,10 +167,10 @@
                                         <label style="font-size: 110%">Nombre de iniciativa</label> <label for=""
                                             style="color: red;">*</label>
                                         @if (isset($iniciativa) && $editar)
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="nombre" name="nombre"
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="nombre" name="nombre" required
                                                 value="{{ old('nombre') ?? @$iniciativa->inic_nombre }}">
                                         @else
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="nombre" name="nombre"
+                                            <input type="text" class="form-control" style="border-radius:5px;" id="nombre" name="nombre" required
                                                 value="{{ old('nombre') }}">
                                         @endif
                                         @if ($errors->has('nombre'))
@@ -245,9 +245,9 @@
                                             <br>
 
                                             @if (isset($iniciativa) && $editar)
-                                                <input type="date" name="desde" id="desde" class="form-control" value="{{ old('inic_desde') ?? @$iniciativa->inic_desde }}">
+                                                <input required type="date" name="desde" id="desde" class="form-control" value="{{ old('inic_desde') ?? @$iniciativa->inic_desde }}">
                                             @else
-                                                <input type="date" name="desde" id="desde" class="form-control" value="{{ old('inic_desde')}}">
+                                                <input required type="date" name="desde" id="desde" class="form-control" value="{{ old('inic_desde')}}">
                                             @endif
                                         </div>
                                     </div>
@@ -261,9 +261,9 @@
                                             style="color: red;">*</label>
                                             <br>
                                             @if (isset($iniciativa) && $editar)
-                                                <input type="date" name="hasta" id="hasta" class="form-control" value="{{ old('inic_hasta') ?? @$iniciativa->inic_hasta }}">
+                                                <input required type="date" name="hasta" id="hasta" class="form-control" value="{{ old('inic_hasta') ?? @$iniciativa->inic_hasta }}">
                                             @else
-                                                <input type="date" name="hasta" id="hasta" class="form-control" value="{{ old('inic_hasta')}}">
+                                                <input required type="date" name="hasta" id="hasta" class="form-control" value="{{ old('inic_hasta')}}">
                                             @endif
                                         </div>
                                     </div>
@@ -274,9 +274,8 @@
                                         <label style="font-size: 110%">Formato de implementación</label> <label
                                             for="" style="color: red;">*</label>
 
-                                        <select class="form-control select2" id="inic_formato" name="inic_formato"
+                                        <select class="form-control select2" id="inic_formato" name="inic_formato" required
                                             style="width: 100%">
-                                            <option disabled selected>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
                                                 <option value="Presencial"
                                                     {{ $iniciativa->inic_formato == 'Presencial' ? 'selected' : '' }}>
@@ -390,9 +389,9 @@
                                         style="color: red;">*</label>
                                         <div class="input-group">
                                             @if (isset($iniciativa) && $editar)
-                                                <textarea class="formbold-form-input" id="brecha" name="brecha" rows="5" style="width: 100%;">{{ old('brecha') ?? @$iniciativa->inic_brecha }}</textarea>
+                                                <textarea required class="formbold-form-input" id="brecha" name="brecha" rows="5" style="width: 100%;">{{ old('brecha') ?? @$iniciativa->inic_brecha }}</textarea>
                                             @else
-                                                <textarea class="formbold-form-input" id="brecha" name="brecha" rows="5" style="width: 100%;">{{ old('brecha') }}</textarea>
+                                                <textarea required class="formbold-form-input" id="brecha" name="brecha" rows="5" style="width: 100%;">{{ old('brecha') }}</textarea>
                                             @endif
                                         </div>
                                         @if ($errors->has('brecha'))
@@ -409,9 +408,9 @@
                                         style="color: red;">*</label>
                                         <div class="input-group">
                                             @if (isset($iniciativa) && $editar)
-                                                <textarea class="formbold-form-input" id="diagnostico" name="diagnostico" rows="5" style="width: 100%;">{{ old('diagnostico') ?? @$iniciativa->inic_diagnostico }}</textarea>
+                                                <textarea required class="formbold-form-input" id="diagnostico" name="diagnostico" rows="5" style="width: 100%;">{{ old('diagnostico') ?? @$iniciativa->inic_diagnostico }}</textarea>
                                             @else
-                                                <textarea class="formbold-form-input" id="diagnostico" name="diagnostico" rows="5" style="width: 100%;">{{ old('diagnostico') }}</textarea>
+                                                <textarea required class="formbold-form-input" id="diagnostico" name="diagnostico" rows="5" style="width: 100%;">{{ old('diagnostico') }}</textarea>
                                             @endif
                                         </div>
                                         @if ($errors->has('diagnostico'))
@@ -431,9 +430,9 @@
                                         style="color: red;">*</label>
                                     <div class="input-group">
                                         @if (isset($iniciativa) && $editar)
-                                            <textarea class="formbold-form-input" id="description" name="description" rows="5" style="width: 100%;">{{ old('description') ?? @$iniciativa->inic_descripcion }}</textarea>
+                                            <textarea required class="formbold-form-input" id="description" name="description" rows="5" style="width: 100%;">{{ old('description') ?? @$iniciativa->inic_descripcion }}</textarea>
                                         @else
-                                            <textarea class="formbold-form-input" id="description" name="description" rows="5" style="width: 100%;">{{ old('description') }}</textarea>
+                                            <textarea required class="formbold-form-input" id="description" name="description" rows="5" style="width: 100%;">{{ old('description') }}</textarea>
                                         @endif
                                     </div>
                                     @if ($errors->has('description'))
@@ -1049,7 +1048,7 @@
                                             style="color: red;">*</label>
                                         {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
                                             for="selectAllEscuelas">Todas</label> --}}
-                                        <select class="form-control select2" name="sedes[]" multiple=""
+                                        <select class="form-control select2" name="sedes[]" multiple="" required
                                             style="width: 100%" id="sedes">
                                             @if (isset($iniciativa) && $editar)
                                                 @forelse ($sedes as $sede)
@@ -1069,12 +1068,12 @@
                                                 @endforelse
                                             @endif
                                         </select>
-                                        @if ($errors->has('escuelas'))
+                                        @if ($errors->has('sedes'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
                                                     <button class="close"
                                                         data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('escuelas') }}</strong>
+                                                    <strong>{{ $errors->first('sedes') }}</strong>
                                                 </div>
                                             </div>
                                         @endif
@@ -1220,16 +1219,14 @@
                                         <div class="row">
                                             <div class="col">
                                                 <label style="font-size: 110%; color:black;">Escuelas Colaboradoras<label style="color:red;">*</label></label>
-                                                &nbsp;
-                                                <input type="checkbox" id="selectAllEscuelas">
-                                                <label for="selectAllEscuelas">Todas</label>
+
 
                                             </div>
 
                                         </div>
 
 
-                                        <select class="form-control select2" name="escuelas[]" multiple=""
+                                        <select class="form-control select2" name="escuelas[]" multiple="" required
                                             style="width: 100%" id="escuelas">
                                             @if (isset($iniciativa) && $editar)
                                                 @forelse ($escuelas as $escuela)
@@ -1266,7 +1263,7 @@
                                             style="color: red;">*</label><input type="checkbox" id="selectAllCarreras"
                                             style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label>
 
-                                        <select class="form-control select2" multiple="" id="carreras"
+                                        <select class="form-control select2" multiple="" id="carreras" required
                                             name="carreras[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 estoy aca
@@ -1312,9 +1309,9 @@
 
 
                                             @if (isset($iniciativa) && $editar)
-                                                <input type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control" value="{{$iniciativa->inic_asignaturas}}">
+                                                <input required type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control" value="{{$iniciativa->inic_asignaturas}}">
                                             @else
-                                                <input type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control">
+                                                <input required type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control">
                                             @endif
 
                                         @if ($errors->has('asignaturas'))
@@ -1341,7 +1338,7 @@
 
                                         <label style="font-size: 110%">Instrumento</label> <label for=""
                                             style="color: red;">*</label>
-                                        <select class="form-control select2" id="tactividad" name="tactividad"
+                                        <select class="form-control select2" required id="tactividad" name="tactividad"
                                             style="width: 100%">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
@@ -1380,7 +1377,7 @@
 
                                         <label style="font-size: 110%">Dispositivo</label> <label for=""
                                             style="color: red;">*</label>
-                                        <select class="form-control select2" id="dispositivo_id" name="dispositivo_id"
+                                        <select class="form-control select2" required id="dispositivo_id" name="dispositivo_id"
                                             style="width: 100%">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
@@ -1416,7 +1413,7 @@
                                     <div class="form-group">
                                         <label style="font-size: 110%">Convenio</label> <label for=""
                                             style="color: red;">*</label>
-                                        <select class="form-control select2" id="convenio" name="convenio"
+                                        <select class="form-control select2" required id="convenio" name="convenio"
                                             style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 <option value="" selected>No Aplica</option>
@@ -1458,7 +1455,7 @@
                                             {{-- <input type="checkbox" id="selectAllCarreras"
                                             style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
-                                        <select class="form-control select2" multiple="" id="impactosInternos"
+                                        <select class="form-control select2" required multiple="" id="impactosInternos"
                                             name="impactosInternos[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 estoy aca
@@ -1501,7 +1498,7 @@
                                             {{-- <input type="checkbox" id="selectAllCarreras"
                                             style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
-                                        <select class="form-control select2" multiple="" id="impactosExternos"
+                                        <select class="form-control select2" required multiple="" id="impactosExternos"
                                             name="impactosExternos[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 estoy aca
