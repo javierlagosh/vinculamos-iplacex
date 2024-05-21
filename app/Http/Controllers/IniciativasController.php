@@ -57,6 +57,7 @@ use App\Models\GruposInteres;
 use App\Models\CentroSimulacion;
 use App\Models\IniciativasCentroSimulacion;
 use App\Models\Ambitos;
+use App\Models\AmbitoTiac;
 use App\Models\IniciativasAmbitos;
 use App\Models\SubUnidades;
 //evaluacion
@@ -1806,6 +1807,23 @@ class IniciativasController extends Controller
         return response()->json($escuelas);
     }
 
+    public function escuelasBySedes(Request $request)
+    {
+        $sedesIds = $request->input('sedes', []);
+        if (empty($sedesIds)) {
+            $escuelas = Escuelas::select('escuelas.escu_nombre', 'escuelas.escu_codigo')
+            ->distinct()
+            ->get();
+            return response()->json($escuelas);
+        }
+        $escuelas = Escuelas::join('sedes_escuelas', 'sedes_escuelas.escu_codigo', '=', 'escuelas.escu_codigo')
+            ->whereIn('sedes_escuelas.sede_codigo', $sedesIds)
+            ->select('escuelas.escu_nombre', 'escuelas.escu_codigo')
+            ->distinct()
+            ->get();
+        return response()->json($escuelas);
+    }
+
     public function comunasByRegiones(Request $request)
     {
 
@@ -1826,6 +1844,58 @@ class IniciativasController extends Controller
         ->get();
 
         return response()->json($regiones);
+    }
+    public function DispositivoByInstrumento(Request $request)
+    {
+        $instrumento = $request->input('tactividad');
+
+       try {
+        $dispositivos = Dispositivos::where('tiac_codigo', $instrumento)
+        ->select('dispositivo.id', 'dispositivo.nombre')
+        ->get();
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No se encontraron dispositivos asociados a este instrumento']);
+       }
+
+        return response()->json($dispositivos);
+    }
+
+    public function ImpactoInternoByInstrumento(Request $request)
+    {
+        $instrumento = $request->input('tactividad');
+
+       try {
+        $impactosInternos = Ambitos::join('ambito_tiac', 'ambito_tiac.amb_codigo', '=', 'ambito.amb_codigo')
+        ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'ambito_tiac.tiac_codigo')
+        ->select('ambito.amb_codigo', 'ambito.amb_nombre')
+        ->where('ambito.amb_descripcion', 'Impacto Interno')
+        ->where('ambito_tiac.tiac_codigo', $instrumento)
+        ->get();
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No se encontraron impactos internos asociados a este instrumento']);
+       }
+
+        return response()->json($impactosInternos);
+
+    }
+
+    public function ImpactoExternoByInstrumento(Request $request)
+    {
+        $instrumento = $request->input('tactividad');
+
+       try {
+        $impactosExternos = Ambitos::join('ambito_tiac', 'ambito_tiac.amb_codigo', '=', 'ambito.amb_codigo')
+        ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'ambito_tiac.tiac_codigo')
+        ->select('ambito.amb_codigo', 'ambito.amb_nombre')
+        ->where('ambito.amb_descripcion', 'Impacto Externo')
+        ->where('ambito_tiac.tiac_codigo', $instrumento)
+        ->get();
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No se encontraron impactos internos asociados a este instrumento']);
+       }
+
+        return response()->json($impactosExternos);
+
     }
 
 

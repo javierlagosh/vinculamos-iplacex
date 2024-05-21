@@ -1391,6 +1391,84 @@
                                     </div>
                                 </div>
 
+                                {{-- TODO: CREAR TABLA DISPOSITIVO --}}
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+
+                                        <label style="font-size: 110%">Dispositivo</label> <label for=""
+                                            style="color: red;">*</label>
+                                        <select class="form-control select2" id="dispositivo_id" name="dispositivo_id"
+                                            style="width: 100%">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                @forelse ($dispositivos as $dispositivo)
+                                                    <option value="{{ $dispositivo->id }}"
+                                                        {{ $iniciativa->dispositivo_id == $dispositivo->id ? 'selected' : '' }}>
+                                                        {{ $dispositivo->nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                @forelse ($dispositivos as $dispositivo)
+                                                    <option value="{{ $dispositivo->id }}"
+                                                        {{ old('dispositivo_id') == $dispositivo->id ? 'selected' : '' }}>
+                                                        {{ $dispositivo->nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('dispositivo_id'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <strong>{{ $errors->first('dispositivo_id') }}</strong>
+                                                </div>
+                                            </div>
+                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Convenio</label> <label for=""
+                                            style="color: red;">*</label>
+                                        <select class="form-control select2" id="convenio" name="convenio"
+                                            style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                <option value="" selected>No Aplica</option>
+                                                @foreach ($convenios as $convenio)
+                                                    <option value="{{ $convenio->conv_codigo }}"
+                                                        {{ $iniciativa->conv_codigo == $convenio->conv_codigo ? 'selected' : '' }}>
+                                                        {{ $convenio->conv_nombre }}</option>
+                                                @endforeach
+                                            @else
+                                                @if (count($convenios) > 0)
+                                                    <option value="" disabled selected>Seleccione...</option>
+                                                    @foreach ($convenios as $convenio)
+                                                        <option value="{{ $convenio->conv_codigo }}">
+                                                            {{ $convenio->conv_nombre }}</option>
+                                                    @endforeach
+                                                @else
+                                                    <option value="-1" disabled selected>No existen registros</option>
+                                                @endif
+
+                                            @endif
+                                        </select>
+
+
+                                        @if ($errors->has('convenio'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('convenio') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Impactos internos</label>
@@ -1477,44 +1555,7 @@
                                     </div>
                                 </div>
 
-                                {{-- TODO: CREAR TABLA DISPOSITIVO --}}
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
 
-                                        <label style="font-size: 110%">Dispositivo</label> <label for=""
-                                            style="color: red;">*</label>
-                                        <select class="form-control select2" id="dispositivo_id" name="dispositivo_id"
-                                            style="width: 100%">
-                                            <option value="" selected disabled>Seleccione...</option>
-                                            @if (isset($iniciativa) && $editar)
-                                                @forelse ($dispositivos as $dispositivo)
-                                                    <option value="{{ $dispositivo->id }}"
-                                                        {{ $iniciativa->dispositivo_id == $dispositivo->id ? 'selected' : '' }}>
-                                                        {{ $dispositivo->nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                @forelse ($dispositivos as $dispositivo)
-                                                    <option value="{{ $dispositivo->id }}"
-                                                        {{ old('dispositivo_id') == $dispositivo->id ? 'selected' : '' }}>
-                                                        {{ $dispositivo->nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('dispositivo_id'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <strong>{{ $errors->first('dispositivo_id') }}</strong>
-                                                </div>
-                                            </div>
-                                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                        @endif
-                                    </div>
-                                </div>
 
 
                                 <div class="col-xl-4 col-md-4 col-lg-4" hidden>
@@ -1555,45 +1596,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Convenio</label> <label for=""
-                                            style="color: red;">*</label>
-                                        <select class="form-control select2" id="convenio" name="convenio"
-                                            style="width: 100%">
-                                            @if (isset($iniciativa) && $editar)
-                                                <option value="" selected>No Aplica</option>
-                                                @foreach ($convenios as $convenio)
-                                                    <option value="{{ $convenio->conv_codigo }}"
-                                                        {{ $iniciativa->conv_codigo == $convenio->conv_codigo ? 'selected' : '' }}>
-                                                        {{ $convenio->conv_nombre }}</option>
-                                                @endforeach
-                                            @else
-                                                @if (count($convenios) > 0)
-                                                    <option value="" disabled selected>Seleccione...</option>
-                                                    @foreach ($convenios as $convenio)
-                                                        <option value="{{ $convenio->conv_codigo }}">
-                                                            {{ $convenio->conv_nombre }}</option>
-                                                    @endforeach
-                                                @else
-                                                    <option value="-1" disabled selected>No existen registros</option>
-                                                @endif
 
-                                            @endif
-                                        </select>
-
-
-                                        @if ($errors->has('convenio'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('convenio') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="row">
@@ -1820,11 +1823,13 @@
             mecanismosByActividades();
             regionesByMacrozonas();
             comunasByRegiones();
+            escuelasBySedes();
             selectAllRegiones();
             selectAllComunas();
             selectAllEscuelas();
             selectAllCarreras();
             carrerasByEscuelas();
+            DispositivoImpactoByInstrumento();
             // selectInstrumento();
             // selectEscuelas();
             // $('#programas').on('change', function() {
@@ -1968,6 +1973,43 @@
             }
         }
 
+        function escuelasBySedes() {
+            $('#sedes').on('change', function() {
+                var sedesId = $(this).val();
+                console.log("sedesId: " + sedesId);
+                if (sedesId) {
+                    $.ajax({
+                        url: window.location.origin + '/admin/iniciativas/obtener-escuelas',
+                        type: 'POST',
+                        dataType: 'json',
+
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            sedes: sedesId
+                        },
+                        success: function(data) {
+                            console.log("dataEscuelas: " + data)
+                            $('#escuelas').empty();
+                            $('#inic_escuela_ejecutora').empty();
+
+                            //escuelas colaboradoras
+                            $.each(data, function(key, value) {
+                                $('#escuelas').append(
+                                    `<option value="${value.escu_codigo}">${value.escu_nombre}</option>`
+                                );
+                            });
+                            //escuela ejecutora
+                            $.each(data, function(key, value) {
+                                $('#inic_escuela_ejecutora').append(
+                                    `<option value="${value.escu_codigo}">${value.escu_nombre}</option>`
+                                );
+                            });
+                        }
+                    });
+                }
+            })
+        }
+
         function comunasByRegiones() {
             $('#region').on('change', function() {
                 var regionesId = $(this).val();
@@ -2019,6 +2061,7 @@
                         error: function(data) {
 
                             $('#region').empty();
+
                             $.each(data, function(key, value) {
                                 console.log("value: " + key);
                                 $('#region').append(
@@ -2029,6 +2072,123 @@
                     });
                 }
             })
+        }
+
+
+
+
+        function DispositivoImpactoByInstrumento(){
+            $('#tactividad').on('change', function() {
+                var tactividad = $(this).val();
+                if (tactividad) {
+                    console.log("tactividad: " + tactividad);
+                    $.ajax({
+                        url: window.location.origin + '/admin/iniciativas/obtener-Dispositivo',
+                        type: 'POST',
+                        dataType: 'json',
+
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            tactividad: tactividad
+                        },
+                        success: function(data) {
+                            console.log("datos: " + data);
+                            $('#dispositivo_id').empty();
+                            $.each(data, function(key, value) {
+                                console.log("value: " + value);
+                                $('#dispositivo_id').append(
+                                    `<option value="${value.id}">${value.nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function(data) {
+                            console.log("error: " + data);
+
+                            $('#dispositivo_id').empty();
+                            $.each(data, function(key, value) {
+                                console.log("value: " + key);
+                                $('#dispositivo_id').append(
+                                    `<option value="${value.id}">${value.nombre}</option>`
+                                );
+                            });
+                        }
+                    });
+
+                    $.ajax({
+                        url: window.location.origin + '/admin/iniciativas/obtener-ImpactoInterno',
+                        type: 'POST',
+                        dataType: 'json',
+
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            tactividad: tactividad
+                        },
+                        success: function(data) {
+                            console.log("datos: " + data);
+                            $('#impactosInternos').empty();
+                            $.each(data, function(key, value) {
+                                console.log("value: " + value);
+                                $('#impactosInternos').append(
+                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function(data) {
+                            console.log("error: " + data);
+
+                            $('#impactosInternos').empty();
+                            $.each(data, function(key, value) {
+                                console.log("value: " + value);
+                                $('#impactosInternos').append(
+                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
+                                );
+                            });
+                        }
+                    });
+
+
+
+                    $.ajax({
+                        url: window.location.origin + '/admin/iniciativas/obtener-ImpactoExterno',
+                        type: 'POST',
+                        dataType: 'json',
+
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            tactividad: tactividad
+                        },
+                        success: function(data) {
+                            console.log("datos: " + data);
+                            $('#impactosExternos').empty();
+                            $.each(data, function(key, value) {
+                                console.log("value: " + value);
+                                $('#impactosExternos').append(
+                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function(data) {
+                            console.log("error: " + data);
+
+                            $('#impactosExternos').empty();
+                            $.each(data, function(key, value) {
+                                console.log("value: " + value);
+                                $('#impactosExternos').append(
+                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
+                                );
+                            });
+                        }
+                    });
+
+
+
+
+
+
+
+                }
+            })
+
         }
 
         function carrerasByEscuelas() {
