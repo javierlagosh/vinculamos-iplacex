@@ -1817,6 +1817,19 @@ class IniciativasController extends Controller
         return response()->json($comunas);
     }
 
+    public function regionesByMacrozonas(Request $request)
+    {
+        $macrozonaJson = $request->all('macrozona');
+        $macrozonaNombre = $macrozonaJson['macrozona'];
+        $regiones = Region::where('regi_macrozona', $macrozonaNombre)
+        ->select('regiones.regi_nombre', 'regiones.regi_codigo')
+        ->get();
+
+        return response()->json($regiones);
+    }
+
+
+
     public function sociosBySubgrupos(Request $request)
     {
 

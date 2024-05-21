@@ -341,6 +341,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/iniciativas/obtener-socio/paso2', [IniciativasController::class, 'sociosBySubgrupos']);
     Route::post('admin/iniciativas/obtener-pais', [IniciativasController::class, 'paisByTerritorio']);
     Route::post('admin/iniciativas/obtener-comunas', [IniciativasController::class, 'comunasByRegiones']);
+    Route::post('admin/iniciativas/obtener-regiones', [IniciativasController::class, 'regionesByMacrozonas']);
     Route::post('admin/inicitiativa/eliminar-externo', [IniciativasController::class, 'eliminarExterno']);
 
     //TODO: Evaluacion de evidenciavinculam_demo_v2

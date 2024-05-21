@@ -1219,7 +1219,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col">
-                                                <label style="font-size: 110%">Escuelas Colaboradoras<label style="color:red;">*</label></label>
+                                                <label style="font-size: 110%; color:black;">Escuelas Colaboradoras<label style="color:red;">*</label></label>
                                                 &nbsp;
                                                 <input type="checkbox" id="selectAllEscuelas">
                                                 <label for="selectAllEscuelas">Todas</label>
@@ -1818,6 +1818,7 @@
         $(document).ready(function() {
             // actividadesByMecanismos();
             mecanismosByActividades();
+            regionesByMacrozonas();
             comunasByRegiones();
             selectAllRegiones();
             selectAllComunas();
@@ -1985,6 +1986,43 @@
                             $.each(data, function(key, value) {
                                 $('#comuna').append(
                                     `<option value="${value.comu_codigo}">${value.comu_nombre}</option>`
+                                );
+                            });
+                        }
+                    });
+                }
+            })
+        }
+
+        function regionesByMacrozonas(){
+            $('#inic_macrozona').on('change', function() {
+                var macrozona = $(this).val();
+                if (macrozona) {
+                    $.ajax({
+                        url: window.location.origin + '/admin/iniciativas/obtener-regiones',
+                        type: 'POST',
+                        dataType: 'json',
+
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            macrozona: macrozona
+                        },
+                        success: function(data) {
+                            console.log("datos: " + data);
+                            $('#region').empty();
+                            $.each(data, function(key, value) {
+                                $('#region').append(
+                                    `<option value="${value.regi_codigo}">${value.regi_nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function(data) {
+
+                            $('#region').empty();
+                            $.each(data, function(key, value) {
+                                console.log("value: " + key);
+                                $('#region').append(
+                                    `<option value="${value.regi_codigo}">${value.regi_nombre}</option>`
                                 );
                             });
                         }
