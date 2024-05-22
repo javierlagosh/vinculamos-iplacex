@@ -473,13 +473,9 @@
                                                 </td>
                                                 <td>
                                                     <ul>
-                                                        @if ($iniciativas_asignaturas->isEmpty())
-                                                            <li>No hay asignaturas registradas</li>
-                                                        @else
-                                                        @foreach ($iniciativas_asignaturas as $asignatura)
-                                                            <li>{{ $asignatura->nombre }}</li>
-                                                        @endforeach
-                                                        @endif
+
+                                                        {{$iniciativa->inic_asignaturas ?? 'No registrado'}}
+
 
                                                     </ul>
                                                 </td>

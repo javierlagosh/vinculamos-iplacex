@@ -326,6 +326,7 @@ class IniciativasController extends Controller
                 'iniciativas.inic_descripcion',
                 'iniciativas.inic_anho',
                 'iniciativas.inic_estado',
+                'iniciativas.inic_asignaturas',
                 'mecanismos.meca_nombre',
                 'tipo_actividades.tiac_nombre',
                 'convenios.conv_nombre',
