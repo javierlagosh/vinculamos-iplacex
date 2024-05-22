@@ -144,28 +144,57 @@
                                         <td><strong>Aportado por la institución</strong></td>
                                         <td>
                                             <div class="row mb-2">
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="empresadinero">
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="empresadinero" hidden>
 
                                                 </div>
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_sede">
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_sede" hidden>
 
                                                 </div>
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_escuela">
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_escuela" hidden>
 
                                                 </div>
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vra">
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vra" hidden>
 
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
+                                                    <label for="tipoaporteempresa">Seleccione una opción:</label>
                                                     <select name="tipoaporteempresa" id="tipoaporteempresa" class="form-control">
+                                                        <option value="" selected disabled>Seleccione...</option>
                                                         <option value="primero">Sede</option>
                                                         <option value="vcmsede">VcM Sede</option>
                                                         <option value="vcmescuela">VcM Escuela</option>
                                                         <option value="vra">VRA</option>
 
                                                     </select>
+                                                    <script>
+                                                        //si se selecciona tipoaporteempresa se quita el hidden de los divs
+                                                        document.getElementById('tipoaporteempresa').addEventListener('change', function() {
+                                                            var tipoaporteempresa = document.getElementById('tipoaporteempresa').value;
+                                                            if (tipoaporteempresa == 'primero') {
+                                                                document.getElementById('empresadinero').hidden = false;
+                                                                document.getElementById('vcm_sede').hidden = true;
+                                                                document.getElementById('vcm_escuela').hidden = true;
+                                                                document.getElementById('vra').hidden = true;
+                                                            } else if (tipoaporteempresa == 'vcmsede') {
+                                                                document.getElementById('empresadinero').hidden = true;
+                                                                document.getElementById('vcm_sede').hidden = false;
+                                                                document.getElementById('vcm_escuela').hidden = true;
+                                                                document.getElementById('vra').hidden = true;
+                                                            } else if (tipoaporteempresa == 'vcmescuela') {
+                                                                document.getElementById('empresadinero').hidden = true;
+                                                                document.getElementById('vcm_sede').hidden = true;
+                                                                document.getElementById('vcm_escuela').hidden = false;
+                                                                document.getElementById('vra').hidden = true;
+                                                            } else if (tipoaporteempresa == 'vra') {
+                                                                document.getElementById('empresadinero').hidden = true;
+                                                                document.getElementById('vcm_sede').hidden = true;
+                                                                document.getElementById('vcm_escuela').hidden = true;
+                                                                document.getElementById('vra').hidden = false;
+                                                            }
+                                                        });
+                                                    </script>
                                                 </div>
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
                                                     <input type="number" class="form-control" id="aporteempresa"
@@ -173,7 +202,7 @@
                                                     <div class="mt-2">
                                                         <button type="button" class="btn btn-icon btn-primary"
                                                             onclick="guardarDinero(1)"><i
-                                                                class="fas fa-save"></i></button>
+                                                                class="fas fa-plus"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -257,7 +286,7 @@
                                                     <div class="mt-2">
                                                         <button type="button" class="btn btn-icon btn-primary"
                                                             onclick="guardarDinero(2)"><i
-                                                                class="fas fa-save"></i></button>
+                                                                class="fas fa-plus"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
