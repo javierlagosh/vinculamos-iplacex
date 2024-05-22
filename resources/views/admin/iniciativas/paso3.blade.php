@@ -197,7 +197,7 @@
                                                     </script>
                                                 </div>
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
-                                                    <input type="number" class="form-control" id="aporteempresa"
+                                                    <input type="number" class="form-control" id="aporteempresa" placeholder="Ingrese el monto..."
                                                         name="aporteempresa" autocomplete="off">
                                                     <div class="mt-2">
                                                         <button type="button" class="btn btn-icon btn-primary"
@@ -280,6 +280,7 @@
                                             <div class="row">
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
                                                     <input type="number" class="form-control" id="aporteexterno"
+                                                    placeholder="Ingrese el monto..."
                                                         name="aporteexterno"
                                                         style="display: inline-block; margin-right: 5px;"
                                                         autocomplete="off">
