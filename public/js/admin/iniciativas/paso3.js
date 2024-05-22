@@ -292,6 +292,8 @@ function guardarDinero(enti_codigo) {
             return;
         }
         dinero = aporteExterno;
+        tipoaporteempresa = 'externo';
+        console.log(dinero);
     }
     console.log('guardando..');
     // petición para guardar/actualizar el monto de dinero aportado por la entidad

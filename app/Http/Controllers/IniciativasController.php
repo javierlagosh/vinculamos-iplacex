@@ -1995,6 +1995,15 @@ class IniciativasController extends Controller
                     'codi_nickname_mod' => Session::get('admin')->usua_nickname,
                     'codi_rol_mod' => Session::get('admin')->rous_codigo
                 ]);
+            }elseif($request->tipoaporteempresa === "externo"){
+                $codiGuardar = CostosDinero::create([
+                    'inic_codigo' => $request->iniciativa,
+                    'enti_codigo' => 2,
+                    'codi_valorizacion' => $request->valorizacion,
+                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                    'codi_rol_mod' => Session::get('admin')->rous_codigo
+                ]);
             }elseif($request->tipoaporteempresa === "vcmsede"){
                 $codiGuardar = CostosDinero::create([
                     'inic_codigo' => $request->iniciativa,
