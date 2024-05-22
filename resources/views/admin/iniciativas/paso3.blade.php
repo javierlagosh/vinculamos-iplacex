@@ -147,8 +147,26 @@
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="empresadinero">
 
                                                 </div>
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_sede">
+
+                                                </div>
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_escuela">
+
+                                                </div>
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vra">
+
+                                                </div>
                                             </div>
                                             <div class="row">
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center">
+                                                    <select name="tipoaporteempresa" id="tipoaporteempresa" class="form-control">
+                                                        <option value="primero">Sede</option>
+                                                        <option value="vcmsede">VcM Sede</option>
+                                                        <option value="vcmescuela">VcM Escuela</option>
+                                                        <option value="vra">VRA</option>
+
+                                                    </select>
+                                                </div>
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
                                                     <input type="number" class="form-control" id="aporteempresa"
                                                         name="aporteempresa" autocomplete="off">

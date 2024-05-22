@@ -17,7 +17,7 @@ function cargarRecursos() {
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/recursos',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -71,6 +71,9 @@ function cargarDinero() {
     let inic_codigo = $('#codigo').val();
     let respuesta, dinero;
     let totalEmpresa = 0;
+    let total_vcm_sede = 0;
+    let total_vcm_escuela = 0;
+    let total_vra = 0;
     let totalExterno = 0;
     $('#aporteempresa').val('');
     $('#aporteexterno').val('');
@@ -80,7 +83,7 @@ function cargarDinero() {
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/consultar-dinero',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -94,11 +97,25 @@ function cargarDinero() {
             dinero = respuesta.resultado;
             if (dinero.length > 0) {
                 dinero.forEach(registro => {
-                    if (registro.enti_codigo == 1) totalEmpresa = totalEmpresa+parseInt(registro.suma_dinero);
-                    else totalExterno = totalExterno+parseInt(registro.suma_dinero);
+                    if (registro.enti_codigo == 1) {
+                        totalEmpresa = totalEmpresa+parseInt(registro.suma_dinero);
+                        total_vcm_sede = total_vcm_sede + parseInt(registro.suma_dinero_vcm_sede);
+                        total_vcm_escuela = total_vcm_escuela + parseInt(registro.suma_dinero_vcm_escuela);
+                        total_vra = total_vra + parseInt(registro.suma_dinero_vra);
+                    }
+                    else {totalExterno = totalExterno+parseInt(registro.suma_dinero);}
                 });
             }
             $('#empresadinero').text('$'+new Intl.NumberFormat('es-CL', { maximumSignificantDigits: 3 }).format(totalEmpresa));
+            $('#vcm_sede').text('VcM Sede: $' + new Intl.NumberFormat('es-CL', {
+                maximumSignificantDigits: 13
+            }).format(total_vcm_sede));
+            $('#vcm_escuela').text('VcM Escuela: $' + new Intl.NumberFormat('es-CL', {
+                maximumSignificantDigits: 13
+            }).format(total_vcm_escuela));
+            $('#vra').text('VRA: $' + new Intl.NumberFormat('es-CL', {
+                maximumSignificantDigits: 13
+            }).format(total_vra));
             $('#externodinero').text('$'+new Intl.NumberFormat('es-CL', { maximumSignificantDigits: 3 }).format(totalExterno));
         },
         error: function(error) {
@@ -118,7 +135,7 @@ function cargarEspecies() {
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/consultar-especies',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -157,7 +174,7 @@ function cargarInfraestructura() {
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/consultar-infraestructura',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -195,7 +212,7 @@ function cargarRrhh() {
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/consultar-rrhh',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -228,7 +245,7 @@ function guardarDinero(enti_codigo) {
     let aporteExterno = $('#aporteexterno').val();
     let dinero, alertError, alertExito
     $('#div-alert-recursos').html('');
-    
+
     if (enti_codigo == 1) {
         if (aporteEmpresa == '' || aporteEmpresa == null) {
             alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe ingresar el monto de dinero aportado por la empresa.</strong></div></div>`;
@@ -326,13 +343,13 @@ function guardarEspecie() {
 function listarEspecies() {
     let inic_codigo = $('#codigo').val();
     let datosEspecies, fila;
-    
+
     // petición para listar las especies aportadas por las entidades
     $.ajax({
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/listar-especies',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -340,7 +357,7 @@ function listarEspecies() {
             $('#tabla-externo-especies').empty();
             cargarEspecies();
             cargarRecursos();
-            
+
             if (!respuesta.estado) {
                 if (respuesta.resultado != '') {
                     alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
@@ -348,7 +365,7 @@ function listarEspecies() {
                 }
                 return;
             }
-            
+
             datosEspecies = respuesta.resultado;
             datosEspecies.forEach(registro => {
                 fila =  '<tr>'+
@@ -436,7 +453,7 @@ function buscarTipoInfra() {
     let coin_horas = $('#horasinfra').val();
     let tiin_codigo = $('#codigoinfra').val();
     let respuesta;
-    
+
     // petición para consultar información del tipo infraestructura seleccionada
     $.ajax({
         type: 'GET',
@@ -467,7 +484,7 @@ function guardarInfra() {
     let respuesta, alertError, alertExito;
     $('#div-alert-infraestructura').html('');
     $('#div-alert-recursos').html('');
-    
+
     // petición para guardar infraestructura aportada por la entidad
     $.ajax({
         type: 'POST',
@@ -502,13 +519,13 @@ function guardarInfra() {
 function listarInfraestructura() {
     let inic_codigo = $('#codigo').val();
     let datosInfra, fila, alertError;
-    
+
     // petición para listar las infraestructuras aportadas por las entidades
     $.ajax({
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/listar-infraestructura',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -516,7 +533,7 @@ function listarInfraestructura() {
             $('#tabla-externo-infra').empty();
             cargarInfraestructura();
             cargarRecursos();
-            
+
             if (!respuesta.estado) {
                 if (respuesta.resultado != '') {
                     alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
@@ -524,7 +541,7 @@ function listarInfraestructura() {
                 }
                 return;
             }
-            
+
             datosInfra = respuesta.resultado;
             datosInfra.forEach(registro => {
                 fila =  '<tr>'+
@@ -613,7 +630,7 @@ function buscarTipoRrhh() {
     let corh_horas = $('#horasrrhh').val();
     let tirh_codigo = $('#codigorrhh').val();
     let respuesta;
-    
+
     // petición para consultar información del tipo de RRHH seleccionado
     $.ajax({
         type: 'GET',
@@ -644,7 +661,7 @@ function guardarRrhh() {
     let respuesta, alertError, alertExito;
     $('#div-alert-rrhh').html('');
     $('#div-alert-recursos').html('');
-    
+
     // petición para guardar RRHH aportado por la entidad
     $.ajax({
         type: 'POST',
@@ -679,13 +696,13 @@ function guardarRrhh() {
 function listarRrhh() {
     let inic_codigo = $('#codigo').val();
     let datosRrhh, fila, alertError;
-    
+
     // petición para listar los RRHH aportados por las entidades
     $.ajax({
         type: 'GET',
         url: window.location.origin+'/digitador/crear-iniciativa/listar-rrhh',
         data: {
-            iniciativa: inic_codigo           
+            iniciativa: inic_codigo
         },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
@@ -693,7 +710,7 @@ function listarRrhh() {
             $('#tabla-externo-rrhh').empty();
             cargarRrhh();
             cargarRecursos();
-            
+
             if (!respuesta.estado) {
                 if (respuesta.resultado != '') {
                     alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
@@ -701,7 +718,7 @@ function listarRrhh() {
                 }
                 return;
             }
-            
+
             datosRrhh = respuesta.resultado;
             datosRrhh.forEach(registro => {
                 fila =  '<tr>'+

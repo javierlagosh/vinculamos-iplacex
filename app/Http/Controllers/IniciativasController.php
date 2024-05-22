@@ -1986,28 +1986,95 @@ class IniciativasController extends Controller
             ]
         )->first();
         if (!$codiVerificar) {
-            $codiGuardar = CostosDinero::create([
-                'inic_codigo' => $request->iniciativa,
-                'enti_codigo' => $request->entidad,
-                'codi_valorizacion' => $request->valorizacion,
-                'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'codi_vigente' => 'S',
-                'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-                'codi_rol_mod' => Session::get('admin')->rous_codigo
-            ]);
-        } else {
-            $codiGuardar = CostosDinero::where(
-                [
+            if($request->tipoaporteempresa === "vcmescuela"){
+                $codiGuardar = CostosDinero::create([
                     'inic_codigo' => $request->iniciativa,
-                    'enti_codigo' => $request->entidad
-                ]
-            )->update([
-                        'codi_valorizacion' => $request->valorizacion,
-                        'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                        'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-                        'codi_rol_mod' => Session::get('admin')->rous_codigo
-                    ]);
+                    'enti_codigo' => $request->entidad,
+                    'codi_valorizacion_vcm_escuela' => $request->valorizacion,
+                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                    'codi_rol_mod' => Session::get('admin')->rous_codigo
+                ]);
+            }elseif($request->tipoaporteempresa === "vcmsede"){
+                $codiGuardar = CostosDinero::create([
+                    'inic_codigo' => $request->iniciativa,
+                    'enti_codigo' => $request->entidad,
+                    'codi_valorizacion_vcm_sede' => $request->valorizacion,
+                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                    'codi_rol_mod' => Session::get('admin')->rous_codigo
+                ]);
+            }elseif($request->tipoaporteempresa === "vra"){
+                $codiGuardar = CostosDinero::create([
+                    'inic_codigo' => $request->iniciativa,
+                    'enti_codigo' => $request->entidad,
+                    'codi_valorizacion_vra' => $request->valorizacion,
+                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                    'codi_rol_mod' => Session::get('admin')->rous_codigo
+                ]);
+            }elseif($request->tipoaporteempresa === "primero"){
+                $codiGuardar = CostosDinero::create([
+                    'inic_codigo' => $request->iniciativa,
+                    'enti_codigo' => $request->entidad,
+                    'codi_valorizacion' => $request->valorizacion,
+                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                    'codi_rol_mod' => Session::get('admin')->rous_codigo
+                ]);
+            }
+
+        } else {
+
+            if($request->tipoaporteempresa === "vcmescuela"){
+                $codiGuardar = CostosDinero::where(
+                    [
+                        'inic_codigo' => $request->iniciativa,
+                        'enti_codigo' => $request->entidad
+                    ]
+                )->update([
+                            'codi_valorizacion_vcm_escuela' => $request->valorizacion,
+                            'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+                            'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                            'codi_rol_mod' => Session::get('admin')->rous_codigo
+                        ]);
+            }elseif($request->tipoaporteempresa === "vcmsede"){
+                $codiGuardar = CostosDinero::where(
+                    [
+                        'inic_codigo' => $request->iniciativa,
+                        'enti_codigo' => $request->entidad
+                    ]
+                )->update([
+                            'codi_valorizacion_vcm_sede' => $request->valorizacion,
+                            'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+                            'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                            'codi_rol_mod' => Session::get('admin')->rous_codigo
+                        ]);
+            }elseif($request->tipoaporteempresa === "vra"){
+                $codiGuardar = CostosDinero::where(
+                    [
+                        'inic_codigo' => $request->iniciativa,
+                        'enti_codigo' => $request->entidad
+                    ]
+                )->update([
+                            'codi_valorizacion_vra' => $request->valorizacion,
+                            'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+                            'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                            'codi_rol_mod' => Session::get('admin')->rous_codigo
+                        ]);
+            }elseif($request->tipoaporteempresa === "primero"){
+                $codiGuardar = CostosDinero::where(
+                    [
+                        'inic_codigo' => $request->iniciativa,
+                        'enti_codigo' => $request->entidad
+                    ]
+                )->update([
+                            'codi_valorizacion' => $request->valorizacion,
+                            'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+                            'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+                            'codi_rol_mod' => Session::get('admin')->rous_codigo
+                        ]);
+            }
         }
 
         if (!$codiGuardar)
@@ -2026,7 +2093,10 @@ class IniciativasController extends Controller
 
         $codiListar = CostosDinero::select(
             'enti_codigo',
-            DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero')
+            DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'),
+            DB::raw('COALESCE(SUM(codi_valorizacion_vcm_sede), 0) AS suma_dinero_vcm_sede'),
+            DB::raw('COALESCE(SUM(codi_valorizacion_vcm_escuela), 0) AS suma_dinero_vcm_escuela'),
+            DB::raw('COALESCE(SUM(codi_valorizacion_vra), 0) AS suma_dinero_vra')
         )->where('inic_codigo', $request->iniciativa)
             ->groupBy('enti_codigo')
             ->get();

@@ -72,6 +72,9 @@ function cargarDinero() {
     let inic_codigo = $('#codigo').val();
     let respuesta, dinero;
     let totalEmpresa = 0;
+    let total_vcm_sede = 0;
+    let total_vcm_escuela = 0;
+    let total_vra = 0;
     let totalExterno = 0;
     $('#aporteempresa').val('');
     $('#aporteexterno').val('');
@@ -96,14 +99,32 @@ function cargarDinero() {
             dinero = respuesta.resultado;
             if (dinero.length > 0) {
                 dinero.forEach(registro => {
-                    if (registro.enti_codigo == 1) totalEmpresa = totalEmpresa + parseInt(
-                        registro.suma_dinero);
-                    else totalExterno = totalExterno + parseInt(registro.suma_dinero);
+                    if (registro.enti_codigo == 1)
+                    {
+                        totalEmpresa = totalEmpresa + parseInt(registro.suma_dinero);
+                        total_vcm_sede = total_vcm_sede + parseInt(registro.suma_dinero_vcm_sede);
+                        total_vcm_escuela = total_vcm_escuela + parseInt(registro.suma_dinero_vcm_escuela);
+                        total_vra = total_vra + parseInt(registro.suma_dinero_vra);
+                    }
+                    else {
+                        totalExterno = totalExterno + parseInt(registro.suma_dinero);
+                    }
                 });
             }
-            $('#empresadinero').text('$' + new Intl.NumberFormat('es-CL', {
+            $('#empresadinero').text('Sede: $' + new Intl.NumberFormat('es-CL', {
                 maximumSignificantDigits: 13
             }).format(totalEmpresa));
+            $('#vcm_sede').text('VcM Sede: $' + new Intl.NumberFormat('es-CL', {
+                maximumSignificantDigits: 13
+            }).format(total_vcm_sede));
+            $('#vcm_escuela').text('VcM Escuela: $' + new Intl.NumberFormat('es-CL', {
+                maximumSignificantDigits: 13
+            }).format(total_vcm_escuela));
+            $('#vra').text('VRA: $' + new Intl.NumberFormat('es-CL', {
+                maximumSignificantDigits: 13
+            }).format(total_vra));
+
+
             $('#externodinero').text('$' + new Intl.NumberFormat('es-CL', {
                 maximumSignificantDigits: 13
             }).format(totalExterno));
@@ -251,6 +272,7 @@ function guardarDinero(enti_codigo) {
     let inic_codigo = $('#codigo').val();
     let aporteEmpresa = $('#aporteempresa').val();
     let aporteExterno = $('#aporteexterno').val();
+    let tipoaporteempresa = $('#tipoaporteempresa').val();
     let dinero, alertError, alertExito
     $('#div-alert-recursos').html('');
 
@@ -271,7 +293,7 @@ function guardarDinero(enti_codigo) {
         }
         dinero = aporteExterno;
     }
-
+    console.log('guardando..');
     // petición para guardar/actualizar el monto de dinero aportado por la entidad
     $.ajax({
         type: 'POST',
@@ -282,10 +304,13 @@ function guardarDinero(enti_codigo) {
         data: {
             iniciativa: inic_codigo,
             entidad: enti_codigo,
-            valorizacion: dinero
+            valorizacion: dinero,
+            tipoaporteempresa: tipoaporteempresa
         },
         success: function(resGuardar) {
+
             respuesta = JSON.parse(resGuardar);
+            console.log(respuesta);
             if (!respuesta.estado) {
                 alertError =
                     `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
