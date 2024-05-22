@@ -1257,6 +1257,21 @@
                                         @endif
                                     </div>
                                 </div>
+
+                                <script>
+                                    // si se selecciona la escuela ejecutora, se agrega al select de escuelas colaboradoras
+                                    $(document).ready(function() {
+                                        $('#inic_escuela_ejecutora').change(function() {
+                                            var escuelaEjecutora = $('#inic_escuela_ejecutora').val();
+                                            if (escuelaEjecutora != null) {
+                                                $('#escuelas').append('<option value="' + escuelaEjecutora +
+                                                    '" selected>' + $('#inic_escuela_ejecutora option:selected').text() +
+                                                    '</option>');
+                                                $('#escuelas').select2();
+                                            }
+                                        });
+                                    });
+                                </script>
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Carreras</label> <label for=""
