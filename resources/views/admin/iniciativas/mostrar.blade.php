@@ -187,7 +187,7 @@
                                             <a href="javascript:void(0);" onclick="this.closest('form').submit();"
                                                 class="dropdown-item has-icon"
                                                 style="display: flex; align-items: center;">
-                                                <i class="fas fa-times" style="margin-right: 8px;"></i> Finalizar
+                                                <i class="fas fa-check-double" style="margin-right: 8px;"></i> Finalizar
                                                 Iniciativa
                                             </a>
                                         </form>
@@ -488,7 +488,7 @@
                                                     <div class="table-responsive">
                                                         <table class="table table-bordered table-sm">
                                                             <thead>
-                                                                <th>Áreas</th>
+                                                                <th>Escuelas</th>
                                                                 <th>Carreras</th>
                                                                 <th>Docentes</th>
                                                                 <th>Docentes final</th>
