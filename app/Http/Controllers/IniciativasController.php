@@ -405,6 +405,36 @@ class IniciativasController extends Controller
             ->groupBy('enti_codigo', 'costos_rrhh.trrhh_codigo', 'trrhh_nombre')
             ->get();
 
+
+        $codiListar = CostosDinero::select(
+                'enti_codigo',
+                DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'),
+                DB::raw('COALESCE(SUM(codi_valorizacion_vcm_sede), 0) AS suma_dinero_vcm_sede'),
+                DB::raw('COALESCE(SUM(codi_valorizacion_vcm_escuela), 0) AS suma_dinero_vcm_escuela'),
+                DB::raw('COALESCE(SUM(codi_valorizacion_vra), 0) AS suma_dinero_vra')
+            )->where('inic_codigo', $inic_codigo)
+                ->groupBy('enti_codigo')
+                ->get();
+
+        //sumatotal enti_codigo = 1
+        $totaldineroenti1 = 0;
+        $sedeDinero = 0;
+        $vcmSedeDinero = 0;
+        $vcmEscuelaDinero = 0;
+        $vra = 0;
+        $totaldineroenti2 = 0;
+        foreach ($codiListar as $codi) {
+            if ($codi->enti_codigo == 1) {
+                $totaldineroenti1 += $codi->suma_dinero + $codi->suma_dinero_vcm_sede + $codi->suma_dinero_vcm_escuela + $codi->suma_dinero_vra;
+                $sedeDinero = $codi->suma_dinero;
+                $vcmSedeDinero = $codi->suma_dinero_vcm_sede;
+                $vcmEscuelaDinero = $codi->suma_dinero_vcm_escuela;
+                $vra = $codi->suma_dinero_vra;
+            }else{
+                $totaldineroenti2 += $codi->suma_dinero;
+            }
+        }
+
         // return $costosDinero;
         // return $iniciativa;
 
@@ -427,7 +457,14 @@ class IniciativasController extends Controller
             'iniciativas_asignaturas' => $iniciativas_asignaturas,
             'dispositivos' => $dispositivos,
             'impactosInternos' => $impactosInternos,
-            'impactosExternos' => $impactosExternos
+            'impactosExternos' => $impactosExternos,
+            'totaldineroenti1' => $totaldineroenti1,
+            'totaldineroenti2' => $totaldineroenti2,
+            'sedeDinero' => $sedeDinero,
+            'vcmSedeDinero' => $vcmSedeDinero,
+            'vcmEscuelaDinero' => $vcmEscuelaDinero,
+            'vra' => $vra
+
         ]);
     }
 
@@ -2033,7 +2070,7 @@ class IniciativasController extends Controller
             ]
         )->first();
         if (!$codiVerificar) {
-            if($request->entidad === 2){
+            if($request->entidad == 2){
                 $codiGuardar = CostosDinero::create([
                     'inic_codigo' => $request->iniciativa,
                     'enti_codigo' => 2,

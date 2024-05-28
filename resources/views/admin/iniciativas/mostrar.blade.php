@@ -570,14 +570,42 @@
                                                                             @if (sizeof($recursoDinero) == 0)
                                                                                 $0
                                                                             @else
-                                                                                @foreach ($recursoDinero as $dinero)
-                                                                                    @if ($entidad->enti_codigo == $dinero->enti_codigo)
-                                                                                        @php
-                                                                                            $entidadDinero = $dinero->suma_dinero;
-                                                                                        @endphp
-                                                                                        ${{ number_format($dinero->suma_dinero, 0, ',', '.') }}
+                                                                                    @if ($entidad->enti_codigo == 1)
+                                                                                    <table class="table">
+                                                                                        <thead></thead>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td>Sede: </td>
+                                                                                                <td>${{ number_format($sedeDinero, 0, ',', '.') }}</td>
+
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>VcM Sede:</td>
+                                                                                                <td>${{ number_format($vcmSedeDinero, 0, ',', '.') }}</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>VcM Escuela:</td>
+                                                                                                <td>${{ number_format($vcmEscuelaDinero, 0, ',', '.') }}</td>
+
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>VRA:</td>
+                                                                                                <td>${{ number_format($vra, 0, ',', '.') }}</td>
+
+
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td><strong>Total:</strong></td>
+                                                                                                <td>${{ number_format($totaldineroenti1, 0, ',', '.') }}</td>
+
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+
+                                                                                    @else
+                                                                                    ${{ number_format($totaldineroenti2, 0, ',', '.') }}
+
                                                                                     @endif
-                                                                                @endforeach
                                                                             @endif
                                                                         </td>
                                                                         <td>
