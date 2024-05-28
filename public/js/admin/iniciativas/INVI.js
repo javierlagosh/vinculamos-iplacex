@@ -20,6 +20,8 @@ function calcularIndice(inic_codigo) {
             datos = respuesta.resultado;
             console.log(datos);
 
+            mecanismo_txt = datos.mecanismo[0].meca_nombre;
+
             mecanismo = datos.mecanismo;
             frecuencia = datos.frecuencia;
 
