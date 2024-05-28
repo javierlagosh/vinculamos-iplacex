@@ -154,7 +154,7 @@ function calcularIndice(inic_codigo) {
             } else {
                 $('#evaluacion-nombre').text("");
             }
-            /* $('#mecanismo-nombre').text(mecanismo_txt);*/
+            $('#mecanismo-nombre').text(mecanismo_txt);
             $('#frecuencia-nombre').text(frecuencia_txt);
             $('#mecanismo-puntaje').text(mecanismo_puntaje);
             $('#frecuencia-puntaje').text(frecuencia_puntaje);
