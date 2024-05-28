@@ -1158,19 +1158,55 @@
                                             @endforeach
                                             @endif
                                         </select>
-                                        @if ($errors->has('inic_macrozona'))
+                                        @if ($errors->has('inic_escuela_ejecutora'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
                                                     <button class="close"
                                                         data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('inic_macrozona') }}</strong>
+                                                    <strong>{{ $errors->first('inic_escuela_ejecutora') }}</strong>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
 
 
-
+                                </div>
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Escuelas colaboradoras</label> <label
+                                        for="" style="color: red;">*</label>
+                                        <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
+                                            for="selectAllEscuelas">Todas</label>
+                                        <select class="form-control select2" name="escuelas[]" multiple=""
+                                            style="width: 100%" id="escuelas">
+                                            @if (isset($iniciativa) && $editar)
+                                                @forelse ($escuelas as $escuela)
+                                                    <option value="{{ $escuela->escu_codigo }}"
+                                                        {{ in_array($escuela->escu_codigo, old('escuelas', [])) || in_array($escuela->escu_codigo, $escuSec) ? 'selected' : '' }}>
+                                                        {{ $escuela->escu_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                @forelse ($escuelas as $escuela)
+                                                    <option value="{{ $escuela->escu_codigo }}"
+                                                        {{ collect(old('escuela'))->contains($escuela->escu_codigo) ? 'selected' : '' }}>
+                                                        {{ $escuela->escu_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+                                        @if ($errors->has('escuelas'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('escuelas') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="col-xl-3 col-md-3 col-lg-3">
 
@@ -1214,64 +1250,6 @@
 
                                 </div>
 
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label style="font-size: 110%; color:black;">Escuelas Colaboradoras<label style="color:red;">*</label></label>
-
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <select class="form-control select2" name="escuelas[]" multiple="" required
-                                            style="width: 100%" id="escuelas">
-                                            @if (isset($iniciativa) && $editar)
-                                                @forelse ($escuelas as $escuela)
-                                                    <option value="{{ $escuela->escu_codigo }}"
-                                                        {{ in_array($escuela->escu_codigo, old('escuelas', [])) || in_array($escuela->escu_codigo, $escuSec) ? 'selected' : '' }}>
-                                                        {{ $escuela->escu_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                @forelse ($escuelas as $escuela)
-                                                    <option value="{{ $escuela->escu_codigo }}"
-                                                        {{ collect(old('escuela'))->contains($escuela->escu_codigo) ? 'selected' : '' }}>
-                                                        {{ $escuela->escu_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-                                        @if ($errors->has('escuelas'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('escuelas') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <script>
-                                    // si se selecciona la escuela ejecutora, se agrega al select de escuelas colaboradoras
-                                    $(document).ready(function() {
-                                        $('#inic_escuela_ejecutora').change(function() {
-                                            var escuelaEjecutora = $('#inic_escuela_ejecutora').val();
-                                            if (escuelaEjecutora != null) {
-                                                $('#escuelas').append('<option value="' + escuelaEjecutora +
-                                                    '" selected>' + $('#inic_escuela_ejecutora option:selected').text() +
-                                                    '</option>');
-                                                $('#escuelas').select2();
-                                            }
-                                        });
-                                    });
-                                </script>
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Carreras</label> <label for=""
@@ -2186,26 +2164,57 @@
 
         }
 
-        function carrerasByEscuelas() {
-            const escuelasSelect = $("#escuelas");
-            const carrerasSelect = $("#carreras");
-            const carrerasOptions = {!! json_encode($carreras) !!};
+        function carrerasByEscuelas(){
+            $('#escuelas').on('change', function() {
+                console.log("escuela modificada");
+                $.ajax({
+                    url: window.location.origin + '/admin/iniciativas/obtener-carreras',
+                    type: 'POST',
+                    dataType: 'json',
 
-            escuelasSelect.on("change", function() {
-                const selectedEscuelas = escuelasSelect.val();
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        escuela: $('#inic_escuela_ejecutora').val(),
+                        escuelas: $('#escuelas').val(),
+                        sedes: $('#sedes').val()
+                    },
+                    success: function(data) {
+                        //vaciar carreras
+                        $('#carreras').empty();
+                        console.log(data);
+                        $.each(data, function(key, value) {
+                            $('#carreras').append(
+                                `<option value="${value.care_codigo}">${value.care_nombre}</option>`
+                            );
+                        });
+                    }
+                });
+            });
 
-                const filteredCarreras = carrerasOptions.filter(carrera => selectedEscuelas.includes(carrera
-                    .escu_codigo.toString()));
 
-                carrerasSelect.empty();
-                if (filteredCarreras.length > 0) {
-                    $.each(filteredCarreras, function(index, carrera) {
-                        carrerasSelect.append($("<option></option>").attr("value", carrera.care_codigo)
-                            .text(carrera.care_nombre));
-                    });
-                } else {
-                    carrerasSelect.append($("<option></option>").attr("value", "-1").text("No existen registros"));
-                }
+            $('#inic_escuela_ejecutora').on('change', function() {
+                console.log("escuela modificada");
+                $.ajax({
+                    url: window.location.origin + '/admin/iniciativas/obtener-carreras',
+                    type: 'POST',
+                    dataType: 'json',
+
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        escuela: $('#inic_escuela_ejecutora').val(),
+                        escuelas: $('#escuelas').val()
+                    },
+                    success: function(data) {
+                        //vaciar carreras
+                        $('#carreras').empty();
+                        console.log(data);
+                        $.each(data, function(key, value) {
+                            $('#carreras').append(
+                                `<option value="${value.care_codigo}">${value.care_nombre}</option>`
+                            );
+                        });
+                    }
+                });
             });
         }
     </script>

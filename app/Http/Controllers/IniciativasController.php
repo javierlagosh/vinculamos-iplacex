@@ -60,6 +60,7 @@ use App\Models\Ambitos;
 use App\Models\AmbitoTiac;
 use App\Models\IniciativasAmbitos;
 use App\Models\SubUnidades;
+use App\Models\SedesCarreras;
 //evaluacion
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormMail;
@@ -830,31 +831,30 @@ class IniciativasController extends Controller
         $pain = [];
         $sedes = $request->input('sedes', []);
         $escuelas = $request->input('escuelas', []);
+        //pushear el valor de la escuela ejecutora
+        array_push($escuelas, $request->inic_escuela_ejecutora);
+        // si es un arerglo vacio se le asigna un arreglo "nohay"
+        if (empty($escuelas)) {
+            $escuelas = [$request->inic_escuela_ejecutora];
+        }
         $carreras = $request->input('carreras', []);
 
+        //id iniciativa
+        $inic_codigo = $inicCrear;
+        // insertar sedes escuelas y carreras a participantes internos
         foreach ($sedes as $sede) {
             foreach ($escuelas as $escuela) {
                 foreach ($carreras as $carrera) {
-                    $sede_escuela = SedesEscuelas::where('sede_codigo', $sede)
-                        ->where('escu_codigo', $escuela)
-                        ->exists();
-
+                    //si la carrera no pertenece a la escuela no se inserta
                     $escuela_carrera = Carreras::where('escu_codigo', $escuela)
                         ->where('care_codigo', $carrera)->exists();
-                    $escuela_sede = ParticipantesInternos::where([
-                        'sede_codigo' => $sede,
-                        'escu_codigo' => $escuela,
-                        'care_codigo' => $carrera,
-                        'inic_codigo' => $inic_codigo
-                    ])->exists();
-
-                    if ($sede_escuela && !$escuela_sede && $escuela_carrera) {
-                        array_push($pain, [
-                            'inic_codigo' => $inic_codigo,
-                            'sede_codigo' => $sede,
-                            'escu_codigo' => $escuela,
-                            'care_codigo' => $carrera,
-                        ]);
+                    if ($escuela_carrera) {
+                    $participantes_internos = new ParticipantesInternos();
+                    $participantes_internos->inic_codigo = $inic_codigo;
+                    $participantes_internos->sede_codigo = $sede;
+                    $participantes_internos->escu_codigo = $escuela;
+                    $participantes_internos->care_codigo = $carrera;
+                    $participantes_internos->save();
                     }
                 }
             }
@@ -978,6 +978,24 @@ class IniciativasController extends Controller
         }
 
         return redirect()->route('admin.iniciativas.detalles', $inic_codigo);
+    }
+
+    public function carrerasByEscuelas1(Request $request)
+    {
+        try {
+            $escuelas = $request->input('escuelas', []) ?? [];
+            $sedes = $request->input('sedes', []);
+            $escuela = $request->escuela;
+            //meter $escuela al array $escuela
+            array_push($escuelas, $escuela);
+            //carreras donde no esten en el array $escuelas
+            $carreras = Carreras::whereIn('escu_codigo', $escuelas)
+            ->get();
+            return response()->json($carreras);
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage());
+        }
+
     }
 
     public function mostrarOds($inic_codigo)
@@ -1245,10 +1263,34 @@ class IniciativasController extends Controller
         $pain = [];
         $sedes = $request->input('sedes', []);
         $escuelas = $request->input('escuelas', []);
+        //pushear el valor de la escuela ejecutora
+        array_push($escuelas, $request->inic_escuela_ejecutora);
+        // si está vacío, se asigna un arreglo con un valor "nohay"
+        if (empty($escuelas)) {
+            $escuelas = [$request->inic_escuela_ejecutora];
+        }
+
         $carreras = $request->input('carreras', []);
 
 
 
+        $existentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)->get();
+
+        foreach ($existentes as $existente) {
+            $sedeExistente = in_array($existente->sede_codigo, $sedes);
+            $escuelaExistente = in_array($existente->escu_codigo, $escuelas);
+            $carreraExistente = in_array($existente->care_codigo, $carreras);
+
+
+            if (!$sedeExistente || !$escuelaExistente) {
+                ParticipantesInternos::where([
+                    'inic_codigo' => $inic_codigo,
+                    'sede_codigo' => $existente->sede_codigo,
+                    'escu_codigo' => $existente->escu_codigo,
+                    'care_codigo' => $existente->care_codigo
+                ])->delete();
+            }
+        }
 
         $existentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)->get();
 
@@ -1286,6 +1328,7 @@ class IniciativasController extends Controller
                     ])->exists();
 
                     if ($sede_escuela && !$escuela_sede && $escuela_carrera) {
+                        //si la carrera no pertenece a la escuela no se inserta
                         array_push($pain, [
                             'inic_codigo' => $inic_codigo,
                             'sede_codigo' => $sede,
@@ -1989,47 +2032,23 @@ class IniciativasController extends Controller
             ]
         )->first();
         if (!$codiVerificar) {
-            if($request->tipoaporteempresa === "vcmescuela"){
-                $codiGuardar = CostosDinero::create([
-                    'inic_codigo' => $request->iniciativa,
-                    'enti_codigo' => $request->entidad,
-                    'codi_valorizacion_vcm_escuela' => $request->valorizacion,
-                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-                    'codi_rol_mod' => Session::get('admin')->rous_codigo
-                ]);
-            }elseif($request->tipoaporteempresa === "externo"){
+            if($request->entidad === 2){
                 $codiGuardar = CostosDinero::create([
                     'inic_codigo' => $request->iniciativa,
                     'enti_codigo' => 2,
-                    'codi_valorizacion' => $request->valorizacion,
+                    'codi_valorizacion' => $request->aporteExterno,
                     'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
                     'codi_nickname_mod' => Session::get('admin')->usua_nickname,
                     'codi_rol_mod' => Session::get('admin')->rous_codigo
                 ]);
-            }elseif($request->tipoaporteempresa === "vcmsede"){
+                }else{
                 $codiGuardar = CostosDinero::create([
                     'inic_codigo' => $request->iniciativa,
                     'enti_codigo' => $request->entidad,
-                    'codi_valorizacion_vcm_sede' => $request->valorizacion,
-                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-                    'codi_rol_mod' => Session::get('admin')->rous_codigo
-                ]);
-            }elseif($request->tipoaporteempresa === "vra"){
-                $codiGuardar = CostosDinero::create([
-                    'inic_codigo' => $request->iniciativa,
-                    'enti_codigo' => $request->entidad,
-                    'codi_valorizacion_vra' => $request->valorizacion,
-                    'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-                    'codi_rol_mod' => Session::get('admin')->rous_codigo
-                ]);
-            }elseif($request->tipoaporteempresa === "primero"){
-                $codiGuardar = CostosDinero::create([
-                    'inic_codigo' => $request->iniciativa,
-                    'enti_codigo' => $request->entidad,
-                    'codi_valorizacion' => $request->valorizacion,
+                    'codi_valorizacion' =>$request->empresadinerovalue,
+                    'codi_valorizacion_vcm_sede' =>$request->vcm_sedevalue,
+                    'codi_valorizacion_vcm_escuela' =>$request->vcm_escuelavalue,
+                    'codi_valorizacion_vra' =>$request->vravalue,
                     'codi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
                     'codi_nickname_mod' => Session::get('admin')->usua_nickname,
                     'codi_rol_mod' => Session::get('admin')->rous_codigo
@@ -2038,55 +2057,43 @@ class IniciativasController extends Controller
 
         } else {
 
-            if($request->tipoaporteempresa === "vcmescuela"){
+            if($request->entidad == 2){
                 $codiGuardar = CostosDinero::where(
                     [
                         'inic_codigo' => $request->iniciativa,
-                        'enti_codigo' => $request->entidad
+                        'enti_codigo' => 2
                     ]
                 )->update([
-                            'codi_valorizacion_vcm_escuela' => $request->valorizacion,
+                            'codi_valorizacion' =>$request->aporteExterno,
+                            'codi_valorizacion_vcm_sede' =>$request->vcm_sedevalue,
+                            'codi_valorizacion_vcm_escuela' =>$request->vcm_escuelavalue,
+                            'codi_valorizacion_vra' =>$request->vravalue,
                             'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
                             'codi_nickname_mod' => Session::get('admin')->usua_nickname,
                             'codi_rol_mod' => Session::get('admin')->rous_codigo
                         ]);
-            }elseif($request->tipoaporteempresa === "vcmsede"){
+
+            }else{
                 $codiGuardar = CostosDinero::where(
                     [
                         'inic_codigo' => $request->iniciativa,
-                        'enti_codigo' => $request->entidad
+                        'enti_codigo' => 1
                     ]
                 )->update([
-                            'codi_valorizacion_vcm_sede' => $request->valorizacion,
-                            'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                            'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-                            'codi_rol_mod' => Session::get('admin')->rous_codigo
-                        ]);
-            }elseif($request->tipoaporteempresa === "vra"){
-                $codiGuardar = CostosDinero::where(
-                    [
-                        'inic_codigo' => $request->iniciativa,
-                        'enti_codigo' => $request->entidad
-                    ]
-                )->update([
-                            'codi_valorizacion_vra' => $request->valorizacion,
-                            'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                            'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-                            'codi_rol_mod' => Session::get('admin')->rous_codigo
-                        ]);
-            }elseif($request->tipoaporteempresa === "primero"){
-                $codiGuardar = CostosDinero::where(
-                    [
-                        'inic_codigo' => $request->iniciativa,
-                        'enti_codigo' => $request->entidad
-                    ]
-                )->update([
-                            'codi_valorizacion' => $request->valorizacion,
+                            'codi_valorizacion' =>$request->empresadinerovalue,
+                            'codi_valorizacion_vcm_sede' =>$request->vcm_sedevalue,
+                            'codi_valorizacion_vcm_escuela' =>$request->vcm_escuelavalue,
+                            'codi_valorizacion_vra' =>$request->vravalue,
                             'codi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
                             'codi_nickname_mod' => Session::get('admin')->usua_nickname,
                             'codi_rol_mod' => Session::get('admin')->rous_codigo
                         ]);
             }
+
+
+
+
+
         }
 
         if (!$codiGuardar)
@@ -2322,11 +2329,18 @@ class IniciativasController extends Controller
         if ($validacion->fails())
             return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
-        $codiListar = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
+        $codiListar1 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
+        $codiListar2 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion_vcm_escuela), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
+        $codiListar3 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion_vcm_sede), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
+        $codiListar4 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion_vra), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
+
+        $sumaCODIS = $codiListar2[0]->suma_dinero + $codiListar3[0]->suma_dinero + $codiListar4[0]->suma_dinero;
+
+
         //$coesListar = CostosEspecies::select('enti_codigo', DB::raw('COALESCE(SUM(coes_valorizacion), 0) AS suma_especies'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         $coinListar = CostosInfraestructura::select('enti_codigo', DB::raw('COALESCE(SUM(coin_valorizacion), 0) AS suma_infraestructura'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         $corhListar = CostosRrhh::select('enti_codigo', DB::raw('COALESCE(SUM(corh_valorizacion), 0) AS suma_rrhh'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
-        $resultado = ['dinero' => $codiListar, 'infraestructura' => $coinListar, 'rrhh' => $corhListar];
+        $resultado = ['dinero' => $codiListar1,'sumaDineroCodi' => $sumaCODIS, 'infraestructura' => $coinListar, 'rrhh' => $corhListar];
         return json_encode(['estado' => true, 'resultado' => $resultado]);
     }
 

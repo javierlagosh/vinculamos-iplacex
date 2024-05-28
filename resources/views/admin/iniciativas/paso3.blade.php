@@ -144,21 +144,36 @@
                                         <td><strong>Aportado por la institución</strong></td>
                                         <td>
                                             <div class="row mb-2">
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="empresadinero" hidden>
+                                                <table class="table">
 
-                                                </div>
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_sede" hidden>
+                                                    <thead></thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-center"><strong></strong>Sede</td>
+                                                            <td  id="empresadinero" hidden></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center" >VcM Sede</td>
+                                                            <td class="text-center" hidden id="vcm_sede"></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_sedevalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">VcM Escuela</td>
+                                                            <td class="text-center" id="vcm_escuela" hidden></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">VRA</td>
+                                                            <td class="text-center" id="vra" hidden></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
 
-                                                </div>
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vcm_escuela" hidden>
-
-                                                </div>
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="vra" hidden>
-
-                                                </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center">
+                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" hidden>
                                                     <label for="tipoaporteempresa">Seleccione una opción:</label>
                                                     <select name="tipoaporteempresa" id="tipoaporteempresa" class="form-control">
                                                         <option value="" selected disabled>Seleccione...</option>
@@ -168,36 +183,9 @@
                                                         <option value="vra">VRA</option>
 
                                                     </select>
-                                                    <script>
-                                                        //si se selecciona tipoaporteempresa se quita el hidden de los divs
-                                                        document.getElementById('tipoaporteempresa').addEventListener('change', function() {
-                                                            var tipoaporteempresa = document.getElementById('tipoaporteempresa').value;
-                                                            if (tipoaporteempresa == 'primero') {
-                                                                document.getElementById('empresadinero').hidden = false;
-                                                                document.getElementById('vcm_sede').hidden = true;
-                                                                document.getElementById('vcm_escuela').hidden = true;
-                                                                document.getElementById('vra').hidden = true;
-                                                            } else if (tipoaporteempresa == 'vcmsede') {
-                                                                document.getElementById('empresadinero').hidden = true;
-                                                                document.getElementById('vcm_sede').hidden = false;
-                                                                document.getElementById('vcm_escuela').hidden = true;
-                                                                document.getElementById('vra').hidden = true;
-                                                            } else if (tipoaporteempresa == 'vcmescuela') {
-                                                                document.getElementById('empresadinero').hidden = true;
-                                                                document.getElementById('vcm_sede').hidden = true;
-                                                                document.getElementById('vcm_escuela').hidden = false;
-                                                                document.getElementById('vra').hidden = true;
-                                                            } else if (tipoaporteempresa == 'vra') {
-                                                                document.getElementById('empresadinero').hidden = true;
-                                                                document.getElementById('vcm_sede').hidden = true;
-                                                                document.getElementById('vcm_escuela').hidden = true;
-                                                                document.getElementById('vra').hidden = false;
-                                                            }
-                                                        });
-                                                    </script>
                                                 </div>
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
-                                                    <input type="number" class="form-control" id="aporteempresa" placeholder="Ingrese el monto..."
+                                                    <input hidden type="number" class="form-control" id="aporteempresa" placeholder="Ingrese el monto..."
                                                         name="aporteempresa" autocomplete="off">
                                                     <div class="mt-2">
                                                         <button type="button" class="btn btn-icon btn-primary"

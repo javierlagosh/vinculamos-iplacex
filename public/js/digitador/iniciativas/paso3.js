@@ -242,6 +242,7 @@ function cargarRrhh() {
 function guardarDinero(enti_codigo) {
     let inic_codigo = $('#codigo').val();
     let aporteEmpresa = $('#aporteempresa').val();
+
     let aporteExterno = $('#aporteexterno').val();
     let dinero, alertError, alertExito
     $('#div-alert-recursos').html('');

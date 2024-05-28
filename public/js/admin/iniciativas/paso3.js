@@ -31,16 +31,24 @@ function cargarRecursos() {
             }
 
             dinero = respuesta.resultado.dinero;
+            console.log("dinero");
+            console.log(dinero);
+            sumaDineroCodi = respuesta.resultado.sumaDineroCodi;
+            console.log("sumaDineroCodi");
+            console.log(sumaDineroCodi);
+
+
             infraestructura = respuesta.resultado.infraestructura;
             rrhh = respuesta.resultado.rrhh;
 
             if (dinero.length > 0) {
                 dinero.forEach(registro => {
                     if (registro.enti_codigo == 1) totalEmpresa = totalEmpresa + parseInt(
-                        registro.suma_dinero);
+                        registro.suma_dinero) + sumaDineroCodi;
                     else totalExterno = totalExterno + parseInt(registro.suma_dinero);
                 });
             }
+
             if (infraestructura.length > 0) {
                 infraestructura.forEach(registro => {
                     if (registro.enti_codigo == 1) totalEmpresa = totalEmpresa + parseInt(
@@ -111,18 +119,23 @@ function cargarDinero() {
                     }
                 });
             }
-            $('#empresadinero').text('Sede: $' + new Intl.NumberFormat('es-CL', {
+            $('#empresadinero').text('$' + new Intl.NumberFormat('es-CL', {
                 maximumSignificantDigits: 13
             }).format(totalEmpresa));
-            $('#vcm_sede').text('VcM Sede: $' + new Intl.NumberFormat('es-CL', {
+            //cambiar el value al input de empresadinerovalue
+            $('#empresadinerovalue').val(totalEmpresa);
+            $('#vcm_sede').text('$' + new Intl.NumberFormat('es-CL', {
                 maximumSignificantDigits: 13
             }).format(total_vcm_sede));
-            $('#vcm_escuela').text('VcM Escuela: $' + new Intl.NumberFormat('es-CL', {
+            $('#vcm_sedevalue').val(total_vcm_sede);
+            $('#vcm_escuela').text('$' + new Intl.NumberFormat('es-CL', {
                 maximumSignificantDigits: 13
             }).format(total_vcm_escuela));
-            $('#vra').text('VRA: $' + new Intl.NumberFormat('es-CL', {
+            $('#vcm_escuelavalue').val(total_vcm_escuela);
+            $('#vra').text('$' + new Intl.NumberFormat('es-CL', {
                 maximumSignificantDigits: 13
             }).format(total_vra));
+            $('#vravalue').val(total_vra);
 
 
             $('#externodinero').text('$' + new Intl.NumberFormat('es-CL', {
@@ -273,15 +286,19 @@ function guardarDinero(enti_codigo) {
     let aporteEmpresa = $('#aporteempresa').val();
     let aporteExterno = $('#aporteexterno').val();
     let tipoaporteempresa = $('#tipoaporteempresa').val();
+    let empresadinerovalue = $('#empresadinerovalue').val();
+    let vcm_sedevalue = $('#vcm_sedevalue').val();
+    let vcm_escuelavalue = $('#vcm_escuelavalue').val();
+    let vravalue = $('#vravalue').val();
     let dinero, alertError, alertExito
     $('#div-alert-recursos').html('');
 
     if (enti_codigo == 1) {
         if (aporteEmpresa == '' || aporteEmpresa == null) {
-            alertError =
-                `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe ingresar el monto de dinero aportado por la empresa.</strong></div></div>`;
-            $('#div-alert-recursos').html(alertError);
-            return;
+            // alertError =
+            //     `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe ingresar el monto de dinero aportado por la empresa.</strong></div></div>`;
+            // $('#div-alert-recursos').html(alertError);
+            // return;
         }
         dinero = aporteEmpresa;
     } else {
@@ -306,8 +323,13 @@ function guardarDinero(enti_codigo) {
         data: {
             iniciativa: inic_codigo,
             entidad: enti_codigo,
+            aporteExterno: aporteExterno,
             valorizacion: dinero,
-            tipoaporteempresa: tipoaporteempresa
+            tipoaporteempresa: tipoaporteempresa,
+            empresadinerovalue: empresadinerovalue,
+            vcm_sedevalue: vcm_sedevalue,
+            vcm_escuelavalue: vcm_escuelavalue,
+            vravalue: vravalue
         },
         success: function(resGuardar) {
 
