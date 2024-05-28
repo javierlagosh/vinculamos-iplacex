@@ -443,12 +443,12 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
+                                    {{-- <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
                                         <span id="plantearObjetivoSpinner" class="" role="status"
                                             aria-hidden="true"></span>
                                         <span id="plantearObjetivoTexto">Plantear objetivos</span>
 
-                                    </button>
+                                    </button> --}}
 
 
 
