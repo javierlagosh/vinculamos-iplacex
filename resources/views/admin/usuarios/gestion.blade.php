@@ -130,8 +130,13 @@
                                                         </div>
                                                     @endif
                                                     @if (
-                                                        $usuario->usua_usuario_mod == Session::get('admin')->usua_nickname &&
-                                                            $usuario->usua_nickname != Session::get('admin')->usua_nickname)
+                                                        ($usuario->usua_usuario_mod == Session::get('admin')->usua_nickname ||
+                                                            $usuario->usua_nickname != Session::get('admin')->usua_nickname))
+                                                            <a href="javascript:void(0)" class="btn btn-icon btn-primary"
+                                                            onclick="editarClaveUsuario('{{ $usuario->usua_nickname }}')"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Cambiar contraseña"><i
+                                                                class="fas fa-user-lock"></i></a>
                                                         <a href="javascript:void(0)" class="btn btn-icon btn-warning"
                                                             onclick="editarUsuario('{{ $usuario->usua_nickname }}')"
                                                             data-toggle="tooltip" data-placement="top" title="Editar"><i
@@ -493,7 +498,7 @@
     </div>
 
     @foreach ($usuarios as $usuario)
-        @if ($usuario->usua_nickname == Session::get('admin')->usua_nickname)
+        @if ($usuario->usua_nickname == Session::get('admin')->usua_nickname || $usuario->usua_nickname != Session::get('admin')->usua_nickname)
             <div class="modal fade" id="modalEditarClaveUsuario-{{ $usuario->usua_nickname }}" tabindex="-1"
                 role="dialog" aria-labelledby="modalEditarClaveUsuario" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
