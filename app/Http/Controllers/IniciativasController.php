@@ -1228,6 +1228,7 @@ class IniciativasController extends Controller
             'inic_brecha' => $request->brecha,
             'inic_diagnostico' => $request->diagnostico,
             'inic_escuela_ejecutora' => $request->inic_escuela_ejecutora,
+            'inic_macrozona' => $request->inic_macrozona,
             'dispositivo_id' => $request->dispositivo_id,
             'inic_desde' => $request->desde,
             'inic_asignaturas' => $request->inic_asignaturas,
