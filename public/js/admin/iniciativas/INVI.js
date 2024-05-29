@@ -36,12 +36,24 @@ function calcularIndice(inic_codigo) {
             if (mecanismo == null) {
                 mecanismo_puntaje = 0;
             }
-            if (mecanismo[0].meca_nombre == "Programa de Extensión" || mecanismo[0].meca_nombre ==
-                "Centro de Recursos del Aprendizaje y Bienestar CRAB") {
-                mecanismo_puntaje = 66;
-            } else {
-                /* mecanismo = mecanismo.meca_nombre; */
+            if (mecanismo[0].meca_nombre == "Mentoría, Asesoría , Asistencia Técnica") {
+                mecanismo_puntaje = 86;
+            }else if (mecanismo[0].meca_nombre == "Extensión") {
+                mecanismo_puntaje = 60;
+            }else if (mecanismo[0].meca_nombre == "Formación Continua") {
+                mecanismo_puntaje = 80;
+            }else if (mecanismo[0].meca_nombre == "Participación en Consejo, Mesa, Directorio") {
+                mecanismo_puntaje = 93;
+            }else if (mecanismo[0].meca_nombre == "Prácticas Profesionales") {
+                mecanismo_puntaje = 73;
+            }else if (mecanismo[0].meca_nombre == "i+e+TT") {
                 mecanismo_puntaje = 100;
+            }else if (mecanismo[0].meca_nombre == "AI+E, APT, ATE, AbP") {
+                mecanismo_puntaje = 67;
+            }
+            else {
+                /* mecanismo = mecanismo.meca_nombre; */
+                mecanismo_puntaje = 0;
             }
 
 
