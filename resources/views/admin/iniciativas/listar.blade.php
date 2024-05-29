@@ -206,10 +206,7 @@
                                                                 onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
                                                                     class="fas fa-tachometer-alt"></i> Calcular INVI</a>
 
-                                                            <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
-                                                                class="dropdown-item has-icon" data-toggle="tooltip"
-                                                                data-placement="top" title="Adjuntar evidencia"><i
-                                                                    class="fas fa-paperclip"></i> Adjuntar evidencia</a>
+
                                                         </div>
                                                     </div>
                                                     <div class="dropdown d-inline">
@@ -233,6 +230,10 @@
                                                                 data-placement="top" title="Evaluar iniciativa"><i
                                                                     class="fas fa-file-signature"></i> Evaluar
                                                                 iniciativa</a>
+                                                                <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                                                    class="dropdown-item has-icon" data-toggle="tooltip"
+                                                                    data-placement="top" title="Adjuntar evidencia"><i
+                                                                        class="fas fa-paperclip"></i> Adjuntar evidencia</a>
                                                         </div>
                                                     </div>
                                                     <div class="dropdown d-inline">
