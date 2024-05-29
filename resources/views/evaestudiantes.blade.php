@@ -148,8 +148,8 @@
 
                                           <tbody>
                                               <tr>
-                                                  <th>¿Sabía usted que las contribuciones
-                                                      esperadas
+                                                  <th>¿Sabía usted que los impactos
+                                                      esperados
                                                       eran?</th>
                                                   <th>¿Sí o No?</th>
                                                   {{-- <th>¿En qué % cree usted que se cumplirán las contribuciones?</th> --}}
@@ -158,9 +158,9 @@
                                               <tr>
                                                   <td>
                                                       <ul>
-                                                          @foreach ($ambitos as $ambito)
-                                                              <li>{{ $ambito->amb_nombre }}</li>
-                                                          @endforeach
+                                                        @foreach ($impactos as $impacto)
+                                                        <li>{{ $impacto->amb_nombre }}</li>
+                                                    @endforeach
                                                       </ul>
 
                                                   </td>
@@ -312,8 +312,7 @@
 
                                           <tbody>
                                               <tr>
-                                                  <th>¿En qué % cree usted que se cumplirán las
-                                                      contribuciones?</th>
+                                                  <th>¿En qué % cree usted que se cumplirán los impactos?</th>
                                               </tr>
 
                                               <tr>

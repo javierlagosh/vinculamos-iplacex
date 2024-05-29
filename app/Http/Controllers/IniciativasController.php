@@ -704,7 +704,6 @@ class IniciativasController extends Controller
             'inic_formato' => 'required',
             'description' => 'required',
             'carreras' => 'required',
-            'escuelas' => 'required',
             'mecanismos' => 'required',
             'tactividad' => 'required',
             'convenio' => 'required',
@@ -2548,6 +2547,9 @@ class IniciativasController extends Controller
             ->where('programas.prog_nombre', '$mecanismo[0]->meca_nombre')
             ->get();
 
+            $impactos = IniciativasAmbitos::join('ambito', 'iniciativas_ambitos.amb_codigo', 'ambito.amb_codigo')
+            ->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
+            ->get();
         return view('admin.iniciativas.evaluacion', compact(
             'iniciativa',
             'resultados',
@@ -2563,6 +2565,7 @@ class IniciativasController extends Controller
             'evaEstudiantesTotal',
             'evaDocentesTotal',
             'evaExternosTotal',
+            'impactos'
         )
         );
     }
@@ -3315,7 +3318,11 @@ class IniciativasController extends Controller
             ->where('prog_nombre', $iniciativa[0]->inic_nombre)
             ->get();
 
-        return view('evaestudiantes', compact('iniciativa', 'evaluaciones', 'inic_codigo', 'resultados', 'ambitos', 'tipo'));
+            $impactos = IniciativasAmbitos::join('ambito', 'iniciativas_ambitos.amb_codigo', 'ambito.amb_codigo')
+            ->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
+            ->get();
+
+        return view('evaestudiantes', compact('iniciativa', 'evaluaciones', 'inic_codigo', 'resultados', 'ambitos', 'tipo', 'impactos'));
 
     }
 

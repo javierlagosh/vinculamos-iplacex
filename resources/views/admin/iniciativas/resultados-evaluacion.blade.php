@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <h4 class="ml-4">Conocimiento de la evaluación</h4>
                         <table class="table table-hover ml-4 border">
                             <thead>
@@ -244,7 +244,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>¿Sabía usted que las contribuciones esperadas eran?
+                                    <td>¿Sabía usted que los impactos esperados eran?
+                                        
 
                                     </td>
                                     <td>
@@ -993,16 +994,16 @@
                             <div class="alert alert-danger" role="alert">
                                 <strong>¡Lo siento!</strong> No se encontraron evaluaciones para esta iniciativa.
                             </div>
-                            <a href="javascript:history.back()" class="btn btn-secondary">Volver</a> 
+                            <a href="javascript:history.back()" class="btn btn-secondary">Volver</a>
                         </div>
                         <br>
-                              
-                        @endif
-                        
 
-                        
-                            
-                        
+                        @endif
+
+
+
+
+
                         </div>
                     </div>
                 </div>

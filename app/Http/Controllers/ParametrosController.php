@@ -1792,6 +1792,7 @@ class ParametrosController extends Controller
                 'tiac_codigo' => $tiac_codigo,
             ]);
         }
+        $drop = TipoActividadAmbitoAccion::where('tiac_codigo', $tiac_codigo)->delete();
         $tiac_amac_Crear = TipoActividadAmbitoAccion::insert($tiac_amac);
         $insertar_metas = TipoActividadesMetas::insert($sedess);
 

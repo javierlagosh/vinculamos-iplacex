@@ -164,7 +164,7 @@
                                                         $estadoBadges = [
                                                             1 => ['class' => 'light', 'icon' => 'history', 'text' => 'En revisión'],
                                                             2 => ['class' => 'info', 'icon' => 'play-circle', 'text' => 'En ejecución'],
-                                                            3 => ['class' => 'success', 'icon' => 'lock', 'text' => 'Aceptada'],
+                                                            3 => ['class' => 'success', 'icon' => 'lock', 'text' => 'Aprobada'],
                                                             4 => ['class' => 'info', 'icon' => 'info-circle', 'text' => 'Falta info'],
                                                             5 => ['class' => 'primary', 'icon' => 'pause-circle', 'text' => 'Cerrada'],
                                                             6 => ['class' => 'success', 'icon' => 'check-double', 'text' => 'Finalizada'],

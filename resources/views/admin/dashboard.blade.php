@@ -1232,7 +1232,7 @@
                     $('#iniciativas_sedes_porcentaje').empty();
                     var total;
                     var estimado;
-                    var estados = ["En ejecución", "Aceptada", "Falta info", "Cerrada", "Falta Evidencia",
+                    var estados = ["En ejecución", "Aprobada", "Falta info", "Cerrada", "Falta Evidencia",
                         "Finalizada"
                     ]
 
@@ -1445,7 +1445,7 @@
                     $('#escuelas_iniciativas_porcentaje').empty();
                     var total;
                     var estimado;
-                    var estados = ["En ejecución", "Aceptada", "Falta info", "Cerrada", "Falta Evidencia",
+                    var estados = ["En ejecución", "Aprobada", "Falta info", "Cerrada", "Falta Evidencia",
                         "Finalizada"
                     ]
 
