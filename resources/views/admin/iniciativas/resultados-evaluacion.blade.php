@@ -151,7 +151,7 @@
                             <tbody>
                                 <tr class="border-bottom">
                                     <td scope="col">¿Sabía usted que el propósito de ésta actividad era?
-
+                                        {{ $iniciativa[0]->inic_descripcion }}
                                     </td>
                                     <td>
                                         <table class="table ">
@@ -198,6 +198,13 @@
                                 </tr>
                                 <tr class="border">
                                     <td>¿Sabía usted que los resultados esperados de la actividad eran?
+                                        <ul>
+                                            @foreach ($resultados as $resultado)
+                                                <li>{{ $resultado->resu_cuantificacion_inicial }}
+                                                    x {{ $resultado->resu_nombre }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
 
                                     </td>
                                     <td>
@@ -245,6 +252,12 @@
                                 </tr>
                                 <tr>
                                     <td>¿Sabía usted que los impactos esperados eran?
+                                        <ul>
+                                            @foreach ($impactos as $impacto)
+                                            <li>{{ $impacto->amb_nombre }}</li>
+                                        @endforeach
+                                          </ul>
+
 
 
                                     </td>

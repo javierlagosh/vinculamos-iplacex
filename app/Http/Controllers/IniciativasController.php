@@ -2878,6 +2878,17 @@ class IniciativasController extends Controller
         }
 
 
+        $resultados = Resultados::where('inic_codigo', $inic_codigo)->get();
+        $ambitos = Programas::join('programas_contribuciones', 'programas_contribuciones.prog_codigo', 'programas.prog_codigo')
+        ->join('ambito', 'ambito.amb_codigo', 'programas_contribuciones.amb_codigo')
+        ->select('ambito.amb_nombre')
+        ->where('programas.prog_nombre', '$mecanismo[0]->meca_nombre')
+        ->get();
+
+        $impactos = IniciativasAmbitos::join('ambito', 'iniciativas_ambitos.amb_codigo', 'ambito.amb_codigo')
+        ->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
+        ->get();
+
         return view('admin.iniciativas.resultados-evaluacion',
         ['iniciativa' => $iniciativa,
         'invitado' => $invitado,
@@ -2896,7 +2907,11 @@ class IniciativasController extends Controller
         'competencia_1' => $competencia_1,
         'competencia_2' => $competencia_2,
         'competencia_3' => $competencia_3,
-        'totalEvaluadores' => $totalEvaluadores
+        'totalEvaluadores' => $totalEvaluadores,
+        'resultados' => $resultados,
+        'ambitos' => $ambitos,
+        'impactos' => $impactos
+
 
          ]);
     }
