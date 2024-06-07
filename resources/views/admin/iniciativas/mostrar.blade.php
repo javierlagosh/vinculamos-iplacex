@@ -626,12 +626,23 @@
                                                                             @if (sizeof($recursoRrhh) == 0)
                                                                                 $0
                                                                             @else
+                                                                            @php
+                                                                                $suma = 0;
+                                                                                cc = 
+                                                                            @endphp
                                                                                 @foreach ($recursoRrhh as $rrhh)
-                                                                                    @if ($entidad->enti_codigo == $rrhh->enti_codigo)
+                                                                                    @if ($entidad->enti_codigo == 1)
+                                                                                        @php
+                                                                                            $suma = $suma + $rrhh->suma_rrhh;
+                                                                                            $entidadRrhh = $rrhh->suma_rrhh;
+                                                                                        @endphp
+                                                                                        ${{ number_format($suma, 0, ',', '.') }}
+                                                                                        @elseif ($entidad->enti_codigo == 2)
                                                                                         @php
                                                                                             $entidadRrhh = $rrhh->suma_rrhh;
                                                                                         @endphp
                                                                                         ${{ number_format($rrhh->suma_rrhh, 0, ',', '.') }}
+
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endif

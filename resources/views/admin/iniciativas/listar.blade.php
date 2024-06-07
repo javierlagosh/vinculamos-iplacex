@@ -200,11 +200,11 @@
                                                                 data-placement="top" title="Ver detalles"><i
                                                                     class="fas fa-eye"></i> Ver detalles</a>
 
-                                                            {{-- <a href="javascript:void(0)" class="dropdown-item has-icon"
+                                                            <a href="javascript:void(0)" class="dropdown-item has-icon"
                                                                 data-toggle="tooltip" data-placement="top"
                                                                 title="Calcular INVI"
                                                                 onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
-                                                                    class="fas fa-tachometer-alt"></i> Calcular INVI</a> --}}
+                                                                    class="fas fa-tachometer-alt"></i> Calcular INVI</a>
 
 
                                                         </div>

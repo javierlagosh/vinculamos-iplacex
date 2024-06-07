@@ -3359,7 +3359,7 @@ class IniciativasController extends Controller
                     $ponderado_3 = 0;
                     $ponderado_4 = 0;
                     $ponderado_final = 0;
-
+                    //ponderados estudiantes
                     if ($request->tipo == 0) {
                         $ponderado_1 = 0.15;
                         $ponderado_2 = 0.30;
@@ -3367,7 +3367,7 @@ class IniciativasController extends Controller
                         $ponderado_4 = 0.40;
                         $ponderado_final = 0.7;
                     }
-
+                    //ponderados docentes
                     if ($request->tipo == 1) {
                         $ponderado_1 = 0.15;
                         $ponderado_2 = 0.30;
@@ -3375,7 +3375,7 @@ class IniciativasController extends Controller
                         $ponderado_4 = 0.40;
                         $ponderado_final = 0.3;
                     }
-
+                    //ponderados externos
                     if ($request->tipo == 2) {
                         $ponderado_1 = 0.20;
                         $ponderado_2 = 0.50;
