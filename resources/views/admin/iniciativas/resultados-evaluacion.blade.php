@@ -140,7 +140,7 @@
                         </div>
 
                         <h4 class="ml-4">Conocimiento de la evaluación</h4>
-                        <table class="table table-hover ml-4 border">
+                        <table class="table  ml-4 border">
                             <thead>
                                 <tr>
                                     <th class="w-25">Pregunta</th>
@@ -154,7 +154,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -201,7 +201,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -245,11 +245,11 @@
                                 </tr>
                                 <tr>
                                     <td>¿Sabía usted que los impactos esperados eran?
-                                        
+
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -297,7 +297,7 @@
                         </table>
 
                         <h4 class="ml-4">Cumplimiento de la Iniciativa</h4>
-                        <table class="table table-hover ml-4 border">
+                        <table class="table  ml-4 border">
                             <thead>
                                 <tr>
                                     <th class="w-25">Pregunta</th>
@@ -311,7 +311,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -376,7 +376,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -441,7 +441,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -506,7 +506,7 @@
                         </table>
 
                         <h4 class="ml-4">Calidad de ejecución</h4>
-                        <table class="table table-hover ml-4 border">
+                        <table class="table  ml-4 border">
                             <thead>
                                 <tr>
                                     <th class="w-25">Pregunta</th>
@@ -520,7 +520,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -585,7 +585,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -650,7 +650,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -715,7 +715,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -781,7 +781,7 @@
                         </table>
 
                         <h4 class="ml-4">Competencia de estudiantes</h4>
-                        <table class="table table-hover ml-4 border">
+                        <table class="table  ml-4 border">
                             <thead>
                                 <tr>
                                     <th class="w-25">Pregunta</th>
@@ -795,7 +795,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -860,7 +860,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
@@ -925,7 +925,7 @@
 
                                     </td>
                                     <td>
-                                        <table class="table table-hover">
+                                        <table class="table ">
                                             <thead>
                                                 <tr class="border-bottom">
                                                     <th class="w-25 text-center"></th>
