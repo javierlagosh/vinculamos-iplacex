@@ -101,6 +101,8 @@ class IniciativasController extends Controller
 
         if ($request->sede != 'all' && $request->sede != null) {
             $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
+        }else{
+            $iniciativas = $iniciativas;
         }
 
         if ($request->mecanismo != 'all' && $request->mecanismo != null) {
