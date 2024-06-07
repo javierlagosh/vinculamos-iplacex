@@ -377,20 +377,7 @@
                                   <h4 style="color:aliceblue">Calidad de ejecución</h4>
                               </div>
                               <div class="card-body">
-                                  <label name="etiquetasEstudiante">A continuación te pedimos que
-                                      evalúes de 0 a 3 la calidad
-                                      en la ejecución de la actividad, según los compromisos
-                                      asumidos por la institución, en que
-                                      <ol>
-                                          <li>0= no cumple.</li>
-                                          <li>1= cumple mínimamente.</li>
-                                          <li>2= cumple medianamente.</li>
-                                          <li>3= cumple totalmente.</li>
-                                      </ol>
-                                      Si considera que algunos ítemes no estaban
-                                      comprometidos,
-                                      marque <b>No Aplica.</b>
-                                  </label>
+
 
                                   <label name="etiquetasOtras">A continuación le pedimos que
                                       evalúe de 0 a 3 la calidad
@@ -509,11 +496,6 @@
                                       <h4 style="color:aliceblue">Competencia de estudiantes</h4>
                                   </div>
                                   <div class="card-body">
-                                      <label name="etiquetasEstudiante">Ahora, siguiendo la misma
-                                          escala de 0 a 3, te pedimos que evalúes si te sirvió la
-                                          actividad para desarrollar
-                                          algunas de las siguientes dimensiones de las competencias
-                                          comprometidas.</label>
 
                                       <label name="etiquetasOtras"> Ahora, siguiendo la misma escala
                                           de 0 a 3, le pedimos que evalúe si la actividad le sirvió a
