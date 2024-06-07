@@ -41,7 +41,7 @@ class ContactFormMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Has sido invitado para rellenar una encuesta sobre la iniciativa: '.$this->nombre_iniciativa)
+        return $this->subject('Has sido invitado a responder una breve una encuesta sobre una iniciativa ')
                      ->view('email.contact-form-mail')->with(['correo' => $this->correo, 'nombre' => $this->nombre, 'encriptacion' => $this->encriptacion, 'tipo' => $this->tipo, 'nombre_iniciativa' => $this->nombre_iniciativa, 'html' => $this->html]);
     }
 }

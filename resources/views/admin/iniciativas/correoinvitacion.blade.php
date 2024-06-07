@@ -165,7 +165,11 @@
                                                 Mensaje:
                                             </label>
                                             <textarea name="mensaje" id="editor">
-                                                Estimado/a,<br>En el marco de las actividades que Iplacex desarrolla, hemos realizado la iniciativa denominada "{{$iniciativa[0]->inic_nombre}}", en la cual le agradecemos haber participado.<br><br>Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente <a target="_blank" rel="nofollow" style="width: 50px;height:50px;" href="http://iplacex.vinculamos.org/evaluaciones/{{$evaluaciontotal->evatotal_encriptado}}">encuesta</a>, que nos permitirá evaluar esta actividad.<br>Saluda atentamente a usted. <br><br><img alt="" src="https://iplacex.vinculamos.org/img/logos/mini-logo.png" width="20" height="100">
+                                                Estimado/a,<br>
+Le agradecemos haber participado de la actividad “{{$iniciativa[0]->inic_nombre}}" en el marco de las acciones de Vinculación con el medio que implementa IPLACEX.
+Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente <a target="_blank" rel="nofollow" style="width: 50px;height:50px;" href="http://iplacex.vinculamos.org/evaluaciones/{{$evaluaciontotal->evatotal_encriptado}}">encuesta</a>, que nos permitirá evaluar esta actividad.
+Saluda atentamente a usted.
+ <br><br><img alt="" src="https://iplacex.vinculamos.org/img/logos/mini-logo.png" width="20" height="100">
                                             </textarea>
                                         </div>
 

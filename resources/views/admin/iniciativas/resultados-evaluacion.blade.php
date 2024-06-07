@@ -139,7 +139,7 @@
                             </div>
                         </div>
 
-                        <h4 class="ml-4">Conocimiento de la evaluación</h4>
+                        <h4 class="ml-4">Conocimiento de la actividad</h4>
                         <table class="table  ml-4 border">
                             <thead>
                                 <tr>
