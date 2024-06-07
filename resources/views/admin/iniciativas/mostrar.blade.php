@@ -552,115 +552,25 @@
                                                             </thead>
 
                                                             <tbody>
-                                                                @php
-                                                                    $totalDinero = 0;
-                                                                    $totalInfraestructura = 0;
-                                                                    $totalRrhh = 0;
-                                                                @endphp
-                                                                @foreach ($entidades as $entidad)
-                                                                    @php
-                                                                        $entidadDinero = 0;
-                                                                        $entidadInfraestructura = 0;
-                                                                        $entidadRrhh = 0;
-                                                                    @endphp
-
                                                                     <tr>
-                                                                        <td>{{ $entidad->enti_nombre }}</td>
-                                                                        <td>
-                                                                            @if (sizeof($recursoDinero) == 0)
-                                                                                $0
-                                                                            @else
-                                                                                    @if ($entidad->enti_codigo == 1)
-                                                                                    <table class="table">
-                                                                                        <thead></thead>
-                                                                                        <tbody>
-                                                                                            <tr>
-                                                                                                <td>Sede: </td>
-                                                                                                <td>${{ number_format($sedeDinero, 0, ',', '.') }}</td>
-
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td>VcM Sede:</td>
-                                                                                                <td>${{ number_format($vcmSedeDinero, 0, ',', '.') }}</td>
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td>VcM Escuela:</td>
-                                                                                                <td>${{ number_format($vcmEscuelaDinero, 0, ',', '.') }}</td>
-
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td>VRA:</td>
-                                                                                                <td>${{ number_format($vra, 0, ',', '.') }}</td>
-
-
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td><strong>Total:</strong></td>
-                                                                                                <td>${{ number_format($totaldineroenti1, 0, ',', '.') }}</td>
-
-                                                                                            </tr>
-                                                                                        </tbody>
-                                                                                    </table>
-
-                                                                                    @else
-                                                                                    ${{ number_format($totaldineroenti2, 0, ',', '.') }}
-
-                                                                                    @endif
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            @if (sizeof($recursoInfraestructura) == 0)
-                                                                                $0
-                                                                            @else
-                                                                                @foreach ($recursoInfraestructura as $infraestructura)
-                                                                                    @if ($entidad->enti_codigo == $infraestructura->enti_codigo)
-                                                                                        @php
-                                                                                            $entidadInfraestructura = $infraestructura->suma_infraestructura;
-                                                                                        @endphp
-                                                                                        ${{ number_format($infraestructura->suma_infraestructura, 0, ',', '.') }}
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            @if (sizeof($recursoRrhh) == 0)
-                                                                                $0
-                                                                            @else
-                                                                            @php
-                                                                                $suma = 0;
-                                                                                cc = 
-                                                                            @endphp
-                                                                                @foreach ($recursoRrhh as $rrhh)
-                                                                                    @if ($entidad->enti_codigo == 1)
-                                                                                        @php
-                                                                                            $suma = $suma + $rrhh->suma_rrhh;
-                                                                                            $entidadRrhh = $rrhh->suma_rrhh;
-                                                                                        @endphp
-                                                                                        ${{ number_format($suma, 0, ',', '.') }}
-                                                                                        @elseif ($entidad->enti_codigo == 2)
-                                                                                        @php
-                                                                                            $entidadRrhh = $rrhh->suma_rrhh;
-                                                                                        @endphp
-                                                                                        ${{ number_format($rrhh->suma_rrhh, 0, ',', '.') }}
-
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </td>
+                                                                        <td>Aportado por la institución </td>
+                                                                        <td>${{$totaldineroenti1}}</td>
+                                                                        <td>${{$infraestructura1["coin_valorizacion"]}}</td>
+                                                                        <td>${{$rrhh1["corh_valorizacion"]}}</td>
                                                                     </tr>
-                                                                    @php
-                                                                        $totalDinero += $entidadDinero;
-                                                                        $totalInfraestructura += $entidadInfraestructura;
-                                                                        $totalRrhh += $entidadRrhh;
-                                                                    @endphp
-                                                                @endforeach
+                                                                    <tr>
+                                                                        <td>Aportado por externos</td>
+                                                                        <td>${{$totaldineroenti2}}</td>
+                                                                        <td>${{$infraestructura2["coin_valorizacion"]}}</td>
+                                                                        <td>${{$rrhh2["corh_valorizacion"]}}</td>
+                                                                    </tr>
                                                                 <tr>
                                                                     <td>Total General</td>
-                                                                    <td>${{ number_format($totalDinero, 0, ',', '.') }}
+                                                                    <td>${{$totaldineroenti1 + $totaldineroenti2}}</td>
                                                                     </td>
-                                                                    <td>${{ number_format($totalInfraestructura, 0, ',', '.') }}
+                                                                    <td>${{ $infraestructura1["coin_valorizacion"] + $infraestructura2["coin_valorizacion"] }}
                                                                     </td>
-                                                                    <td>${{ number_format($totalRrhh, 0, ',', '.') }}
+                                                                    <td>${{$rrhh1["corh_valorizacion"] + $rrhh2["corh_valorizacion"]}}
                                                                     </td>
                                                                 </tr>
 

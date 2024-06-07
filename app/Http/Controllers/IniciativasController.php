@@ -390,7 +390,26 @@ class IniciativasController extends Controller
         $entidadesRecursos = Entidades::select('enti_codigo', 'enti_nombre')->get();
         $costosDinero = CostosDinero::select(DB::raw('IFNULL(SUM(codi_valorizacion), 0) AS codi_valorizacion'))->where('inic_codigo', $inic_codigo)->first();
         $costosInfraestructura = CostosInfraestructura::select(DB::raw('IFNULL(SUM(coin_valorizacion), 0) AS coin_valorizacion'))->where('inic_codigo', $inic_codigo)->first();
+
+        $costosInfraestructura1 = CostosInfraestructura::select(DB::raw('IFNULL(SUM(coin_valorizacion), 0) AS coin_valorizacion'))
+        ->where('enti_codigo', 1)
+        ->where('inic_codigo', $inic_codigo)->first();
+
+        $costosInfraestructura2 = CostosInfraestructura::select(DB::raw('IFNULL(SUM(coin_valorizacion), 0) AS coin_valorizacion'))
+        ->where('enti_codigo', 2)
+        ->where('inic_codigo', $inic_codigo)->first();
+
+
         $costosRrhh = CostosRrhh::select(DB::raw('IFNULL(SUM(corh_valorizacion), 0) AS corh_valorizacion'))->where('inic_codigo', $inic_codigo)->first();
+
+        $costosRrhh1 = CostosRrhh::select(DB::raw('IFNULL(SUM(corh_valorizacion), 0) AS corh_valorizacion'))
+        ->where('enti_codigo', 1)
+        ->where('inic_codigo', $inic_codigo)->first();
+
+        $costosRrhh2 = CostosRrhh::select(DB::raw('IFNULL(SUM(corh_valorizacion), 0) AS corh_valorizacion'))
+        ->where('enti_codigo', 2)
+        ->where('inic_codigo', $inic_codigo)->first();
+
 
         $codiListar = CostosDinero::select('enti_codigo', DB::raw('IFNULL(SUM(codi_valorizacion), 0) AS suma_dinero'))->where('inic_codigo', $inic_codigo)->groupBy('enti_codigo')->get();
         $coinListar = CostosInfraestructura::select('enti_codigo', 'costos_infraestructura.tinf_codigo', 'tinf_nombre', DB::raw('IFNULL(SUM(coin_valorizacion), 0) AS suma_infraestructura'))
@@ -435,6 +454,7 @@ class IniciativasController extends Controller
             }
         }
 
+
         // return $costosDinero;
         // return $iniciativa;
 
@@ -447,7 +467,11 @@ class IniciativasController extends Controller
             'internos' => $participantes,
             'dinero' => $costosDinero,
             'infraestructura' => $costosInfraestructura,
+            'infraestructura1' => $costosInfraestructura1,
+            'infraestructura2' => $costosInfraestructura2,
             'rrhh' => $costosRrhh,
+            'rrhh1' => $costosRrhh1,
+            'rrhh2' => $costosRrhh2,
             'recursoDinero' => $codiListar,
             'recursoInfraestructura' => $coinListar,
             'recursoRrhh' => $corhListar,
