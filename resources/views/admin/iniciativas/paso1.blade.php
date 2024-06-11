@@ -443,12 +443,12 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
+                                    {{-- <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
                                         <span id="plantearObjetivoSpinner" class="" role="status"
                                             aria-hidden="true"></span>
-                                        {{-- <span id="plantearObjetivoTexto">Plantear objetivos</span> --}}
+                                        <span id="plantearObjetivoTexto">Plantear objetivos</span>
 
-                                    </button>
+                                    </button> --}}
 
 
 
@@ -456,9 +456,9 @@
 
 
                                 </div>
-                                {{-- <div id="objetivosPlanteados">
+                                <div id="objetivosPlanteados">
                                     {{-- ods --}}
-                                    @if (isset($iniciativa) && $editar)
+                                    {{-- @if (isset($iniciativa) && $editar)
                                     <br> <br>
                                     <label style="font-size: 110%">Objetivos asociados</label>
                                     <br>
@@ -468,12 +468,12 @@
                                                     @empty
 
                                         @endforelse
-                                    @endif
+                                    @endif --}}
 
 
                                     {{-- fin ods --}}
 
-                                </div> --}}
+                                </div>
                                 <input type="text" id="ObjetivoElegido" hidden>
                                 <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
                                     <span id="asociarODSpinner" class="" role="status" aria-hidden="true"></span>
