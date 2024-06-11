@@ -1205,124 +1205,6 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-md-3 col-lg-3">
-
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Sub-unidad ejecutora</label>
-
-                                        <select class="form-control select2" id="sugr_codigo" name="sugr_codigo"
-                                            style="width: 100%">
-                                            <option disabled selected>Seleccione...</option>
-                                            @if (isset($iniciativa) && $editar)
-                                                @foreach ($subgrupos as $subgrupo)
-                                                    @if ($subgrupo->suni_codigo == $iniciativa->sugr_codigo)
-                                                        <option value="{{ $subgrupo->suni_codigo }}"
-                                                            {{ old('suni_codigo', $iniciativa->sugr_codigo) == $subgrupo->suni_codigo ? 'selected' : '' }}>
-                                                            {{ $subgrupo->suni_nombre }}</option>
-                                                    @else
-                                                        <option value="{{ $subgrupo->suni_codigo }}">{{ $subgrupo->suni_nombre }}
-                                                        </option>
-                                                    @endif
-
-
-                                                @endforeach
-                                            @else
-                                            @foreach ($subgrupos as $subgrupo)
-                                                <option value="{{$subgrupo->suni_codigo}}">{{$subgrupo->suni_nombre}}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-                                        @if ($errors->has('inic_macrozona'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('inic_macrozona') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-
-
-
-                                </div>
-
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Carreras</label> <label for=""
-                                            style="color: red;">*</label><input type="checkbox" id="selectAllCarreras"
-                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label>
-
-                                        <select class="form-control select2" multiple="" id="carreras" required
-                                            name="carreras[]" style="width: 100%">
-                                            @if (isset($iniciativa) && $editar)
-                                                estoy aca
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($carreras as $carrera)
-                                                    <option value="{{ $carrera->care_codigo }}"
-                                                        {{ in_array($carrera->care_codigo, old('carreras', [])) || in_array($carrera->care_codigo, $careSec) ? 'selected' : '' }}>
-                                                        {{ $carrera->care_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($carreras as $carrera)
-                                                    <option value="{{ $carrera->care_codigo }}"
-                                                        {{ collect(old('carreras'))->contains($carrera->care_codigo) ? 'selected' : '' }}>
-                                                        {{ $carrera->care_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('carreras'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('carreras') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                </div>
-                                {{-- TODO: CREAR TABLA ASIGNATURA --}}
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Asignaturas</label> <label for=""
-                                            style="color: red;">*</label>
-                                            {{-- <input type="checkbox" id="selectAllCarreras"
-                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
-
-
-                                            @if (isset($iniciativa) && $editar)
-                                                <input required type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control" value="{{$iniciativa->inic_asignaturas}}">
-                                            @else
-                                                <input required type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control">
-                                            @endif
-
-                                        @if ($errors->has('asignaturas'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('asignaturas') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                </div>
-
-
-
-                            </div>
-
-                            <div class="row">
-
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
 
@@ -1399,6 +1281,79 @@
                                         @endif
                                     </div>
                                 </div>
+
+
+
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Carreras</label> <label for=""
+                                            style="color: red;">*</label><input type="checkbox" id="selectAllCarreras"
+                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label>
+
+                                        <select class="form-control select2" multiple="" id="carreras" required
+                                            name="carreras[]" style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                estoy aca
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($carreras as $carrera)
+                                                    <option value="{{ $carrera->care_codigo }}"
+                                                        {{ in_array($carrera->care_codigo, old('carreras', [])) || in_array($carrera->care_codigo, $careSec) ? 'selected' : '' }}>
+                                                        {{ $carrera->care_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($carreras as $carrera)
+                                                    <option value="{{ $carrera->care_codigo }}"
+                                                        {{ collect(old('carreras'))->contains($carrera->care_codigo) ? 'selected' : '' }}>
+                                                        {{ $carrera->care_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('carreras'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('carreras') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                </div>
+                                {{-- TODO: CREAR TABLA ASIGNATURA --}}
+                                <div class="col-xl-4 col-md-4 col-lg-4" id="bloque_asignatura" style="display: none;">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Asignaturas</label> <label for=""
+                                            style="color: red;">*</label>
+                                            {{-- <input type="checkbox" id="selectAllCarreras"
+                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
+
+
+                                            @if (isset($iniciativa) && $editar)
+                                                <input  type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control" value="{{$iniciativa->inic_asignaturas}}">
+                                            @else
+                                                <input  type="text" name="inic_asignaturas" id="inic_asignaturas" class="form-control">
+                                            @endif
+
+                                        @if ($errors->has('asignaturas'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('asignaturas') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                </div>
+
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Convenio</label> <label for=""
@@ -1438,6 +1393,57 @@
                                         @endif
                                     </div>
                                 </div>
+
+
+                                <div class="col-xl-3 col-md-3 col-lg-3">
+
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Sub-unidad ejecutora</label>
+
+                                        <select class="form-control select2" id="sugr_codigo" name="sugr_codigo"
+                                            style="width: 100%">
+                                            <option disabled selected>Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                @foreach ($subgrupos as $subgrupo)
+                                                    @if ($subgrupo->suni_codigo == $iniciativa->sugr_codigo)
+                                                        <option value="{{ $subgrupo->suni_codigo }}"
+                                                            {{ old('suni_codigo', $iniciativa->sugr_codigo) == $subgrupo->suni_codigo ? 'selected' : '' }}>
+                                                            {{ $subgrupo->suni_nombre }}</option>
+                                                    @else
+                                                        <option value="{{ $subgrupo->suni_codigo }}">{{ $subgrupo->suni_nombre }}
+                                                        </option>
+                                                    @endif
+
+
+                                                @endforeach
+                                            @else
+                                            @foreach ($subgrupos as $subgrupo)
+                                                <option value="{{$subgrupo->suni_codigo}}">{{$subgrupo->suni_nombre}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                        @if ($errors->has('inic_macrozona'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_macrozona') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="row">
+
+
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
@@ -2057,6 +2063,15 @@
         function DispositivoImpactoByInstrumento(){
             $('#tactividad').on('change', function() {
                 var tactividad = $(this).val();
+                if(tactividad == 5){
+                    //quitar el display none del bloque_asignatura
+                    document.getElementById('bloque_asignatura').style.display = 'block';
+                }else{
+                    document.getElementById('bloque_asignatura').style.display = 'none';
+
+
+
+                }
                 if (tactividad) {
                     console.log("tactividad: " + tactividad);
                     $.ajax({
