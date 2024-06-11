@@ -1091,6 +1091,7 @@ class IniciativasController extends Controller
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $asignaturas = Asignaturas::all();
+        $ods = pivoteOds::select('id_ods')->where('inic_codigo', $inic_codigo)->get();
 
         $iniciativaData = Iniciativas::join('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
             ->where('inic_codigo', $inic_codigo)
@@ -1208,6 +1209,7 @@ class IniciativasController extends Controller
             'impactosExternos' => $impactosExternos,
             'impactosExternosSec' => $impactosExternosSec,
             'impactosInternosSec' => $impactosInternosSec,
+            'ods_array' => $ods,
 
         ]);
 
