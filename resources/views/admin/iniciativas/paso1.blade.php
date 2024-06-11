@@ -1583,6 +1583,10 @@
                                             style="width: 100%">
                                             <option disabled selected>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
+                                            <option value="Nacional"
+                                                    {{ $iniciativa->inic_macrozona == 'Nacional' ? 'selected' : '' }}>
+                                                    Nacional
+                                                </option>
                                                 <option value="Macrozona Norte"
                                                     {{ $iniciativa->inic_macrozona == 'Macrozona Norte' ? 'selected' : '' }}>
                                                     Macrozona Norte
@@ -1604,6 +1608,9 @@
                                                     Macrozona Austral
                                                 </option>
                                             @else
+                                            <option value="Nacional" {{ old('inic_macrozona') == 'Nacional' ? 'selected' : '' }}>
+                                                Nacional
+                                            </option>
                                                 <option value="Macrozona Norte" {{ old('inic_macrozona') == 'Macrozona Norte' ? 'selected' : '' }}>
                                                     Macrozona Norte
                                                 </option>

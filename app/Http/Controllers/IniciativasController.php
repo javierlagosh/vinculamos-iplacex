@@ -1951,9 +1951,18 @@ class IniciativasController extends Controller
     {
         $macrozonaJson = $request->all('macrozona');
         $macrozonaNombre = $macrozonaJson['macrozona'];
+
+        if($macrozonaNombre == 'Nacional'){
+            $regiones = Region::select('regiones.regi_nombre', 'regiones.regi_codigo')
+            ->get();
+            return response()->json($regiones);
+        }
+
         $regiones = Region::where('regi_macrozona', $macrozonaNombre)
         ->select('regiones.regi_nombre', 'regiones.regi_codigo')
         ->get();
+
+
 
         return response()->json($regiones);
     }
