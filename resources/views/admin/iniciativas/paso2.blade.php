@@ -503,7 +503,7 @@
                                         <i class="fas fa-pen-nib"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value=""
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="" required
                                     autocomplete="off">
                             </div>
                             @if ($errors->has('nombre'))
@@ -519,7 +519,7 @@
                         <div class="form-group">
                             <label>Grupo de interés</label>
                             <div class="input-group">
-                                <select class="form-control select2" style="width: 100%" id="grupointres" name="grupo" onchange="cargarSubgrupos()">
+                                <select class="form-control select2" required style="width: 100%" id="grupointres" name="grupo" onchange="cargarSubgrupos()">
                                     <option value="" disabled selected>Seleccione...</option>
                                     @foreach ($grupos as $grupo)
                                         <option value="{{ $grupo->grin_codigo }}">
@@ -542,7 +542,7 @@
                         <div class="form-group">
                             <label>Subgrupo de interés</label>
                             <div class="input-group">
-                                <select class="form-control select2" style="width: 100%" id="subgrupo2" name="subgrupo2">
+                                <select class="form-control select2" required style="width: 100%" id="subgrupo2" name="subgrupo2">
                                     <option value="" disabled selected>Seleccione...</option>
 
                                 </select>
@@ -566,7 +566,7 @@
                                         <i class="fas fa-map-marker-alt"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" id="domicilio" name="domicilio"
+                                <input type="text" class="form-control" required id="domicilio" name="domicilio"
                                     value="" autocomplete="off">
                             </div>
                             @if ($errors->has('domicilio'))
@@ -587,7 +587,7 @@
                                         <i class="fas fa-pen-nib"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" id="nombre_contraparte"
+                                <input type="text" class="form-control" required id="nombre_contraparte"
                                     name="nombre_contraparte" value="" autocomplete="off">
                             </div>
                             @if ($errors->has('nombre_contraparte'))
@@ -608,7 +608,7 @@
                                         <i class="fas fa-phone"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" id="telefono" name="telefono"
+                                <input type="text" class="form-control" required id="telefono" name="telefono"
                                     value="" autocomplete="off">
                             </div>
                             @if ($errors->has('telefono'))
@@ -629,7 +629,7 @@
                                         <i class="far fa-envelope"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" id="email" name="email" value=""
+                                <input type="text" class="form-control" id="email" required name="email" value=""
                                     autocomplete="off">
                             </div>
                             @if ($errors->has('email'))
