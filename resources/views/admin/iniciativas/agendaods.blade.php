@@ -109,7 +109,7 @@
                                         @foreach ($odsValues as $ods)
                                             <tr>
                                                 <td style="text-align: center; vertical-align: middle;">
-                                                    <img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-{{ $ods->id_ods }}.png" alt="Ods {{ $ods->id_ods }}" style="width: 150px; height: 150px; margin: 0 auto; display: block; margin-bottom: 10px; transition: transform 0.3s;">
+                                                    <img src="https://cftpucv.vinculamos.org/img/ods/{{ $ods->id_ods }}.png" alt="Ods {{ $ods->id_ods }}" style="width: 150px; height: 150px; margin: 0 auto; display: block; margin-bottom: 10px; transition: transform 0.3s;">
 
                                                     <!-- Agregamos el estilo para el efecto de zoom en hover -->
                                                     <style>

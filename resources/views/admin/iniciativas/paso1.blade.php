@@ -443,12 +443,12 @@
                                             </div>
                                         </div>
                                     @endif
-                                    {{-- <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
+                                    <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
                                         <span id="plantearObjetivoSpinner" class="" role="status"
                                             aria-hidden="true"></span>
                                         <span id="plantearObjetivoTexto">Plantear objetivos</span>
 
-                                    </button> --}}
+                                    </button>
 
 
 
@@ -901,10 +901,7 @@
 
                                                     arraySinEspacios.forEach(function(numero) {
 
-                                                        $('#fotosods').append(
-                                                            '<div><img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-' +
-                                                            numero + '.png" height="150px" width="150px" alt="ods' +
-                                                            numero + '"></div>');
+                                                        $('#fotosods').append('<div><img src="https://cftpucv.vinculamos.org/img/ods/'+numero+'.png" height="150px" width="150px" alt="ods'+numero+'"></div>');
                                                         $('#fotosods').css({
                                                             'display': 'flex',
                                                             'flexDirection': 'row', // Alinear los elementos en fila
@@ -956,8 +953,8 @@
                                                     for (var i = 0; i < arraySinEspacios.length; i++) {
                                                         tablaHTML += `
                                                         <tr>
-                                                            <td><div data-toggle="tooltip" data-placement="top" title="${metasDesc[i]}"><img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-${arraySinEspacios[i]}.png" height="150px" width="150px" alt="ods'+numero+'"></div></td>
-                                                            <td>${metas[i]}</td>
+                                                            <td><div data-toggle="tooltip" data-placement="top" title="ods ${arraySinEspacios[i]}"><img src="https://cftpucv.vinculamos.org/img/ods/${arraySinEspacios[i]}.png" height="150px" width="150px" alt="ods'+numero+'"></div></td>
+                                                            <td>${metasDesc[i]}</td>
                                                             <td>${fundamentos[i]}</td>
                                                         </tr>
                                                     `;
