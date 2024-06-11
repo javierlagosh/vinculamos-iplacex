@@ -341,7 +341,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <h6>Índice de vinculación INVI</h6>
+                                        <h6>INVI Total</h6>
                                     </td>
                                     <td id="valor-indice"></td>
                                 </tr>
