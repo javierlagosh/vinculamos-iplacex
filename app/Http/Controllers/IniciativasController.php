@@ -3240,7 +3240,7 @@ class IniciativasController extends Controller
             return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $mecanismoDato = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', 'iniciativas.meca_codigo')
-            ->select('mecanismos.meca_nombre', 'iniciativas.inic_codigo')
+            ->select('mecanismos.meca_nombre', 'iniciativas.inic_codigo', 'mecanismos.meca_puntaje')
             ->where('iniciativas.inic_codigo', $request->iniciativa)
             ->get();
 
@@ -3300,6 +3300,41 @@ class IniciativasController extends Controller
                 'evaluacion' => $evalDatos
             ]
         ]);
+    }
+    public function guardarDatosIndice(Request $request)
+    {
+
+
+        try {
+            DB::table('invi')->where('inic_codigo', $request->inic_codigo)->delete();
+
+
+            $invi = DB::table('invi')->insert([
+                'inic_codigo' => $request->inic_codigo,
+                'invi_mecanismo_nombre' => $request->mecanismo_nombre,
+                'invi_mecanismo_puntaje' => $request->mecanismo_puntaje,
+                'invi_frecuencia_nombre' => $request->frecuencia_nombre,
+                'invi_frecuencia_puntaje' => $request->frecuencia_puntaje,
+                'invi_resultados_puntaje' => $request->resultados_puntaje,
+                'invi_cobertura_puntaje' => $request->cobertura_puntaje,
+                'invi_evaluacion_puntaje' => $request->evaluacion_puntaje,
+                'invi_valor_indice' => $request->valor_indice,
+            ]);
+
+            if (!$invi) {
+                return response()->json(['state' => false]);
+            }
+
+            return response()->json(['state' => true]);
+        } catch (\Throwable $th) {
+            return response()->json(['state' => false, 'error' => $th->getMessage()]);
+        }
+    }
+
+    public function obtenerIDs()
+    {
+        $inic_codigo = Iniciativas::select('inic_codigo')->get();
+        return response()->json($inic_codigo);
     }
 
     /* public function actualizarIndice(Request $request) {

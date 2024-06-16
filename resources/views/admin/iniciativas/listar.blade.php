@@ -49,6 +49,9 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Listado de Iniciativas</h4>
+                            <div class="card-header-action">
+                                <button type="button" class="btn btn-primary" onclick="obtenerIDs()"><i class="fas fa-tachometer-alt"></i> Almacenar INVI</button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.iniciativa.listar') }}" method="GET">
@@ -372,71 +375,67 @@
         </div>
     </div>
 
-@foreach ($iniciativas as $iniciativa)
-<div class="modal fade" id="modalINVI" tabindex="-1" role="dialog" aria-labelledby="formModal"
-aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="formModal">Índice de vinculación INVI</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-md" id="table-1"
-                    style="border-top: 1px ghostwhite solid;">
-                    <tbody>
-                        <tr>
-                            <td><strong>Mecanismo</strong></td>
-                            @if ($iniciativa->meca_nombre != null)
-                            <td>{{ $iniciativa->meca_nombre }}</td>
-                            @else
-                            <td id="mecanismo-nombre"></td>
-                            @endif
-
-
-                            <td id="mecanismo-puntaje"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Frecuencia</strong></td>
-                            <td id="frecuencia-nombre"></td>
-                            <td id="frecuencia-puntaje"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Resultados</strong></td>
-                            <td id="resultados-nombre"></td>
-                            <td id="resultados-puntaje"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Cobertura</strong></td>
-                            <td id="cobertura-nombre"></td>
-                            <td id="cobertura-puntaje"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Evaluación</strong></td>
-                            <td id="evaluacion-nombre"></td>
-                            <td id="evaluacion-puntaje"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <h6>INVI Total</h6>
-                            </td>
-                            <td id="valor-indice"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+    <div class="modal fade" id="modalINVI" tabindex="-1" role="dialog" aria-labelledby="formModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formModal">Índice de vinculación INVI</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="invi_modal_guardado"></div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-md" id="table-1"
+                            style="border-top: 1px ghostwhite solid;">
+                            <tbody>
+                                <tr style="display: none;">
+                                    <td id='codigo_iniciativa'></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mecanismo</strong></td>
+                                    <td id="mecanismo-nombre"></td>
+                                    <td id="mecanismo-puntaje"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Frecuencia</strong></td>
+                                    <td id="frecuencia-nombre"></td>
+                                    <td id="frecuencia-puntaje"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Resultados</strong></td>
+                                    <td id="resultados-nombre"></td>
+                                    <td id="resultados-puntaje"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cobertura</strong></td>
+                                    <td id="cobertura-nombre"></td>
+                                    <td id="cobertura-puntaje"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Evaluación</strong></td>
+                                    <td id="evaluacion-nombre"></td>
+                                    <td id="evaluacion-puntaje"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <h6>Índice de vinculación INVI</h6>
+                                    </td>
+                                    <td id="valor-indice"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary" onclick="guardarINVI()"> <i class="fas fa-save"></i> Guardar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-
-@endforeach
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
     <script>
         function eliminarIniciativa(inic_codigo) {

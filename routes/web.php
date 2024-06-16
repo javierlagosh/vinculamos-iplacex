@@ -54,7 +54,8 @@ Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPass
 
 //TODO: Ruta INVI
 Route::get('admin/iniciativa/invi/datos', [IniciativasController::class, 'datosIndice']);
-/* Route::post('admin/iniciativa/invi/actualizar', [IniciativasController::class, 'actualizarIndice']); */
+Route::post('admin/iniciativa/invi/guardar', [IniciativasController::class, 'guardarDatosIndice']);
+Route::get('admin/iniciativas/invi/ids',[IniciativasController::class,'obtenerIDs']);
 
 //Evaluacion de las iniciativas
 Route::get('admin/iniciativa/listar-evaluaciones', [IniciativasController::class, 'listarEvaluaciones']);
