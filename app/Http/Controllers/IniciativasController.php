@@ -341,6 +341,7 @@ class IniciativasController extends Controller
                 'iniciativas.inic_desde',
                 'iniciativas.inic_hasta',
                 'iniciativas.inic_escuela_ejecutora',
+                'iniciativas.inic_objetivo',
             )
             ->where('iniciativas.inic_codigo', $inic_codigo)
             ->first();
@@ -775,6 +776,7 @@ class IniciativasController extends Controller
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'inic_nickname_mod' => Session::get('admin')->usua_nickname,
             'inic_rol_mod' => Session::get('admin')->rous_codigo,
+            'inic_objetivo' => $request->inic_objetivo ?? 'No se ha seleccionado un objetivo.',
         ]);
 
         if (!$inicCrear)
@@ -1271,7 +1273,15 @@ class IniciativasController extends Controller
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'inic_nickname_mod' => Session::get('admin')->usua_nickname,
             'inic_rol_mod' => Session::get('admin')->rous_codigo,
+
         ]);
+
+        // si no esta inic_objetivo en el request, se deja el valor que ya tiene
+        if ($request->inic_objetivo) {
+            Iniciativas::where('inic_codigo', $inic_codigo)->update([
+                'inic_objetivo' => $request->inic_objetivo,
+            ]);
+        }
 
         if (!$inicActualizar)
             return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante la actualización de los datos de la iniciativa, intente más tarde.')->withInput();

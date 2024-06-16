@@ -431,9 +431,13 @@
                                     <div class="input-group">
                                         @if (isset($iniciativa) && $editar)
                                             <textarea required class="formbold-form-input" id="description" name="description" rows="5" style="width: 100%;">{{ old('description') ?? @$iniciativa->inic_descripcion }}</textarea>
+                                            <label style="font-size: 110%">Objetivo:</label>
+                                            <input type="text" name="inic_objetivo" id="inic_objetivo" class="form-control" value="{{$iniciativa->inic_objetivo}}">
                                         @else
                                             <textarea required class="formbold-form-input" id="description" name="description" rows="5" style="width: 100%;">{{ old('description') }}</textarea>
-                                        @endif
+                                            <label style="font-size: 110%">Objetivo:</label>
+                                            <input type="text" name="inic_objetivo" id="inic_objetivo" class="form-control" >
+                                            @endif
                                     </div>
                                     @if ($errors->has('description'))
                                         <div class="alert alert-warning alert-dismissible show fade mt-2">
@@ -443,12 +447,12 @@
                                             </div>
                                         </div>
                                     @endif
-                                    {{-- <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
+                                    <button id="boton-revisar" class="btn btn-primary mr-1 text-white mt-2">
                                         <span id="plantearObjetivoSpinner" class="" role="status"
                                             aria-hidden="true"></span>
                                         <span id="plantearObjetivoTexto">Plantear objetivos</span>
 
-                                    </button> --}}
+                                    </button>
 
 
 
@@ -475,10 +479,10 @@
 
                                 </div>
                                 <input type="text" id="ObjetivoElegido" hidden>
-                                <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
+                                {{-- <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
                                     <span id="asociarODSpinner" class="" role="status" aria-hidden="true"></span>
                                     <span id="asociarODSObjetivoTexto">Asociar ODS</span>
-                                </button>
+                                </button> --}}
                                 <script>
                                     function elegirObjetivo(elegido) {
                                         for (let index = 1; index < 4; index++) {
@@ -493,6 +497,12 @@
                                             }
                                         }
                                         document.getElementById("ObjetivoElegido").value = arrayRespuestas[elegido - 1];
+
+                                        let objetivoElegido = arrayRespuestas[elegido - 1];
+                                        //quitar primeros 3 caracteres del objetivo
+                                        objetivoElegido = objetivoElegido.substring(3);
+                                        document.getElementById("inic_objetivo").value = objetivoElegido;
+
                                         $('#send-button').removeClass('d-none');
 
 
@@ -680,6 +690,7 @@
 
                                                 // llenar con la informacion
                                                 $('#objetivosPlanteados').append(`
+                                                <label style="font-size: 110%">Seleccione un objetivo:</label>
 
                                             <div class="mt-2">
                                                 <div id="opcion1ODS" onclick="elegirObjetivo(1)" style="width: 100%; border: 1px solid #5a5a5a; border-radius: 5px;" onmouseover="this.style.borderColor='#0000FF'; this.style.cursor='pointer';" onmouseout="this.style.borderColor='#5a5a5a';this.style.cursor='default';">

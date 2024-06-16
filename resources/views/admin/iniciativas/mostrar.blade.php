@@ -315,6 +315,10 @@
                                                     {{ $iniciativa->inic_descripcion }}
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td><strong>Objetivo</strong></td>
+                                                <td>{{ $iniciativa->inic_objetivo }}</td>
+                                            </tr>
 
                                             <tr>
                                                 <td><strong>Mecanismo</strong></td>
@@ -333,6 +337,7 @@
                                                 <td><strong>Convenio</strong></td>
                                                 <td>{{ $iniciativa->conv_nombre }}</td>
                                             </tr>
+
                                             <tr>
 
                                                 {{-- {{json_encode($ods_array)}} --}}
