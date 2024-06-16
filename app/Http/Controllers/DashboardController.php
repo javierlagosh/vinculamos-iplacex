@@ -139,6 +139,126 @@ class DashboardController extends Controller
         );
     }
 
+    public function IndexObservador()
+    {
+        $nIniciativas = ParticipantesInternos::select('inic_codigo')->distinct()->get();
+        $nEstudiantes = ParticipantesInternos::select(DB::raw('SUM(COALESCE(pain_estudiantes_final,0)) as estudiantes'))->get();
+        $nDocentes = ParticipantesInternos::select(DB::raw('SUM(COALESCE(pain_docentes_final,0)) as docentes'))->get();
+        $nSocios = SociosComunitarios::all();
+        $nBeneficiarios = IniciativasParticipantes::select(DB::raw('SUM(COALESCE(inpr_total_final,0)) as beneficiarios'))->get();
+        $nTitulados = IniciativasParticipantes::select(DB::raw('SUM(COALESCE(inpr_total_final,0)) as titulados'))->where('soco_codigo', 15)->get();
+
+        $comunas = IniciativasComunas::select('comu_codigo')->distinct()->get();
+        $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
+        $escuelas = Escuelas::select('escu_codigo', 'escu_nombre')->orderBy('escu_nombre', 'asc')->get();
+        $programa1_m = Programas::select(['prog_meta_estudiantes', 'prog_meta_docentes', 'prog_meta_socios', 'prog_meta_beneficiarios'])
+            ->where('prog_codigo', 1)->get();
+
+        $programa1_avance = DB::table('iniciativas_participantes')
+            ->select([
+                'iniciativas_participantes.inpr_codigo',
+                'iniciativas_participantes.inic_codigo',
+                DB::raw('SUM(COALESCE(participantes_internos.pain_docentes, 0)) as total_docentes'),
+                DB::raw('SUM(COALESCE(participantes_internos.pain_estudiantes, 0)) as total_estudiantes'),
+                DB::raw('(SELECT SUM(iniciativas_participantes.inpr_total) FROM iniciativas_participantes JOIN iniciativas ON iniciativas_participantes.inic_codigo = iniciativas.inic_codigo WHERE iniciativas.meca_codigo = 1 GROUP BY iniciativas_participantes.inpr_codigo) as total_beneficiarios'),
+                DB::raw('COUNT(DISTINCT iniciativas_participantes.soco_codigo) as total_socios')
+            ])
+            ->join('iniciativas', 'iniciativas_participantes.inic_codigo', '=', 'iniciativas.inic_codigo')
+            ->join('participantes_internos', 'iniciativas.inic_codigo', '=', 'participantes_internos.inic_codigo')
+            ->where('iniciativas.meca_codigo', 1)
+            ->groupBy('iniciativas_participantes.inpr_codigo', 'iniciativas_participantes.inic_codigo')
+            ->get();
+
+        $programa2_m = Programas::select(['prog_meta_estudiantes', 'prog_meta_docentes', 'prog_meta_socios', 'prog_meta_beneficiarios'])
+            ->where('prog_codigo', 3)->get();
+
+        $programa2_avance = DB::table('iniciativas_participantes')
+            ->select([
+                'iniciativas_participantes.inpr_codigo',
+                'iniciativas_participantes.inic_codigo',
+                DB::raw('SUM(COALESCE(participantes_internos.pain_docentes, 0)) as total_docentes'),
+                DB::raw('SUM(COALESCE(participantes_internos.pain_estudiantes, 0)) as total_estudiantes'),
+                DB::raw('(SELECT SUM(iniciativas_participantes.inpr_total) FROM iniciativas_participantes JOIN iniciativas ON iniciativas_participantes.inic_codigo = iniciativas.inic_codigo WHERE iniciativas.meca_codigo = 1 GROUP BY iniciativas_participantes.inpr_codigo) as total_beneficiarios'),
+                DB::raw('COUNT(DISTINCT iniciativas_participantes.soco_codigo) as total_socios')
+            ])
+            ->join('iniciativas', 'iniciativas_participantes.inic_codigo', '=', 'iniciativas.inic_codigo')
+            ->join('participantes_internos', 'iniciativas.inic_codigo', '=', 'participantes_internos.inic_codigo')
+            ->where('iniciativas.meca_codigo', 3)
+            ->groupBy('iniciativas_participantes.inpr_codigo', 'iniciativas_participantes.inic_codigo')
+            ->get();
+
+        $programa3_m = Programas::select(['prog_meta_estudiantes', 'prog_meta_docentes', 'prog_meta_socios', 'prog_meta_beneficiarios'])
+            ->where('prog_codigo', 4)->get();
+
+        $programa3_avance = DB::table('iniciativas_participantes')
+            ->select([
+                'iniciativas_participantes.inpr_codigo',
+                'iniciativas_participantes.inic_codigo',
+                DB::raw('SUM(COALESCE(participantes_internos.pain_docentes, 0)) as total_docentes'),
+                DB::raw('SUM(COALESCE(participantes_internos.pain_estudiantes, 0)) as total_estudiantes'),
+                DB::raw('(SELECT SUM(iniciativas_participantes.inpr_total) FROM iniciativas_participantes JOIN iniciativas ON iniciativas_participantes.inic_codigo = iniciativas.inic_codigo WHERE iniciativas.meca_codigo = 1 GROUP BY iniciativas_participantes.inpr_codigo) as total_beneficiarios'),
+                DB::raw('COUNT(DISTINCT iniciativas_participantes.soco_codigo) as total_socios')
+            ])
+            ->join('iniciativas', 'iniciativas_participantes.inic_codigo', '=', 'iniciativas.inic_codigo')
+            ->join('participantes_internos', 'iniciativas.inic_codigo', '=', 'participantes_internos.inic_codigo')
+            ->where('iniciativas.meca_codigo', 2)
+            ->groupBy('iniciativas_participantes.inpr_codigo', 'iniciativas_participantes.inic_codigo')
+            ->get();
+
+        $programa4_m = Programas::select(['prog_meta_estudiantes', 'prog_meta_docentes', 'prog_meta_socios', 'prog_meta_beneficiarios'])
+            ->where('prog_codigo', 2)->get();
+
+        $programa4_avance = DB::table('iniciativas_participantes')
+            ->select([
+                'iniciativas_participantes.inpr_codigo',
+                'iniciativas_participantes.inic_codigo',
+                DB::raw('SUM(COALESCE(participantes_internos.pain_docentes, 0)) as total_docentes'),
+                DB::raw('SUM(COALESCE(participantes_internos.pain_estudiantes, 0)) as total_estudiantes'),
+                DB::raw('(SELECT SUM(iniciativas_participantes.inpr_total) FROM iniciativas_participantes JOIN iniciativas ON iniciativas_participantes.inic_codigo = iniciativas.inic_codigo WHERE iniciativas.meca_codigo = 1 GROUP BY iniciativas_participantes.inpr_codigo) as total_beneficiarios'),
+                DB::raw('COUNT(DISTINCT iniciativas_participantes.soco_codigo) as total_socios')
+            ])
+            ->join('iniciativas', 'iniciativas_participantes.inic_codigo', '=', 'iniciativas.inic_codigo')
+            ->join('participantes_internos', 'iniciativas.inic_codigo', '=', 'participantes_internos.inic_codigo')
+            ->where('iniciativas.meca_codigo', 4)
+            ->groupBy('iniciativas_participantes.inpr_codigo', 'iniciativas_participantes.inic_codigo')
+            ->get();
+
+        $metas_total = Sedes::select(
+            DB::raw('SUM(COALESCE(sede_meta_estudiantes,0)) as meta_sede_estudiantes'),
+            DB::raw('SUM(COALESCE(sede_meta_docentes,0)) as meta_sede_docentes')
+        )
+            ->get();
+
+
+        $tcomponentes = Componentes::select('comp_codigo','comp_nombre')->get();
+
+
+        return view(
+            'observador.dashboard',
+            compact(
+                'tcomponentes',
+                'nIniciativas',
+                'nEstudiantes',
+                'nDocentes',
+                'nSocios',
+                'nBeneficiarios',
+                'nTitulados',
+                'comunas',
+                'sedes',
+                'escuelas',
+                'programa1_m',
+                'programa2_m',
+                'programa3_m',
+                'programa4_m',
+                'metas_total',
+                'programa1_avance',
+                'programa2_avance',
+                'programa3_avance',
+                'programa4_avance'
+            )
+        );
+    }
+
     public function sedesDatos(Request $request)
     {
 

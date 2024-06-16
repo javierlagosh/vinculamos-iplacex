@@ -77,6 +77,7 @@ Route::middleware('verificar.superadmin')->group(function () {
 });
 
 Route::get('dashboard', [DashboardController::class, 'Index'])->name('dashboard.ver');
+
 Route::post('dashboard/sedes-datos', [DashboardController::class, 'sedesDatos']);
 Route::post('dashboard/componentes-datos', [DashboardController::class, 'componentesDatos']);
 
