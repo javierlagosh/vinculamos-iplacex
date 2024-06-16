@@ -317,7 +317,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Objetivo</strong></td>
-                                                <td>{{ $iniciativa->inic_objetivo }}</td>
+                                                <td>{{ $iniciativa->inic_objetivo ?? "No se ha seleccionado un objetivo." }}</td>
                                             </tr>
 
                                             <tr>
