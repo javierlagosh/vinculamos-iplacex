@@ -335,6 +335,42 @@
                                     @endif
                                 </div>
                             </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="rol">Rol</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-id-card"></i>
+                                            </div>
+                                            <select name="rol" id="rol" class="form-control"
+                                                style="width: 100%">
+                                                <option value="" disabled selected>Seleccione...</option>
+                                                @forelse ($roles as $rol)
+                                                    <option value="{{ $rol->rous_codigo }}">{{ $rol->rous_nombre }}
+                                                    </option>
+                                                @empty
+                                                    <option value="" disabled selected>Sin registros</option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+
+
+
+                                    </div>
+                                    @if ($errors->has('rol'))
+                                        <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                            <div class="alert-body">
+                                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                <strong>{{ $errors->first('rol') }}</strong>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary waves-effect"><i class="fa fa-save"></i>

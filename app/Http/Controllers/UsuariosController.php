@@ -21,11 +21,13 @@ class UsuariosController extends Controller
     public function listarUsuarios()
     {
         return view('admin.usuarios.gestion', [
-            'usuarios' => Usuarios::where('rous_codigo', 1)->orderBy('usua_creado', 'desc')->get()
+            'usuarios' => Usuarios::orderBy('usua_creado', 'desc')->get(),
+            'roles' => RoleUsuarios::select('rous_nombre','rous_codigo')->where('rous_codigo', '!=', 4)->get()
         ]);
     }
 
     public function crearUsuario(Request $request) {
+
         $request->validate(
             [
                 'nombre' => 'required|max:50',
@@ -33,7 +35,8 @@ class UsuariosController extends Controller
                 'nickname' => 'required',
                 'email' => 'required|max:100',
                 'clave' => 'required|min:8|max:25',
-                'confirmarclave' => 'required|same:clave'
+                'confirmarclave' => 'required|same:clave',
+                'rol' => 'required'
             ],
             [
                 'nombre.required' => 'El nombre es requerido.',
@@ -43,6 +46,7 @@ class UsuariosController extends Controller
                 'nickname.required' => 'El nombre de usuario es requerido.',
                 'email.required' => 'El correo electrónico es requerido.',
                 'email.max' => 'El correo electrónico excede el máximo de caracteres permitidos (100).',
+                'rol.required' => 'El rol del usuario es requerido.',
                 'clave.required' => 'La contraseña es requerida.',
                 'clave.min' => 'La contraseña debe tener 8 caracteres como mínimo.',
                 'clave.max' => 'La contraseña debe tener 25 caracteres como máximo.',
@@ -55,8 +59,8 @@ class UsuariosController extends Controller
         if ($usuaVerificar) return redirect()->back()->with('errorRegistro', 'El usuario ya se encuentra registrado como.')->withInput();
 
         $usuaCrear = Usuarios::create([
+            'rous_codigo' => $request->rol,
             'usua_nickname' => $request->nickname,
-            'rous_codigo' => 1,
             'usua_nombre' => $request->nombre,
             'usua_apellido' => $request->apellido,
             'usua_email' => $request->email,
