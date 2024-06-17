@@ -8,6 +8,10 @@
             <a href="{{route('dashboard.ver')}}" class="nav-link">
                 <i data-feather="home" id="saludo"></i><span>Inicio</span></a>
         </li>
+        <li class="dropdown">
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiNmNhNGZlYmMtNzk5ZS00NjJjLWE0ZmEtODY3YmJhMDM2NGMwIiwidCI6IjAyNjA5MDkwLTIxNWItNDM4Ny1iZGFkLTFhYmMyMWFkMmU1ZSJ9 " class="nav-link">
+                <i data-feather="bar-chart" id="saludo"></i><span>Historico VcM</span></a>
+        </li>
         <li class="{{ Route::is('admin.iniciativa.listar') ||
                     Route::is('admin.inicitiativas.crear.primero')
                     ? 'dropdown active' : 'dropdown' }}">
