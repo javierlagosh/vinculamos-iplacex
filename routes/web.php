@@ -340,6 +340,7 @@ Route::middleware('verificar.admin')->group(function () {
     //todo:fin evidencias de iniciativas
 
     Route::put('admin/iniciativa/resultados/', [IniciativasController::class, 'actualizarResultado'])->name('admin.resultado.actualizar');
+    Route::put('admin/socio/paso2/actualizar/', [IniciativasController::class, 'actualizarSocioPaso2'])->name('admin.socio.paso2.actualizar');
 
     Route::delete('admin/iniciativas/eliminar', [IniciativasController::class, 'eliminarIniciativas'])->name('admin.iniciativa.eliminar');
     // Route::post('admin/iniciativas/obtener-escuelas',[IniciativasController::class,'escuelasBySede']);

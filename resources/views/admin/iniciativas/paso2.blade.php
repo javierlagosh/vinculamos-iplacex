@@ -1093,6 +1093,8 @@
                     $('#body-tabla-externos').empty();
 
                     datosInternos = respuesta.resultado;
+
+                    console.log('externos');
                     datosInternos.forEach(registro => {
 
                         fila = `<tr>
@@ -1180,9 +1182,20 @@
             $('#sugr_nombre').val(sugr_nombre);
             $('#inpr_total').val(inpr_total);
 
+
+
+            $('#socio_inic_codigo').val($('#iniciativa').val());
+            $('#soco_codigo_antiguo').val(soco_nombre_socio);
+            // seleciconar en el select socioSeleccionado el valor del socio
+            $('#socioSeleccionado').val(soco_nombre_socio).trigger('change');
+
+            $('#personasBeneficiadas').val(sugr_nombre);
+
             // Mostrar el modal
             $('#modalEditarSede').modal('show');
         }
+
+
     </script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
 
@@ -1198,10 +1211,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formEditarSede" action="#">
+                    <form action="{{ route('admin.socio.paso2.actualizar') }} " method="POST" id="formEditarSede" action="#">
+                         @method('PUT')
+                        @csrf
                         <div class="form-group">
                             <label>Nombre del socio</label>
-                            <select class="form-control select2" id="socio" name="socio"
+                            <input hidden type="text" id="soco_codigo_antiguo" name="soco_codigo_antiguo">
+                            <input hidden type="text" id="socio_inic_codigo" name="socio_inic_codigo">
+                            <select class="form-control select2" id="socioSeleccionado" name="socioSeleccionado"
                             style="width: 100%">
                                 @forelse ($socios as $socio)
                                     <option value="{{ $socio->soco_codigo }}">{{ $socio->soco_nombre_socio }}
@@ -1219,7 +1236,7 @@
                                         <i class="fas fa-calculator"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="inpr_total" name="inpr_total" autocomplete="off">
+                                <input type="number" class="form-control" id="personasBeneficiadas" name="personasBeneficiadas" autocomplete="off">
                             </div>
                         </div>
                         <div class="text-center">
