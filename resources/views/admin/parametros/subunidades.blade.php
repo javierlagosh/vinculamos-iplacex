@@ -198,7 +198,7 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
                                         </div>
                                     </div>
                                     <input type="text" class="form-control" id="responsable" name="responsable"
-                                        value="{{ $registro->unid_responsable }}" autocomplete="off">
+                                        value="{{ $registro->suni_responsable }}" autocomplete="off">
                                 </div>
                             </div>
                             @if ($registro->suni_codigo == 24)
