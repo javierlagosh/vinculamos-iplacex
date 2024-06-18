@@ -360,7 +360,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/iniciativas/{inic_codigo}/evaluar/invitar/{invitado}/correo', [IniciativasController::class, 'iniciativaEvaluarInvitarCorreo'])->name('admin.iniciativa.evaluar.invitar.correo');
     Route::post('admin/iniciativas/evaluar/correo/enviar', [IniciativasController::class, 'iniciativaEvaluarEnviarCorreo'])->name('admin.iniciativa.evaluar.enviar.correo');
     //fin de rutas para iniciativas
-
+    Route::put('admin/iniciativas/invitado/{evainv_codigo}', [ParametrosController::class, 'actualizarInvitado'])->name('admin.actualizar.invitados');
     // TODO: inicio rutas para gestionar usuarios
     Route::get('admin/listar-usuarios', [UsuariosController::class, 'listarUsuarios'])->name('admin.listar.usuarios');
     Route::post('admin/crear-usuario', [UsuariosController::class, 'crearUsuario'])->name('admin.crear.usuarios');

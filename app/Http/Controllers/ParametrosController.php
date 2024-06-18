@@ -55,6 +55,7 @@ use App\Models\IniciativasCentroSimulacion;
 use App\Models\CarrerasAsignaturas;
 use App\Models\DispositivosTiac;
 use App\Models\TipoActividadAmbitoAccion;
+use App\Models\EvaluacionInvitado;
 
 class ParametrosController extends Controller
 {
@@ -2633,4 +2634,39 @@ class ParametrosController extends Controller
         ;
     }
 
+    public function actualizarInvitado(Request $request, $evainv_codigo)
+    {
+        // Buscar al invitado por su código
+        $invitado = EvaluacionInvitado::find($evainv_codigo);
+
+        // dd($request->all());
+
+        // Validar si el invitado existe
+        if (!$invitado) {
+            return redirect()->route('admin.listar.iniciativas')->with('errorSede', 'El invitado no se ha encontrado en el sistema.');
+        }
+
+        // Validar los datos enviados en el formulario
+        $validatedData = $request->validate([
+            'evainv_nombre' => 'required|string|max:255',
+            'evainv_correo' => 'required|email|max:255',
+        ], [
+            'evainv_nombre.required' => 'El campo Nombre del invitado es requerido.',
+            'evainv_nombre.string' => 'El campo Nombre del invitado debe ser una cadena de texto.',
+            'evainv_nombre.max' => 'El campo Nombre del invitado no puede tener más de 255 caracteres.',
+            'evainv_correo.required' => 'El campo Correo del invitado es requerido.',
+            'evainv_correo.email' => 'El campo Correo del invitado debe ser una dirección de correo válida.',
+            'evainv_correo.max' => 'El campo Correo del invitado no puede tener más de 255 caracteres.',
+        ]);
+
+        // Actualizar los datos del invitado
+        $invitado->evainv_nombre = $request->input('evainv_nombre');
+        $invitado->evainv_correo = $request->input('evainv_correo');
+
+        // Guardar los cambios en la base de datos
+        $invitado->save();
+
+        // Redirigir back
+        return redirect()->back()->with('exitoInvitado', 'Invitado actualizado exitosamente');
+    }
 }

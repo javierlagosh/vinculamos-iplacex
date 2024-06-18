@@ -305,6 +305,7 @@
                                                     <tbody>
                                                         <?php $i = 1; ?>
                                                         @foreach ($invitados as $invitado)
+
                                                         <tr>
                                                             <td> <?php echo $i; $i++; ?> </td>
                                                             <td> {{$invitado->evainv_nombre}} </td>
@@ -320,6 +321,9 @@
 
                                                             </td>
                                                             <td>
+                                                                <a href="javascript:void(0)" class="btn btn-icon btn-warning mb-2"
+                                                                onclick="editarSede({{ $invitado->evainv_codigo}})" data-toggle="tooltip"
+                                                                data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                                                 <form action="{{route('admin.eliminar.invitacion',$invitado->evainv_codigo)}}" method="post">
                                                                     @csrf
 
@@ -331,6 +335,7 @@
                                                             </td>
 
                                                         </tr>
+
                                                         @endforeach
                                                     </tbody>
                                                 </table>
@@ -395,5 +400,61 @@
                 </div>
             </div>
         </div>
+
+        @foreach ($invitados as $invitado)
+        <div class="modal fade" id="modalEditarsedes-{{ $invitado->evainv_codigo}}" tabindex="-1" role="dialog"
+            aria-labelledby="modalEditarsedes-{{ $invitado->evainv_codigo }}" aria-hidden="true" style="z-index: 1050 !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarsedes-{{ $invitado->evainv_codigo }}">Editar Invitado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('admin.actualizar.invitados', $invitado->evainv_codigo) }}" method="POST">
+                            @method('PUT')
+                            @csrf
+
+                            <div class="form-group">
+                                <label>Nombre del invitado</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-pen-nib"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="evainv_nombre" name="evainv_nombre"
+                                           value="{{ $invitado->evainv_nombre }}" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Correo del invitado</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                    </div>
+                                    <input type="email" class="form-control" id="evainv_correo" name="evainv_correo"
+                                           value="{{ $invitado->evainv_correo }}" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
+
+        <script>
+            function editarSede(evainv_codigo) {
+                $('#modalEditarsedes-' + evainv_codigo).modal('show');
+            }
+        </script>
 
 @endsection
