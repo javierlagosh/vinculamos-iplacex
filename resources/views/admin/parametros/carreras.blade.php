@@ -79,7 +79,7 @@
                                                         data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                                     <a href="javascript:void(0)" class="btn btn-icon btn-danger"
                                                         onclick="eliminarCare({{ $care->care_codigo }})"
-                                                        data-toggle="tooltip" data-placement="top" title="Eliminar care"><i
+                                                        data-toggle="tooltip" data-placement="top" title="Eliminar"><i
                                                             class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
