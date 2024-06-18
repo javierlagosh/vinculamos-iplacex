@@ -88,6 +88,7 @@ class IniciativasController extends Controller
                 'iniciativas.inic_anho',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
+                'tipo_actividades.tiac_nombre',
                 'dispositivo.nombre as dispositivo',
                 'componentes.comp_nombre',
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
@@ -95,7 +96,7 @@ class IniciativasController extends Controller
                 // DB::raw('GROUP_CONCAT(DISTINCT carreras.care_nombre SEPARATOR ", ") as carreras'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             )
-            ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado', 'dispositivo.nombre') // Agregamos inic_creado al GROUP BY
+            ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado', 'dispositivo.nombre', 'tipo_actividades.tiac_nombre') // Agregamos inic_creado al GROUP BY
             ->orderBy('inic_creado', 'desc'); // Ordenar por fecha de creación formateada en orden descendente
         // ->where('iniciativas.inic_anho','2023')
 
@@ -103,6 +104,9 @@ class IniciativasController extends Controller
             $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
         }else{
             $iniciativas = $iniciativas;
+        }
+        if ($request->tiac != 'all' && $request->tiac != null) {
+            $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
         }
 
         if ($request->mecanismo != 'all' && $request->mecanismo != null) {
@@ -124,9 +128,10 @@ class IniciativasController extends Controller
         // $carreras = Carreras::select('care_codigo', 'care_nombre')->orderBy('care_nombre', 'asc')->get();
         // $componentes = DB::table('componentes')->select('comp_codigo', 'comp_nombre')->orderBy('comp_nombre', 'asc')->get();
         $mecanismos = Mecanismos::select('meca_codigo','meca_nombre')->get();
+        $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
         $anhos = Iniciativas::select('inic_anho')->distinct('inic_anho')->orderBy('inic_anho', 'asc')->get();
 
-        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes'));
+        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes', 'tiac'));
     }
 
 

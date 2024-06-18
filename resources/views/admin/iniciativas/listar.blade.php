@@ -74,15 +74,15 @@
                                     </div>
 
                                     <div class="col-xl-4 col-md-4 col-lg-4">
-                                        <div class="form-group"><label for="mecanismo">Mecanismos</label>
-                                            <select name="mecanismo" id="mecanismo" class="form-control select2"
+                                        <div class="form-group"><label for="tiac">Instrumento</label>
+                                            <select name="tiac" id="tiac" class="form-control select2"
                                                 style="width: 100%">
                                                 <option value="" selected>Seleccione...</option>
                                                 <option value="all">Todos</option>
-                                                @forelse ($mecanismos as $mecanismo)
-                                                    <option value="{{ $mecanismo->meca_codigo }}"
-                                                        {{ Request::get('mecanismo') == $mecanismo->meca_codigo ? 'selected' : '' }}>
-                                                        {{ $mecanismo->meca_nombre }}</option>
+                                                @forelse ($tiac as $tiacc)
+                                                    <option value="{{ $tiacc->tiac_codigo }}"
+                                                        {{ Request::get('tiac') == $tiacc->tiac_codigo ? 'selected' : '' }}>
+                                                        {{ $tiacc->tiac_nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
@@ -126,6 +126,7 @@
                                             <th>ID</th>
                                             <th>Nombre</th>
                                             <th>Dispositivo</th>
+                                            <th>Instrumento</th>
                                             <th>Año</th>
                                             <th>Sedes</th>
                                             {{-- <th>Carreras</th> --}}
@@ -140,6 +141,7 @@
                                                 <td>{{ $iniciativa->inic_codigo }}</td>
                                                 <td>{{ $iniciativa->inic_nombre }}</td>
                                                 <td>{{ $iniciativa->dispositivo }}</td>
+                                                <td>{{ $iniciativa->tiac_nombre }}</td>
                                                 <td>{{ $iniciativa->inic_anho }}</td>
                                                 <td>
                                                     @php
