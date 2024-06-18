@@ -119,7 +119,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('admin.actualizar.convenios', $conv->conv_codigo) }}" method="POST">
+                        <form action="{{ route('admin.actualizar.convenios', $conv->conv_codigo) }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-group">
@@ -171,20 +171,32 @@
                                             <i class="fas fa-file"></i>
                                         </div>
                                     </div>
-                                    <input type="text" class="form-control" id="nombrearchivo" name="nombrearchivo"
+                                    <input type="text" class="form-control" id="nombrearchivo2" name="nombrearchivo"
                                         value="{{ $conv->conv_nombre_archivo }}" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Ruta del archivo de colaboración</label>
+                                <label>Editar archivo del colaboración</label>
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="alert alert-info">
-                                            <div class="alert-title">{{ $conv->conv_ruta_archivo }}</div>
-                                          </div>
+                                        <div class="fallback">
+                                            <input name="archivo" id="archivo2" type="file" accept="*/*"  />
+                                            @if ($errors->has('archivo'))
+                                        <div class="alert alert-warning alert-dismissible show fade mt-2 text-center"
+                                            style="width:100%">
+                                            <div class="alert-body">
+                                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                <strong>{{ $errors->first('archivo') }}</strong>
+                                            </div>
+                                        </div>
+                                    @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+
+
                             {{-- <div class="form-group">
                                 <label>Cambiar archivo del convenio</label>
                                 <div class="card">

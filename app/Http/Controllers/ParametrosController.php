@@ -453,6 +453,7 @@ class ParametrosController extends Controller
 
     public function actualizarConvenios(Request $request, $conv_codigo)
     {
+
         $validacion = $request->validate(
             [
                 'nombre' => 'required|max:255',
@@ -481,6 +482,7 @@ class ParametrosController extends Controller
         }
 
         $archivo = $request->file('archivo');
+
         //return redirect()->route('admin.listar.convenios')->with('errorConvenio', $archivo);
         if ($archivo) {
             $extension = $archivo->getClientOriginalExtension();
@@ -581,6 +583,7 @@ class ParametrosController extends Controller
         }
 
         $archivo = $request->file('archivo');
+
         $rutaConvenio = 'files/convenios/' . $convGuardar;
         if (File::exists(public_path($rutaConvenio)))
             File::delete(public_path($rutaConvenio));
