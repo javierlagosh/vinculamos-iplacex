@@ -2100,6 +2100,11 @@ class ParametrosController extends Controller
         $editado->suni_visible = 1;
         $editado->suni_nickname_mod = Session::get('admin')->usua_nickname;
         $editado->suni_rol_mod = Session::get('admin')->rous_codigo;
+        $editado->suni_meta1 = $request->input('suni_meta1') ?? 0;
+        $editado->suni_meta2 = $request->input('suni_meta2') ?? 0;
+        $editado->suni_meta3 = $request->input('suni_meta3') ?? 0;
+        $editado->suni_meta4 = $request->input('suni_meta4') ?? 0;
+        $editado->suni_meta5 = $request->input('suni_meta5') ?? 0;
         $editado->save();
 
         return redirect()->back()->with('exito', 'SubUnidad actualizada exitosamente')->withInput();

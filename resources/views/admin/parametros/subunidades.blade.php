@@ -172,6 +172,7 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
                                     </select>
                                 </div>
                             </div>
+
                             {{-- <div class="form-group">
                                 <label>Descripción de la subunidad</label>
                                 <div class="input-group">
@@ -200,6 +201,92 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
                                         value="{{ $registro->unid_responsable }}" autocomplete="off">
                                 </div>
                             </div>
+                            @if ($registro->suni_codigo == 24)
+                            <div class="row">
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Meta portal de empleo</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="suni_meta1"
+                                                name="suni_meta1" value="{{$registro->suni_meta1 ?? 0}}" placeholder="Meta portal de empleo"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Meta feria laboral</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="suni_meta2"
+                                                name="suni_meta2" value="{{$registro->suni_meta2 ?? 0}}" placeholder="Meta feria laboral"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Meta mundo mujer</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="suni_meta3"
+                                                name="suni_meta3" value="{{$registro->suni_meta3 ?? 0}}" placeholder="Meta mundo mujer"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Meta orientaciones laborales</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="suni_meta4"
+                                                name="suni_meta4" value="{{$registro->suni_meta4 ?? 0}}" placeholder="Meta orientaciones laborales"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Meta perfeccionamiento y formación continua</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="suni_meta5"
+                                                name="suni_meta5" value="{{$registro->suni_meta5 ?? 0}}" placeholder="Meta perfeccionamiento y formación continua"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            @endif
                             {{-- CAMPO TEMPLATE PARA COPIAR Y PEGAR (es en texto, asi que cambiar segun necesidad) --}}
                             {{--
                             <div class="form-group">

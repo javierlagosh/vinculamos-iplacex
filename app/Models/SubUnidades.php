@@ -26,7 +26,13 @@ class SubUnidades extends Model
         'suni_visible',
         'suni_nickname_mod',
         'suni_rol_mod',
+        'suni_meta1',
+        'suni_meta2',
+        'suni_meta3',
+        'suni_meta4',
+        'suni_meta5',
     ];
+
 
     protected $attributes = [
         'suni_visible' => 1, // Valor predeterminado para suni_visible
