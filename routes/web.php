@@ -317,6 +317,10 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/actualizar/participantes-internos', [IniciativasController::class, 'actualizarInternos']);
     Route::post('admin/iniciativas/agregar/participantes-externos', [IniciativasController::class, 'agregarExternos']);
 
+
+
+
+
     //todo: Update state iniciativa
     Route::post('/admin/iniciativas/update-state', [IniciativasController::class, 'updateState'])->name('admin.iniciativas.updateState');
     //todo: Add result iniciativa
@@ -334,6 +338,8 @@ Route::middleware('verificar.admin')->group(function () {
     // Route::get('admin/inicicativas/{inic_codigo}/cobertura',[IniciativasController::class,'ingresarCobertura'])->name('admin.cobertura.listar');
 
     //todo:fin evidencias de iniciativas
+
+    Route::put('admin/iniciativa/resultados/', [IniciativasController::class, 'actualizarResultado'])->name('admin.resultado.actualizar');
 
     Route::delete('admin/iniciativas/eliminar', [IniciativasController::class, 'eliminarIniciativas'])->name('admin.iniciativa.eliminar');
     // Route::post('admin/iniciativas/obtener-escuelas',[IniciativasController::class,'escuelasBySede']);

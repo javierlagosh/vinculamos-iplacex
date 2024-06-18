@@ -2190,6 +2190,30 @@ class IniciativasController extends Controller
             return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el recurso, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El recurso fue guardado correctamente.']);
     }
+
+
+    public function actualizarResultado(Request $request){
+
+        //actualizar resultado
+        $resuActualizar = Resultados::where('resu_codigo', $request->resu_codigo)
+        ->where('inic_codigo', $request->resu_inic_codigo)
+            ->update([
+                'resu_nombre' => $request->resu_nombre,
+                'resu_cuantificacion_inicial' => $request->resu_cuantificacion_inicial,
+                'resu_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+                'resu_nickname_mod' => Session::get('admin')->usua_nickname,
+                'resu_rol_mod' => Session::get('admin')->rous_codigo
+            ]);
+        if(!$resuActualizar){
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al actualizar el resultado esperado, intente más tarde.']);
+        }
+
+
+        //return back
+        return redirect()->back()->with('exitoPaso3', 'Los datos de la iniciativa se actualizaron correctamente');
+    }
+
+
     public function consultarDinero(Request $request)
     {
         $validacion = Validator::make(

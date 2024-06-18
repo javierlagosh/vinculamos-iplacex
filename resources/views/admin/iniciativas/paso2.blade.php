@@ -840,6 +840,9 @@
                             '<td>' + registro.resu_cuantificacion_inicial + '</td>' +
                             '<td>' + registro.resu_nombre + '</td>' +
                             '<td>' +
+                            '<button type="button" class="btn btn-icon btn-warning" onclick="mostrarModalEditar(' +
+                            registro.resu_codigo + ', `' + registro.resu_nombre + '`, ' + registro.resu_cuantificacion_inicial +
+                            ')"><i class="fas fa-edit"></i></button>' +
                             '<button type="button" class="btn btn-icon btn-danger" onclick="eliminarResultado(' +
                             registro.resu_codigo + ', ' + registro.inic_codigo +
                             ')"><i class="fas fa-trash"></i></button>' +
@@ -854,6 +857,15 @@
                     console.log(error);
                 }
             });
+        }
+
+        window.mostrarModalEditar = function(resuCodigo, resuNombre, resuCuantificacionInicial) {
+            resuCodigoParaEditar = resuCodigo;
+            $('#resu_codigo').val(resuCodigo);
+            $('#resu_inic_codigo').val($('#iniciativa').val());
+            $('#resu_nombre').val(resuNombre);
+            $('#resu_cuantificacion_inicial').val(resuCuantificacionInicial);
+            $('#modalEditarResultado').modal('show');
         }
 
         function agregarResultado() {
@@ -1088,6 +1100,9 @@
                                 <td>${registro.soco_nombre_socio}</td>
                                 <td>${registro.inpr_total}</td>
                                 <td>
+                                    <a href="javascript:void(0)" class="btn btn-icon btn-warning mb-2"
+                                    onclick="editarSede(${registro.sugr_codigo}, ${registro.soco_codigo}, ${registro.inpr_total})" data-toggle="tooltip"
+                                    data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                     <button type='button' onclick=eliminarExterno(${registro.inic_codigo},${registro.sugr_codigo},${registro.soco_codigo}) class= 'btn btn-icon btn-danger' ><i class="fas fa-trash"></i></button>
                                 </td>
                                 </tr>`
@@ -1159,6 +1174,91 @@
                 }
             })
         }
+        function editarSede(sugr_codigo, soco_nombre_socio, sugr_nombre, inpr_total) {
+            // Llenar los campos del modal con los datos recibidos
+            $('#soco_nombre_socio').val(soco_nombre_socio);
+            $('#sugr_nombre').val(sugr_nombre);
+            $('#inpr_total').val(inpr_total);
+
+            // Mostrar el modal
+            $('#modalEditarSede').modal('show');
+        }
     </script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
+
+
+    <!-- Modal de Edición -->
+    <div class="modal fade" id="modalEditarSede" tabindex="-1" role="dialog" aria-labelledby="modalEditarSedeLabel" aria-hidden="true" style="z-index: 1050 !important;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarSedeLabel">Editar Sede</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarSede" action="#">
+                        <div class="form-group">
+                            <label>Nombre del socio</label>
+                            <select class="form-control select2" id="socio" name="socio"
+                            style="width: 100%">
+                                @forelse ($socios as $socio)
+                                    <option value="{{ $socio->soco_codigo }}">{{ $socio->soco_nombre_socio }}
+                                    </option>
+                                @empty
+                                    <option value="-1">No existen registros</option>
+                                @endforelse
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Personas Beneficiadas</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calculator"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="inpr_total" name="inpr_total" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edición -->
+<div class="modal fade" id="modalEditarResultado" tabindex="-1" role="dialog" aria-labelledby="modalEditarResultadoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarResultadoLabel">Editar Resultado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('admin.resultado.actualizar') }} " method="POST" id="formEditarResultado">
+                    @method('PUT')
+                    @csrf
+                    <input id="resu_codigo" hidden name="resu_codigo">
+                    <input id="resu_inic_codigo" hidden name="resu_inic_codigo">
+                    <div class="form-group">
+                        <label for="resu_nombre">Nombre del Resultado</label>
+                        <input type="text" class="form-control" id="resu_nombre" name="resu_nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="resu_cuantificacion_inicial">Cuantificación Inicial</label>
+                        <input type="number" class="form-control" id="resu_cuantificacion_inicial" name="resu_cuantificacion_inicial">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btnGuardarCambios">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
