@@ -812,6 +812,7 @@ class ParametrosController extends Controller
         return redirect()->back()->with('exitoDispositivo', 'Dispositivo actualizado exitosamente');
     }
 
+
     public function eliminarDispositivo(Request $request){
         $dispositivo = Dispositivos::where('id', $request->dispositivo_id)->first();
         $dispositivo->delete();
@@ -1017,8 +1018,9 @@ class ParametrosController extends Controller
         return redirect()->route('admin.listar.carreras')->with('exitoCarrera', 'La carrera fue eliminada correctamente.');
     }
 
-    public function actualizarCarreras(Request $request, $care_codigo)
+    public function actualizarCarrera(Request $request, $care_codigo)
     {
+
         // Obtener la carrera por su código
         $carrera = Carreras::where('care_codigo', $care_codigo)->first();
 

@@ -106,7 +106,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('admin.actualizar.carreras', $care->care_codigo) }}" method="POST">
+                        <form action="{{ route('admin.actualizar.carrera', $care->care_codigo) }}" method="POST">
                             @method('PUT')
                             @csrf
 
@@ -189,7 +189,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" hidden>
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label>Meta Estudiantes</label>
@@ -226,7 +226,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" hidden>
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label>Meta socios/as Comunitarios/as</label>
@@ -263,7 +263,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" hidden>
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label>Meta Iniciativas</label>
@@ -439,7 +439,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Meta Estudiantes</label>
@@ -476,7 +476,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Meta socios/as Comunitarios/as</label>
@@ -513,7 +513,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Meta Iniciativas</label>

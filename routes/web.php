@@ -168,7 +168,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/listar-area-especialidad', [ParametrosController::class, 'listarAes'])->name('admin.listar.aespecialidad');
     Route::delete('admin/eliminar-carreras/', [ParametrosController::class, 'eliminarCarreras'])->name('admin.eliminar.carreras');
     Route::delete('admin/eliminar-aes/', [ParametrosController::class, 'eliminarAes'])->name('admin.eliminar.aes');
-    Route::put('admin/editar-carreras/{care_codigo}', [ParametrosController::class, 'actualizarCarreras'])->name('admin.actualizar.carreras');
+    Route::put('admin/editar-carrera/{care_codigo}', [ParametrosController::class, 'actualizarCarrera'])->name('admin.actualizar.carrera');
     Route::put('admin/editar-aes/{aes_codigo}', [ParametrosController::class, 'actualizarAes'])->name('admin.actualizar.aes');
     Route::post('admin/crear-carreras/', [ParametrosController::class, 'crearCarreras'])->name('admin.crear.carreras');
     Route::post('admin/crear-aes/', [ParametrosController::class, 'crearAes'])->name('admin.crear.aes');
