@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="{{ asset('/css/custom.css') }}">
 
                                                                     {{-- TODO: IMAGEN DE LA PESTAÑA --}}
-    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('/img/logo-iplacex.svg') }}" />
+    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('/img/Logo-iplacex-2022.webp') }}" />
 
 </head>
 
@@ -65,7 +65,7 @@
                 <ul class="navbar-nav navbar-right">
                     <div class="sidebar-brand text-right">
                         <a href="javascript:void(0)">
-                            <img alt="image" src="{{ asset('/img/logo-iplacex.svg') }}" class="header-logo img-fluid"
+                            <img alt="image" src="{{ asset('/img/Logo-iplacex-2022.webp') }}" class="header-logo img-fluid"
                                 style="max-width: 100%; height: auto; width: 3cm" />
                         </a>
                     </div>

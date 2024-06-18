@@ -20,7 +20,7 @@
 
 <body>
     <div style="text-align: center;">
-        <img src="https://iplacex.vinculamos.org/img/logo-iplacex.svg" alt="logo iplacex" style="width:293px;heigh:81px;">
+        <img src="https://iplacex.vinculamos.org/img/Logo-iplacex-2022.webp" alt="logo iplacex" style="width:293px;heigh:81px;">
       </div>
 
     {{-- {{dd($odsValues)}} --}}
