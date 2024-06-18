@@ -201,7 +201,7 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
                                         value="{{ $registro->suni_responsable }}" autocomplete="off">
                                 </div>
                             </div>
-                            @if ($registro->suni_codigo == 24)
+                            @if ($registro->suni_codigo == 1)
                             <div class="row">
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">

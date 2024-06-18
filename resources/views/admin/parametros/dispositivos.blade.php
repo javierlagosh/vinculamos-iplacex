@@ -119,7 +119,8 @@
                                     @endforeach
                                 </select>
                             </div>
-                            {{-- Metas --}}
+                            <div hidden>
+                                {{-- Metas --}}
                         <strong>Metas por escuela</strong>
                         <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
@@ -253,6 +254,7 @@
                                 </div>
                             </div>
                         </div>
+                            </div>
 
 
 
@@ -317,7 +319,8 @@
 
 
                             </div>
-                            {{-- Metas --}}
+                            <div hidden>
+                                {{-- Metas --}}
                         <strong>Metas por escuela</strong>
                         <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
@@ -450,6 +453,9 @@
                                     </div>
                                 </div>
                             </div>
+
+                            </div>
+
                         </div>
 
 

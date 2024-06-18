@@ -438,7 +438,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div hidden>
+                            <div>
                             {{-- Metas --}}
                         <strong>Metas por escuela</strong>
 
@@ -447,7 +447,12 @@
                         <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
+                                    @if ($tiac->tiac_codigo == 2)
+                                    <label>Meta portal de empleo</label>
+                                    @else
                                     <label>Meta Administración y Negocios</label>
+                                    @endif
+
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
@@ -463,7 +468,12 @@
 
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
+                                    @if ($tiac->tiac_codigo == 2)
+                                    <label>Meta feria laboral</label>
+                                    @else
                                     <label>Meta Educación</label>
+                                    @endif
+
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
@@ -480,7 +490,12 @@
                         <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
+                                    @if ($tiac->tiac_codigo == 2)
+                                    <label>Meta mundo mujer</label>
+                                    @else
                                     <label>Meta Salud</label>
+                                    @endif
+
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
@@ -496,7 +511,12 @@
 
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
+                                    @if ($tiac->tiac_codigo == 2)
+                                    <label>Meta orientaciones laborales</label>
+                                    @else
                                     <label>Meta Tecnología</label>
+                                    @endif
+
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
@@ -513,7 +533,12 @@
                         <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
+                                    @if ($tiac->tiac_codigo == 2)
+                                    <label>Meta perfeccionamiento y formación continua</label>
+                                    @else
                                     <label>Meta Gastronomía y Turismo</label>
+                                    @endif
+
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
@@ -526,7 +551,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            @if ($tiac->tiac_codigo != 2)
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Meta Informática y Telecomunicaciones</label>
@@ -542,7 +567,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
+                        @if ($tiac->tiac_codigo != 2)
                         <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
@@ -576,6 +603,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        @endif
                     </div>
                             {{-- <label style="display: block; text-align: center; width: 100%;">METAS POR SEDE</label> --}}
                             {{-- <div class="row">
