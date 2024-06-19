@@ -1102,7 +1102,7 @@
                                 <td>${registro.soco_nombre_socio}</td>
                                 <td>${registro.inpr_total}</td>
                                 <td>
-                                    <a href="javascript:void(0)" class="btn btn-icon btn-warning mb-2"
+                                    <a href="javascript:void(0)" class="btn btn-icon btn-warning"
                                     onclick="editarSede(${registro.sugr_codigo}, ${registro.soco_codigo}, ${registro.inpr_total})" data-toggle="tooltip"
                                     data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                     <button type='button' onclick=eliminarExterno(${registro.inic_codigo},${registro.sugr_codigo},${registro.soco_codigo}) class= 'btn btn-icon btn-danger' ><i class="fas fa-trash"></i></button>
