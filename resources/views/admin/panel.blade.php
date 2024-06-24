@@ -1,8 +1,35 @@
+@if (Session::has('admin'))
+    @php
+        $role = 'admin';
+    @endphp
+@elseif (Session::has('digitador'))
+    @php
+        $role = 'digitador';
+    @endphp
+@elseif (Session::has('observador'))
+    @php
+        $role = 'observador';
+    @endphp
+@elseif (Session::has('supervisor'))
+    @php
+        $role = 'supervisor';
+    @endphp
+@endif
 @extends('layout.index')
 
 @section('acceso')
     <ul class="sidebar-menu" style="font-size: 110%;">
-    <li class="menu-header">Administrador/a</li>
+    <li class="menu-header">
+        @if (Session::has('admin'))
+        Administrador/a
+        @elseif (Session::has('digitador'))
+            Digitador/a
+        @elseif (Session::has('observador'))
+            Observador/a
+        @elseif (Session::has('supervisor'))
+            Supervisor/a
+        @endif
+    </li>
 
         <li class="dropdown">
             <a href="{{route('dashboard.ver')}}" class="nav-link">
@@ -17,7 +44,7 @@
                     ? 'dropdown active' : 'dropdown' }}">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="book-open"></i><span>Iniciativas</span></a>
             <ul class="dropdown-menu">
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route('admin.iniciativa.listar')}}">Listado de iniciativas</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route($role . '.iniciativa.listar')}}">Listado de iniciativas</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route('admin.inicitiativas.crear.primero')}}">Crear iniciativa</a></li>
             </ul>
         </li>
@@ -50,6 +77,7 @@
             Route::is('admin.listar.subunidades')
             ? 'dropdown active'
             : 'dropdown' }}">
+            @if (Session::has('admin'))
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="command"></i><span>Parámetros</span></a>
             <ul class="dropdown-menu">
@@ -77,7 +105,9 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.subunidades")}}">SubUnidades</a></li>
                 {{-- <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tematica")}}">Tematicas</a></li> --}}
             </ul>
+            @endif
         </li>
+        @if (Session::has('admin'))
         <li class="dropdown">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="star"></i><span>Impactos Externos</span></a>
@@ -85,6 +115,7 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ods")}}">Agenda 2030</a></li>
             </ul>
         </li>
+        @endif
         {{-- <li class="dropdown">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="bar-chart-2"></i><span>Análisis de datos</span></a>
@@ -93,12 +124,14 @@
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="arrow-left-circle"></i><span>Extracción de datos</span></a>
         </li> --}}
+        @if (Session::has('admin'))
         <li class="dropdown">
             <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown"><i data-feather="users"></i><span>Usuarios</span></a>
             <ul class="dropdown-menu">
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.usuarios")}}">Listado de usuarios</a></li>
             </ul>
         </li>
+        @endif
 
 @endsection
 

@@ -396,6 +396,13 @@ Route::middleware('verificar.admin')->group(function () {
 });
 
 
+Route::middleware('verificar.digitador')->group(function () {
+    Route::get('digitador/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('digitador.iniciativa.listar');
+
+});
+
+
+
 //ruta para evaluacion de iniciativas
 Route::get('/{evatotal_encriptado}/unirse', [IniciativasController::class, 'AutoInvitacionEvaluacion']);
 Route::post('/evaluaciones/unirse', [IniciativasController::class, 'guardarInvitacion'])->name('evaluacion.auto.invitarse');

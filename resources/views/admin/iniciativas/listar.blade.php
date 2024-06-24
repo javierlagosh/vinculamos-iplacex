@@ -49,9 +49,13 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Listado de Iniciativas</h4>
+                            @if (Session::has('admin'))
+
+
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" onclick="obtenerIDs()"><i class="fas fa-tachometer-alt"></i> Almacenar INVI</button>
                             </div>
+                            @endif
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.iniciativa.listar') }}" method="GET">
@@ -112,7 +116,7 @@
 
                                             <button type="submit" class="btn btn-primary mr-1 waves-effect"
                                                 {{--  onclick="Filtro()" --}}><i class="fas fa-search"></i> Filtrar</button>
-                                            <a href="{{ route($role . '.iniciativa.listar') }}" type="button"
+                                            <a href="{{ route('admin.iniciativa.listar') }}" type="button"
                                                 class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
                                                 Limpiar</a>
                                         </div>
@@ -230,7 +234,7 @@
                                                                 data-placement="top" title="Ingresar resultado"><i
                                                                     class="fas fa-flag"></i> Ingresar resultados</a>
 
-                                                            <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
+                                                            <a href="{{ route('admin.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
                                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                                 data-placement="top" title="Evaluar iniciativa"><i
                                                                     class="fas fa-file-signature"></i> Evaluar
