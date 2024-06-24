@@ -1254,6 +1254,9 @@ class IniciativasController extends Controller
         //obtener el anho del request date y convertirlo a number
         $anho = Carbon::parse($request->desde)->format('Y');
 
+        $MecanismosActividades = MecanismosActividades::where('tiac_codigo', $request->tactividad)->first();
+        $mecanismo = $MecanismosActividades->meca_codigo;
+
         $inicActualizar = Iniciativas::where('inic_codigo', $inic_codigo)->update([
             'inic_nombre' => $request->nombre,
             'inic_anho' => $anho,
@@ -1270,7 +1273,7 @@ class IniciativasController extends Controller
             'inic_hasta' => $request->hasta,
             'sugr_codigo' => $request->sugr_codigo,
             'conv_codigo' => $request->convenio,
-            'meca_codigo' => $request->mecanismos,
+            'meca_codigo' => $mecanismo,
             'tiac_codigo' => $request->tactividad,
             'inic_territorio' => $request->territorio,
             'inic_visible' => 1,
