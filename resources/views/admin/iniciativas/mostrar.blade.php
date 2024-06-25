@@ -69,13 +69,13 @@
                                             onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
                                                 class="fas fa-tachometer-alt"></i> INVI</a>
 
-                                        <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.editar.paso1', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip"
                                             data-placement="top" title="Editar iniciativa"><i class="fas fa-edit"></i>
                                             Editar
                                             Iniciativa</a>
 
-                                        <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip"
                                             data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i>
                                             Adjuntar evidencia</a>
@@ -95,12 +95,12 @@
                                             <button class="btn btn-warning dropdown-toggle" id="dropdownMenuButton2"
                                                 data-toggle="dropdown"> Agenda 2030</button>
                                             <div class="dropdown-menu dropright">
-                                            <a href="{{ route('admin.iniciativas.agendaods', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.iniciativas.agendaods', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                 data-placement="top" title="Agenda 2030"><i
                                                     class="fas  fa-star-half"></i> Contribucion externa</a>
 
-                                            <a href="{{ route('admin.iniciativas.pdf', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.iniciativas.pdf', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                 data-placement="top" title="Agenda 2030"><i
                                                     class="fas  fa-file-pdf"></i> Generar
@@ -114,11 +114,11 @@
                                     <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
                                         data-toggle="dropdown"> <i class="fas fa-plus-circle"></i> Ingresar</button>
                                     <div class="dropdown-menu dropright">
-                                        <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.cobertura.index', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                             title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
 
-                                        <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.resultados.listado', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                             title="Ingresar resultado"><i class="fas fa-flag"></i> Ingresar resultado/s</a>
 
@@ -127,7 +127,7 @@
                                             title="Evaluar iniciativa"><i class="fas fa-file-signature"></i> Evaluar iniciativa</a>
                                     </div>
                                 </div>
-
+                                @if (Session::has('admin'))
                                 <div class="dropdown d-inline">
 
                                     <button class="btn btn-primary dropdown-toggle" id="dropdownMenuButton2"
@@ -196,6 +196,7 @@
 
                                     </div>
                                 </div>
+                                @endif
 
                                 {{-- <a href="{{ route('admin.iniciativa.listar') }}" data-toggle="tooltip" data-placemet="top"
                                     type="button" class="btn btn-primary" title="Ir a iniciativas">

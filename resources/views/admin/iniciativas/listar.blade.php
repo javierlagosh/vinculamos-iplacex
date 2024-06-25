@@ -58,7 +58,7 @@
                             @endif
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.iniciativa.listar') }}" method="GET">
+                            <form action="{{ route($role . '.iniciativa.listar') }}" method="GET">
                                 <div class="row">
                                     <div class="col-xl-4 col-md-4 col-lg-4">
                                         <div class="form-group"><label for="sede">Sedes</label>
@@ -116,7 +116,7 @@
 
                                             <button type="submit" class="btn btn-primary mr-1 waves-effect"
                                                 {{--  onclick="Filtro()" --}}><i class="fas fa-search"></i> Filtrar</button>
-                                            <a href="{{ route('admin.iniciativa.listar') }}" type="button"
+                                            <a href="{{ route($role . '.iniciativa.listar') }}" type="button"
                                                 class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
                                                 Limpiar</a>
                                         </div>
@@ -195,16 +195,18 @@
                                                             <i class="fas fa-cog"></i></button>
                                                         <div class="dropdown-menu dropright">
 
-                                                            <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
+                                                            <a href="{{ route($role . '.editar.paso1', $iniciativa->inic_codigo) }}"
                                                                 class="dropdown-item has-icon"><i
                                                                     class="fas fa-edit"></i>Editar Iniciativa</a>
+                                                                    @if (Session::has('admin'))
                                                             <a href="javascript:void(0)" class="dropdown-item has-icon"
                                                                 onclick="eliminarIniciativa({{ $iniciativa->inic_codigo }})"
                                                                 data-toggle="tooltip" data-placement="top"
                                                                 title="Eliminar">Eliminar Iniciativa<i
                                                                     class="fas fa-trash"></i></a>
+                                                                    @endif
 
-                                                            <a href="{{ route('admin.iniciativas.detalles', $iniciativa->inic_codigo) }}"
+                                                            <a href="{{ route($role . '.iniciativas.detalles', $iniciativa->inic_codigo) }}"
                                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                                 data-placement="top" title="Ver detalles"><i
                                                                     class="fas fa-eye"></i> Ver detalles</a>
@@ -224,27 +226,28 @@
                                                             data-toggle="dropdown"title="ingresar">
                                                             <i class="fas fa-plus-circle"></i> Ingresar</button>
                                                         <div class="dropdown-menu dropright">
-                                                            <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                                            <a href="{{ route($role . '.cobertura.index', $iniciativa->inic_codigo) }}"
                                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                                 data-placement="top" title="Ingresar cobertura"><i
                                                                     class="fas fa-users"></i> Ingresar cobertura</a>
 
-                                                            <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
+                                                            <a href="{{ route($role . '.resultados.listado', $iniciativa->inic_codigo) }}"
                                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                                 data-placement="top" title="Ingresar resultado"><i
                                                                     class="fas fa-flag"></i> Ingresar resultados</a>
 
-                                                            <a href="{{ route('admin.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
+                                                            <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
                                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                                 data-placement="top" title="Evaluar iniciativa"><i
                                                                     class="fas fa-file-signature"></i> Evaluar
                                                                 iniciativa</a>
-                                                                <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                                                <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
                                                                     class="dropdown-item has-icon" data-toggle="tooltip"
                                                                     data-placement="top" title="Adjuntar evidencia"><i
                                                                         class="fas fa-paperclip"></i> Adjuntar evidencia</a>
                                                         </div>
                                                     </div>
+                                                    @if (Session::has('admin'))
                                                     <div class="dropdown d-inline">
 
                                                         <button class="btn btn-primary dropdown-toggle" id="dropdownMenuButton2"
@@ -313,15 +316,16 @@
 
                                                         </div>
                                                     </div>
+                                                    @endif
 
 
 
 
-                                                    {{-- <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                                    {{-- <a href="{{ route($role . '.cobertura.index', $iniciativa->inic_codigo) }}"
                                                         class="btn btn-icon btn-success" data-toggle="tooltip"
                                                         data-placement="top" title="Ingresar cobertura"><i
                                                             class="fas fa-users"></i></a>
-                                                    <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
+                                                    <a href="{{ route($role . '.resultados.listado', $iniciativa->inic_codigo) }}"
                                                         class="btn btn-icon btn-success" data-toggle="tooltip"
                                                         data-placement="top" title="Ingresar resultado"><i
                                                             class="fas fa-flag"></i></a> --}}
@@ -356,7 +360,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <form action="{{ route('admin.iniciativa.eliminar') }} " method="POST">
+                <form action="{{ route($role . '.iniciativa.eliminar') }} " method="POST">
                     @method('DELETE')
                     @csrf
                     <div class="modal-header">

@@ -570,8 +570,8 @@ class IniciativasController extends Controller
             'inev_descripcion' => $request->inev_descripcion,
             'inev_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'inev_rol_mod' => Session::get('admin')->rous_codigo,
-            'inev_nickname_mod' => Session::get('admin')->usua_nickname
+            'inev_rol_mod' => 1,
+            'inev_nickname_mod' => 'jcarpincho'
         ]);
         if (!$inevGuardar)
             redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
@@ -591,8 +591,8 @@ class IniciativasController extends Controller
             'inev_mime' => $archivo->getClientMimeType(),
             'inev_nombre_origen' => $archivo->getClientOriginalName(),
             'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'inev_rol_mod' => Session::get('admin')->rous_codigo,
-            'inev_nickname_mod' => Session::get('admin')->usua_nickname
+            'inev_rol_mod' => 1,
+            'inev_nickname_mod' => 'jcarpincho'
         ]);
         if (!$inevActualizar)
             return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
@@ -628,8 +628,8 @@ class IniciativasController extends Controller
                 'inev_descripcion' => $request->inev_descripcion_edit,
                 // 'inev_tipo' => $request->inev_tipo_edit,
                 'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'inev_rol_mod' => Session::get('admin')->rous_codigo,
-                'inev_nickname_mod' => Session::get('admin')->usua_nickname
+                'inev_rol_mod' => 1,
+                'inev_nickname_mod' => 'jcarpincho'
             ]);
             if (!$inevActualizar)
                 return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al actualizar la evidencia, intente más tarde.');
@@ -726,6 +726,7 @@ class IniciativasController extends Controller
 
     public function verificarPaso1(Request $request)
     {
+        try {
 
 
 
@@ -756,6 +757,12 @@ class IniciativasController extends Controller
             'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
         ]);
         $anho = Carbon::parse($request->desde)->format('Y');
+
+
+        $adminRol = Session::get('admin')->rous_codigo ?? null;
+        $digitadorRol = Session::get('digitador')->rous_codigo ?? null;
+
+
         $inicCrear = Iniciativas::insertGetId([
             'inic_nombre' => $request->nombre,
             'inic_anho' => $anho,
@@ -779,8 +786,8 @@ class IniciativasController extends Controller
             'inic_visible' => 1,
             'inic_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'inic_nickname_mod' => Session::get('admin')->usua_nickname,
-            'inic_rol_mod' => Session::get('admin')->rous_codigo,
+            'inic_nickname_mod' => 'jcarpincho',
+            'inic_rol_mod' => 1,
             'inic_objetivo' => $request->inic_objetivo ?? 'No se ha seleccionado un objetivo.',
         ]);
 
@@ -847,8 +854,8 @@ class IniciativasController extends Controller
             'pais_codigo' => $request->pais,
             'pain_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'pain_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'pais_nickname_mod' => Session::get('admin')->usua_nickname,
-            'pain_rol_mod' => Session::get('admin')->rous_codigo,
+            'pais_nickname_mod' => 'jcarpincho',
+            'pain_rol_mod' => 1,
         ]);
 
         $regi = [];
@@ -862,8 +869,8 @@ class IniciativasController extends Controller
                     'regi_codigo' => $region,
                     'rein_creado' => Carbon::now()->format('Y-m-d H:i:s'),
                     'rein_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'rein_nickname_rol' => Session::get('admin')->usua_nickname,
-                    'rein_rol_mod' => Session::get('admin')->rous_codigo,
+                    'rein_nickname_rol' => 'jcarpincho',
+                    'rein_rol_mod' => 1,
                 ]
             );
         }
@@ -884,8 +891,8 @@ class IniciativasController extends Controller
                 'comu_codigo' => $comuna,
                 'coin_creado' => Carbon::now()->format('Y-m-d H:i:s'),
                 'coin_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'coin_nickname_mod' => Session::get('admin')->usua_nickname,
-                'coin_rol_mod' => Session::get('admin')->rous_codigo,
+                'coin_nickname_mod' => 'jcarpincho',
+                'coin_rol_mod' => 1,
             ]);
         }
 
@@ -1026,7 +1033,16 @@ class IniciativasController extends Controller
         if (isset($errorODS)) {
             return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente, Lamentablemente ocurrió un error al registrar los ODS, por favor intente nuevamente...');
         }
-        return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+
+        $rolCreador = Session::get('admin')->rous_codigo ?? Session::get('digitador')->rous_codigo;
+        if($rolCreador == 1){
+            return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+        }else{
+            return redirect()->route('digitador.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+        }
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
     }
 
     public function saveODS(Request $request, $inic_codigo)
@@ -1279,8 +1295,8 @@ class IniciativasController extends Controller
             'inic_visible' => 1,
             'inic_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'inic_nickname_mod' => Session::get('admin')->usua_nickname,
-            'inic_rol_mod' => Session::get('admin')->rous_codigo,
+            'inic_nickname_mod' => 'jcarpincho',
+            'inic_rol_mod' => 1,
 
         ]);
 
@@ -1439,8 +1455,8 @@ class IniciativasController extends Controller
             'pais_codigo' => $request->pais,
             'pain_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'pain_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'pais_nickname_mod' => Session::get('admin')->usua_nickname,
-            'pain_rol_mod' => Session::get('admin')->rous_codigo,
+            'pais_nickname_mod' => 'jcarpincho',
+            'pain_rol_mod' => 1,
         ]);
 
         $regi = [];
@@ -1454,8 +1470,8 @@ class IniciativasController extends Controller
                     'regi_codigo' => $region,
                     'rein_creado' => Carbon::now()->format('Y-m-d H:i:s'),
                     'rein_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'rein_nickname_rol' => Session::get('admin')->usua_nickname,
-                    'rein_rol_mod' => Session::get('admin')->rous_codigo,
+                    'rein_nickname_rol' => 'jcarpincho',
+                    'rein_rol_mod' => 1,
                 ]
             );
         }
@@ -1476,8 +1492,8 @@ class IniciativasController extends Controller
                 'comu_codigo' => $comuna,
                 'coin_creado' => Carbon::now()->format('Y-m-d H:i:s'),
                 'coin_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'coin_nickname_mod' => Session::get('admin')->usua_nickname,
-                'coin_rol_mod' => Session::get('admin')->rous_codigo,
+                'coin_nickname_mod' => 'jcarpincho',
+                'coin_rol_mod' => 1,
             ]);
         }
 
@@ -1510,7 +1526,13 @@ class IniciativasController extends Controller
         if (empty($odsValues) && empty($odsMetasValues) && empty($odsMetasDescValues) && empty($fundamentoOds)) {
             // if(empty($request->ods_values) && empty($request->ods_metas_values) && empty($request->ods_metas_desc_values) && empty($request->ods_fundamentos_values)){
             // dd('estoy aca');
-            return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se actualizaron correctamente');
+            $rolCreador = Session::get('admin')->rous_codigo ?? Session::get('digitador')->rous_codigo;
+        if($rolCreador == 1){
+            return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+        }else{
+            return redirect()->route('digitador.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+        }
+
         } else {
             // dd('estoy aqui');
 
@@ -2204,8 +2226,8 @@ class IniciativasController extends Controller
                 'resu_nombre' => $request->resu_nombre,
                 'resu_cuantificacion_inicial' => $request->resu_cuantificacion_inicial,
                 'resu_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'resu_nickname_mod' => Session::get('admin')->usua_nickname,
-                'resu_rol_mod' => Session::get('admin')->rous_codigo
+                'resu_nickname_mod' => 'jcarpincho',
+                'resu_rol_mod' => 1
             ]);
         if(!$resuActualizar){
             return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al actualizar el resultado esperado, intente más tarde.']);
@@ -2230,8 +2252,8 @@ class IniciativasController extends Controller
                 'inpr_total' => $request->personasBeneficiadas,
                 'sugr_codigo' => $sugr_codigo,
                 'inpr_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'inpr_nickname_mod' => Session::get('admin')->usua_nickname,
-                'inpr_rol_mod' => Session::get('admin')->rous_codigo
+                'inpr_nickname_mod' => 'jcarpincho',
+                'inpr_rol_mod' => 1
             ]);
 
         return redirect()->back()->with('exitoPaso3', 'Los datos de la iniciativa se actualizaron correctamente');
@@ -2290,8 +2312,8 @@ class IniciativasController extends Controller
             'resu_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'resu_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'resu_visible' => 1,
-            'resu_nickname_mod' => Session::get('admin')->usua_nickname,
-            'resu_rol_mod' => Session::get('admin')->rous_codigo
+            'resu_nickname_mod' => 'jcarpincho',
+            'resu_rol_mod' => 1
         ]);
         if (!$resuGuardar)
             return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el resultado esperado, intente más tarde.']);

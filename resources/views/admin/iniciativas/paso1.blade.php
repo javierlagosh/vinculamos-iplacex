@@ -99,7 +99,7 @@
                                             data-toggle="dropdown"title="Iniciativa">
                                             Iniciativa</button>
                                         <div class="dropdown-menu dropright">
-                                            <a href="{{ route('admin.iniciativas.detalles', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.iniciativas.detalles', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Ver detalles de la iniciativa"><i class="fas fa-eye"></i> Ver
                                                 detalle</a>
@@ -114,7 +114,7 @@
                                                 onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
                                                     class="fas fa-tachometer-alt"></i> INVI</a>
 
-                                            <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Adjuntar
                                                 evidencia</a>
@@ -126,12 +126,12 @@
                                             <i class="fas fa-plus-circle"></i> Ingresar</button>
                                         <div class="dropdown-menu dropright">
 
-                                            <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.cobertura.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar
                                                 cobertura</a>
 
-                                            <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.resultados.listado', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Ingresar resultado"><i class="fas fa-flag"></i> Ingresar
                                                 resultado/s</a>
@@ -142,7 +142,7 @@
                                                 iniciativa</a>
                                         </div>
                                     </div>
-                                    <a href="{{ route('admin.iniciativa.listar') }}"
+                                    <a href="{{ route($role . '.iniciativa.listar') }}"
                                         class="btn btn-primary mr-1 waves-effect icon-left" type="button">
                                         <i class="fas fa-angle-left"></i> Volver a listado
                                     </a>
@@ -153,11 +153,11 @@
                         <div class="card-body">
                             @if (isset($iniciativa) && $editar)
                                 <form id="iniciativas-paso1"
-                                    action="{{ route('admin.actualizar.paso1', $iniciativa->inic_codigo) }}" method="POST">
+                                    action="{{ route($role . '.actualizar.paso1', $iniciativa->inic_codigo) }}" method="POST">
                                     @method('PUT')
                                     @csrf
                                 @else
-                                    <form id="iniciativas-paso1" action="{{ route('admin.paso1.verificar') }}"
+                                    <form id="iniciativas-paso1" action="{{ route($role . '.paso1.verificar') }}"
                                         method="POST">
                                         @csrf
                             @endif
@@ -661,7 +661,7 @@
 
                                     // Enviar el mensaje al servidor
                                     $.ajax({
-                                        url: '{{ route('admin.chat.revisarObjetivo') }}',
+                                        url: '{{ route($role . '.chat.revisarObjetivo') }}',
                                         type: 'POST',
                                         data: {
                                             '_token': '{{ csrf_token() }}',
@@ -755,7 +755,7 @@
                                         console.log(objetivoSeleccionado);
                                         // Enviar el mensaje al servidor
                                         $.ajax({
-                                            url: '{{ route('admin.chat.sendMessage') }}',
+                                            url: '{{ route($role . '.chat.sendMessage') }}',
                                             type: 'POST',
                                             data: {
                                                 '_token': '{{ csrf_token() }}',
@@ -1887,7 +1887,7 @@
             $('#mecanismos').on('change', function() {
                 console.log("first")
                 $.ajax({
-                    url: window.location.origin + '/admin/iniciativas/obtener-actividades',
+                    url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-actividades',
                     type: 'POST',
                     dataType: 'json',
 
@@ -1911,7 +1911,7 @@
         function mecanismosByActividades() {
             $('#tactividad').on('change', function() {
                 $.ajax({
-                    url: `${window.location.origin}/admin/iniciativas/obtener-mecanismos`,
+                    url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-mecanismos',
                     type: 'POST',
                     dataType: 'json',
 
@@ -1939,7 +1939,7 @@
                 $('#regiones_div').show();
                 $('#comunas_div').show();
                 $.ajax({
-                    url: window.location.origin + '/admin/iniciativas/obtener-pais',
+                    url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-pais',
                     type: 'POST',
                     dataType: 'json',
 
@@ -1962,7 +1962,7 @@
                 $('#regiones_div').hide();
                 $('#comunas_div').hide();
                 $.ajax({
-                    url: window.location.origin + '/admin/iniciativas/obtener-pais',
+                    url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-pais',
                     type: 'POST',
                     dataType: 'json',
 
@@ -1989,7 +1989,7 @@
                 console.log("sedesId: " + sedesId);
                 if (sedesId) {
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-escuelas',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-escuelas',
                         type: 'POST',
                         dataType: 'json',
 
@@ -2025,7 +2025,7 @@
                 var regionesId = $(this).val();
                 if (regionesId) {
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-comunas',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-comunas',
                         type: 'POST',
                         dataType: 'json',
 
@@ -2051,7 +2051,7 @@
                 var macrozona = $(this).val();
                 if (macrozona) {
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-regiones',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-regiones',
                         type: 'POST',
                         dataType: 'json',
 
@@ -2102,7 +2102,7 @@
                 if (tactividad) {
                     console.log("tactividad: " + tactividad);
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-Dispositivo',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-Dispositivo',
                         type: 'POST',
                         dataType: 'json',
 
@@ -2134,7 +2134,7 @@
                     });
 
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-ImpactoInterno',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-ImpactoInterno',
                         type: 'POST',
                         dataType: 'json',
 
@@ -2168,7 +2168,7 @@
 
 
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-ImpactoExterno',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-ImpactoExterno',
                         type: 'POST',
                         dataType: 'json',
 
@@ -2212,9 +2212,8 @@
 
         function carrerasByEscuelas(){
             $('#escuelas').on('change', function() {
-                console.log("escuela modificada");
                 $.ajax({
-                    url: window.location.origin + '/admin/iniciativas/obtener-carreras',
+                    url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-carreras',
                     type: 'POST',
                     dataType: 'json',
 
@@ -2241,7 +2240,7 @@
             $('#inic_escuela_ejecutora').on('change', function() {
                 console.log("escuela modificada");
                 $.ajax({
-                    url: window.location.origin + '/admin/iniciativas/obtener-carreras',
+                    url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-carreras',
                     type: 'POST',
                     dataType: 'json',
 

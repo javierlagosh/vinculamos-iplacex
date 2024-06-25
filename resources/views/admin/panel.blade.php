@@ -39,15 +39,18 @@
             <a href="https://app.powerbi.com/view?r=eyJrIjoiNmNhNGZlYmMtNzk5ZS00NjJjLWE0ZmEtODY3YmJhMDM2NGMwIiwidCI6IjAyNjA5MDkwLTIxNWItNDM4Ny1iZGFkLTFhYmMyMWFkMmU1ZSJ9 " class="nav-link">
                 <i data-feather="bar-chart" id="saludo"></i><span>Historico VcM</span></a>
         </li> --}}
+        @if (Session::has('admin') || Session::has('digitador'))
         <li class="{{ Route::is('admin.iniciativa.listar') ||
                     Route::is('admin.inicitiativas.crear.primero')
                     ? 'dropdown active' : 'dropdown' }}">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="book-open"></i><span>Iniciativas</span></a>
             <ul class="dropdown-menu">
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route($role . '.iniciativa.listar')}}">Listado de iniciativas</a></li>
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route('admin.inicitiativas.crear.primero')}}">Crear iniciativa</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route($role . '.inicitiativas.crear.primero')}}">Crear iniciativa</a></li>
             </ul>
         </li>
+        @endif
+        @if (Session::has('admin'))
         <li class="{{ Route::is('admin.listar.actividades')? 'dropdown active' : 'dropdown' }}">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="clipboard"></i><span>Bitácora</span></a>
@@ -57,6 +60,7 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route('admin.ingresar.donaciones')}}">Ingresar donación</a></li> --}}
             </ul>
         </li>
+        @endif
         <li class="{{ Route::is('admin.listar.sedes') ||
             Route::is('admin.listar.escuelas')||
             Route::is('admin.listar.carreras')||

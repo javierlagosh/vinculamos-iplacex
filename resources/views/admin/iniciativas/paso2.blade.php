@@ -80,12 +80,12 @@
                                             data-toggle="dropdown"title="Iniciativa">
                                             </i> Iniciativa</button>
                                         <div class="dropdown-menu dropright">
-                                            <a href="{{ route('admin.iniciativas.detalles', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.iniciativas.detalles', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Ver detalles de la iniciativa"><i class="fas fa-eye"></i> Ver
                                                 detalle</a>
 
-                                            {{-- <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
+                                            {{-- <a href="{{ route($role . '.editar.paso1', $iniciativa->inic_codigo) }}"
                                                 class="btn btn-icon btn-primary icon-left" data-toggle="tooltip"
                                                 data-placement="top" title="Editar iniciativa"><i
                                                     class="fas fa-edit"></i>Editar Iniciativa</a> --}}
@@ -95,7 +95,7 @@
                                                 onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
                                                     class="fas fa-tachometer-alt"></i> INVI</a>
 
-                                            <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Adjuntar
                                                 evidencia</a>
@@ -106,12 +106,12 @@
                                             data-toggle="dropdown"title="Iniciativa">
                                             <i class="fas fa-plus-circle"></i> Ingresar</button>
                                         <div class="dropdown-menu dropright">
-                                            <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.cobertura.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar
                                                 cobertura</a>
 
-                                            <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.resultados.listado', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Ingresar resultado"><i class="fas fa-flag"></i> Ingresar
                                                 resultado/s</a>
@@ -122,7 +122,7 @@
                                                 iniciativa</a>
                                         </div>
 
-                                        <a href="{{ route('admin.iniciativa.listar') }}"
+                                        <a href="{{ route($role . '.iniciativa.listar') }}"
                                             class="btn btn-primary mr-1 waves-effect icon-left" type="button">
                                             <i class="fas fa-angle-left"></i> Volver a listado
                                         </a>
@@ -462,13 +462,13 @@
                                 <div class="col-xl-12 col-md-12 col-log-12">
                                     <div class="text-right">
                                         <strong>
-                                            <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route($role . '.editar.paso1', $iniciativa->inic_codigo) }}"
                                                 type="button" class="btn mr-1 waves-effect"
                                                 style="background-color:#042344; color:white"><i
                                                     class="fas fa-chevron-left"></i>
                                                 Paso anterior</a>
                                         </strong>
-                                        <a href="{{ route('admin.editar.paso3', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.editar.paso3', $iniciativa->inic_codigo) }}"
                                             type="button" class="btn btn-primary mr-1 waves-effect">
                                             Paso siguiente <i class="fas fa-chevron-right"></i></a>
                                     </div>
@@ -493,7 +493,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.crear.socios') }} " method="POST">
+                    <form action="{{ route($role . '.crear.socios') }} " method="POST">
                         @csrf
                         <div class="form-group">
                             <label>Nombre del socio/a comunitario/a</label>
@@ -741,7 +741,7 @@
         function cargarSubgrupos() {
             var grupo = $('#grupointres').val()
             $.ajax({
-                url: `${window.location.origin}/admin/socios/listar-subgrupos`,
+                url: window.location.origin + '/' + @json($role)+'/socios/listar-subgrupos',
                 type: 'POST',
                 dataType: 'json',
 
@@ -766,7 +766,7 @@
         function cargarSubgrupos2() {
             var grupo = $('#grupo').val()
             $.ajax({
-                url: `${window.location.origin}/admin/socios/listar-subgrupos`,
+                url: window.location.origin + '/' + @json($role)+'/socios/listar-subgrupos',
                 type: 'POST',
                 dataType: 'json',
 
@@ -813,7 +813,8 @@
             // TODO: petición para listar resultados asociados a la iniciativa
             $.ajax({
                 type: 'GET',
-                url: `${window.location.origin}/admin/iniciativa/listar-resultados`,
+                url: window.location.origin + '/' + @json($role)+'/iniciativa/listar-resultados',
+
                 data: {
                     _token: '{{ csrf_token() }}',
                     iniciativa: inic_codigo
@@ -879,7 +880,7 @@
             // petición para guardar un resultado asociado a la iniciativa
             $.ajax({
                 type: 'POST',
-                url: window.location.origin + '/admin/iniciativa/guardar-resultado',
+                url: window.location.origin + '/' + @json($role)+'/iniciativa/guardar-resultado',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -916,7 +917,7 @@
             // petición para eliminar un resultado asociada a la iniciativa
             $.ajax({
                 type: 'POST',
-                url: `${window.location.origin}/admin/iniciativa/eliminar-resultado`,
+                url: window.location.origin + '/' + @json($role)+'/iniciativa/eliminar-resultado',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -949,7 +950,7 @@
                 var sedesId = $(this).val();
                 if (sedesId) {
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-escuelas/paso2',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-escuelas/paso2',
                         type: 'POST',
                         dataType: 'json',
 
@@ -978,7 +979,7 @@
                 var subgrupoId = $(this).val();
                 if (subgrupoId) {
                     $.ajax({
-                        url: window.location.origin + '/admin/iniciativas/obtener-socio/paso2',
+                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-socio/paso2',
                         type: 'POST',
                         dataType: 'json',
 
@@ -1006,7 +1007,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `${window.location.origin}/admin/actualizar/participantes-internos`,
+                url: window.location.origin + '/' + @json($role)+'/actualizar/participantes-internos',
                 data: {
                     _token: '{{ csrf_token() }}',
                     inic_codigo: $("#idIniciativa").text(),
@@ -1059,7 +1060,7 @@
         function AgregarParticipantesExternos() {
             $.ajax({
                 type: 'POST',
-                url: `${window.location.origin}/admin/iniciativas/agregar/participantes-externos`,
+                url: window.location.origin + '/' + @json($role)+'/iniciativas/agregar/participantes-externos',
                 data: {
                     _token: '{{ csrf_token() }}',
                     inic_codigo: $("#idIniciativa").text(),
@@ -1082,7 +1083,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `${window.location.origin}/admin/crear/iniciativa/listar-externos`,
+                url: window.location.origin + '/' + @json($role)+'/crear/iniciativa/listar-externos',
                 data: {
                     _token: '{{ csrf_token() }}',
                     inic_codigo: $('#idIniciativa').text()
@@ -1117,7 +1118,7 @@
         function eliminarExterno(inic_codigo, sugr_codigo, soco_codigo) {
             $.ajax({
                 type: 'POST',
-                url: `${window.location.origin}/admin/inicitiativa/eliminar-externo`,
+                url: window.location.origin + '/' + @json($role)+'/inicitiativa/eliminar-externo',
                 data: {
                     _token: '{{ csrf_token() }}',
                     inic_codigo: inic_codigo,
@@ -1139,7 +1140,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `${window.location.origin}/admin/crear/iniciativa/listar-internos`,
+                url: window.location.origin + '/' + @json($role)+'/crear/iniciativa/listar-internos',
                 data: {
                     _token: '{{ csrf_token() }}',
                     inic_codigo: $('#idIniciativa').text()
@@ -1211,7 +1212,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.socio.paso2.actualizar') }} " method="POST" id="formEditarSede" action="#">
+                    <form action="{{ route($role . '.socio.paso2.actualizar') }} " method="POST" id="formEditarSede" action="#">
                          @method('PUT')
                         @csrf
                         <div class="form-group">
@@ -1259,7 +1260,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('admin.resultado.actualizar') }} " method="POST" id="formEditarResultado">
+                <form action="{{ route($role . '.resultado.actualizar') }} " method="POST" id="formEditarResultado">
                     @method('PUT')
                     @csrf
                     <input id="resu_codigo" hidden name="resu_codigo">

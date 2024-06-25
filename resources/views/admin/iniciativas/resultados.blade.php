@@ -44,12 +44,12 @@
                                     <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton2"
                                         data-toggle="dropdown"> Iniciativas</button>
                                     <div class="dropdown-menu dropright">
-                                        <a href="{{ route('admin.iniciativas.detalles', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.iniciativas.detalles', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip"
                                             data-placement="top" title="Ver detalles de la iniciativa"><i
                                                 class="fas fa-eye"></i> Ver detalle</a>
 
-                                        <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.editar.paso1', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip"
                                             data-placement="top" title="Editar iniciativa"><i class="fas fa-edit"></i>
                                             Editar Iniciativa</a>
@@ -59,7 +59,7 @@
                                             onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
                                                 class="fas fa-tachometer-alt"></i> INVI</a>
 
-                                        <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip"
                                             data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i>
                                             Adjuntar evidencia</a>
@@ -71,12 +71,12 @@
                                         data-toggle="dropdown"> <i class="fas fa-plus-circle"></i> Ingresar</button>
                                     <div class="dropdown-menu dropright">
 
-                                        <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                        <a href="{{ route($role . '.cobertura.index', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon" data-toggle="tooltip"
                                             data-placement="top" title="Ingresar cobertura"><i
                                                 class="fas fa-users"></i> Ingresar cobertura</a>
 
-                                        {{-- <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
+                                        {{-- <a href="{{ route($role . '.resultados.listado', $iniciativa[0]->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                 data-placement="top" title="Ingresar resultado"><i
                                                     class="fas fa-flag"></i>Resultado/s</a> --}}
@@ -87,7 +87,7 @@
                                                 class="fas fa-file-signature"></i> Evaluar iniciativa</a>
                                     </div>
 
-                                    <a href="{{ route('admin.iniciativa.listar') }}"
+                                    <a href="{{ route($role . '.iniciativa.listar') }}"
                                         class="btn btn-primary mr-1 waves-effect icon-left" type="button">
                                         <i class="fas fa-angle-left"></i> Volver a listado
                                     </a>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="card-body">
                             {{-- <form action="" method="post"> --}}
-                            <form action="{{ route('admin.resultados.actualizar', $iniciativa->inic_codigo) }}"
+                            <form action="{{ route($role . '.resultados.actualizar', $iniciativa->inic_codigo) }}"
                                 method="post">
                                 @csrf
                                 <div class="row mt-3">
@@ -144,7 +144,7 @@
                                     <div class="col-xl-12 col-md-12 col-lg-12 text-right">
                                         <input type="hidden" id="inic_codigo" name="inic_codigo"
                                             value="{{ $iniciativa->inic_codigo }}">
-                                        <a href="{{ route('admin.iniciativa.listar') }}"
+                                        <a href="{{ route($role . '.iniciativa.listar') }}"
                                             class="btn btn-primary mr-1 waves-effect" type="button">
                                             <i class="fas fa-angle-left"></i> Volver a listado
                                         </a>
