@@ -1353,6 +1353,7 @@
 
                                     </div>
                                 </div>
+
                                 {{-- TODO: CREAR TABLA ASIGNATURA --}}
                                 <div class="col-xl-4 col-md-4 col-lg-4" id="bloque_asignatura" style="display: none;">
                                     <div class="form-group">
@@ -1829,6 +1830,12 @@
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
     <script>
         $(document).ready(function() {
+
+            // si se esta editando y tiac_codigo es 5 se muestra las asignatura
+            if ($('#tactividad').val() == 5) {
+                $('#bloque_asignatura').show();
+            }
+
             // actividadesByMecanismos();
             mecanismosByActividades();
             regionesByMacrozonas();
