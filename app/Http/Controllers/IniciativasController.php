@@ -727,6 +727,15 @@ class IniciativasController extends Controller
 
     public function verificarPaso1(Request $request)
     {
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        } elseif (Session::has('observador')) {
+            $rolePrefix = 'observador';
+        } elseif (Session::has('supervisor')) {
+            $rolePrefix = 'supervisor';
+        }
         try {
         //TODO: LAS ASIGNATURAS SE DEBERIAN GUARDAR EN UNA NUEVA COLUMNA DE PARTICIPANTES_INTERNOS
         //PREGUNTAR COMO VA LA COSA PORQUE PAIN DOCENTES Y PAIN ESTUDIANTES SON POR CARRERA Y NO POR ASIGNATURA POR LO QUE UNA CARRERA TIENE MÁS DOCENTES Y ESTUDIANTES QUE UNA ASIGNATURA
