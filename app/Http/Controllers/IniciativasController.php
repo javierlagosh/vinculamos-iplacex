@@ -688,7 +688,8 @@ class IniciativasController extends Controller
         $paises = Pais::all();
         $regiones = Region::all();
         $escuelas = Escuelas::all();
-        $sedes = Sedes::all();
+        //obtener sedes excepto sede_codigo = 16
+        $sedes = sedes::where('sede_codigo', '!=', 16)->get();
         $centro_simulacion = CentroSimulacion::all();
         $comunas = Comuna::all();
         $carreras = Carreras::all();
@@ -1113,7 +1114,7 @@ class IniciativasController extends Controller
             ->where('inic_codigo', $inic_codigo)
             ->get();
 
-        $sedes = Sedes::all();
+        $sedes = sedes::where('sede_codigo', '!=', 16)->get();
         $tipoActividad = TipoActividades::all();
         $convenios = Convenios::all();
         // $programas = Programas::all();
