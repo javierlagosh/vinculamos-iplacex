@@ -727,9 +727,6 @@ class IniciativasController extends Controller
     public function verificarPaso1(Request $request)
     {
         try {
-
-
-
         //TODO: LAS ASIGNATURAS SE DEBERIAN GUARDAR EN UNA NUEVA COLUMNA DE PARTICIPANTES_INTERNOS
         //PREGUNTAR COMO VA LA COSA PORQUE PAIN DOCENTES Y PAIN ESTUDIANTES SON POR CARRERA Y NO POR ASIGNATURA POR LO QUE UNA CARRERA TIENE MÁS DOCENTES Y ESTUDIANTES QUE UNA ASIGNATURA
         $request->validate([
@@ -796,19 +793,6 @@ class IniciativasController extends Controller
 
         $inic_codigo = $inicCrear;
 
-        // $asignaturas = $request->input('asignaturas', []);
-        // if (empty($asignaturas))
-        // {
-        //     //
-        // }else{
-        //     foreach ($asignaturas as $asignatura) {
-        //             $IniciativasAsignaturas = new IniciativasAsignaturas();
-        //             $IniciativasAsignaturas->inic_codigo = $inic_codigo;
-        //             $IniciativasAsignaturas->asignatura_id = $asignatura;
-        //             $IniciativasAsignaturas->save();
-        //     }
-        // }
-
         $impactosInternos = $request->input('impactosInternos', []);
 
         if (empty($impactosInternos))
@@ -852,10 +836,10 @@ class IniciativasController extends Controller
         IniciativasPais::create([
             'inic_codigo' => $inic_codigo,
             'pais_codigo' => $request->pais,
-            'pain_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'pain_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'pais_nickname_mod' => 'jcarpincho',
-            'pain_rol_mod' => 1,
+            'pain_creado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+            'pain_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+            'pais_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
+            'pain_rol_mod' => Session::get($rolePrefix)->rous_codigo,
         ]);
 
         $regi = [];
@@ -867,10 +851,10 @@ class IniciativasController extends Controller
                 [
                     'inic_codigo' => $inic_codigo,
                     'regi_codigo' => $region,
-                    'rein_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'rein_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'rein_nickname_rol' => 'jcarpincho',
-                    'rein_rol_mod' => 1,
+                    'rein_creado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                    'rein_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                    'rein_nickname_rol' => Session::get($rolePrefix)->usua_nickname,
+                    'rein_rol_mod' => Session::get($rolePrefix)->rous_codigo,
                 ]
             );
         }
@@ -889,10 +873,10 @@ class IniciativasController extends Controller
             array_push($comu, [
                 'inic_codigo' => $inic_codigo,
                 'comu_codigo' => $comuna,
-                'coin_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'coin_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'coin_nickname_mod' => 'jcarpincho',
-                'coin_rol_mod' => 1,
+                'coin_creado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                'coin_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                'coin_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
+                'coin_rol_mod' => Session::get($rolePrefix)->rous_codigo,
             ]);
         }
 
@@ -1076,6 +1060,15 @@ class IniciativasController extends Controller
             //carreras donde no esten en el array $escuelas
             $carreras = Carreras::whereIn('escu_codigo', $escuelas)
             ->get();
+
+            // si existe care_codigo = 71, quitar care_codigo = 71 y no es $request->escuela
+
+            foreach ($carreras as $key => $value) {
+                if ($value->care_codigo == 71) {
+                    unset($carreras[$key]);
+                }
+            }
+
             return response()->json($carreras);
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
@@ -1240,6 +1233,15 @@ class IniciativasController extends Controller
 
     public function actualizarPaso1(Request $request, $inic_codigo)
     {
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        } elseif (Session::has('observador')) {
+            $rolePrefix = 'observador';
+        } elseif (Session::has('supervisor')) {
+            $rolePrefix = 'supervisor';
+        }
         $request->validate([
             'nombre' => 'required|max:255',
             /* 'anho' => 'required',
@@ -1453,10 +1455,10 @@ class IniciativasController extends Controller
         IniciativasPais::create([
             'inic_codigo' => $inic_codigo,
             'pais_codigo' => $request->pais,
-            'pain_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'pain_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'pais_nickname_mod' => 'jcarpincho',
-            'pain_rol_mod' => 1,
+            'pain_creado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+            'pain_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+            'pais_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
+            'pain_rol_mod' => Session::get($rolePrefix)->rous_codigo,
         ]);
 
         $regi = [];
@@ -1468,10 +1470,10 @@ class IniciativasController extends Controller
                 [
                     'inic_codigo' => $inic_codigo,
                     'regi_codigo' => $region,
-                    'rein_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'rein_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'rein_nickname_rol' => 'jcarpincho',
-                    'rein_rol_mod' => 1,
+                    'rein_creado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                    'rein_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                    'rein_nickname_rol' => Session::get($rolePrefix)->usua_nickname,
+                    'rein_rol_mod' => Session::get($rolePrefix)->rous_codigo,
                 ]
             );
         }
@@ -1490,10 +1492,10 @@ class IniciativasController extends Controller
             array_push($comu, [
                 'inic_codigo' => $inic_codigo,
                 'comu_codigo' => $comuna,
-                'coin_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'coin_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'coin_nickname_mod' => 'jcarpincho',
-                'coin_rol_mod' => 1,
+                'coin_creado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                'coin_actualizado' => Carbon::now('America/Santiago')->format('Y-m-d H:i:s'),
+                'coin_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
+                'coin_rol_mod' => Session::get($rolePrefix)->rous_codigo,
             ]);
         }
 
