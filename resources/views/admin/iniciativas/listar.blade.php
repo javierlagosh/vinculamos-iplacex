@@ -95,6 +95,23 @@
                                     </div>
 
                                     <div class="col-xl-4 col-md-4 col-lg-4">
+                                        <div class="form-group"><label for="amac">Ámbito de acción</label>
+                                            <select name="amac" id="amac" class="form-control select2"
+                                                style="width: 100%">
+                                                <option value="" selected>Seleccione...</option>
+                                                <option value="all">Todos</option>
+                                                @forelse ($amac as $amacc)
+                                                    <option value="{{ $amacc->amac_codigo }}"
+                                                        {{ Request::get('amac') == $amacc->amac_codigo ? 'selected' : '' }}>
+                                                        {{ $amacc->amac_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4 col-md-4 col-lg-4">
                                         <div class="form-group"><label for="anho">Año</label>
                                             <select name="anho" id="anho" class="form-control select2"
                                                 style="width: 100%">

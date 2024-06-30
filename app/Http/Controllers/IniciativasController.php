@@ -59,6 +59,7 @@ use App\Models\IniciativasCentroSimulacion;
 use App\Models\Ambitos;
 use App\Models\AmbitoTiac;
 use App\Models\IniciativasAmbitos;
+use App\Models\AmbitosAccion;
 use App\Models\SubUnidades;
 use App\Models\SedesCarreras;
 //evaluacion
@@ -108,6 +109,12 @@ class IniciativasController extends Controller
         if ($request->tiac != 'all' && $request->tiac != null) {
             $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
         }
+        if ($request->amac != 'all' && $request->amac != null) {
+            $iniciativas = $iniciativas->join('tipoactividad_ambitosaccion as taa1', 'iniciativas.tiac_codigo', '=', 'taa1.tiac_codigo')
+            ->join('tipoactividad_ambitosaccion as taa2', 'taa1.amac_codigo', '=', 'taa2.amac_codigo')
+            ->join('ambito_accion as aa', 'taa2.amac_codigo', '=', 'aa.amac_codigo')
+            ->where('aa.amac_codigo', $request->amac);
+        }
 
         if ($request->mecanismo != 'all' && $request->mecanismo != null) {
             $iniciativas = $iniciativas->where('mecanismos.meca_codigo', $request->mecanismo);
@@ -129,9 +136,10 @@ class IniciativasController extends Controller
         // $componentes = DB::table('componentes')->select('comp_codigo', 'comp_nombre')->orderBy('comp_nombre', 'asc')->get();
         $mecanismos = Mecanismos::select('meca_codigo','meca_nombre')->get();
         $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
+        $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
         $anhos = Iniciativas::select('inic_anho')->distinct('inic_anho')->orderBy('inic_anho', 'asc')->get();
 
-        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes', 'tiac'));
+        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes', 'tiac', 'amac'));
     }
 
 
