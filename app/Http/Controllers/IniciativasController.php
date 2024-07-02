@@ -59,6 +59,7 @@ use App\Models\IniciativasCentroSimulacion;
 use App\Models\Ambitos;
 use App\Models\AmbitoTiac;
 use App\Models\IniciativasAmbitos;
+use App\Models\IniciativasEscuelas;
 use App\Models\AmbitosAccion;
 use App\Models\SubUnidades;
 use App\Models\SedesCarreras;
@@ -907,36 +908,101 @@ class IniciativasController extends Controller
         }
 
         $pain = [];
-        $sedes = $request->input('sedes', []);
-        $escuelas = $request->input('escuelas', []);
-        //pushear el valor de la escuela ejecutora
-        array_push($escuelas, $request->inic_escuela_ejecutora);
-        // si es un arerglo vacio se le asigna un arreglo "nohay"
-        if (empty($escuelas)) {
-            $escuelas = [$request->inic_escuela_ejecutora];
-        }
-        $carreras = $request->input('carreras', []);
 
-        //id iniciativa
-        $inic_codigo = $inicCrear;
-        // insertar sedes escuelas y carreras a participantes internos
-        foreach ($sedes as $sede) {
-            foreach ($escuelas as $escuela) {
-                foreach ($carreras as $carrera) {
-                    //si la carrera no pertenece a la escuela no se inserta
-                    $escuela_carrera = Carreras::where('escu_codigo', $escuela)
-                        ->where('care_codigo', $carrera)->exists();
-                    if ($escuela_carrera) {
+        // Obtener los arreglos de la solicitud
+    $sedesArray = $request->input('sedes', []);
+    $escuelasArray = $request->input('escuelas', []);
+    $carrerasArray = $request->input('carreras', []);
+
+    // Agregar la escuela ejecutora al array de escuelas
+    array_push($escuelasArray, $request->inic_escuela_ejecutora);
+
+    // Si el array de escuelas está vacío, asignar el valor de la escuela ejecutora
+    if (empty($escuelasArray)) {
+        $escuelasArray = [$request->inic_escuela_ejecutora];
+    }
+
+    // Identificar la última escuela en el arreglo
+    $ultimaEscuela = end($escuelasArray);
+
+    // Eliminar IniciativasEscuelas donde 'inic_codigo' = $inic_codigo
+    DB::table('iniciativas_escuelas')->where('inic_codigo', $inic_codigo)->delete();
+
+    // Recorrer cada combinación de sede, escuela y carrera para insertar los datos en la tabla iniciativas_escuelas
+    foreach ($sedesArray as $sedeCodigo) {
+        foreach ($escuelasArray as $escuCodigo) {
+            foreach ($carrerasArray as $careCodigo) {
+                // Obtener la relación entre escuela y carrera
+                $carrera = DB::table('carreras')
+                    ->where('care_codigo', $careCodigo)
+                    ->where('escu_codigo', $escuCodigo)
+                    ->first();
+
+                // Determinar el tipo basado en si es la última escuela
+                $tipo = $escuCodigo === $ultimaEscuela ? 'E' : 'C';
+
+                // Insertar en la tabla iniciativas_escuelas si la relación existe
+                if ($carrera) {
+                    DB::table('iniciativas_escuelas')->insert([
+                        'inic_codigo' => $inic_codigo, // 'inic_codigo' => $inic_codigo,
+                        'sede_codigo' => $sedeCodigo,
+                        'escu_codigo' => $escuCodigo,
+                        'care_codigo' => $careCodigo,
+                        'tipo' => $tipo
+                    ]);
+
                     $participantes_internos = new ParticipantesInternos();
                     $participantes_internos->inic_codigo = $inic_codigo;
-                    $participantes_internos->sede_codigo = $sede;
-                    $participantes_internos->escu_codigo = $escuela;
-                    $participantes_internos->care_codigo = $carrera;
+                    $participantes_internos->sede_codigo = $sedeCodigo;
+                    $participantes_internos->escu_codigo = $escuCodigo;
+                    $participantes_internos->care_codigo = $careCodigo;
                     $participantes_internos->save();
-                    }
+                } else {
+                    // Insertar con care_codigo como null si no hay relación
+                    DB::table('iniciativas_escuelas')->insert([
+                        'inic_codigo' => $inic_codigo,
+                        'sede_codigo' => $sedeCodigo,
+                        'escu_codigo' => $escuCodigo,
+                        'care_codigo' => null,
+                        'tipo' => $tipo
+                    ]);
                 }
             }
         }
+    }
+
+
+
+        // $sedes = $request->input('sedes', []);
+        // $escuelas = $request->input('escuelas', []);
+        // //pushear el valor de la escuela ejecutora
+        // array_push($escuelas, $request->inic_escuela_ejecutora);
+        // // si es un arerglo vacio se le asigna un arreglo "nohay"
+        // if (empty($escuelas)) {
+        //     $escuelas = [$request->inic_escuela_ejecutora];
+        // }
+        // $carreras = $request->input('carreras', []);
+
+        // //id iniciativa
+        // $inic_codigo = $inicCrear;
+        // // insertar sedes escuelas y carreras a participantes internos
+        // foreach ($sedes as $sede) {
+        //     foreach ($escuelas as $escuela) {
+        //         foreach ($carreras as $carrera) {
+        //             //si la carrera no pertenece a la escuela no se inserta
+        //             $escuela_carrera = Carreras::where('escu_codigo', $escuela)
+        //                 ->where('care_codigo', $carrera)->exists();
+        //             if ($escuela_carrera) {
+        //             $participantes_internos = new ParticipantesInternos();
+        //             $participantes_internos->inic_codigo = $inic_codigo;
+        //             $participantes_internos->sede_codigo = $sede;
+        //             $participantes_internos->escu_codigo = $escuela;
+        //             $participantes_internos->care_codigo = $carrera;
+        //             $participantes_internos->save();
+        //             }
+        //         }
+        //     }
+        // }
 
         try {
             $odsValues = $request->ods_values ?? [];
@@ -1147,8 +1213,14 @@ class IniciativasController extends Controller
         $escuelas = Escuelas::all();
         $carreras = Carreras::all();
         $sedeSec = ParticipantesInternos::select('sede_codigo')->where('inic_codigo', $inic_codigo)->get();
-        $escuSec = ParticipantesInternos::select('escu_codigo')->where('inic_codigo', $inic_codigo)->get();
-        $careSec = ParticipantesInternos::select('care_codigo')->where('inic_codigo', $inic_codigo)->get();
+        // escusec menos el participante interno
+        $escuSec = IniciativasEscuelas::select('escu_codigo')->where('inic_codigo', $inic_codigo)
+        ->where('tipo', 'C')
+        ->get();
+        //$escuSec = ParticipantesInternos::select('escu_codigo')->where('inic_codigo', $inic_codigo)->get();
+        $careSec = IniciativasEscuelas::select('care_codigo')->where('inic_codigo', $inic_codigo)
+        ->get();
+        //$careSec = ParticipantesInternos::select('care_codigo')->where('inic_codigo', $inic_codigo)->get();
         $iniciativaPais = IniciativasPais::where('inic_codigo', $inic_codigo)->get();
         $iniciativaRegion = IniciativasRegiones::select('regi_codigo')->where('inic_codigo', $inic_codigo)->get();
         $iniciativaComuna = IniciativasComunas::select('comu_codigo')->where('inic_codigo', $inic_codigo)->get();
@@ -1286,6 +1358,65 @@ class IniciativasController extends Controller
             /* 'territorio.required' => 'Especifique si la iniciativa es a nivel nacional o internacional.',
             'pais.required' => 'Seleccione el país en donde se ejecutará la iniciativa.' */
         ]);
+
+
+
+
+    // Obtener los arreglos de la solicitud
+    $sedesArray = $request->input('sedes', []);
+    $escuelasArray = $request->input('escuelas', []);
+    $carrerasArray = $request->input('carreras', []);
+
+    // Agregar la escuela ejecutora al array de escuelas
+    array_push($escuelasArray, $request->inic_escuela_ejecutora);
+
+    // Si el array de escuelas está vacío, asignar el valor de la escuela ejecutora
+    if (empty($escuelasArray)) {
+        $escuelasArray = [$request->inic_escuela_ejecutora];
+    }
+
+    // Identificar la última escuela en el arreglo
+    $ultimaEscuela = end($escuelasArray);
+
+    // Eliminar IniciativasEscuelas donde 'inic_codigo' = $inic_codigo
+    DB::table('iniciativas_escuelas')->where('inic_codigo', $inic_codigo)->delete();
+
+    // Recorrer cada combinación de sede, escuela y carrera para insertar los datos en la tabla iniciativas_escuelas
+    foreach ($sedesArray as $sedeCodigo) {
+        foreach ($escuelasArray as $escuCodigo) {
+            foreach ($carrerasArray as $careCodigo) {
+                // Obtener la relación entre escuela y carrera
+                $carrera = DB::table('carreras')
+                    ->where('care_codigo', $careCodigo)
+                    ->where('escu_codigo', $escuCodigo)
+                    ->first();
+
+                // Determinar el tipo basado en si es la última escuela
+                $tipo = $escuCodigo === $ultimaEscuela ? 'E' : 'C';
+
+                // Insertar en la tabla iniciativas_escuelas si la relación existe
+                if ($carrera) {
+                    DB::table('iniciativas_escuelas')->insert([
+                        'inic_codigo' => $inic_codigo, // 'inic_codigo' => $inic_codigo,
+                        'sede_codigo' => $sedeCodigo,
+                        'escu_codigo' => $escuCodigo,
+                        'care_codigo' => $careCodigo,
+                        'tipo' => $tipo
+                    ]);
+                } else {
+                    // Insertar con care_codigo como null si no hay relación
+                    DB::table('iniciativas_escuelas')->insert([
+                        'inic_codigo' => $inic_codigo,
+                        'sede_codigo' => $sedeCodigo,
+                        'escu_codigo' => $escuCodigo,
+                        'care_codigo' => null,
+                        'tipo' => $tipo
+                    ]);
+                }
+            }
+        }
+    }
+
 
         //obtener el anho del request date y convertirlo a number
         $anho = Carbon::parse($request->desde)->format('Y');
