@@ -1720,7 +1720,7 @@
                                                 @if (isset($iniciativa) && $editar)
                                                     @forelse ($comunas as $comuna)
                                                         <option value="{{ $comuna->comu_codigo }}"
-                                                            {{ in_array($comuna->comu_codigo, $iniciativaComuna) ? 'selected' : '' }}>
+                                                            >
                                                             {{ $comuna->comu_nombre }}</option>
                                                     @empty
                                                         <option value="-1">No existen registros</option>
@@ -1728,7 +1728,7 @@
                                                 @else
                                                     @forelse ($comunas as $comuna)
                                                         <option value="{{ $comuna->comu_codigo }}"
-                                                            {{ collect(old('comuna'))->contains($comuna->comu_codigo) ? 'selected' : '' }}>
+                                                            >
                                                             {{ $comuna->comu_nombre }}
                                                         </option>
                                                     @empty
