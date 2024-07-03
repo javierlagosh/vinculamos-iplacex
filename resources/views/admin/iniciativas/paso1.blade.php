@@ -1604,13 +1604,13 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
 
                                     <div class="form-group">
                                         <label style="font-size: 110%">Macrozona</label> <label
                                             for="" style="color: red;">*</label>
 
-                                        <select class="form-control select2" id="inic_macrozona" name="inic_macrozona"
+                                        <select class="form-control select2" id="inic_macrozona" name="inic_macrozona" onchange="cambioMacrozona()"
                                             style="width: 100%">
                                             <option disabled selected>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
@@ -1672,8 +1672,86 @@
 
 
                                 </div>
+                                @if (isset($iniciativa) && $editar && $iniciativa->inic_macrozona == 'Nacional')
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group" id="regiones_div" style="display: none;">
+                                        <label style="font-size: 110%">Región</label>
+                                        <input type="hidden" id="territorio" name="territorio" value="nacional">
+                                        <input type="hidden" id="pais" name="pais" value="1">
+                                        <select class="form-control select2" id="region" multiple=""
+                                            name="region[]" style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                @forelse ($regiones as $region)
+                                                    <option value="{{ $region->regi_codigo }}"
+                                                        {{ in_array($region->regi_codigo, $iniciativaRegion) ? 'selected' : '' }}>
+                                                        {{ $region->regi_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                @forelse ($regiones as $region)
+                                                    <option value="{{ $region->regi_codigo }}"
+                                                        {{ collect(old('region'))->contains($region->regi_codigo) ? 'selected' : '' }}>
+                                                        {{ $region->regi_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('region'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('region') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                    <div class="col-xl-4 col-md-4 col-lg-4">
+                                        <div class="form-group" id="comunas_div" style="display: none;">
+                                            <label style="font-size: 110%">Comuna</label>
+                                            <select class="form-control select2" id="comuna" name="comuna[]"
+                                                multiple="" style="width: 100%">
+                                                <option value="" disabled>Seleccione...</option>
+                                                @if (isset($iniciativa) && $editar)
+                                                    @forelse ($comunas as $comuna)
+                                                        <option value="{{ $comuna->comu_codigo }}"
+                                                            {{ in_array($comuna->comu_codigo, $iniciativaComuna) ? 'selected' : '' }}>
+                                                            {{ $comuna->comu_nombre }}</option>
+                                                    @empty
+                                                        <option value="-1">No existen registros</option>
+                                                    @endforelse
+                                                @else
+                                                    @forelse ($comunas as $comuna)
+                                                        <option value="{{ $comuna->comu_codigo }}"
+                                                            {{ collect(old('comuna'))->contains($comuna->comu_codigo) ? 'selected' : '' }}>
+                                                            {{ $comuna->comu_nombre }}
+                                                        </option>
+                                                    @empty
+                                                    @endforelse
+                                                @endif
+                                            </select>
+
+                                            @if ($errors->has('comuna'))
+                                                <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                    <div class="alert-body">
+                                                        <button class="close"
+                                                            data-dismiss="alert"><span>&times;</span></button>
+                                                        <strong>{{ $errors->first('comuna') }}</strong>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
 
 
+
+
+                                @else
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group" id="regiones_div">
                                         <label style="font-size: 110%">Región</label>
@@ -1710,12 +1788,8 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div>
-                                <input type="hidden" name="ods_values[]" id="ods-hidden-field" value="">
-                                <input type="hidden" name="ods_metas_values[]" id="ods-meta-hidden-field">
-                                <input type="hidden" name="ods_metas_desc_values[]" id="ods-meta-desc-hidden-field">
-                                <input type="hidden" name="ods_fundamentos_values[]" id="ods-fundamentos-hidden-field">
 
+                                </div>
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group" id="comunas_div">
                                         <label style="font-size: 110%">Comuna</label>
@@ -1752,6 +1826,37 @@
                                         @endif
                                     </div>
                                 </div>
+
+                                @endif
+
+
+
+
+                                    <script>
+                                        // si inic_macrozona es igual a Nacional ocultar region y comuna sino mostrar
+                                        function cambioMacrozona(){
+                                            var macrozona = $('#inic_macrozona').val();
+                                            if(macrozona == 'Nacional'){
+                                                $('#regiones_div').hide();
+                                                $('#comunas_div').hide();
+                                                $('#territorio').val('nacional');
+                                                $('#pais').val('1');
+                                            }else{
+                                                $('#regiones_div').show();
+                                                $('#comunas_div').show();
+                                                $('#territorio').val('regional');
+                                                $('#pais').val('1');
+                                            }
+                                        }
+                                    </script>
+
+                                </div>
+                                <input type="hidden" name="ods_values[]" id="ods-hidden-field" value="">
+                                <input type="hidden" name="ods_metas_values[]" id="ods-meta-hidden-field">
+                                <input type="hidden" name="ods_metas_desc_values[]" id="ods-meta-desc-hidden-field">
+                                <input type="hidden" name="ods_fundamentos_values[]" id="ods-fundamentos-hidden-field">
+
+
 
                             </div>
                             <div class="row">
