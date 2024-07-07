@@ -3223,6 +3223,21 @@ class IniciativasController extends Controller
         return view('admin.iniciativas.evaluacion', compact('iniciativa', 'resultados', 'ambitos', 'evaluaciones'))->with('exito', "Evaluación eliminada correctamente.");
     }
 
+    public function eliminarEvaluacionManual(Request $request)
+{
+    try {
+        $evaluacion = Evaluacion::where('inic_codigo', $request->inic_codigo)
+        ->where('eval_codigo', $request->eval_codigo)
+        ->delete();
+        return redirect()->back()->with('exito', '¡Evaluación eliminada correctamente!');
+    } catch (\Throwable $th) {
+        return redirect()->back()->with('error', '¡Evaluación no eliminada!');
+    }
+
+
+
+}
+
     // TODO: Calculo Evaluación
     public function guardarEvaluacion(Request $request)
     {
@@ -3447,22 +3462,26 @@ class IniciativasController extends Controller
     // TODO: Calculo Evaluación
     public function guardarEvaluacion2(Request $request)
     {
+        try {
+            $nuevo = new Evaluacion();
+            $nuevo->inic_codigo = $request->iniciativa_codigo;
+            $nuevo->eval_evaluador = $request->tipo_data;
+            $nuevo->eval_puntaje = $request->puntaje;
+            $nuevo->eval_email = Session::get('admin')->usua_email;
 
-        $nuevo = new Evaluacion();
-        $nuevo->inic_codigo = $request->iniciativa_codigo;
-        $nuevo->eval_evaluador = $request->tipo_data;
-        $nuevo->eval_puntaje = $request->puntaje;
+            $nuevo->eval_creado = Carbon::now('America/Santiago')->format('Y-m-d H:i:s');
+            $nuevo->eval_actualizado = Carbon::now('America/Santiago')->format('Y-m-d H:i:s');
+            $nuevo->eval_vigente = 1;
+            $nuevo->eval_nickname_mod = Session::get('admin')->usua_nickname;
+            $nuevo->eval_rol_mod = Session::get('admin')->rous_codigo;
 
-        $nuevo->eval_creado = Carbon::now('America/Santiago')->format('Y-m-d H:i:s');
-        $nuevo->eval_actualizado = Carbon::now('America/Santiago')->format('Y-m-d H:i:s');
-        $nuevo->eval_vigente = 1;
-        $nuevo->eval_nickname_mod = Session::get('admin')->usua_nickname;
-        $nuevo->eval_rol_mod = Session::get('admin')->rous_codigo;
+            $nuevo->save();
 
-        $nuevo->save();
-
-        # PARA RETORNAR AL LISTADO
-        return json_encode(['estado' => true, 'resultado' => 'La evaluación fue ingresada correctamente.']);
+            # PARA RETORNAR AL LISTADO
+            return json_encode(['estado' => true, 'resultado' => 'La evaluación fue ingresada correctamente.']);
+        } catch (\Throwable $th) {
+            return json_encode(['estado' => false, 'resultado' => 'Error al ingresar la evaluación:'. $th]);
+        }
     }
 
     //TODO: INVI

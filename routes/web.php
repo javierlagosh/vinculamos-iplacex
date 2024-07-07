@@ -60,6 +60,7 @@ Route::get('admin/iniciativas/invi/ids',[IniciativasController::class,'obtenerID
 //Evaluacion de las iniciativas
 Route::get('admin/iniciativa/listar-evaluaciones', [IniciativasController::class, 'listarEvaluaciones']);
 Route::delete('admin/eliminar-evaluacion/', [IniciativasController::class, 'eliminarEvaluacion'])->name('admin.eliminar.evaluacion');
+Route::delete('admin/eliminar-evaluacion/', [IniciativasController::class, 'eliminarEvaluacionManual'])->name('admin.eliminar.evaluacion.manual');
 
 Route::middleware('verificar.superadmin')->group(function () {
     // inicio rutas para gestionar usuarios
