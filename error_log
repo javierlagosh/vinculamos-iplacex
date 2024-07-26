@@ -1,0 +1,2 @@
+[05-Feb-2024 01:11:24 UTC] PHP Warning:  require(/home/wwvinc/iplacex.vinculamos.org/vendor/autoload.php): failed to open stream: No such file or directory in /home/wwvinc/iplacex.vinculamos.org/artisan on line 18
+[05-Feb-2024 01:11:24 UTC] PHP Fatal error:  require(): Failed opening required '/home/wwvinc/iplacex.vinculamos.org/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home/wwvinc/iplacex.vinculamos.org/artisan on line 18

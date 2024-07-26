@@ -1,0 +1,42 @@
+import openai
+import random
+
+# Establecer la clave de la API de OpenAI
+openai.api_key = "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"
+
+# Función para generar una sugerencia de texto utilizando ChatGPT
+def generar_sugerencia(palabra_clave):
+    respuesta = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=f"Dame una redacción relacionada con '{palabra_clave}': ",
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.6,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    sugerencia = respuesta.choices[0].text.strip()
+    return sugerencia
+
+# Obtener el input del usuario
+entrada = input("Ingresa las palabras clave separadas por espacios: ")
+
+# Obtener las palabras clave ingresadas
+palabras_clave = entrada.lower().split()
+
+# Generar las sugerencias de texto
+sugerencias = []
+for palabra in palabras_clave:
+    sugerencia = generar_sugerencia(palabra)
+    sugerencias.append(sugerencia)
+
+# Imprimir las sugerencias
+if sugerencias:
+    print("Sugerencias de texto:")
+    for i, sugerencia in enumerate(sugerencias, 1):
+        print(f"{i}. {sugerencia}")
+else:
+    print("Lo siento, no tengo sugerencias para esas palabras clave.")
+ 
