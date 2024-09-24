@@ -121,7 +121,7 @@
                                             </label>
                                             <textarea name="mensaje" id="editor">
                                                 Estimado/a, <br>
-                                                Le agradecemos haber participado en la actividad "{{$iniciativa[0]->inic_nombre}}" en el marco de las acciones de Vinculación con el medio que implementa CFT Coquimbo.<br>Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente <a target="_blank" rel="nofollow" style="width: 50px;height:50px;" href="{{ env('URL_EVALUACIONES') }}evaluaciones/{{$evaluaciontotal->evatotal_encriptado}}">encuesta</a>, que nos permitirá evaluar esta actividad. Saluda atentamente a usted.<br><br><img alt="" src="{{ env('SENDER_IMAGE') }}" width="20" height="100">
+                                                Le agradecemos haber participado en la actividad "{{$iniciativa[0]->inic_nombre}}" en el marco de las acciones de Vinculación con el medio que implementa CFT Coquimbo.<br>Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente <a target="_blank" rel="nofollow" style="width: 50px;height:50px;" href="{{ env('URL_EVALUACIONES') }}evaluaciones/{{$evaluaciontotal->evatotal_encriptado}}">encuesta</a>, que nos permitirá evaluar esta actividad. Saluda atentamente a usted.<br><br><img alt="" src="{{ asset('/img/logos/logo.jpg') }}" width="20" height="100">
                                             </textarea>
                                         </div>
 
