@@ -100,7 +100,6 @@ Route::middleware('verificar.admin')->group(function () {
     Route::delete('admin/eliminar-invitado-externo/{evainv_codigo}', [IniciativasController::class, 'eliminarInvitadoEvaluacionExterno'])->name('admin.eliminar.invitacion.externo');
     Route::post('admin/iniciativas/carga-individual-evaluacion', [IniciativasController::class, 'cargaIndividualEvaluacion'])->name('admin.iniciativa.evaluar.enviar.cargaIndividual');
     //Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarArchivo'])->name('procesarArchivo');
-    Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
     //ver resultados de la evaluacion
     Route::get('admin/iniciativas/{inic_codigo}/evaluacion/resultados/{invitado}', [IniciativasController::class, 'verEvaluacion'])->name('admin.ver.evaluacion');
 
@@ -502,7 +501,6 @@ Route::middleware('verificar.digitador')->group(function () {
     Route::delete('digitador/eliminar-invitado-externo/{evainv_codigo}', [IniciativasController::class, 'eliminarInvitadoEvaluacionExterno'])->name('digitador.eliminar.invitacion.externo');
     Route::post('digitador/iniciativas/carga-individual-evaluacion', [IniciativasController::class, 'cargaIndividualEvaluacion'])->name('digitador.iniciativa.evaluar.enviar.cargaIndividual');
     //Route::post('digitador/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarArchivo'])->name('procesarArchivo');
-    Route::post('digitador/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
     //ver resultados de la evaluacion
     Route::get('digitador/iniciativas/{inic_codigo}/evaluacion/resultados/{invitado}', [IniciativasController::class, 'verEvaluacion'])->name('digitador.ver.evaluacion');
 
@@ -541,3 +539,4 @@ Route::post('admin/iniciativas/evaluar/manual', [IniciativasController::class, '
 use App\Http\Controllers\MailController;
 
 Route::post('/send-email', [MailController::class, 'sendEmail'])->name('enviar.email');
+Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
