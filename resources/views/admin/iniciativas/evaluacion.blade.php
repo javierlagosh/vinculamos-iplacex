@@ -73,7 +73,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
 
-                            <h4>Evaluación de la iniciativa: {{ $iniciativa[0]->inic_nombre }} </h4>
+                            <h4>Evaluación de la iniciativa {{ $iniciativa[0]->inic_nombre }} </h4>
                             <input type="hidden" name="iniciativa_codigo" id="iniciativa_codigo"
                             value="{{ $iniciativa[0]->inic_codigo }}">
 
