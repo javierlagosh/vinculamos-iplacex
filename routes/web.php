@@ -533,3 +533,11 @@ use App\Http\Controllers\EmailController;
 
 Route::post('/send-email-estudiante', [IniciativasController::class, 'sendEmailEstudiante'])->name('send.email');
 //fin de rutas para evaluacion de iniciativas
+//eliminar todas las evaluaciones relacionadas a un id admin.eliminar.todas.las.evaluaciones
+Route::get('admin/iniciativas/{inic_codigo}/evaluar/propuesta/{invitado}', [IniciativasController::class, 'evaluarIniciativaPaso2'])->name('admin.evaluar.paso2');
+Route::delete('admin/eliminar-todas-las-evaluaciones', [IniciativasController::class, 'eliminarTodasLasEvaluaciones'])->name('admin.eliminar.todas.las.evaluaciones');
+Route::post('admin/iniciativas/evaluar/manual', [IniciativasController::class, 'guardarEvaluacionManual'])->name('admin.guardar.evaluacion.manual');
+
+use App\Http\Controllers\MailController;
+
+Route::post('/send-email', [MailController::class, 'sendEmail'])->name('enviar.email');

@@ -137,7 +137,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="container-fluid">
+
+
+                        {{-- <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-12">
                                         <div class="form-group">
@@ -149,7 +151,7 @@
                                                     <option value="0" @if ($invitadoNombre == 'Estudiantes') selected @endif >Evaluador interno - Estudiante</option>
                                                     <option value="1" @if ($invitadoNombre == 'Docentes/Directivos') selected @endif >Evaluador interno - Docente/Directivo</option>
                                                     <option value="2" @if ($invitadoNombre == 'Externos') selected @endif >Evaluador externo</option>
-                                                    {{-- <option value="4">Limpiar</option> --}}
+
                                                 </select>
                                                 <script>
                                                     function cambioInvitado() {
@@ -171,24 +173,30 @@
                                         </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="container-fluid">
+                            <h5>Paso 3: Seleccionar evaluadores</h5>
+                            <p  ><span style="color:red;">! </span>Instrucción: Tienes 3 opciones para cargar nombres y correos electrónicos de los evaluadores. Agrega nombre y correo electrónico y luego guarda con "Cargar individualmente" o "Cargar múltiple" según corresponda. En este paso sólo estás creando los contactos, en el próximo podrás enviar la encuesta.</p>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <h5>Cargar individualmente</h5>
+                                                <h6>Cargar individualmente</h6>
                                                         <form method="post" action="{{ route('admin.iniciativa.evaluar.enviar.cargaIndividual') }}" enctype="multipart/form-data">
                                                             @csrf
                                                             <input type="number" hidden name="inic_codigo" value="{{$inic_codigo}}">
                                                             @if ($invitadoNombre == 'Estudiantes')
                                                                 <input type="number" hidden name="tipo" value="0">
-                                                            @elseif ($invitadoNombre == 'Docentes/Directivos')
+                                                            @elseif ($invitadoNombre == 'Docentes')
                                                                 <input type="number" hidden name="tipo" value="1">
-                                                            @elseif ($invitadoNombre == 'Externos')
-                                                                <input type="number" hidden name="tipo" value="2">
+                                                            @elseif ($invitadoNombre == 'Directivos')
+                                                                <input type="number" hidden name="tipo" value="12">
+                                                            @elseif ($invitadoNombre == 'Beneficiario')
+                                                                <input type="number" hidden name="tipo" value="13">
+                                                            @elseif ($invitadoNombre == 'Socio comunitario')
+                                                                <input type="number" hidden name="tipo" value="14">
                                                             @endif
                                                             <div class="form-group">
                                                                 <label for="nombre">
@@ -206,14 +214,14 @@
                                                             &nbsp;
                                                             <button type="submit" class="btn btn-primary">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="15" height="15"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M48 96V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V170.5c0-4.2-1.7-8.3-4.7-11.3l33.9-33.9c12 12 18.7 28.3 18.7 45.3V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H309.5c17 0 33.3 6.7 45.3 18.7l74.5 74.5-33.9 33.9L320.8 84.7c-.3-.3-.5-.5-.8-.8V184c0 13.3-10.7 24-24 24H104c-13.3 0-24-10.7-24-24V80H64c-8.8 0-16 7.2-16 16zm80-16v80H272V80H128zm32 240a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z"/></svg>
-                                                                Cargar indivudualmente
+                                                                Cargar individualmente
                                                             </button>
                                                         </form>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="d-flex justify-content-between ">
-                                                    <h5 class="mb-0">Cargar por Texto</h5>
+                                                    <h6 class="mb-0">Cargar por Texto</h6>
 
                                                   </div>
 
@@ -222,10 +230,14 @@
                                                                 <input type="number" hidden name="inic_codigo" value="{{$inic_codigo}}">
                                                                 @if ($invitadoNombre == 'Estudiantes')
                                                                     <input type="number" hidden name="tipo" value="0">
-                                                                @elseif ($invitadoNombre == 'Docentes/Directivos')
+                                                                @elseif ($invitadoNombre == 'Docentes')
                                                                     <input type="number" hidden name="tipo" value="1">
-                                                                @elseif ($invitadoNombre == 'Externos')
-                                                                    <input type="number" hidden name="tipo" value="2">
+                                                                @elseif ($invitadoNombre == 'Directivos')
+                                                                    <input type="number" hidden name="tipo" value="12">
+                                                                @elseif ($invitadoNombre == 'Beneficiario')
+                                                                    <input type="number" hidden name="tipo" value="13">
+                                                                @elseif ($invitadoNombre == 'Socio comunitario')
+                                                                    <input type="number" hidden name="tipo" value="14">
                                                                 @endif
                                                                 <div class="form-group">
 
@@ -244,7 +256,7 @@
                                                             </form>
                                             </div>
                                             <div class="col-md-4">
-                                                <h5>Link de invitación</h5>
+                                                <h6>Link de invitación</h6>
                                                                 <div class="form-group">
 
                                                                     <label for="exampleInputFile">
@@ -259,7 +271,7 @@
                                                                 <img src="{{ route('generateQR') }}" alt="QR Code"> --}}
 
 
-                                                                <button type="button" class="btn btn-success" onclick="copyToClipboard('http://iplacex.vinculamos.org/{{$evaluaciontotal->evatotal_encriptado}}/unirse')">
+                                                                <button type="button" class="btn btn-success" onclick="copyToClipboard('{{ env('URL_EVALUACIONES') }}{{$evaluaciontotal->evatotal_encriptado}}/unirse')">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="15" height="15"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M208 0H332.1c12.7 0 24.9 5.1 33.9 14.1l67.9 67.9c9 9 14.1 21.2 14.1 33.9V336c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V48c0-26.5 21.5-48 48-48zM48 128h80v64H64V448H256V416h64v48c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48z"/></svg>
                                                                     Copiar enlace para unirse
                                                                 </button>
@@ -305,7 +317,6 @@
                                                     <tbody>
                                                         <?php $i = 1; ?>
                                                         @foreach ($invitados as $invitado)
-
                                                         <tr>
                                                             <td> <?php echo $i; $i++; ?> </td>
                                                             <td> {{$invitado->evainv_nombre}} </td>
@@ -321,9 +332,6 @@
 
                                                             </td>
                                                             <td>
-                                                                <a href="javascript:void(0)" class="btn btn-icon btn-warning mb-2"
-                                                                onclick="editarSede({{ $invitado->evainv_codigo}})" data-toggle="tooltip"
-                                                                data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                                                 <form action="{{route('admin.eliminar.invitacion',$invitado->evainv_codigo)}}" method="post">
                                                                     @csrf
 
@@ -335,12 +343,11 @@
                                                             </td>
 
                                                         </tr>
-
                                                         @endforeach
                                                     </tbody>
                                                 </table>
                                                 <br>
-                                                <div class="row">
+                                                {{-- <div class="row">
                                                     <div class="col-md-6">
                                                     </div>
                                                     <div class="col-md-6">
@@ -380,7 +387,75 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div> --}}
+
+
+                                                <div class="row mb-3">
+                                                    <div class="col-xl-12 col-md-12 col-log-12">
+                                                        <div class="text-right">
+                                                            <strong>
+
+                                                            </strong>
+                                                            @if ($invitadoNombre == 'Estudiantes')
+                                                            <a href="{{route('admin.evaluar.paso2', [$iniciativa[0]->inic_codigo,0])}}"
+                                                                type="button" class="btn mr-1 waves-effect"
+                                                                style="background-color:#042344; color:white"><i
+                                                                    class="fas fa-chevron-left"></i>
+                                                                Paso anterior</a>
+
+                                                                <a href="{{route('admin.iniciativa.evaluar.invitar.correo', [$iniciativa[0]->inic_codigo, 0])}}"
+                                                                    type="button" class="btn btn-primary mr-1 waves-effect">
+                                                                    Paso siguiente <i class="fas fa-chevron-right"></i></a>
+
+                                                            @elseif ($invitadoNombre == 'Docentes')
+                                                            <a href="{{route('admin.evaluar.paso2', [$iniciativa[0]->inic_codigo,1])}}"
+                                                                type="button" class="btn mr-1 waves-effect"
+                                                                style="background-color:#042344; color:white"><i
+                                                                    class="fas fa-chevron-left"></i>
+                                                                Paso anterior</a>
+
+                                                                <a href="{{route('admin.iniciativa.evaluar.invitar.correo', [$iniciativa[0]->inic_codigo, 1])}}"
+                                                                    type="button" class="btn btn-primary mr-1 waves-effect">
+                                                                    Paso siguiente <i class="fas fa-chevron-right"></i></a>
+
+                                                            @elseif ($invitadoNombre == 'Directivos')
+                                                                    <a href="{{route('admin.evaluar.paso2', [$iniciativa[0]->inic_codigo,12])}}"
+                                                                        type="button" class="btn mr-1 waves-effect"
+                                                                        style="background-color:#042344; color:white"><i
+                                                                            class="fas fa-chevron-left"></i>
+                                                                        Paso anterior</a>
+
+                                                                <a href="{{route('admin.iniciativa.evaluar.invitar.correo', [$iniciativa[0]->inic_codigo, 12])}}"
+                                                                    type="button" class="btn btn-primary mr-1 waves-effect">
+                                                                    Paso siguiente <i class="fas fa-chevron-right"></i></a>
+
+                                                            @elseif ($invitadoNombre == 'Beneficiario')
+                                                                    <a href="{{route('admin.evaluar.paso2', [$iniciativa[0]->inic_codigo,13])}}"
+                                                                        type="button" class="btn mr-1 waves-effect"
+                                                                        style="background-color:#042344; color:white"><i
+                                                                            class="fas fa-chevron-left"></i>
+                                                                        Paso anterior</a>
+
+                                                                <a href="{{route('admin.iniciativa.evaluar.invitar.correo', [$iniciativa[0]->inic_codigo, 13])}}"
+                                                                    type="button" class="btn btn-primary mr-1 waves-effect">
+                                                                    Paso siguiente <i class="fas fa-chevron-right"></i></a>
+
+                                                            @elseif ($invitadoNombre == 'Socio comunitario')
+                                                                    <a href="{{route('admin.evaluar.paso2', [$iniciativa[0]->inic_codigo,14])}}"
+                                                                        type="button" class="btn mr-1 waves-effect"
+                                                                        style="background-color:#042344; color:white"><i
+                                                                            class="fas fa-chevron-left"></i>
+                                                                        Paso anterior</a>
+
+                                                                <a href="{{route('admin.iniciativa.evaluar.invitar.correo', [$iniciativa[0]->inic_codigo, 14])}}"
+                                                                    type="button" class="btn btn-primary mr-1 waves-effect">
+                                                                    Paso siguiente <i class="fas fa-chevron-right"></i></a>
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -400,61 +475,5 @@
                 </div>
             </div>
         </div>
-
-        @foreach ($invitados as $invitado)
-        <div class="modal fade" id="modalEditarsedes-{{ $invitado->evainv_codigo}}" tabindex="-1" role="dialog"
-            aria-labelledby="modalEditarsedes-{{ $invitado->evainv_codigo }}" aria-hidden="true" style="z-index: 1050 !important;">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditarsedes-{{ $invitado->evainv_codigo }}">Editar Invitado</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('admin.actualizar.invitados', $invitado->evainv_codigo) }}" method="POST">
-                            @method('PUT')
-                            @csrf
-
-                            <div class="form-group">
-                                <label>Nombre del invitado</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <i class="fas fa-pen-nib"></i>
-                                        </div>
-                                    </div>
-                                    <input type="text" class="form-control" id="evainv_nombre" name="evainv_nombre"
-                                           value="{{ $invitado->evainv_nombre }}" autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Correo del invitado</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <i class="fas fa-envelope"></i>
-                                        </div>
-                                    </div>
-                                    <input type="email" class="form-control" id="evainv_correo" name="evainv_correo"
-                                           value="{{ $invitado->evainv_correo }}" autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endforeach
-
-        <script>
-            function editarSede(evainv_codigo) {
-                $('#modalEditarsedes-' + evainv_codigo).modal('show');
-            }
-        </script>
 
 @endsection
