@@ -50,7 +50,7 @@
                             @if (Session::has('exito'))
                                 <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
-                                        <strong>{{ Session::get('exito') }}</strong>
+                                        <strong>{{ Session::get('exito') }}  <a style="color:blue;" href="{{route('admin.evaluar.iniciativa', $inic_codigo)}}">Crear nueva encuesta.</a></strong>
                                         <button class="close" data-dismiss="alert"><span>&times;</span></button>
                                     </div>
                                 </div>
@@ -73,6 +73,7 @@
                     </div>
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
+
 
                             <h4>Evaluación de la iniciativa: {{ $iniciativa[0]->inic_nombre }} - Enviar invitación a {{$invitadoNombre}} </h4>
                             <input type="hidden" name="iniciativa_codigo" id="iniciativa_codigo"
@@ -121,7 +122,7 @@
                                             </label>
                                             <textarea name="mensaje" id="editor">
                                                 Estimado/a, <br>
-                                                Le agradecemos haber participado en la actividad "{{$iniciativa[0]->inic_nombre}}" en el marco de las acciones de Vinculación con el medio que implementa CFT Coquimbo.<br>Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente <a target="_blank" rel="nofollow" style="width: 50px;height:50px;" href="{{ env('URL_EVALUACIONES') }}evaluaciones/{{$evaluaciontotal->evatotal_encriptado}}">encuesta</a>, que nos permitirá evaluar esta actividad. Saluda atentamente a usted.<br><br><img alt="" src="{{ asset('/img/logos/logo.jpg') }}" width="20" height="100">
+                                                Le agradecemos haber participado en la actividad "{{$iniciativa[0]->inic_nombre}}" en el marco de las acciones de Vinculación con el medio que implementa CFT Coquimbo.<br>Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente <a target="_blank" rel="nofollow" style="width: 50px;height:50px;" href="{{ env('URL_EVALUACIONES') }}evaluaciones/{{$evaluaciontotal->evatotal_encriptado}}">encuesta</a>, que nos permitirá evaluar esta actividad. Saluda atentamente a usted.<br><br><img alt="" src="{{ env('SENDER_IMAGE') }}" width="20" height="100">
                                             </textarea>
                                         </div>
 
