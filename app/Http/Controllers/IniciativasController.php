@@ -2820,14 +2820,16 @@ class IniciativasController extends Controller
         $evaluaciontotal = EvaluacionTotal::where('inic_codigo', $inic_codigo)->get();
 
         $evaluacion = Evaluacion::where('inic_codigo', $inic_codigo)->first();
-        if ($evaluacion == null) {
-            $evaluacionManualPredeterminada = 0;
+        $evainvitados = EvaluacionInvitado::where('inic_codigo', $inic_codigo)->count(); // Usar count para verificar si hay invitados
+
+        if ($evainvitados > 0) {
+            $evaluacionManualPredeterminada = 2; // Predeterminada ya que hay invitados
+        } elseif ($evaluacion == null) {
+            $evaluacionManualPredeterminada = 0; // No hay evaluación
+        } elseif (empty($evaluacion->eval_email)) {
+            $evaluacionManualPredeterminada = 1; // Manual ya que eval_email es null
         } else {
-            if (empty($evaluacion->eval_email)) {
-                $evaluacionManualPredeterminada = 1; // Manual
-            } else {
-                $evaluacionManualPredeterminada = 2; // Predeterminada
-            }
+            $evaluacionManualPredeterminada = 2; // Predeterminada
         }
 
 
