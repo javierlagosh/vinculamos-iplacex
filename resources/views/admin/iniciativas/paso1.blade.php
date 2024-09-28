@@ -1157,7 +1157,7 @@
                                 <div class="col-xl-3 col-md-3 col-lg-3">
 
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Escuela ejecutora</label> <label
+                                        <label style="font-size: 110%">Unidad ejecutora</label> <label
                                             for="" style="color: red;">*</label>
 
                                         <select class="form-control select2" id="inic_escuela_ejecutora" name="inic_escuela_ejecutora"
@@ -1197,7 +1197,7 @@
                                 </div>
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Escuelas colaboradoras</label> <label
+                                        <label style="font-size: 110%">Unidades ejecutoras colaboradoras</label> <label
                                         for="" style="color: red;">*</label>
                                         <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
                                             for="selectAllEscuelas">Todas</label>
@@ -1475,7 +1475,7 @@
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Impactos internos</label>
+                                        <label style="font-size: 110%">Contribuciones internas</label>
                                             {{-- <input type="checkbox" id="selectAllCarreras"
                                             style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
@@ -1518,7 +1518,7 @@
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Impactos externos</label>
+                                        <label style="font-size: 110%">Contribuciones externas</label>
                                             {{-- <input type="checkbox" id="selectAllCarreras"
                                             style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
