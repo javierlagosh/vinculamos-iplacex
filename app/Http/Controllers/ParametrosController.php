@@ -1179,6 +1179,7 @@ class ParametrosController extends Controller
     public function eliminarEscuelas(Request $request)
     {
         $verificarDrop = Escuelas::where('escu_codigo', $request->escu_codigo)->first();
+        $nombre = Escuelas::select('escu_nombre')->where('escu_codigo', $request->escu_codigo)->first();
         if (!$verificarDrop) {
             return redirect()->route('admin.listar.escuelas')->with('error', 'La escuela no se encuentra registrada en el sistema.');
         }
@@ -1194,7 +1195,8 @@ class ParametrosController extends Controller
             return redirect()->back()->with('error', 'La escuela no se pudo eliminar, intente más tarde.');
         }
 
-        return redirect()->route('admin.listar.escuelas')->with('exito', 'La escuela fue eliminada correctamente.');
+        $mensaje = 'La escuela "'. $nombre->escu_nombre . '" fue eliminada correctamente.';
+        return redirect()->route('admin.listar.escuelas')->with('exito', $mensaje);
     }
 
     public function actualizarEscuelas(Request $request, $escu_codigo)
@@ -1223,6 +1225,10 @@ class ParametrosController extends Controller
         $escuela->escu_nombre = $request->input('escu_nombre');
         $escuela->escu_descripcion = $request->input('descripcion');
         $escuela->escu_director = $request->input('escu_director');
+        $escuela->escu_meta_serv = $request->input('escu_meta_serv');
+        $escuela->escu_meta_ext = $request->input('escu_meta_ext');
+        $escuela->escu_meta_con = $request->input('escu_meta_con');
+        $escuela->escu_meta_red = $request->input('escu_meta_red');
 
         // Guardar los cambios en la escuela
         $escuela->save();
@@ -1245,7 +1251,8 @@ class ParametrosController extends Controller
         }
 
         $relacCrear = SedesEscuelas::insert($sed);
-        return redirect()->back()->with('exito', 'La escuela ha sido actualizada correctamente.');
+        $mensaje = 'La escuela "'. $escuela->escu_nombre . '" fue actualizada correctamente.';
+        return redirect()->back()->with('exito', $mensaje);
     }
 
 
@@ -1292,6 +1299,10 @@ class ParametrosController extends Controller
             'escu_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'escu_nikcname_mod' => Session::get('admin')->usua_nickname,
             'escu_rol_mod' => Session::get('admin')->rous_codigo,
+            'escu_meta_serv' => $request->input('escu_meta_serv'),
+            'escu_meta_ext' => $request->input('escu_meta_ext'),
+            'escu_meta_con' => $request->input('escu_meta_con'),
+            'escu_meta_red' => $request->input('escu_meta_red'),
         ]);
 
         $sed = [];
@@ -1312,8 +1323,9 @@ class ParametrosController extends Controller
         }
 
         $relacCrear = SedesEscuelas::insert($sed);
+        $mensaje = 'La escuela "'. $request->input('nombre') . '" fue creada correctamente.';
 
-        return redirect()->back()->with('exito', 'La escuela fue creada existosamente');
+        return redirect()->back()->with('exito', $mensaje);
     }
 
     //TODO: Parametro Sociso COmunitarios
