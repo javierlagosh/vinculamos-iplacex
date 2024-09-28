@@ -132,6 +132,7 @@
                                 @endif
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label style="font-size: 110%">Sedes</label> {{-- <label for=""
                                 style="color: red;">*</label> --}}
@@ -313,7 +314,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" @if ($escu->escu_codigo == 12) hidden @endif>
                                 <label style="font-size: 110%">Sedes</label> {{-- <label for=""
                                     style="color: red;">*</label> --}}
                                 {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
