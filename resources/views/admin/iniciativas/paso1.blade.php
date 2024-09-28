@@ -1473,7 +1473,7 @@
 
 
 
-                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Contribuciones internas</label>
                                             {{-- <input type="checkbox" id="selectAllCarreras"
@@ -1516,7 +1516,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Contribuciones externas</label>
                                             {{-- <input type="checkbox" id="selectAllCarreras"
@@ -1604,9 +1604,9 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4" hidden>
 
-                                    <div class="form-group">
+                                    <div class="form-group" >
                                         <label style="font-size: 110%">Macrozona</label> <label
                                             for="" style="color: red;">*</label>
 
@@ -1752,7 +1752,7 @@
 
 
                                 @else
-                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group" id="regiones_div">
                                         <label style="font-size: 110%">Región</label>
                                         <input type="hidden" id="territorio" name="territorio" value="nacional">
@@ -1790,7 +1790,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group" id="comunas_div">
                                         <label style="font-size: 110%">Comuna</label>
                                         <select class="form-control select2" id="comuna" name="comuna[]"
@@ -1859,7 +1859,8 @@
 
 
                             </div>
-                            <div class="row">
+
+                            <div class="row mb-3 mr-2">
                                 <div class="col-xl-12 col-md-12 col-lg-12">
                                     <div class="text-right">
                                         <button type="submit" class="btn btn-primary mr-1 waves-effect">Siguiente <i
