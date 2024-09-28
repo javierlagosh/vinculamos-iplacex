@@ -81,10 +81,10 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
 
                     <div class="card">
                         <div class="card-header">
-                            <h4>Listado de SubUnidades</h4>
+                            <h4>Listado de Sub-Unidades</h4>
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#modalCrearregistroto"><i class="fas fa-plus"></i> Nuevo SubUnidad</button>
+                                    data-target="#modalCrearregistroto"><i class="fas fa-plus"></i> Nueva Sub-unidad</button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -205,7 +205,7 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
                             <div class="row">
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        <label>Meta portal de empleo</label>
+                                        <label>Meta Extensión Académica</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">
@@ -221,7 +221,7 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
 
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        <label>Meta feria laboral</label>
+                                        <label>Meta Red Laboral</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">
@@ -229,16 +229,18 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="suni_meta2"
-                                                name="suni_meta2" value="{{$registro->suni_meta2 ?? 0}}" placeholder="Meta feria laboral"
+                                                name="suni_meta2" value="{{$registro->suni_meta2 ?? 0}}" placeholder="0"
                                                 autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            @elseif ($registro->suni_codigo == 2)
+
+                            <div class="row" >
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        <label>Meta mundo mujer</label>
+                                        <label>Meta Servicio Disciplinar</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">
@@ -246,40 +248,7 @@ RECUERDA AGREGAR A PANEL CON SU RESPECTIVA RUTA (href) Y ARREGLAR EL CONTROLLER
                                                 </div>
                                             </div>
                                             <input type="number" class="form-control" id="suni_meta3"
-                                                name="suni_meta3" value="{{$registro->suni_meta3 ?? 0}}" placeholder="Meta mundo mujer"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-6 col-md-6 col-lg-6">
-                                    <div class="form-group">
-                                        <label>Meta orientaciones laborales</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-calendar-check"></i>
-                                                </div>
-                                            </div>
-                                            <input type="number" class="form-control" id="suni_meta4"
-                                                name="suni_meta4" value="{{$registro->suni_meta4 ?? 0}}" placeholder="Meta orientaciones laborales"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 col-md-6 col-lg-6">
-                                    <div class="form-group">
-                                        <label>Meta perfeccionamiento y formación continua</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-calendar-check"></i>
-                                                </div>
-                                            </div>
-                                            <input type="number" class="form-control" id="suni_meta5"
-                                                name="suni_meta5" value="{{$registro->suni_meta5 ?? 0}}" placeholder="Meta perfeccionamiento y formación continua"
+                                                name="suni_meta3" value="{{$registro->suni_meta3 ?? 0}}" placeholder="0"
                                                 autocomplete="off">
                                         </div>
                                     </div>

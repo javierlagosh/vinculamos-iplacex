@@ -674,6 +674,8 @@ class ParametrosController extends Controller
         $sede->sede_meta_iniciativas = $request->input('meta_iniciativas');
         $sede->sede_meta_beneficiarios = $request->input('meta_beneficiarios');
         $sede->sede_meta_egresados = $request->input('meta_egresados');
+        $sede->sede_meta_serv = $request->input('sede_meta_serv');
+        $sede->sede_meta_ext = $request->input('sede_meta_ext');
 
         // Obtener los datos de la sesión
         $sede->sede_visible = $request->input('sede_visible', 1);
@@ -684,17 +686,18 @@ class ParametrosController extends Controller
 
         // Guardar la sede en la base de datos
         $sede->save();
-
+        $mensaje = 'La sede "'. $sede->sede_nombre . '" fue creada correctamente.';
         // Redireccionar o realizar alguna acción adicional si es necesario
-        return redirect()->back()->with('success', 'Sede creada exitosamente');
+        return redirect()->back()->with('exitoSede', $mensaje);
     }
 
     public function eliminarSedes(Request $request)
     {
+        $nombresede = Sedes::select('sede_nombre')->where('sede_codigo', $request->sedecodigo)->first();
         $verificarDrop = Sedes::where('sede_codigo', $request->sedecodigo)->first();
 
         if (!$verificarDrop) {
-            return redirect()->route('admin.listar.sedes')->with('errorSede', 'El campus no se encuentra registrado en el sistema.');
+            return redirect()->route('admin.listar.sedes')->with('errorSede', 'La sede no se encuentra registrada en el sistema.');
         }
 
         $sededrop = Sedes::where('sede_codigo', $request->sedecodigo)->delete();
@@ -702,7 +705,9 @@ class ParametrosController extends Controller
             return redirect()->back()->with('errorSede', 'Ocurrió un error en el sistema.');
         }
 
-        return redirect()->route('admin.listar.sedes')->with('exitoSede', 'El campus fue eliminado correctamente.');
+        $mensaje = 'La sede "'. $nombresede->sede_nombre . '" fue eliminada correctamente.';
+
+        return redirect()->route('admin.listar.sedes')->with('exitoSede', $mensaje);
     }
 
     public function actualizarSedes(Request $request, $sede_codigo)
@@ -741,11 +746,15 @@ class ParametrosController extends Controller
         $sede->sede_meta_iniciativas = $request->input('meta_iniciativas');
         $sede->sede_meta_beneficiarios = $request->input('meta_beneficiarios');
         $sede->sede_meta_egresados = $request->input('meta_egresados');
+        $sede->sede_meta_serv = $request->input('sede_meta_serv');
+        $sede->sede_meta_ext = $request->input('sede_meta_ext');
 
         // Resto de la lógica para actualizar la sede
         $sede->save(); // Guardar los cambios en la base de datos
 
-        return redirect()->route('admin.listar.sedes')->with('exitoSede', 'El campus fue actualizado correctamente.');
+        $mensaje = 'La sede "'. $sede->sede_nombre . '" fue actualizada correctamente.';
+
+        return redirect()->route('admin.listar.sedes')->with('exitoSede', $mensaje);
     }
 
     //TODO: Parametro Dispositivo
@@ -2057,18 +2066,28 @@ class ParametrosController extends Controller
 
         $nuevo->save();
 
-        return redirect()->back()->with('exito', 'SubUnidad creada exitosamente');
+        $mensaje = '¡SubUnidad "' . $nuevo->suni_nombre .'" creada exitosamente!';
+
+        return redirect()->back()->with('exitoSubUnidad', $mensaje);
     }
 
     public function eliminarSubUnidades(Request $request)
     {
+        //verificar si suni_codigo != 1 o 2
+        if ($request->suni_codigo == 1 || $request->suni_codigo == 2) {
+            return redirect()->route('admin.listar.subunidades')->with('errorSubUnidad', 'No es posible eliminar la SubUnidad seleccionada ya que contiene metas personalizadas asociadas, por favor contacte un administrador si la desea eliminar.');
+        }
+
         $eliminado = SubUnidades::where('suni_codigo', $request->suni_codigo)->first();
+        $nombre = $eliminado->suni_nombre;
         if (!$eliminado) {
-            return redirect()->route('admin.listar.subunidades')->with('error', 'La SubUnidad no se encuentra registrada en el sistema.');
+            return redirect()->route('admin.listar.subunidades')->with('errorSubUnidad', 'La SubUnidad no se encuentra registrada en el sistema.');
         }
 
         $eliminado = SubUnidades::where('suni_codigo', $request->suni_codigo)->delete();
-        return redirect()->route('admin.listar.subunidades')->with('exito', 'La SubUnidad fue eliminada correctamente.');
+
+        $mensaje = '¡SubUnidad "' . $nombre .'" eliminada exitosamente!';
+        return redirect()->route('admin.listar.subunidades')->with('exitoSubUnidad', $mensaje);
     }
 
     public function actualizarSubUnidades(Request $request, $suni_codigo)
@@ -2091,7 +2110,7 @@ class ParametrosController extends Controller
         $editado = SubUnidades::find($suni_codigo);
         //return redirect()->route('admin.listar.ambitos')->with('errorAmbito', $amb_codigo);
         if (!$editado) {
-            return redirect()->route('admin.listar.subunidades')->with('error', 'La SubUnidad no se encuentra registrada en el sistema.')->withInput();
+            return redirect()->route('admin.listar.subunidades')->with('errorSubUnidad', 'La SubUnidad no se encuentra registrada en el sistema.')->withInput();
         }
 
         $editado->suni_nombre = $request->input('nombre');
@@ -2109,7 +2128,8 @@ class ParametrosController extends Controller
         $editado->suni_meta5 = $request->input('suni_meta5') ?? 0;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'SubUnidad actualizada exitosamente')->withInput();
+        $mensaje = '¡SubUnidad "' . $editado->suni_nombre .'" actualizada exitosamente!';
+        return redirect()->back()->with('exitoSubUnidad', $mensaje)->withInput();
         ;
     }
     //TODO: Tipo de iniciativa
