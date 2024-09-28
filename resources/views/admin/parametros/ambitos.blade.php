@@ -300,6 +300,7 @@
                 <form action="{{ route('admin.eliminar.ambitos') }} " method="POST">
                     @method('DELETE')
                     @csrf
+
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalEliminar">Eliminar Contribución</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

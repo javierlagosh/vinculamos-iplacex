@@ -56,6 +56,7 @@ use App\Models\CarrerasAsignaturas;
 use App\Models\DispositivosTiac;
 use App\Models\TipoActividadAmbitoAccion;
 use App\Models\EvaluacionInvitado;
+use App\Models\IniciativasAmbitos;
 
 class ParametrosController extends Controller
 {
@@ -97,7 +98,24 @@ class ParametrosController extends Controller
 
     public function eliminarAmbitos(Request $request)
     {
+
         $ambito = Ambitos::where('amb_codigo', $request->amb_codigo)->first();
+        $iniciativasAmbitos = IniciativasAmbitos::where('amb_codigo', $request->amb_codigo)->get();
+        // eliminar
+        foreach ($iniciativasAmbitos as $iniciativaAmbito) {
+            //eliminar todas los registros de los ambitos con ese amb_codigo
+            IniciativasAmbitos::where('amb_codigo', $request->amb_codigo)->delete();
+        }
+
+        $iniciativas = Iniciativas::all();
+        $iniciativasAmbitos = IniciativasAmbitos::all();
+        // eliminar los registros de iniciativas que no existan y esten relacionados con el ambito
+        foreach ($iniciativasAmbitos as $iniciativaAmbito) {
+            $iniciativa = Iniciativas::where('inic_codigo', $iniciativaAmbito->inic_codigo)->first();
+            if (!$iniciativa) {
+                IniciativasAmbitos::where('inic_codigo', $iniciativaAmbito->inic_codigo)->delete();
+            }
+        }
 
         if (!$ambito) {
             return redirect()->route('admin.listar.ambitos')->with('errorAmbito', 'El impacto no se encuentra registrado en el sistema.');
