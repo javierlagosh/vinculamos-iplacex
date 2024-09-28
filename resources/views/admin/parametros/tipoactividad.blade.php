@@ -80,7 +80,7 @@
                                                     <a href="javascript:void(0)" class="btn btn-icon btn-danger"
                                                         onclick="eliminarTipoact({{ $tiac->tiac_codigo }})"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Eliminar instrumento"><i class="fas fa-trash"></i></a>
+                                                        title="Eliminar"><i class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -440,11 +440,11 @@
                             </div>
                             <div>
                             {{-- Metas --}}
-                        <strong>Metas por escuela</strong>
+                        <strong hidden>Metas por escuela</strong>
 
 
 
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     @if ($tiac->tiac_codigo == 2)
@@ -487,7 +487,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     @if ($tiac->tiac_codigo == 2)
@@ -530,7 +530,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     @if ($tiac->tiac_codigo == 2)
@@ -570,7 +570,7 @@
                             @endif
                         </div>
                         @if ($tiac->tiac_codigo != 2)
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Meta Construcción</label>
