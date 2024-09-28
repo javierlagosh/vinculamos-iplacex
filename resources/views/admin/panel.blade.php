@@ -92,7 +92,7 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.centro-simulacion")}}">Centros de Simulación</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.dispositivos")}}">Dispositivos</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.asignaturas")}}">Asignaturas</a></li>
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Impactos</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Contribuciones</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitosaccion")}}">Ambitos Acción</a></li>
                 {{-- <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.componente")}}">Componentes</a></li> --}}
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tipoact")}}">Instrumentos</a></li>
@@ -112,7 +112,7 @@
             @endif
         </li>
         @if (Session::has('admin'))
-        <li class="dropdown">
+        <li class="dropdown" hidden>
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="star"></i><span>Impactos Externos</span></a>
             <ul class="dropdown-menu">
