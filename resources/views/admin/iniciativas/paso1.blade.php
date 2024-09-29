@@ -160,7 +160,7 @@
                                         @csrf
                             @endif
                             <div class="row">
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Nombre de iniciativa</label> <label for=""
                                             style="color: red;">*</label>
@@ -182,7 +182,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Responsable</label> <label for=""
                                             style="color: red;">*</label>
@@ -233,7 +233,7 @@
                                         @endif
                                     </div>
                                 </div> --}}
-                                <div class="col-xl-3">
+                                <div class="col-xl-4">
                                     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
                                     <script src="assets/plugins/global/plugins.bundle.js"></script>
                                     <div class="form-group">
@@ -250,7 +250,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-3">
+                                <div class="col-xl-4">
                                     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
                                     <script src="assets/plugins/global/plugins.bundle.js"></script>
                                     <div class="form-group">
@@ -266,7 +266,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
 
                                     <div class="form-group">
                                         <label style="font-size: 110%">Formato de implementación</label> <label
@@ -1191,7 +1191,7 @@
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Unidades ejecutoras colaboradoras</label> <label
+                                        <label style="font-size: 110%">Unidades colaboradoras</label> <label
                                         for="" style="color: red;">*</label>
                                         <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
                                             for="selectAllEscuelas">Todas</label>
@@ -1429,8 +1429,95 @@
                                     </div>
                                 </div>
 
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Contribuciones internas</label>
+                                            {{-- <input type="checkbox" id="selectAllCarreras"
+                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                        <select class="form-control select2" required multiple="" id="impactosInternos"
+                                            name="impactosInternos[]" style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                estoy aca
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosInternos as $impactosInterno)
+                                                    <option value="{{ $impactosInterno->amb_codigo }}"
+                                                        {{ in_array($impactosInterno->amb_nombre, old('impactosInternos', [])) || in_array($impactosInterno->amb_codigo, $impactosInternosSec) ? 'selected' : '' }}>
+                                                        {{ $impactosInterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosInternos as $impactosInterno)
+                                                    <option value="{{ $impactosInterno->amb_codigo }}"
+                                                        {{ collect(old('impactosInternos'))->contains($impactosInterno->amb_codigo) ? 'selected' : '' }}>
+                                                        {{ $impactosInterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('impactosInternos'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('impactosInternos') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Contribuciones externas</label>
+                                            {{-- <input type="checkbox" id="selectAllCarreras"
+                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
+
+                                        <select class="form-control select2" required multiple="" id="impactosExternos"
+                                            name="impactosExternos[]" style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                estoy aca
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosExternos as $impactosExterno)
+                                                    <option value="{{ $impactosExterno->amb_codigo }}"
+                                                        {{ in_array($impactosExterno->amb_nombre, old('impactosExternos', [])) || in_array($impactosExterno->amb_codigo, $impactosExternosSec) ? 'selected' : '' }}>
+                                                        {{ $impactosExterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosExternos as $impactosExterno)
+                                                    <option value="{{ $impactosExterno->amb_codigo }}"
+                                                        {{ collect(old('impactosExternos'))->contains($impactosExterno->amb_codigo) ? 'selected' : '' }}>
+                                                        {{ $impactosExterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('impactosExternos'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('impactosExternos') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xl-3 col-md-3 col-lg-3" hidden>
 
                                     <div class="form-group">
                                         <label style="font-size: 110%">Sub-unidad ejecutora</label>
@@ -1480,91 +1567,7 @@
 
 
 
-                                <div class="col-xl-6 col-md-6 col-lg-6">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Contribuciones internas</label>
-                                            {{-- <input type="checkbox" id="selectAllCarreras"
-                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
-                                        <select class="form-control select2" required multiple="" id="impactosInternos"
-                                            name="impactosInternos[]" style="width: 100%">
-                                            @if (isset($iniciativa) && $editar)
-                                                estoy aca
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosInternos as $impactosInterno)
-                                                    <option value="{{ $impactosInterno->amb_codigo }}"
-                                                        {{ in_array($impactosInterno->amb_nombre, old('impactosInternos', [])) || in_array($impactosInterno->amb_codigo, $impactosInternosSec) ? 'selected' : '' }}>
-                                                        {{ $impactosInterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosInternos as $impactosInterno)
-                                                    <option value="{{ $impactosInterno->amb_codigo }}"
-                                                        {{ collect(old('impactosInternos'))->contains($impactosInterno->amb_codigo) ? 'selected' : '' }}>
-                                                        {{ $impactosInterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('impactosInternos'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('impactosInternos') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-6 col-md-6 col-lg-6">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Contribuciones externas</label>
-                                            {{-- <input type="checkbox" id="selectAllCarreras"
-                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
-
-                                        <select class="form-control select2" required multiple="" id="impactosExternos"
-                                            name="impactosExternos[]" style="width: 100%">
-                                            @if (isset($iniciativa) && $editar)
-                                                estoy aca
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosExternos as $impactosExterno)
-                                                    <option value="{{ $impactosExterno->amb_codigo }}"
-                                                        {{ in_array($impactosExterno->amb_nombre, old('impactosExternos', [])) || in_array($impactosExterno->amb_codigo, $impactosExternosSec) ? 'selected' : '' }}>
-                                                        {{ $impactosExterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosExternos as $impactosExterno)
-                                                    <option value="{{ $impactosExterno->amb_codigo }}"
-                                                        {{ collect(old('impactosExternos'))->contains($impactosExterno->amb_codigo) ? 'selected' : '' }}>
-                                                        {{ $impactosExterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('impactosExternos'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('impactosExternos') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                </div>
 
 
 

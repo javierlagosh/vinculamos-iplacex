@@ -257,7 +257,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <strong>Escuela ejecutora</strong>
+                                                    <strong>Unidad ejecutora</strong>
                                                 </td>
                                                 <td>
                                                     {{ $escuelaEjecutora ?? 'No registrado' }}
