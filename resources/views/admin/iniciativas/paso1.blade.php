@@ -88,9 +88,6 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Sección 1 - Antecedentes generales</h4>
-                        </div>
-
-                        <div class="card-header">
 
                             @if (isset($iniciativa) && $editar)
                                 <div class="card-header-action">
@@ -147,8 +144,9 @@
                                         <i class="fas fa-angle-left"></i> Volver a listado
                                     </a>
                                 </div>
+                            @endif
                         </div>
-                        @endif
+
 
                         <div class="card-body">
                             @if (isset($iniciativa) && $editar)
@@ -189,10 +187,10 @@
                                         <label style="font-size: 110%">Responsable</label> <label for=""
                                             style="color: red;">*</label>
                                         @if (isset($iniciativa) && $editar)
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                            <input required type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
                                                 value="{{ old('inic_responsable') ?? @$iniciativa->inic_responsable }}">
                                         @else
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                            <input required type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
                                                 value="{{ old('inic_responsable') }}">
                                         @endif
                                         @if ($errors->has('inic_responsable'))
@@ -1066,6 +1064,43 @@
                             </script>
 
                             <div class="row">
+                                {{-- TODO: CREAR TABLA ESCUELA EJECUTORA  Y PASARLO A SELECT --}}
+                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Unidad ejecutora</label>
+                                        <label for="" style="color: red;">*</label>
+
+                                        <select required class="form-control select2" id="inic_escuela_ejecutora"
+                                                name="inic_escuela_ejecutora" style="width: 100%">
+                                            <option disabled selected value="">Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                @foreach ($escuelas as $escuela)
+                                                    <option value="{{ $escuela->escu_codigo }}"
+                                                        {{ old('inic_escuela_ejecutora', $iniciativa->inic_escuela_ejecutora) == $escuela->escu_codigo ? 'selected' : '' }}>
+                                                        {{ $escuela->escu_nombre }}
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                @foreach ($escuelas as $escuela)
+                                                    <option value="{{ $escuela->escu_codigo }}"
+                                                        {{ old('inic_escuela_ejecutora') == $escuela->escu_codigo ? 'selected' : '' }}>
+                                                        {{ $escuela->escu_nombre }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('inic_escuela_ejecutora'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_escuela_ejecutora') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Sedes</label> <label for=""
@@ -1153,48 +1188,7 @@
                                     });
 
                                 </script>
-                                {{-- TODO: CREAR TABLA ESCUELA EJECUTORA  Y PASARLO A SELECT --}}
-                                <div class="col-xl-3 col-md-3 col-lg-3">
 
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Unidad ejecutora</label> <label
-                                            for="" style="color: red;">*</label>
-
-                                        <select class="form-control select2" id="inic_escuela_ejecutora" name="inic_escuela_ejecutora"
-                                            style="width: 100%">
-                                            <option disabled selected>Seleccione...</option>
-                                            @if (isset($iniciativa) && $editar)
-                                                @foreach ($escuelas as $escuela)
-                                                    @if ($escuela->escu_codigo == $iniciativa->inic_escuela_ejecutora)
-                                                        <option value="{{ $escuela->escu_codigo }}"
-                                                            {{ old('inic_escuela_ejecutora', $iniciativa->inic_escuela_ejecutora) == $escuela->escu_codigo ? 'selected' : '' }}>
-                                                            {{ $escuela->escu_nombre }}</option>
-                                                    @else
-                                                        <option value="{{ $escuela->escu_codigo }}">{{ $escuela->escu_nombre }}
-                                                        </option>
-                                                    @endif
-
-
-                                                @endforeach
-                                            @else
-                                            @foreach ($escuelas as $escuela)
-                                                <option value="{{$escuela->escu_codigo}}">{{$escuela->escu_nombre}}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-                                        @if ($errors->has('inic_escuela_ejecutora'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('inic_escuela_ejecutora') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-
-
-                                </div>
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Unidades ejecutoras colaboradoras</label> <label
@@ -1297,6 +1291,19 @@
                                                 @endforelse
                                             @endif
                                         </select>
+
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#dispositivo_id').change(function() {
+                                                    var dispositivo = $('#dispositivo_id').val();
+                                                    if (dispositivo == 11) {
+                                                        $('#bloque_asignatura').show();
+                                                    } else {
+                                                        $('#bloque_asignatura').hide();
+                                                    }
+                                                });
+                                            });
+                                        </script>
 
                                         @if ($errors->has('dispositivo_id'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
@@ -1937,8 +1944,8 @@
     <script>
         $(document).ready(function() {
 
-            // si se esta editando y tiac_codigo es 5 se muestra las asignatura
-            if ($('#tactividad').val() == 5) {
+            // si se esta editando y dispositivo_id es 1 se muestra las asignatura
+            if ($('#dispositivo_id').val() == 11) {
                 $('#bloque_asignatura').show();
             }
 
@@ -2203,15 +2210,7 @@
         function DispositivoImpactoByInstrumento(){
             $('#tactividad').on('change', function() {
                 var tactividad = $(this).val();
-                if(tactividad == 5){
-                    //quitar el display none del bloque_asignatura
-                    document.getElementById('bloque_asignatura').style.display = 'block';
-                }else{
-                    document.getElementById('bloque_asignatura').style.display = 'none';
 
-
-
-                }
                 if (tactividad) {
                     console.log("tactividad: " + tactividad);
                     $.ajax({

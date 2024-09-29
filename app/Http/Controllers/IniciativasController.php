@@ -374,6 +374,8 @@ class IniciativasController extends Controller
                 'participantes_internos.pain_docentes_final',
                 'participantes_internos.pain_estudiantes',
                 'participantes_internos.pain_estudiantes_final',
+                'participantes_internos.pain_funcionarios',
+                'participantes_internos.pain_funcionarios_final',
                 'carreras.care_nombre',
                 'escuelas.escu_nombre'
             )

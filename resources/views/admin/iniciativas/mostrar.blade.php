@@ -484,7 +484,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <strong>Impacto(s) interno(s)</strong>
+                                                    <strong>Contribucion(es) interna(s)</strong>
                                                 </td>
                                                 <td>
                                                         @if ($impactosInternos->isEmpty())
@@ -499,7 +499,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <strong>Impacto(s) Externos(s)</strong>
+                                                    <strong>Contribucion(es) Externas(s)</strong>
                                                 </td>
                                                 <td>
                                                         @if ($impactosExternos->isEmpty())
@@ -511,7 +511,7 @@
                                                         @endif
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr hidden>
                                                 <td>
                                                     <strong>Macrozona</strong>
                                                 </td>
@@ -619,12 +619,14 @@
                                                     <div class="table-responsive">
                                                         <table class="table table-bordered table-sm">
                                                             <thead>
-                                                                <th>Escuelas</th>
-                                                                <th>Carreras</th>
-                                                                <th>Docentes</th>
-                                                                <th>Docentes final</th>
+                                                                <th>Unidad Ejecutora</th>
+                                                                <th>Carrera</th>
                                                                 <th>Estudiantes</th>
                                                                 <th>Estudiantes final</th>
+                                                                <th>Docentes</th>
+                                                                <th>Docentes final</th>
+                                                                <th>Funcionarios/as</th>
+                                                                <th>Funcionarios/as final</th>
                                                             </thead>
 
                                                             <tbody>
@@ -632,6 +634,21 @@
                                                                     <tr>
                                                                         <td>{{ $interno->escu_nombre }}</td>
                                                                         <td>{{ $interno->care_nombre }}</td>
+                                                                        <td>
+                                                                            @if ($interno->pain_estudiantes != null)
+                                                                                {{ $interno->pain_estudiantes }}
+                                                                            @else
+                                                                                No registrado
+                                                                            @endif
+                                                                        </td>
+
+                                                                        <td>
+                                                                            @if ($interno->pain_estudiantes_final != null)
+                                                                                {{ $interno->pain_estudiantes_final }}
+                                                                            @else
+                                                                                No registrado
+                                                                            @endif
+                                                                        </td>
                                                                         <td>
                                                                             @if ($interno->pain_docentes != null)
                                                                                 {{ $interno->pain_docentes }}
@@ -647,17 +664,17 @@
                                                                                 No registrado
                                                                             @endif
                                                                         </td>
+
                                                                         <td>
-                                                                            @if ($interno->pain_estudiantes != null)
-                                                                                {{ $interno->pain_estudiantes }}
+                                                                            @if ($interno->pain_funcionarios != null)
+                                                                                {{ $interno->pain_funcionarios }}
                                                                             @else
                                                                                 No registrado
                                                                             @endif
                                                                         </td>
-
                                                                         <td>
-                                                                            @if ($interno->pain_estudiantes_final != null)
-                                                                                {{ $interno->pain_estudiantes_final }}
+                                                                            @if ($interno->pain_funcionarios_final != null)
+                                                                                {{ $interno->pain_funcionarios_final }}
                                                                             @else
                                                                                 No registrado
                                                                             @endif
@@ -680,29 +697,98 @@
                                                                 <th>Dinero</th>
                                                                 <th>Infraestructura</th>
                                                                 <th>Recursos humanos</th>
+                                                                <th>Total General</th>
                                                             </thead>
 
                                                             <tbody>
+                                                                @php
+                                                                    $totalDinero = 0;
+                                                                    $totalInfraestructura = 0;
+                                                                    $totalRrhh = 0;
+                                                                    $totalFila = 0;
+                                                                @endphp
+                                                                @foreach ($entidades as $entidad)
+                                                                    @php
+                                                                        $entidadDinero = 0;
+                                                                        $entidadInfraestructura = 0;
+                                                                        $entidadRrhh = 0;
+                                                                    @endphp
+
                                                                     <tr>
-                                                                        <td>Aportado por la institución </td>
-                                                                        <td>${{$totaldineroenti1}}</td>
-                                                                        <td>${{$infraestructura1["coin_valorizacion"]}}</td>
-                                                                        <td>${{$rrhh1["corh_valorizacion"]}}</td>
+                                                                        <td>{{ $entidad->enti_nombre }}</td>
+                                                                        <td>
+                                                                            @if (sizeof($recursoDinero) == 0)
+                                                                                $0
+                                                                            @else
+                                                                                @foreach ($recursoDinero as $dinero)
+                                                                                    @if ($entidad->enti_codigo == $dinero->enti_codigo)
+                                                                                        @if($entidad->enti_codigo == 1)
+
+                                                                                            @php
+                                                                                            $entidadDinero = $totaldineroenti1;
+                                                                                        @endphp
+                                                                                        ${{ number_format($totaldineroenti1, 0, ',', '.') }}
+                                                                                        @else
+                                                                                        @php
+                                                                                            $entidadDinero = $dinero->suma_dinero;
+                                                                                        @endphp
+                                                                                        ${{ number_format($dinero->suma_dinero, 0, ',', '.') }}
+
+                                                                                        @endif
+
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (sizeof($recursoInfraestructura) == 0)
+                                                                                $0
+                                                                            @else
+                                                                                @foreach ($recursoInfraestructura as $infraestructura)
+                                                                                    @if ($entidad->enti_codigo == $infraestructura->enti_codigo)
+                                                                                        @php
+                                                                                            $entidadInfraestructura += $infraestructura->suma_infraestructura;
+                                                                                        @endphp
+                                                                                    @endif
+                                                                                @endforeach
+                                                                                ${{ number_format($entidadInfraestructura, 0, ',', '.') }}
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (sizeof($recursoRrhh) == 0)
+                                                                                $0
+                                                                            @else
+                                                                                @foreach ($recursoRrhh as $rrhh)
+                                                                                    @if ($entidad->enti_codigo == $rrhh->enti_codigo)
+                                                                                        @php
+                                                                                            $entidadRrhh += $rrhh->suma_rrhh;
+                                                                                        @endphp
+                                                                                    @endif
+                                                                                @endforeach
+                                                                                ${{ number_format($entidadRrhh, 0, ',', '.') }}
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @php
+                                                                                $totalFila = $entidadDinero + $entidadInfraestructura + $entidadRrhh;
+                                                                            @endphp
+                                                                            ${{ number_format($totalFila, 0, ',', '.') }}
+                                                                        </td>
                                                                     </tr>
-                                                                    <tr>
-                                                                        <td>Aportado por externos</td>
-                                                                        <td>${{$totaldineroenti2}}</td>
-                                                                        <td>${{$infraestructura2["coin_valorizacion"]}}</td>
-                                                                        <td>${{$rrhh2["corh_valorizacion"]}}</td>
-                                                                    </tr>
+                                                                    @php
+                                                                        $totalDinero += $entidadDinero;
+                                                                        $totalInfraestructura += $entidadInfraestructura;
+                                                                        $totalRrhh += $entidadRrhh;
+                                                                    @endphp
+                                                                @endforeach
                                                                 <tr>
                                                                     <td>Total General</td>
-                                                                    <td>${{$totaldineroenti1 + $totaldineroenti2}}</td>
-                                                                    </td>
-                                                                    <td>${{ $infraestructura1["coin_valorizacion"] + $infraestructura2["coin_valorizacion"] }}
-                                                                    </td>
-                                                                    <td>${{$rrhh1["corh_valorizacion"] + $rrhh2["corh_valorizacion"]}}
-                                                                    </td>
+                                                                    <td>${{ number_format($totalDinero, 0, ',', '.') }}</td>
+                                                                    <td>${{ number_format($totalInfraestructura, 0, ',', '.') }}</td>
+                                                                    <td>${{ number_format($totalRrhh, 0, ',', '.') }}</td>
+                                                                    <td style="border: 2px solid black; font-weight: bold;">
+                                                                        ${{ number_format($totalDinero + $totalInfraestructura + $totalRrhh, 0, ',', '.') }}
+                                                                    </td> <!-- Total General -->
                                                                 </tr>
 
                                                             </tbody>

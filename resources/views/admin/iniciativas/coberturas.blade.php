@@ -85,7 +85,7 @@
 
                                 </div>
                                 <div class="dropdown d-inline">
-                                    <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton2"
+                                    <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
                                         data-toggle="dropdown"title="Iniciativa">
                                         <i class="fas fa-plus-circle"></i> Ingresar</button>
                                     <div class="dropdown-menu dropright">
@@ -128,10 +128,11 @@
                                                                 <th scope="col">Sede</th>
                                                                 <th scope="col">Área</th>
                                                                 <th scope="col">Carrera</th>
-                                                                <th scope="col">Docentes inicial</th>
-                                                                <th scope="col">Docentes final</th>
                                                                 <th scope="col">Estudiantes inicial</th>
                                                                 <th scope="col">Estudiantes final</th>
+                                                                <th scope="col">Docentes inicial</th>
+                                                                <th scope="col">Docentes final</th>
+
                                                                 <th scope="col">Funcionarios/as inicial</th>
                                                                 <th scope="col">Funcionarios/as final</th>
                                                             </tr>
@@ -143,14 +144,6 @@
                                                                     <td>{{ $resultado->sede_nombre }}</td>
                                                                     <td>{{ $resultado->escu_nombre }}</td>
                                                                     <td>{{ $resultado->care_nombre }}</td>
-                                                                    <td>{{ $resultado->pain_docentes }}</td>
-                                                                    <td>
-                                                                        <input type="number" class="form-control"
-                                                                            id="cantidad-docentes-final-{{ $resultado->pain_codigo }}"
-                                                                            name="docentes_final[{{ $resultado->pain_codigo }}]"
-                                                                            value="{{ $resultado->pain_docentes_final }}"
-                                                                            min="0">
-                                                                    </td>
                                                                     <td>{{ $resultado->pain_estudiantes }}</td>
                                                                     <td>
                                                                         <input type="number" class="form-control"
@@ -159,6 +152,15 @@
                                                                             value="{{ $resultado->pain_estudiantes_final }}"
                                                                             min="0">
                                                                     </td>
+                                                                    <td>{{ $resultado->pain_docentes }}</td>
+                                                                    <td>
+                                                                        <input type="number" class="form-control"
+                                                                            id="cantidad-docentes-final-{{ $resultado->pain_codigo }}"
+                                                                            name="docentes_final[{{ $resultado->pain_codigo }}]"
+                                                                            value="{{ $resultado->pain_docentes_final }}"
+                                                                            min="0">
+                                                                    </td>
+
                                                                     <td>{{ $resultado->pain_funcionarios }}</td>
                                                                     <td>
                                                                         <input type="number" class="form-control"
