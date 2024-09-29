@@ -413,7 +413,9 @@
 
                             <div class="row p-4">
                                 <div class="col-xl-6 col-md-6 col-lg-6">
-                                    <h6>Resultados esperados</h6>
+                                    <div class="col-xl-6 col-md-6 col-lg-6">
+                                        <h5>Sección 4 - Resultados esperados</h5>
+                                    </div>
                                     <div class="row mt-3">
                                         <div class="col-3 col-md-3 col-lg-3">
                                             <div class="form-group">

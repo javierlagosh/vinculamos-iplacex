@@ -76,7 +76,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4>{{ $iniciativa->inic_nombre }} - Paso 3 de 3</h4>
+                        <h4>{{ $iniciativa->inic_nombre }} </h4>
                         <div class="card-header-action">
                             <div class="dropdown d-inline">
                                 <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton2"
@@ -125,7 +125,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <h6>Recursos</h6>
+                        <div class="col-xl-6 col-md-6 col-lg-6">
+                            <h5>Sección 5 - Recursos</h5>
+                        </div>
                         <div class="row mt-3">
                             <div class="col-3 col-md-3 col-lg-3"></div>
                             <div class="col-6 col-md-6 col-lg-6 text-center" id="div-alert-recursos"></div>
