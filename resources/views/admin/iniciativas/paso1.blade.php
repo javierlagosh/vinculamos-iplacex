@@ -1064,42 +1064,7 @@
                             </script>
 
                             <div class="row">
-                                {{-- TODO: CREAR TABLA ESCUELA EJECUTORA  Y PASARLO A SELECT --}}
-                                <div class="col-xl-3 col-md-3 col-lg-3">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Unidad ejecutora</label>
-                                        <label for="" style="color: red;">*</label>
 
-                                        <select required class="form-control select2" id="inic_escuela_ejecutora"
-                                                name="inic_escuela_ejecutora" style="width: 100%">
-                                            <option disabled selected value="">Seleccione...</option>
-                                            @if (isset($iniciativa) && $editar)
-                                                @foreach ($escuelas as $escuela)
-                                                    <option value="{{ $escuela->escu_codigo }}"
-                                                        {{ old('inic_escuela_ejecutora', $iniciativa->inic_escuela_ejecutora) == $escuela->escu_codigo ? 'selected' : '' }}>
-                                                        {{ $escuela->escu_nombre }}
-                                                    </option>
-                                                @endforeach
-                                            @else
-                                                @foreach ($escuelas as $escuela)
-                                                    <option value="{{ $escuela->escu_codigo }}"
-                                                        {{ old('inic_escuela_ejecutora') == $escuela->escu_codigo ? 'selected' : '' }}>
-                                                        {{ $escuela->escu_nombre }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('inic_escuela_ejecutora'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('inic_escuela_ejecutora') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
@@ -1133,6 +1098,43 @@
                                                     <button class="close"
                                                         data-dismiss="alert"><span>&times;</span></button>
                                                     <strong>{{ $errors->first('sedes') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                 {{-- TODO: CREAR TABLA ESCUELA EJECUTORA  Y PASARLO A SELECT --}}
+                                 <div class="col-xl-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Unidad ejecutora</label>
+                                        <label for="" style="color: red;">*</label>
+
+                                        <select required class="form-control select2" id="inic_escuela_ejecutora"
+                                                name="inic_escuela_ejecutora" style="width: 100%">
+                                            <option disabled selected value="">Seleccione...</option>
+                                            @if (isset($iniciativa) && $editar)
+                                                @foreach ($escuelas as $escuela)
+                                                    <option value="{{ $escuela->escu_codigo }}"
+                                                        {{ old('inic_escuela_ejecutora', $iniciativa->inic_escuela_ejecutora) == $escuela->escu_codigo ? 'selected' : '' }}>
+                                                        {{ $escuela->escu_nombre }}
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                @foreach ($escuelas as $escuela)
+                                                    <option value="{{ $escuela->escu_codigo }}"
+                                                        {{ old('inic_escuela_ejecutora') == $escuela->escu_codigo ? 'selected' : '' }}>
+                                                        {{ $escuela->escu_nombre }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('inic_escuela_ejecutora'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('inic_escuela_ejecutora') }}</strong>
                                                 </div>
                                             </div>
                                         @endif

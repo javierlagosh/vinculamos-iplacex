@@ -393,9 +393,9 @@
                                             <div class="table-responsive">
                                                 <table class="table table-bored table-md">
                                                     <thead>
-                                                        <th>Sedes</th>
-                                                        <th>Escuelas</th>
-                                                        <th>Carreras</th>
+                                                        <th>Sede</th>
+                                                        <th>Unidad ejecutora</th>
+                                                        <th>Carrera</th>
                                                         <th>Estudiantes</th>
                                                         <th>Docentes</th>
                                                         <th>Funcionarios/as</th>
