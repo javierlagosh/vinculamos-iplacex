@@ -1304,6 +1304,7 @@ class IniciativasController extends Controller
             'regiones' => $regiones,
             'escuelas' => $escuelas,
             'sedeSec' => $sedeSecCod,
+            'comuSec' => $comuSec,
             'dispositivos' => $dispositivos,
             //'asignaturaSec' => $asignaturaSecCod,
             'escuSec' => $escuSecCod,
@@ -1640,6 +1641,7 @@ class IniciativasController extends Controller
         $comu = [];
         $comunas = $request->input('comuna', []);
 
+
         foreach ($comunas as $comuna) {
             array_push($comu, [
                 'inic_codigo' => $inic_codigo,
@@ -1651,7 +1653,12 @@ class IniciativasController extends Controller
             ]);
         }
 
-        $comuCrear = IniciativasComunas::insert($comu);
+
+        try {
+            $comuCrear = IniciativasComunas::insert($comu);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('comuError', 'Ocurrió un error durante el registro de las comunas, intente más tarde.')->withInput();
+        }
         $odsValues = $request->ods_values ?? [];
         $odsMetasValues = $request->ods_metas_values ?? [];
         $odsMetasDescValues = $request->ods_metas_desc_values ?? [];

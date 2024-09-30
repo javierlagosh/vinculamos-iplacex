@@ -1731,6 +1731,10 @@
                                                 <option value="" disabled>Seleccione...</option>
                                                 @if (isset($iniciativa) && $editar)
                                                     @forelse ($comunas as $comuna)
+                                                    {{-- si el array $comuSec es = $comuna->comu_codigo se pone selected --}}
+                                                        <option value="{{ $comuna->comu_codigo }}"
+                                                            {{ in_array($comuna->comu_codigo, $iniciativaComuna) ? 'selected' : '' }}>
+                                                            {{ $comuna->comu_nombre }}</option>
                                                         <option value="{{ $comuna->comu_codigo }}"
                                                             >
                                                             {{ $comuna->comu_nombre }}</option>
