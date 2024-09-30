@@ -1684,9 +1684,9 @@
 
 
                                 </div>
-                                @if (isset($iniciativa) && $editar && $iniciativa->inic_macrozona == 'Nacional')
+                                @if (isset($iniciativa) && $editar )
                                 <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group" id="regiones_div" style="display: none;">
+                                    <div class="form-group" id="regiones_div" >
                                         <label style="font-size: 110%">Región</label>
                                         <input type="hidden" id="territorio" name="territorio" value="nacional">
                                         <input type="hidden" id="pais" name="pais" value="1">
@@ -1724,7 +1724,7 @@
                                 </div>
 
                                     <div class="col-xl-4 col-md-4 col-lg-4">
-                                        <div class="form-group" id="comunas_div" style="display: none;">
+                                        <div class="form-group" id="comunas_div" >
                                             <label style="font-size: 110%">Comuna</label>
                                             <select class="form-control select2" id="comuna" name="comuna[]"
                                                 multiple="" style="width: 100%">
