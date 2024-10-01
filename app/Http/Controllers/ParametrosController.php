@@ -57,6 +57,7 @@ use App\Models\DispositivosTiac;
 use App\Models\TipoActividadAmbitoAccion;
 use App\Models\EvaluacionInvitado;
 use App\Models\IniciativasAmbitos;
+use App\Models\AmbitosTiac;
 
 class ParametrosController extends Controller
 {
@@ -66,7 +67,9 @@ class ParametrosController extends Controller
     public function listarAmbitos()
     {
         return view('admin.parametros.ambitos', [
-            'ambitos' => Ambitos::orderBy('amb_codigo', 'asc')->get()
+            'ambitos' => Ambitos::orderBy('amb_codigo', 'asc')->get(),
+            'tiacs' => TipoActividades::orderBy('tiac_codigo', 'asc')->get(),
+            'ambitosTiac' => AmbitosTiac::all()
         ]);
     }
 
@@ -89,9 +92,35 @@ class ParametrosController extends Controller
         $ambito->amb_director = $request->input('director');
         $ambito->amb_creado = now();
         $ambito->amb_actualizado = now();
-
         // Guardar el programa en la base de datos
         $ambito->save();
+
+        $amb_codigo = $ambito->amb_codigo;
+
+        $tiacArray = [];
+        $tiacs = $request->input('tiacs', []);
+
+
+        foreach ($tiacs as $se) {
+            array_push(
+                $tiacArray,
+                [
+                    'amb_codigo' => $amb_codigo,
+                    'tiac_codigo' => $se,
+
+                ]
+            );
+        }
+
+        $relacCrear = AmbitosTiac::insert($tiacArray);
+
+        if (!$relacCrear) {
+            Ambitos::where('amb_codigo', $amb_codigo)->delete();
+            return redirect()->back()->with('errorAmbito', 'Ocurrió un error durante el registro del impacto, intente más tarde.')->withInput();
+        }
+
+
+
 
         return redirect()->back()->with('exitoAmbito', 'Impacto creado exitosamente');
     }
@@ -115,6 +144,11 @@ class ParametrosController extends Controller
             if (!$iniciativa) {
                 IniciativasAmbitos::where('inic_codigo', $iniciativaAmbito->inic_codigo)->delete();
             }
+        }
+        try {
+            AmbitosTiac::where('amb_codigo', $amb_codigo)->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
         }
 
         if (!$ambito) {
@@ -154,6 +188,30 @@ class ParametrosController extends Controller
 
         // Guardar la actualización del programa en la base de datos
         $ambito->save();
+
+        AmbitosTiac::where('amb_codigo', $amb_codigo)->delete();
+
+        $tiacArray = [];
+        $tiacs = $request->input('tiacs', []);
+
+
+        foreach ($tiacs as $se) {
+            array_push(
+                $tiacArray,
+                [
+                    'amb_codigo' => $amb_codigo,
+                    'tiac_codigo' => $se,
+
+                ]
+            );
+        }
+
+        $relacCrear = AmbitosTiac::insert($tiacArray);
+
+        if (!$relacCrear) {
+            Ambitos::where('amb_codigo', $amb_codigo)->delete();
+            return redirect()->back()->with('errorAmbito', 'Ocurrió un error durante el registro del impacto, intente más tarde.')->withInput();
+        }
 
         return redirect()->back()->with('exitoAmbito', 'Impacto actualizado exitosamente')->withInput();
         ;

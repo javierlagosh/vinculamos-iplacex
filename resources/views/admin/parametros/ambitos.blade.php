@@ -165,6 +165,31 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label style="font-size: 110%">Instrumentos</label> {{-- <label for=""
+                                    style="color: red;">*</label> --}}
+                                {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
+                                    for="selectAllEscuelas">Todas</label> --}}
+                                <select class="form-control select2" name="tiacs[]" multiple=""
+                                    style="width: 100%" id="tiacs">
+                                    @if (isset($tiacs))
+                                        @forelse ($tiacs as $tiac)
+                                            @php
+                                                // Comprueba si $escu->escu_codigo y $sede->sede_codigo están en la misma fila de ambitosTiac
+                                                $relationExists = $ambitosTiac->where('amb_codigo', $ambi->amb_codigo)
+                                                    ->where('tiac_codigo', $tiac->tiac_codigo)
+                                                    ->isNotEmpty();
+                                            @endphp
+                                            <option value="{{ $tiac->tiac_codigo }}" {{ $relationExists ? 'selected' : '' }}>
+                                                {{ $tiac->tiac_nombre }}
+                                            </option>
+                                        @empty
+                                            <option value="-1">No existen registros</option>
+                                        @endforelse
+                                    @endif
+                                </select>
+                            </div>
                             {{-- <div class="form-group">
                                 <label>Descripción del impacto</label>
                                 <div class="input-group">
@@ -243,6 +268,24 @@
                                     </div>
                                 @enderror
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-size: 110%">Instrumentos</label> {{-- <label for=""
+                                style="color: red;">*</label> --}}
+                            {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
+                                for="selectAllEscuelas">Todas</label> --}}
+                            <select class="form-control select2" name="tiacs[]" multiple=""
+                                style="width: 100%" id="tiacs">
+                                @if (isset($tiacs))
+                                    @forelse ($tiacs as $tiac)
+                                        <option value="{{ $tiac->tiac_codigo }}">
+                                            {{ $tiac->tiac_nombre }}</option>
+                                    @empty
+                                        <option value="-1">No existen registros</option>
+                                    @endforelse
+                                @endif
+                            </select>
                         </div>
                         {{-- <div class="form-group">
                             <label>Descripción del impacto</label>
