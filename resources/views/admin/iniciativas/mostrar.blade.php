@@ -488,7 +488,7 @@
                                                 </td>
                                                 <td>
                                                         @if ($impactosInternos->isEmpty())
-                                                            No hay impactos internos registrados
+                                                            No hay contribuciones internas registrados
                                                         @else
                                                         @foreach ($impactosInternos as $impactosInterno)
                                                             {{ $impactosInterno->amb_nombre }} <br>
@@ -503,7 +503,7 @@
                                                 </td>
                                                 <td>
                                                         @if ($impactosExternos->isEmpty())
-                                                            No hay impactos externos registrados
+                                                            No hay contribuciones externas registrados
                                                         @else
                                                         @foreach ($impactosExternos as $impactosExterno)
                                                             {{ $impactosExterno->amb_nombre }} <br>
