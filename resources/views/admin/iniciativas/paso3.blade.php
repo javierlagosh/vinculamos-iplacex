@@ -153,22 +153,17 @@
                                                         <tr>
                                                             <td class="text-center"><strong></strong>Sede</td>
                                                             <td  id="empresadinero" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="text-center" >VcM Sede</td>
-                                                            <td class="text-center" hidden id="vcm_sede"></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_sedevalue" value="0" placeholder="Ingrese el monto..."></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-center">VcM Escuela</td>
+                                                            <td class="text-center">Escuela</td>
                                                             <td class="text-center" id="vcm_escuela" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="text-center">VRA</td>
+                                                            <td class="text-center">Unidad de titulados</td>
                                                             <td class="text-center" id="vra" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
