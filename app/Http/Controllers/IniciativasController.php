@@ -74,7 +74,223 @@ use App\Models\ProgramasContribuciones;
 
 class IniciativasController extends Controller
 {
+    // public function listarIniciativas(Request $request)
+    // {
+    //     $iniciativas = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', 'iniciativas.meca_codigo')
+    //         ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
+    //         ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
+    //         ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
+    //         ->leftjoin('dispositivo', 'dispositivo.id', 'iniciativas.dispositivo_id')
+    //         ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
+    //         ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
+    //         ->leftjoin('escuelas', 'escuelas.escu_codigo', 'participantes_internos.escu_codigo')
+    //         ->select(
+    //             'iniciativas.inic_codigo',
+    //             'iniciativas.inic_nombre',
+    //             'iniciativas.inic_estado',
+    //             'iniciativas.inic_anho',
+    //             'iniciativas.meca_codigo',
+    //             'mecanismos.meca_nombre',
+    //             'tipo_actividades.tiac_nombre',
+    //             'dispositivo.nombre as dispositivo',
+    //             'componentes.comp_nombre',
+    //             DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
+    //             // DB::raw('GROUP_CONCAT(DISTINCT escuelas.escu_nombre SEPARATOR "/ ") as escuelas'),
+    //             // DB::raw('GROUP_CONCAT(DISTINCT carreras.care_nombre SEPARATOR ", ") as carreras'),
+    //             DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
+    //         )
+    //         ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado', 'dispositivo.nombre', 'tipo_actividades.tiac_nombre') // Agregamos inic_creado al GROUP BY
+    //         ->orderBy('inic_creado', 'desc'); // Ordenar por fecha de creación formateada en orden descendente
+    //     // ->where('iniciativas.inic_anho','2023')
+
+    //     if ($request->sede != 'all' && $request->sede != null) {
+    //         $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
+    //     }else{
+    //         $iniciativas = $iniciativas;
+    //     }
+    //     if ($request->tiac != 'all' && $request->tiac != null) {
+    //         $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
+    //     }
+    //     if ($request->amac != 'all' && $request->amac != null) {
+    //         $iniciativas = $iniciativas->join('tipoactividad_ambitosaccion as taa1', 'iniciativas.tiac_codigo', '=', 'taa1.tiac_codigo')
+    //         ->join('tipoactividad_ambitosaccion as taa2', 'taa1.amac_codigo', '=', 'taa2.amac_codigo')
+    //         ->join('ambito_accion as aa', 'taa2.amac_codigo', '=', 'aa.amac_codigo')
+    //         ->where('aa.amac_codigo', $request->amac);
+    //     }
+
+    //     if ($request->mecanismo != 'all' && $request->mecanismo != null) {
+    //         $iniciativas = $iniciativas->where('mecanismos.meca_codigo', $request->mecanismo);
+    //     }
+
+    //     if ($request->anho != 'all' && $request->anho != null) {
+    //         $iniciativas = $iniciativas->where('iniciativas.inic_anho', $request->anho);
+    //     }
+
+    //     if ($request->escuela == null && $request->mecanismo == null && $request->anho == null) {
+    //         $iniciativas = $iniciativas->where('iniciativas.inic_anho', '2024');
+    //     }
+
+    //     $iniciativas = $iniciativas->get();
+
+
+    //     $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
+    //     // $carreras = Carreras::select('care_codigo', 'care_nombre')->orderBy('care_nombre', 'asc')->get();
+    //     // $componentes = DB::table('componentes')->select('comp_codigo', 'comp_nombre')->orderBy('comp_nombre', 'asc')->get();
+    //     $mecanismos = Mecanismos::select('meca_codigo','meca_nombre')->get();
+    //     $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
+    //     $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
+    //     $anhos = Iniciativas::select('inic_anho')->distinct('inic_anho')->orderBy('inic_anho', 'asc')->get();
+
+    //     return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes', 'tiac', 'amac'));
+    // }
+
+    private function getUserRole()
+    {
+        if (Session::has('admin')) {
+            return 'admin';
+        } elseif (Session::has('digitador')) {
+            return 'digitador';
+        } elseif (Session::has('observador')) {
+            return 'observador';
+        } elseif (Session::has('supervisor')) {
+            return 'supervisor';
+        }
+        return null;
+    }
+
     public function listarIniciativas(Request $request)
+    {
+        $role = $this->getUserRole();
+        $iniciativas = $this->getIniciativasQuery($request);
+
+        if ($request->ajax()) {
+            // Aplicar filtros (Dropdowns de Sedes/Componentes/Año)
+            if ($request->sede != 'all' && $request->sede != null) {
+                $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
+            }else{
+                $iniciativas = $iniciativas;
+            }
+            if ($request->tiac != 'all' && $request->tiac != null) {
+                $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
+            }
+            if ($request->amac != 'all' && $request->amac != null) {
+                $iniciativas = $iniciativas->join('tipoactividad_ambitosaccion as taa1', 'iniciativas.tiac_codigo', '=', 'taa1.tiac_codigo')
+                ->join('tipoactividad_ambitosaccion as taa2', 'taa1.amac_codigo', '=', 'taa2.amac_codigo')
+                ->join('ambito_accion as aa', 'taa2.amac_codigo', '=', 'aa.amac_codigo')
+                ->where('aa.amac_codigo', $request->amac);
+            }
+    
+            if ($request->mecanismo != 'all' && $request->mecanismo != null) {
+                $iniciativas = $iniciativas->where('mecanismos.meca_codigo', $request->mecanismo);
+            }
+    
+            if ($request->anho != 'all' && $request->anho != null) {
+                $iniciativas = $iniciativas->where('iniciativas.inic_anho', $request->anho);
+            }
+    
+            // Filtro por defecto
+            if ($request->escuela == null && $request->mecanismo == null && $request->anho == null) {
+                $iniciativas = $iniciativas->where('iniciativas.inic_anho', Carbon::now()->year);
+            }
+
+            // Total records before GROUP BY
+            $recordsTotal = $iniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
+
+            // Page Length
+            $pageNumber = ( $request->start / $request->length )+1;
+            $pageLength = $request->length;
+            $skip       = ($pageNumber-1) * $pageLength;
+
+            // Search
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+
+                $iniciativas->where(function ($query) use ($search) {
+                    $query->where('iniciativas.inic_nombre', 'like', "%{$search}%")
+                        ->orWhere('mecanismos.meca_nombre', 'like', "%{$search}%")
+                        ->orWhere('componentes.comp_nombre', 'like', "%{$search}%")
+                        ->orWhere('iniciativas.inic_anho', 'like', "%{$search}%")
+                        ->orWhere('tipo_actividades.tiac_nombre', 'like', "%{$search}%")
+                        ->orWhere('dispositivo.nombre', 'like', "%{$search}%");
+                });
+            }
+
+            // Total records after applying the search filter
+            $recordsFiltered = $iniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
+
+            // Page Order
+            $orderColumnIndex = $request->order[0]['column'] ?? '0';
+            $orderBy = $request->order[0]['dir'] ?? 'desc';
+            $orderByName = 'name';
+
+            switch($orderColumnIndex){
+                case '0':
+                    $orderByName = 'iniciativas.inic_codigo';
+                    break;
+                case '1':
+                    $orderByName = 'iniciativas.inic_nombre';
+                    break;
+                case '2':
+                    $orderByName = 'dispositivo';
+                    break;
+                case '3':
+                    $orderByName = 'tipo_actividades.tiac_nombre';
+                    break;
+                case '4':
+                    $orderByName = 'iniciativas.inic_anho';
+                    break;
+                case '5':
+                    $orderByName = 'sedes';
+                    break;
+                case '6':
+                    $orderByName = 'iniciativas.inic_estado';
+                    break;
+                case '7':
+                    $orderByName = 'inic_creado';
+                    break;
+            }
+
+            $iniciativas = $iniciativas
+                ->groupBy(
+                    'iniciativas.meca_codigo',
+                    'iniciativas.inic_codigo', 
+                    'componentes.comp_nombre', 
+                    'iniciativas.inic_nombre', 
+                    'iniciativas.inic_estado', 
+                    'iniciativas.inic_anho', 
+                    'mecanismos.meca_nombre', 
+                    'inic_creado', 
+                    'dispositivo.nombre', 
+                    'tipo_actividades.tiac_nombre'
+                );
+
+            $iniciativas = $iniciativas
+                ->orderBy($orderByName, $orderBy);
+
+            $iniciativas = $iniciativas
+                ->skip($skip)
+                ->take($pageLength)
+                ->get();
+
+            return response()->json([
+                "draw"=> $request->draw,
+                "recordsTotal"=> $recordsTotal,
+                "recordsFiltered" => $recordsFiltered,
+                'data' => $iniciativas
+            ], 200);
+        }
+
+        // No AJAX, renderizar vista
+        $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
+        $mecanismos = Mecanismos::select('meca_codigo','meca_nombre')->get();
+        $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
+        $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
+        $anhos = Iniciativas::select('inic_anho')->distinct('inic_anho')->orderBy('inic_anho', 'asc')->get();
+
+        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes', 'tiac', 'amac'));
+    }
+
+    private function getIniciativasQuery(Request $request)
     {
         $iniciativas = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', 'iniciativas.meca_codigo')
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
@@ -95,53 +311,10 @@ class IniciativasController extends Controller
                 'dispositivo.nombre as dispositivo',
                 'componentes.comp_nombre',
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
-                // DB::raw('GROUP_CONCAT(DISTINCT escuelas.escu_nombre SEPARATOR "/ ") as escuelas'),
-                // DB::raw('GROUP_CONCAT(DISTINCT carreras.care_nombre SEPARATOR ", ") as carreras'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
-            )
-            ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado', 'dispositivo.nombre', 'tipo_actividades.tiac_nombre') // Agregamos inic_creado al GROUP BY
-            ->orderBy('inic_creado', 'desc'); // Ordenar por fecha de creación formateada en orden descendente
-        // ->where('iniciativas.inic_anho','2023')
+            );
 
-        if ($request->sede != 'all' && $request->sede != null) {
-            $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
-        }else{
-            $iniciativas = $iniciativas;
-        }
-        if ($request->tiac != 'all' && $request->tiac != null) {
-            $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
-        }
-        if ($request->amac != 'all' && $request->amac != null) {
-            $iniciativas = $iniciativas->join('tipoactividad_ambitosaccion as taa1', 'iniciativas.tiac_codigo', '=', 'taa1.tiac_codigo')
-            ->join('tipoactividad_ambitosaccion as taa2', 'taa1.amac_codigo', '=', 'taa2.amac_codigo')
-            ->join('ambito_accion as aa', 'taa2.amac_codigo', '=', 'aa.amac_codigo')
-            ->where('aa.amac_codigo', $request->amac);
-        }
-
-        if ($request->mecanismo != 'all' && $request->mecanismo != null) {
-            $iniciativas = $iniciativas->where('mecanismos.meca_codigo', $request->mecanismo);
-        }
-
-        if ($request->anho != 'all' && $request->anho != null) {
-            $iniciativas = $iniciativas->where('iniciativas.inic_anho', $request->anho);
-        }
-
-        if ($request->escuela == null && $request->mecanismo == null && $request->anho == null) {
-            $iniciativas = $iniciativas->where('iniciativas.inic_anho', '2024');
-        }
-
-        $iniciativas = $iniciativas->get();
-
-
-        $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
-        // $carreras = Carreras::select('care_codigo', 'care_nombre')->orderBy('care_nombre', 'asc')->get();
-        // $componentes = DB::table('componentes')->select('comp_codigo', 'comp_nombre')->orderBy('comp_nombre', 'asc')->get();
-        $mecanismos = Mecanismos::select('meca_codigo','meca_nombre')->get();
-        $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
-        $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
-        $anhos = Iniciativas::select('inic_anho')->distinct('inic_anho')->orderBy('inic_anho', 'asc')->get();
-
-        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes', 'tiac', 'amac'));
+        return $iniciativas;
     }
 
 
