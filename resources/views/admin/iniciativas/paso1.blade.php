@@ -1954,7 +1954,8 @@
         // Comunas seleccionadas al editar
         var comunasSeleccionadas = @json($comuSec ?? []);
         // Dispositivos, impactos internos y externos seleccionados al editar
-        var dispositivosSeleccionados = @json($dispositivos ?? []);
+        var dispositivosSeleccionados = [@json($iniciativa->dispositivo_id)];
+
         var impactosInternosSeleccionados = @json($impactosInternosSec ?? []);
         var impactosExternosSeleccionados = @json($impactosExternosSec ?? []);
     </script>
@@ -2290,6 +2291,7 @@
                     console.log("Impactos Internos recibidos: ", data);
                     $('#impactosInternos').empty();
                     $.each(data, function(key, value) {
+                        console.log("value interno: ", value.amb_codigo + " - " + impactosInternosSeleccionados);
                         var selected = impactosInternosSeleccionados.includes(value.amb_codigo) ? 'selected' : '';
                         $('#impactosInternos').append(
                             `<option value="${value.amb_codigo}" ${selected}>${value.amb_nombre}</option>`
@@ -2314,6 +2316,8 @@
                     console.log("Impactos Externos recibidos: ", data);
                     $('#impactosExternos').empty();
                     $.each(data, function(key, value) {
+                        console.log("value externo: " + value.amb_codigo + " - " + impactosExternosSeleccionados);
+
                         var selected = impactosExternosSeleccionados.includes(value.amb_codigo) ? 'selected' : '';
                         $('#impactosExternos').append(
                             `<option value="${value.amb_codigo}" ${selected}>${value.amb_nombre}</option>`
