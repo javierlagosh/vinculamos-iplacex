@@ -1954,7 +1954,9 @@
         // Comunas seleccionadas al editar
         var comunasSeleccionadas = @json($comuSec ?? []);
         // Dispositivos, impactos internos y externos seleccionados al editar
-        var dispositivosSeleccionados = [@json($iniciativa->dispositivo_id) ?? ""];
+
+        var dispositivoSeleccionado = @json(optional($iniciativa)->dispositivo_id ?? null);
+
 
         var impactosInternosSeleccionados = @json($impactosInternosSec ?? []);
         var impactosExternosSeleccionados = @json($impactosExternosSec ?? []);
@@ -2262,7 +2264,8 @@
 
                     if (data.length > 0) {
                         $.each(data, function(key, value) {
-                            var selected = dispositivosSeleccionados.includes(value.id) ? 'selected' : '';
+                            // Si el dispositivo coincide con el seleccionado, marcarlo como 'selected'
+                            var selected = (dispositivoSeleccionado == value.id) ? 'selected' : '';
                             $('#dispositivo_id').append(
                                 `<option value="${value.id}" ${selected}>${value.nombre}</option>`
                             );
@@ -2273,8 +2276,6 @@
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al obtener dispositivos: ", error);
-                    $('#dispositivo_id').empty();
-                    $('#dispositivo_id').append('<option value="-1">Error al cargar dispositivos</option>');
                 }
             });
 
