@@ -1690,7 +1690,7 @@
                                         <label style="font-size: 110%">Región</label>
                                         <input type="hidden" id="territorio" name="territorio" value="nacional">
                                         <input type="hidden" id="pais" name="pais" value="1">
-                                        <select class="form-control select2" id="region" multiple=""
+                                        <select class="form-control select2" id="region" multiple="" required
                                             name="region[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 @forelse ($regiones as $region)
@@ -1726,7 +1726,7 @@
                                     <div class="col-xl-4 col-md-4 col-lg-4">
                                         <div class="form-group" id="comunas_div" >
                                             <label style="font-size: 110%">Comuna</label>
-                                            <select class="form-control select2" id="comuna" name="comuna[]"
+                                            <select class="form-control select2" id="comuna" name="comuna[]" required
                                                 multiple="" style="width: 100%">
                                                 <option value="" disabled>Seleccione...</option>
                                                 @if (isset($iniciativa) && $editar)
@@ -1773,7 +1773,7 @@
                                         <label style="font-size: 110%">Región</label>
                                         <input type="hidden" id="territorio" name="territorio" value="nacional">
                                         <input type="hidden" id="pais" name="pais" value="1">
-                                        <select class="form-control select2" id="region" multiple=""
+                                        <select class="form-control select2" id="region" multiple="" required
                                             name="region[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 @forelse ($regiones as $region)
@@ -1809,7 +1809,7 @@
                                 <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group" id="comunas_div">
                                         <label style="font-size: 110%">Comuna</label>
-                                        <select class="form-control select2" id="comuna" name="comuna[]"
+                                        <select class="form-control select2" id="comuna" name="comuna[]" required
                                             multiple="" style="width: 100%">
                                             <option value="" disabled>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
@@ -1951,6 +1951,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
     <script>
+        // Comunas seleccionadas al editar
+        var comunasSeleccionadas = @json($comuSec ?? []);
+        // Dispositivos, impactos internos y externos seleccionados al editar
+        var dispositivosSeleccionados = @json($dispositivos ?? []);
+        var impactosInternosSeleccionados = @json($impactosInternosSec ?? []);
+        var impactosExternosSeleccionados = @json($impactosExternosSec ?? []);
+    </script>
+
+    <script>
         $(document).ready(function() {
 
             // si se esta editando y dispositivo_id es 1 se muestra las asignatura
@@ -1978,6 +1987,8 @@
             // // Llamada inicial
             // selectTiposActividades();
         });
+
+
 
         function selectAllRegiones() {
             $('#selectAllRegiones').change(function() {
@@ -2150,14 +2161,14 @@
         }
 
         function comunasByRegiones() {
-            $('#region').on('change', function() {
-                var regionesId = $(this).val();
+            // Lógica para cargar comunas por regiones
+            function cargarComunas() {
+                var regionesId = $('#region').val();
                 if (regionesId) {
                     $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-comunas',
+                        url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-comunas',
                         type: 'POST',
                         dataType: 'json',
-
                         data: {
                             _token: '{{ csrf_token() }}',
                             regiones: regionesId
@@ -2165,15 +2176,27 @@
                         success: function(data) {
                             $('#comuna').empty();
                             $.each(data, function(key, value) {
+                                // Si la comuna está en el array de comunas seleccionadas, marcarla como seleccionada
+                                var selected = comunasSeleccionadas.includes(value.comu_codigo) ? 'selected' : '';
                                 $('#comuna').append(
-                                    `<option value="${value.comu_codigo}">${value.comu_nombre}</option>`
+                                    `<option value="${value.comu_codigo}" ${selected}>${value.comu_nombre}</option>`
                                 );
                             });
                         }
                     });
                 }
-            })
+            }
+
+            // Ejecutar la función al cambiar la región
+            $('#region').on('change', cargarComunas);
+
+            // Ejecutar la función cuando se carga la página
+            $(document).ready(function() {
+                cargarComunas();
+            });
         }
+
+
 
         function regionesByMacrozonas(){
             $('#inic_macrozona').on('change', function() {
@@ -2216,120 +2239,104 @@
 
 
 
-        function DispositivoImpactoByInstrumento(){
-            $('#tactividad').on('change', function() {
-                var tactividad = $(this).val();
+        function DispositivoImpactoByInstrumento() {
+    // Lógica para cargar dispositivos e impactos
+    function cargarDispositivosImpactos() {
+        var tactividad = $('#tactividad').val();
 
-                if (tactividad) {
-                    console.log("tactividad: " + tactividad);
-                    $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-Dispositivo',
-                        type: 'POST',
-                        dataType: 'json',
+        if (tactividad) {
+            // Cargar dispositivos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-Dispositivo',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("Dispositivos recibidos: ", data);
+                    $('#dispositivo_id').empty();
+                    $('#dispositivo_id').append('<option value="" disabled>Seleccione...</option>'); // Opción por defecto
 
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            tactividad: tactividad
-                        },
-                        success: function(data) {
-                            console.log("datos: " + data);
-                            $('#dispositivo_id').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#dispositivo_id').append(
-                                    `<option value="${value.id}">${value.nombre}</option>`
-                                );
-                            });
-                        },
-                        error: function(data) {
-                            console.log("error: " + data);
-
-                            $('#dispositivo_id').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + key);
-                                $('#dispositivo_id').append(
-                                    `<option value="${value.id}">${value.nombre}</option>`
-                                );
-                            });
-                        }
-                    });
-
-                    $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-ImpactoInterno',
-                        type: 'POST',
-                        dataType: 'json',
-
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            tactividad: tactividad
-                        },
-                        success: function(data) {
-                            console.log("datos: " + data);
-                            $('#impactosInternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosInternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        },
-                        error: function(data) {
-                            console.log("error: " + data);
-
-                            $('#impactosInternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosInternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        }
-                    });
-
-
-
-                    $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-ImpactoExterno',
-                        type: 'POST',
-                        dataType: 'json',
-
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            tactividad: tactividad
-                        },
-                        success: function(data) {
-                            console.log("datos: " + data);
-                            $('#impactosExternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosExternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        },
-                        error: function(data) {
-                            console.log("error: " + data);
-
-                            $('#impactosExternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosExternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        }
-                    });
-
-
-
-
-
-
-
+                    if (data.length > 0) {
+                        $.each(data, function(key, value) {
+                            var selected = dispositivosSeleccionados.includes(value.id) ? 'selected' : '';
+                            $('#dispositivo_id').append(
+                                `<option value="${value.id}" ${selected}>${value.nombre}</option>`
+                            );
+                        });
+                    } else {
+                        $('#dispositivo_id').append('<option value="-1">No existen registros</option>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener dispositivos: ", error);
+                    $('#dispositivo_id').empty();
+                    $('#dispositivo_id').append('<option value="-1">Error al cargar dispositivos</option>');
                 }
-            })
+            });
 
+            // Cargar impactos internos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-ImpactoInterno',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("Impactos Internos recibidos: ", data);
+                    $('#impactosInternos').empty();
+                    $.each(data, function(key, value) {
+                        var selected = impactosInternosSeleccionados.includes(value.amb_codigo) ? 'selected' : '';
+                        $('#impactosInternos').append(
+                            `<option value="${value.amb_codigo}" ${selected}>${value.amb_nombre}</option>`
+                        );
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener impactos internos: ", error);
+                }
+            });
+
+            // Cargar impactos externos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-ImpactoExterno',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("Impactos Externos recibidos: ", data);
+                    $('#impactosExternos').empty();
+                    $.each(data, function(key, value) {
+                        var selected = impactosExternosSeleccionados.includes(value.amb_codigo) ? 'selected' : '';
+                        $('#impactosExternos').append(
+                            `<option value="${value.amb_codigo}" ${selected}>${value.amb_nombre}</option>`
+                        );
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener impactos externos: ", error);
+                }
+            });
         }
+    }
+
+    // Ejecutar la función al cambiar la actividad
+    $('#tactividad').on('change', cargarDispositivosImpactos);
+
+    // Ejecutar la función cuando se carga la página
+    $(document).ready(function() {
+        cargarDispositivosImpactos();
+    });
+}
+
+
 
         function carrerasByEscuelas(){
             $('#escuelas').on('change', function() {
