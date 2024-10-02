@@ -469,15 +469,12 @@ function guardarInfra() {
 
 function listarInfraestructura() {
     let inic_codigo = $('#codigo').val();
-    let datosInfra, fila, alertError;
+    let datosInfra;
 
-    // petición para listar las infraestructuras aportadas por las entidades
     $.ajax({
         type: 'GET',
         url: '/admin/crear-iniciativa/listar-infraestructura',
-        data: {
-            iniciativa: inic_codigo
-        },
+        data: { iniciativa: inic_codigo },
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
             $('#tabla-empresa-infra').empty();
@@ -487,8 +484,7 @@ function listarInfraestructura() {
 
             if (!respuesta.estado) {
                 if (respuesta.resultado != '') {
-                    alertError =
-                        `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
+                    let alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
                     $('#div-alert-recursos').html(alertError);
                 }
                 return;
@@ -496,17 +492,14 @@ function listarInfraestructura() {
 
             datosInfra = respuesta.resultado;
             datosInfra.forEach(registro => {
-                fila = '<tr>' +
+                let fila = '<tr>' +
                     '<td>' + registro.tinf_nombre + '</td>' +
                     '<td>' + registro.coin_horas + '</td>' +
                     '<td>' + registro.coin_cantidad + '</td>' +
-                    '<td>' + '$' + new Intl.NumberFormat('es-CL', {
-                        maximumSignificantDigits: 13
-                    }).format(registro.coin_valorizacion) + '</td>' +
+                    '<td>' + '$' + new Intl.NumberFormat('es-CL').format(registro.coin_valorizacion) + '</td>' +
                     '<td>' +
-                    '<button type="button" class="btn btn-icon btn-sm btn-danger" onclick="eliminarInfraestructura(' +
-                    registro.inic_codigo + ', ' + registro.enti_codigo + ', ' + registro
-                    .tinf_codigo + ')"><i class="fas fa-trash"></i></button>' +
+                    '<button type="button" class="btn btn-icon btn-sm btn-warning" onclick="editarInfraestructura(' + registro.inic_codigo + ', ' + registro.enti_codigo + ', ' + registro.tinf_codigo +  ', \'' + registro.coin_horas + '\', \'' + registro.coin_cantidad + '\')"><i class="fas fa-edit"></i></button>' +
+                    '<button type="button" class="btn btn-icon btn-sm btn-danger" onclick="eliminarInfraestructura(' + registro.inic_codigo + ', ' + registro.enti_codigo + ', ' + registro.tinf_codigo + ')"><i class="fas fa-trash"></i></button>' +
                     '</td>' +
                     '</tr>';
                 if (registro.enti_codigo == 1) $('#tabla-empresa-infra').append(fila);
@@ -514,7 +507,7 @@ function listarInfraestructura() {
             });
         },
         error: function(error) {
-            //console.error(error);
+            console.error(error);
         }
     });
 }
@@ -552,6 +545,22 @@ function eliminarInfraestructura(inic_codigo, enti_codigo, tiin_codigo) {
             //console.error(error);
         }
     });
+}
+
+function editarInfraestructura(inic_codigo, enti_codigo, tinf_codigo, coin_horas, coin_cantidad) {
+    // Asignar los valores a los campos del modal
+    $('#editar-iniccodigo').val(inic_codigo);
+    $('#editar-entidadinfra').val(enti_codigo);
+    $('#editar-tipoinfra').val(tinf_codigo);
+    $('#editar-codigoinfra').val(tinf_codigo);
+    $('#editar-horasinfra').val(coin_horas);
+    $('#editar-cantidadinfra').val(coin_cantidad);
+
+    // Llamar a la función para mostrar el nombre de la infraestructura basado en el tinf_codigo
+    mostrarNombreInfraestructura(tinf_codigo);
+
+    // Mostrar el modal
+    $('#modalEditarInfraestructura').modal('show');
 }
 
 function crearRrhh(enti_codigo) {
@@ -665,7 +674,7 @@ function listarRrhh() {
     // petición para listar los RRHH aportados por las entidades
     $.ajax({
         type: 'GET',
-        url:  '/admin/crear-iniciativa/listar-rrhh',
+        url: '/admin/crear-iniciativa/listar-rrhh',
         data: {
             iniciativa: inic_codigo
         },
@@ -692,13 +701,14 @@ function listarRrhh() {
                     '<td>' + registro.trrhh_nombre + '</td>' +
                     '<td>' + registro.corh_horas + '</td>' +
                     '<td>' + registro.corh_cantidad + '</td>' +
-                    '<td>' + '$' + new Intl.NumberFormat('es-CL', {
-                        maximumSignificantDigits: 13
-                    }).format(registro.corh_valorizacion) + '</td>' +
+                    '<td>' + '$' + new Intl.NumberFormat('es-CL', { maximumSignificantDigits: 13 }).format(registro.corh_valorizacion) + '</td>' +
                     '<td>' +
+                    '<button type="button" class="btn btn-icon btn-sm btn-warning" onclick="editarRrhh(' +
+                    registro.inic_codigo + ', ' + registro.enti_codigo + ', \'' + registro.trrhh_codigo + '\', \'' +
+                    registro.corh_horas + '\', \'' + registro.corh_cantidad + '\', \'' + registro.corh_valorizacion + '\')">' +
+                    '<i class="fas fa-edit"></i></button> ' +
                     '<button type="button" class="btn btn-icon btn-sm btn-danger" onclick="eliminarRrhh(' +
-                    registro.inic_codigo + ', ' + registro.enti_codigo + ', ' + registro
-                    .trrhh_codigo + ')"><i class="fas fa-trash"></i></button>' +
+                    registro.inic_codigo + ', ' + registro.enti_codigo + ', ' + registro.trrhh_codigo + ')"><i class="fas fa-trash"></i></button>' +
                     '</td>' +
                     '</tr>';
                 if (registro.enti_codigo == 1) $('#tabla-empresa-rrhh').append(fila);
@@ -706,9 +716,25 @@ function listarRrhh() {
             });
         },
         error: function(error) {
-            //console.error(error);
+            console.error(error);
         }
     });
+}
+
+function editarRrhh(inic_codigo, enti_codigo, trrhh_codigo, corh_horas, corh_cantidad, corh_valorizacion) {
+    // Rellenar los campos del formulario con los valores seleccionados
+    $('#editar-iniccodigorrhh').val(inic_codigo);
+    $('#editar-entidadrrhh').val(enti_codigo);
+    $('#editar-codigorrhh').val(trrhh_codigo);  // Tipo RRHH ahora es editable
+    $('#editar-horasrrhh').val(corh_horas);
+    $('#editar-cantidadhh').val(corh_cantidad);
+    $('#editar-valorrrhh').val(corh_valorizacion);
+
+    // Llamar a la función para mostrar el nombre de la infraestructura basado en el tinf_codigo
+    mostrarNombreRrhh(trrhh_codigo);
+
+    // Mostrar el modal de edición
+    $('#modalEditarRrhh').modal('show');
 }
 
 function eliminarRrhh(inic_codigo, enti_codigo, trrhh_codigo) {

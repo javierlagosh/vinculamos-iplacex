@@ -1325,6 +1325,62 @@ class IniciativasController extends Controller
 
     }
 
+    public function actualizarInfraestructura(Request $request){
+        $tiinConsultar = TipoInfraestructura::select('tinf_valor')->where('tinf_codigo', $request->tipoinfra)->first();
+
+        try {
+            //actualizar
+        $coinActualizar = CostosInfraestructura::where(
+            [
+                'inic_codigo' => $request->iniccodigo,
+                'enti_codigo' => $request->entidadinfra,
+                'tinf_codigo' => $request->tipoinfra
+            ]
+        )->update([
+            'coin_horas' => $request->horasinfra,
+            'coin_cantidad' => $request->cantidadinfra,
+            'coin_valorizacion' => $request->horasinfra * $tiinConsultar->tinf_valor * $request->cantidadinfra,
+        ]);
+
+        if (!$coinActualizar) {
+            return redirect()->back()->with('errorPaso3', 'Ocurrió un error al actualizar el recurso. Por favor, consulte a un administrador.')->withInput();
+        }
+        } catch (\Throwable $th) {
+            return json_encode(['estado' => false, 'resultado' => $th->getMessage()]);
+        }
+
+        return redirect()->back()->with('exitoPaso3', 'Los datos de infraestructura se actualizaron correctamente.');
+
+    }
+    public function actualizarRrhh(Request $request){
+
+        $tirhConsultar = TipoRrhh::select('trrhh_valor')->where('trrhh_codigo', $request->codigorrhh)->first();
+        try {
+            $corhActualizar = CostosRrhh::where(
+                [
+                    'inic_codigo' => $request->iniccodigo,
+                    'trrhh_codigo' => $request->codigorrhh,
+                    'enti_codigo' => $request->entidadrrhh
+                ]
+            )->update([
+                'corh_cantidad' => $request->cantidadhh,
+                'corh_horas' => $request->horasrrhh,
+                'corh_valorizacion' => $request->horasrrhh * $tirhConsultar->trrhh_valor * $request->cantidadhh,
+            ]);
+
+            if (!$corhActualizar) {
+                return redirect()->back()->with('errorPaso3', 'Ocurrió un error al actualizar el recurso. Por favor, consulte a un administrador.')->withInput();
+            }
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorPaso3', 'Ocurrió un error al actualizar el recurso. Por favor, consulte a un administrador.')->withInput();
+        }
+
+        return redirect()->back()->with('exitoPaso3', 'Los datos de recursos humanos se actualizaron correctamente.');
+
+
+    }
+
     public function actualizarPaso1(Request $request, $inic_codigo)
     {
         if (Session::has('admin')) {
@@ -2272,6 +2328,8 @@ class IniciativasController extends Controller
     public function editarPaso3($inic_codigo)
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
+        $infraestructura = TipoInfraestructura::select('tinf_codigo', 'tinf_nombre')->get();
+        $rrhh = TipoRRHH::select('trrhh_codigo', 'trrhh_nombre')->get();
         // $inicEditar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         // $listarRegiones = Regiones::select('regi_codigo', 'regi_nombre')->orderBy('regi_codigo')->get();
         // $listarParticipantes = DB::table('participantes')
@@ -2281,7 +2339,9 @@ class IniciativasController extends Controller
         //     ->orderBy('part_creado', 'asc')
         //     ->get();
         return view('admin.iniciativas.paso3', [
-            'iniciativa' => $iniciativa
+            'iniciativa' => $iniciativa,
+            'infraestructura' => $infraestructura,
+            'rrhh' => $rrhh
         ]);
     }
 

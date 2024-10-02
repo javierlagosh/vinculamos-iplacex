@@ -440,6 +440,82 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalEditarInfraestructura" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar Infraestructura</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('admin.infra.actualizar')}}" method="post">
+                        @method('POST')
+                        @csrf
+                        <div class="text-center" id="div-alert-editar-infraestructura">
+                        </div>
+                        <div class="form-group">
+
+                            <label>Tipo de Infraestructura</label>
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                </div>
+                                <p id="editar-nombretipoinfra" class="form-control">Nombre infraestructura</p>
+
+
+                                <input type="number" id="editar-tipoinfra" hidden name="tipoinfra" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Horas de uso</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-stopwatch"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-horasinfra" name="horasinfra" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cantidad de Infraestructuras</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-cantidadinfra" name="cantidadinfra" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label>Valorización</label>
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                                <input type="number"  class="form-control" id="editar-valorinfra" name="editar-valorinfra" disabled>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <input type="hidden" id="editar-entidadinfra" name="entidadinfra">
+                            <input type="hidden" id="editar-iniccodigo" name="iniccodigo">
+                            <input type="hidden" id="editar-tinf_codigo" name="tinf_codigo">
+                            <button type="submit" class="btn btn-primary waves-effect" >Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="modalRrhh" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -515,6 +591,83 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalEditarRrhh" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar RRHH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action=" {{route('admin.rrhh.actualizar')}} " method="post">
+                        @method('POST')
+                        @csrf
+                        <div class="text-center" id="div-alert-editar-rrhh"></div>
+
+                        <div class="form-group">
+                            <label>Tipo RRHH</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                </div>
+                                <p id="editar-nombrerrhh" class="form-control">Nombre infraestructura</p>
+                                <!-- Cambiado de <select> a <input> para edición directa -->
+                                <input type="text" hidden class="form-control" id="editar-codigorrhh" name="codigorrhh" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cantidad de horas</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-stopwatch"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cantidad de personal</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group" hidden>
+                            <label>Valorización</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-valorrrhh" name="valorrrhh" disabled>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <input type="hidden" id="editar-entidadrrhh" name="entidadrrhh">
+                            <input type="hidden" id="editar-iniccodigorrhh" name="iniccodigo">
+                            <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="tituloModalFinalizar"
         aria-hidden="true">
@@ -593,7 +746,39 @@
             </div>
         </div>
     </div>
+    <script>
+        // Función para mostrar el nombre de la infraestructura
+    function mostrarNombreInfraestructura(tinf_codigo) {
+        // Obtenemos el array de infraestructura desde PHP
+        const infraestructuras = {!! json_encode($infraestructura) !!};
 
+        // Buscar en el array el nombre que corresponde al código
+        const infraestructura = infraestructuras.find(infra => infra.tinf_codigo == tinf_codigo);
+
+        // Si se encuentra una infraestructura con ese código, mostrar el nombre
+        if (infraestructura) {
+            document.getElementById('editar-nombretipoinfra').textContent = infraestructura.tinf_nombre;
+        } else {
+            document.getElementById('editar-nombretipoinfra').textContent = 'Infraestructura no encontrada';
+        }
+    }
+
+        // Función para mostrar el nombre de rrhh
+        function mostrarNombreRrhh(trrhh_codigo) {
+        // Obtenemos el array de infraestructura desde PHP
+        const rrhhs = {!! json_encode($rrhh) !!};
+
+        // Buscar en el array el nombre que corresponde al código
+        const rrhh = rrhhs.find(rh => rh.trrhh_codigo == trrhh_codigo);
+
+        // Si se encuentra una rrhh con ese código, mostrar el nombre
+        if (rrhh) {
+            document.getElementById('editar-nombrerrhh').textContent = rrhh.trrhh_nombre;
+        } else {
+            document.getElementById('editar-nombrerrhh').textContent = 'Rrhh no encontrado';
+        }
+    }
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ '/js/admin/iniciativas/paso3.js' }}"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
