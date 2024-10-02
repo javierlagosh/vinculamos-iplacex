@@ -1954,7 +1954,7 @@
         // Comunas seleccionadas al editar
         var comunasSeleccionadas = @json($comuSec ?? []);
         // Dispositivos, impactos internos y externos seleccionados al editar
-        var dispositivosSeleccionados = [@json($iniciativa->dispositivo_id)];
+        var dispositivosSeleccionados = [@json($iniciativa->dispositivo_id) ?? ""];
 
         var impactosInternosSeleccionados = @json($impactosInternosSec ?? []);
         var impactosExternosSeleccionados = @json($impactosExternosSec ?? []);
