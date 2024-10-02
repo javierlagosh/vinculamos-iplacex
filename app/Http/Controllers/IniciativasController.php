@@ -84,6 +84,9 @@ class IniciativasController extends Controller
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
             ->leftjoin('escuelas', 'escuelas.escu_codigo', 'participantes_internos.escu_codigo')
+
+            ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
+            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
             ->select(
                 'iniciativas.inic_codigo',
                 'iniciativas.inic_nombre',
@@ -91,15 +94,30 @@ class IniciativasController extends Controller
                 'iniciativas.inic_anho',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
+                'escuelas.escu_nombre',
                 'tipo_actividades.tiac_nombre',
                 'dispositivo.nombre as dispositivo',
+                'ambito_accion.amac_codigo',
+                'ambito_accion.amac_nombre',
                 'componentes.comp_nombre',
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
                 // DB::raw('GROUP_CONCAT(DISTINCT escuelas.escu_nombre SEPARATOR "/ ") as escuelas'),
                 // DB::raw('GROUP_CONCAT(DISTINCT carreras.care_nombre SEPARATOR ", ") as carreras'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             )
-            ->groupBy('iniciativas.meca_codigo','iniciativas.inic_codigo', 'componentes.comp_nombre', 'iniciativas.inic_nombre', 'iniciativas.inic_estado', 'iniciativas.inic_anho', 'mecanismos.meca_nombre', 'inic_creado', 'dispositivo.nombre', 'tipo_actividades.tiac_nombre') // Agregamos inic_creado al GROUP BY
+            ->groupBy('iniciativas.meca_codigo',
+            'iniciativas.inic_codigo',
+             'componentes.comp_nombre',
+              'iniciativas.inic_nombre',
+               'iniciativas.inic_estado',
+                'iniciativas.inic_anho',
+                 'mecanismos.meca_nombre',
+                  'inic_creado',
+                   'dispositivo.nombre',
+                    'tipo_actividades.tiac_nombre',
+                     'escuelas.escu_nombre',
+                        'ambito_accion.amac_codigo',
+                        'ambito_accion.amac_nombre')
             ->orderBy('inic_creado', 'desc'); // Ordenar por fecha de creación formateada en orden descendente
         // ->where('iniciativas.inic_anho','2023')
 
@@ -129,6 +147,11 @@ class IniciativasController extends Controller
         if ($request->escuela == null && $request->mecanismo == null && $request->anho == null) {
             $iniciativas = $iniciativas->where('iniciativas.inic_anho', '2024');
         }
+
+        if ($request->mac != 'all' && $request->amac != null) {
+            $iniciativas = $iniciativas->where('ambito_accion.amac_codigo', $request->amac);
+        }
+
 
         $iniciativas = $iniciativas->get();
 

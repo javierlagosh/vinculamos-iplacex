@@ -111,7 +111,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-4 col-md-4 col-lg-4">
+                                    {{-- <div class="col-xl-4 col-md-4 col-lg-4">
                                         <div class="form-group"><label for="anho">Año</label>
                                             <select name="anho" id="anho" class="form-control select2"
                                                 style="width: 100%">
@@ -126,7 +126,7 @@
                                                 @endforelse
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-xl-12 col-sm-4 col-md-4 col-lg-4">
                                         <div class="mb-4 text-right">
@@ -146,9 +146,11 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Nombre</th>
-                                            <th>Dispositivo</th>
+                                            <th>Unidad Ejecutora</th>
+                                            <th>Ámbito</th>
+                                            {{-- <th>Dispositivo</th> --}}
                                             <th>Instrumento</th>
-                                            <th>Año</th>
+                                            {{-- <th>Año</th> --}}
                                             <th>Sedes</th>
                                             {{-- <th>Carreras</th> --}}
                                             <th>Estado</th>
@@ -161,9 +163,11 @@
                                             <tr>
                                                 <td>{{ $iniciativa->inic_codigo }}</td>
                                                 <td>{{ $iniciativa->inic_nombre }}</td>
-                                                <td>{{ $iniciativa->dispositivo }}</td>
+                                                <td> {{$iniciativa->escu_nombre}} </td>
+                                                <td>{{ $iniciativa->amac_nombre }}</td>
+                                                {{-- <td>{{ $iniciativa->dispositivo }}</td> --}}
                                                 <td>{{ $iniciativa->tiac_nombre }}</td>
-                                                <td>{{ $iniciativa->inic_anho }}</td>
+                                                {{-- <td>{{ $iniciativa->inic_anho }}</td> --}}
                                                 <td>
                                                     @php
                                                         $sedesArray = explode('/', $iniciativa->sedes);
