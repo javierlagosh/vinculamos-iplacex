@@ -2333,6 +2333,11 @@
     // Ejecutar la función cuando se carga la página
     $(document).ready(function() {
         cargarDispositivosImpactos();
+        //poner selected en los selectores de impactos
+        $('#impactosInternos').val(impactosInternosSeleccionados);
+        $('#impactosExternos').val(impactosExternosSeleccionados);
+
+
     });
 }
 
