@@ -233,7 +233,7 @@ class IniciativasController extends Controller
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
             ->leftjoin('escuelas', 'escuelas.escu_codigo', 'participantes_internos.escu_codigo')
-            ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
+            //->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
             //->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
             ->select(
                 'iniciativas.inic_codigo',
