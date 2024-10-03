@@ -1606,6 +1606,20 @@ class IniciativasController extends Controller
 
         $carreras = $request->input('carreras', []);
 
+        foreach($carreras as $key => $care_codigo){
+            $carrerasDB = Carreras::where('care_codigo', $care_codigo)->first();
+            if($carrerasDB->care_nombre == 'No aplica'){
+                $carrerasNoAplica = Carreras::where('care_nombre', 'No aplica')->get();
+                foreach($carrerasNoAplica as $carreraNoAplica){
+                    array_push($carreras, $carreraNoAplica->care_codigo);
+
+                }
+                break;
+            }
+        }
+
+        //quitar repetidos
+        $carreras = array_unique($carreras);
 
 
         $existentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)->get();
@@ -1679,6 +1693,24 @@ class IniciativasController extends Controller
             ParticipantesInternos::where('inic_codigo', $inic_codigo)->delete();
             return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de las unidades, intente más tarde.')->withInput();
         }
+
+        //eliminar pain duplicados donde tenga el mismo inic_codigo sede_codigo escu_codigo y care_codigo
+        $painDuplicados = ParticipantesInternos::select('sede_codigo', 'escu_codigo', 'care_codigo', 'inic_codigo')
+            ->groupBy('sede_codigo', 'escu_codigo', 'care_codigo', 'inic_codigo')
+            ->havingRaw('count(*) > 1')
+            ->get();
+
+        foreach ($painDuplicados as $painDuplicado) {
+            $painEliminar = ParticipantesInternos::where('sede_codigo', $painDuplicado->sede_codigo)
+                ->where('escu_codigo', $painDuplicado->escu_codigo)
+                ->where('care_codigo', $painDuplicado->care_codigo)
+                ->where('inic_codigo', $painDuplicado->inic_codigo)
+                ->orderBy('pain_codigo', 'desc')
+                ->limit(1)
+                ->delete();
+        }
+
+
 
         IniciativasPais::where('inic_codigo', $inic_codigo)->delete();
         IniciativasRegiones::where('inic_codigo', $inic_codigo)->delete();
