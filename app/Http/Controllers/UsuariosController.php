@@ -103,12 +103,16 @@ class UsuariosController extends Controller
     }
 
     public function eliminarUsuario(Request $request) {
-        $usuaVerificar = Usuarios::where(['usua_nickname' => $request->usua_nickname, 'rous_codigo' => 1])->first();
-        if (!$usuaVerificar) return redirect()->back()->with('errorUsuario', 'El usuario no se encuentra registrado.');
+        //verificar si el usuario logeado es admin
+        if (Session::get('admin')->rous_codigo != 1) return redirect()->back()->with('errorUsuario', 'No tiene permisos para realizar esta acción.');
 
-        $usuaEliminar = Usuarios::where(['usua_nickname' => $request->usua_nickname, 'rous_codigo' => 1])->delete();
+        $usuaVerificar = Usuarios::where(['usua_nickname' => $request->usua_nickname])->first();
+        if (!$usuaVerificar) return redirect()->back()->with('errorUsuario', 'El usuario no se encuentra registrado.');
+        $nombre = $usuaVerificar->usua_nombre .' '. $usuaVerificar->usua_apellido;
+        $usuaEliminar = Usuarios::where(['usua_nickname' => $request->usua_nickname])->delete();
         if (!$usuaEliminar) return redirect()->back()->with('errorUsuario', 'Ocurrió un error al eliminar el usuario, intente más tarde.');
-        return redirect()->route('admin.listar.usuarios')->with('exitoUsuario', 'El usuario fue eliminado correctamente.');
+        $mensaje = 'El usuario de "'. $nombre .'" fue eliminado correctamente.';
+        return redirect()->route('admin.listar.usuarios')->with('exitoUsuario', $mensaje);
     }
 
     public function editarUsuario(Request $request, $usua_nickname) {
