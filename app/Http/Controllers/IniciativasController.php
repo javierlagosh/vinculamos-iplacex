@@ -109,15 +109,15 @@ class IniciativasController extends Controller
                 ->join('ambito_accion as aa', 'taa2.amac_codigo', '=', 'aa.amac_codigo')
                 ->where('aa.amac_codigo', $request->amac);
             }
-    
+
             if ($request->mecanismo != 'all' && $request->mecanismo != null) {
                 $iniciativas = $iniciativas->where('mecanismos.meca_codigo', $request->mecanismo);
             }
-    
+
             if ($request->anho != 'all' && $request->anho != null) {
                 $iniciativas = $iniciativas->where('iniciativas.inic_anho', $request->anho);
             }
-    
+
             // Filtro por defecto
             if ($request->escuela == null && $request->mecanismo == null && $request->anho == null) {
                 $iniciativas = $iniciativas->where('iniciativas.inic_anho', Carbon::now()->year);
@@ -197,6 +197,10 @@ class IniciativasController extends Controller
                     // 'ambito_accion.amac_nombre'
                 );
 
+            //quitar duplicados
+            $iniciativas = $iniciativas->distinct();
+
+
             $iniciativas = $iniciativas
                 ->orderBy($orderByName, $orderBy);
 
@@ -205,6 +209,8 @@ class IniciativasController extends Controller
                 ->take($pageLength)
                 ->get();
 
+
+
             return response()->json([
                 "draw"=> $request->draw,
                 "recordsTotal"=> $recordsTotal,
@@ -212,6 +218,8 @@ class IniciativasController extends Controller
                 'data' => $iniciativas
             ], 200);
         }
+
+
 
         // No AJAX, renderizar vista
         $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
