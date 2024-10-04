@@ -145,7 +145,7 @@
                                 </button>
                                 </div>
                             </div>
-                            
+
                             <div id="iniciativas-container">
                                 <div class="table-responsive">
                                     <table class="table table-striped w-100" id="iniciativas">
@@ -202,6 +202,34 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalUpdateState" tabindex="-1" role="dialog" aria-labelledby="modalUpdateState"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="{{ route('admin.iniciativas.updateState') }} " method="POST">
+                @method('POST')
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalUpdateEstado">Actualizar estado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-refresh text-success mb-3" style="font-size: 50px; color"></i>
+                    <h6 class="mt-2" id="mensajeUpdateState"></h6>
+                    <input type="hidden" id="inic_codigo_update" name="inic_codigo" value="">
+                    <input type="hidden" id="estado_update" name="state" value="">
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="submit" class="btn btn-primary">Continuar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <div class="modal fade" id="modalINVI" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
@@ -495,6 +523,23 @@
                     fila.style.display = 'table-row';
                 }
             });
+        }
+
+        function abrirModalUpdateState(inic_codigo, estado) {
+            $('#estado_update').val(estado);
+            if(estado == 3){
+                $('#mensajeUpdateState').text('¿Está seguro de aprobar la iniciativa?');
+            }else if(estado == 2){
+                $('#mensajeUpdateState').text('¿Está seguro de poner en ejecución la iniciativa?');
+            }else if(estado == 4){
+                $('#mensajeUpdateState').text('¿Está seguro de poner en falta de información la iniciativa?');
+            }else if(estado == 5){
+                $('#mensajeUpdateState').text('¿Está seguro de cerrar la iniciativa?');
+            }else if(estado == 6){
+                $('#mensajeUpdateState').text('¿Está seguro de finalizar la iniciativa?');
+            }
+            $('#inic_codigo_update').val(inic_codigo);
+            $('#modalUpdateState').modal('show');
         }
     </script>
 @endsection
