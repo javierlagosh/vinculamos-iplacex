@@ -192,14 +192,13 @@ class IniciativasController extends Controller
                     'inic_creado',
                     'dispositivo.nombre',
                     'tipo_actividades.tiac_nombre',
-                    'escuelas.escu_nombre',
+                    //'escuelas.escu_nombre',
                     // 'ambito_accion.amac_codigo',
                     // 'ambito_accion.amac_nombre'
                 );
 
             //quitar duplicados
             $iniciativas = $iniciativas->distinct();
-
 
             $iniciativas = $iniciativas
                 ->orderBy($orderByName, $orderBy);
@@ -209,8 +208,6 @@ class IniciativasController extends Controller
                 ->take($pageLength)
                 ->get();
 
-
-
             return response()->json([
                 "draw"=> $request->draw,
                 "recordsTotal"=> $recordsTotal,
@@ -218,8 +215,6 @@ class IniciativasController extends Controller
                 'data' => $iniciativas
             ], 200);
         }
-
-
 
         // No AJAX, renderizar vista
         $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
@@ -240,7 +235,7 @@ class IniciativasController extends Controller
             ->leftjoin('dispositivo', 'dispositivo.id', 'iniciativas.dispositivo_id')
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
-            ->leftjoin('escuelas', 'escuelas.escu_codigo', 'participantes_internos.escu_codigo')
+            //->leftjoin('escuelas', 'escuelas.escu_codigo', 'participantes_internos.escu_codigo')
             //->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
             //->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
             ->select(
@@ -250,7 +245,7 @@ class IniciativasController extends Controller
                 'iniciativas.inic_anho',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
-                'escuelas.escu_nombre',
+                //'escuelas.escu_nombre',
                 'tipo_actividades.tiac_nombre',
                 'dispositivo.nombre as dispositivo',
                 // 'ambito_accion.amac_codigo',
