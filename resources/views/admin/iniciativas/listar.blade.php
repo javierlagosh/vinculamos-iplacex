@@ -153,6 +153,7 @@
                                             <tr>
                                                 <th data-column="inic_codigo">ID</th>
                                                 <th style="width: 20%" data-column="inic_nombre">Nombre</th>
+                                                <th data-column="escu_nombre">Unidad Ejecutora</th>
                                                 <th data-column="dispositivo">Dispositivo</th>
                                                 <th data-column="tiac_nombre">Instrumento</th>
                                                 <th data-column="inic_anho">Año</th>
@@ -322,6 +323,7 @@
             columns: [
                 { data: 'inic_codigo', name: 'iniciativas.inic_codigo' },
                 { data: 'inic_nombre', name: 'iniciativas.inic_nombre' },
+                { data: 'escu_nombre', name: 'escuelas.escu_nombre' },
                 { data: 'dispositivo', name: 'dispositivo' },
                 { data: 'tiac_nombre', name: 'tipo_actividades.tiac_nombre' },
                 { data: 'inic_anho', name: 'iniciativas.inic_anho' },
