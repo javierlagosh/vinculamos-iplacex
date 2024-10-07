@@ -59,7 +59,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                <div class="col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group"><label for="sede">Sedes</label>
                                         <select name="sede" id="sede" class="form-control select2"
                                             style="width: 100%">
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                <div class="col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group"><label for="amac">Ámbito de acción</label>
                                         <select name="amac" id="amac" class="form-control select2"
                                             style="width: 100%">
@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                <div class="col-md-2 col-lg-2 col-xl-2" hidden>
                                     <div class="form-group"><label for="anho">Año</label>
                                         <select name="anho" id="anho" class="form-control select2"
                                             style="width: 100%">
@@ -154,9 +154,9 @@
                                                 <th data-column="inic_codigo">ID</th>
                                                 <th style="width: 20%" data-column="inic_nombre">Nombre</th>
                                                 <th data-column="escu_nombre">Unidad Ejecutora</th>
-                                                <th data-column="dispositivo">Dispositivo</th>
+                                                <th data-column="amacs">Ámbito </th>
                                                 <th data-column="tiac_nombre">Instrumento</th>
-                                                <th data-column="inic_anho">Año</th>
+
                                                 <th data-column="sedes">Sedes</th>
                                                 <th data-column="inic_estado">Estado</th>
                                                 <th data-column="inic_creado">Fecha de creación</th>
@@ -324,9 +324,24 @@
                 { data: 'inic_codigo', name: 'iniciativas.inic_codigo' },
                 { data: 'inic_nombre', name: 'iniciativas.inic_nombre' },
                 { data: 'escu_nombre', name: 'escuelas.escu_nombre' },
-                { data: 'dispositivo', name: 'dispositivo' },
+                {
+                    data: 'amacs',
+                    name: 'amacs',
+                    render: function(data, type, row) {
+                        if(data === null){
+                            return "";
+                        }
+
+                        const amacsArray = data.split(' / ');
+                        if (amacsArray.length > 6) {
+                            return 'Todas';
+                        } else {
+                            return data;
+                        }
+                    }
+                },
                 { data: 'tiac_nombre', name: 'tipo_actividades.tiac_nombre' },
-                { data: 'inic_anho', name: 'iniciativas.inic_anho' },
+
                 {
                     data: 'sedes',
                     name: 'sedes',

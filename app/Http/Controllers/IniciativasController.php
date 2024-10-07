@@ -187,10 +187,10 @@ class IniciativasController extends Controller
                     'componentes.comp_nombre',
                     'iniciativas.inic_nombre',
                     'iniciativas.inic_estado',
-                    'iniciativas.inic_anho',
+                    // 'iniciativas.inic_anho',
                     'mecanismos.meca_nombre',
                     'inic_creado',
-                    'dispositivo.nombre',
+                    // 'dispositivo.nombre',
                     'tipo_actividades.tiac_nombre',
                     'escuelas.escu_nombre',
                     // 'ambito_accion.amac_codigo',
@@ -232,25 +232,26 @@ class IniciativasController extends Controller
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
             ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
             ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
-            ->leftjoin('dispositivo', 'dispositivo.id', 'iniciativas.dispositivo_id')
+            // ->leftjoin('dispositivo', 'dispositivo.id', 'iniciativas.dispositivo_id')
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
             ->leftjoin('escuelas', 'escuelas.escu_codigo', 'iniciativas.inic_escuela_ejecutora')
-            //->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
-            //->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
+            ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
+            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
             ->select(
                 'iniciativas.inic_codigo',
                 'iniciativas.inic_nombre',
                 'iniciativas.inic_estado',
-                'iniciativas.inic_anho',
+                // 'iniciativas.inic_anho',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
                 'escuelas.escu_nombre',
                 'tipo_actividades.tiac_nombre',
-                'dispositivo.nombre as dispositivo',
+                // 'dispositivo.nombre as dispositivo',
                 // 'ambito_accion.amac_codigo',
                 // 'ambito_accion.amac_nombre',
                 'componentes.comp_nombre',
+                DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             );
