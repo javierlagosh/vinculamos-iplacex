@@ -19,6 +19,7 @@ class Iniciativas extends Model
         'conv_codigo',
         'prog_codigo',
         'meca_codigo',
+        'amac_codigo',
         'dispositivo_id',
         'inic_nombre',
         'inic_territorio',

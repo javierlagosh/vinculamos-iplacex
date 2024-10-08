@@ -1393,23 +1393,23 @@
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Convenio</label> <label for=""
+                                        <label style="font-size: 110%">Ámbito</label> <label for=""
                                             style="color: red;">*</label>
-                                        <select class="form-control select2" required id="convenio" name="convenio"
+                                        <select class="form-control select2" required id="ambito" name="ambito" required
                                             style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 <option value="" selected>No Aplica</option>
-                                                @foreach ($convenios as $convenio)
-                                                    <option value="{{ $convenio->conv_codigo }}"
-                                                        {{ $iniciativa->conv_codigo == $convenio->conv_codigo ? 'selected' : '' }}>
-                                                        {{ $convenio->conv_nombre }}</option>
+                                                @foreach ($ambitos as $ambito)
+                                                    <option value="{{ $ambito->amac_codigo }}"
+                                                        {{ $iniciativa->amac_codigo == $ambito->amac_codigo ? 'selected' : '' }}>
+                                                        {{ $ambito->amac_nombre }}</option>
                                                 @endforeach
                                             @else
-                                                @if (count($convenios) > 0)
+                                                @if (count($ambitos) > 0)
                                                     <option value="" disabled selected>Seleccione...</option>
-                                                    @foreach ($convenios as $convenio)
-                                                        <option value="{{ $convenio->conv_codigo }}">
-                                                            {{ $convenio->conv_nombre }}</option>
+                                                    @foreach ($ambitos as $ambito)
+                                                        <option value="{{ $ambito->amac_codigo }}">
+                                                            {{ $ambito->amac_nombre }}</option>
                                                     @endforeach
                                                 @else
                                                     <option value="-1" disabled selected>No existen registros</option>
@@ -1419,17 +1419,19 @@
                                         </select>
 
 
-                                        @if ($errors->has('convenio'))
+                                        @if ($errors->has('ambito'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
                                                     <button class="close"
                                                         data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('convenio') }}</strong>
+                                                    <strong>{{ $errors->first('ambito') }}</strong>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
+
+
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
@@ -1616,7 +1618,46 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xl-4 col-md-4 col-lg-4" hidden>
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Convenio</label> <label for=""
+                                            style="color: red;">*</label>
+                                        <select class="form-control select2" required id="convenio" name="convenio"
+                                            style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                <option value="" selected>No Aplica</option>
+                                                @foreach ($convenios as $convenio)
+                                                    <option value="{{ $convenio->conv_codigo }}"
+                                                        {{ $iniciativa->conv_codigo == $convenio->conv_codigo ? 'selected' : '' }}>
+                                                        {{ $convenio->conv_nombre }}</option>
+                                                @endforeach
+                                            @else
+                                                @if (count($convenios) > 0)
+                                                    <option value="" disabled selected>Seleccione...</option>
+                                                    @foreach ($convenios as $convenio)
+                                                        <option value="{{ $convenio->conv_codigo }}">
+                                                            {{ $convenio->conv_nombre }}</option>
+                                                    @endforeach
+                                                @else
+                                                    <option value="-1" disabled selected>No existen registros</option>
+                                                @endif
+
+                                            @endif
+                                        </select>
+
+
+                                        @if ($errors->has('convenio'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('convenio') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- <div class="col-xl-4 col-md-4 col-lg-4" hidden>
 
                                     <div class="form-group" >
                                         <label style="font-size: 110%">Macrozona</label> <label
@@ -1683,7 +1724,7 @@
                                     </div>
 
 
-                                </div>
+                                </div> --}}
                                 @if (isset($iniciativa) && $editar )
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group" id="regiones_div" >
@@ -1768,7 +1809,7 @@
 
 
                                 @else
-                                <div class="col-xl-6 col-md-6 col-lg-6">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group" id="regiones_div">
                                         <label style="font-size: 110%">Región</label>
                                         <input type="hidden" id="territorio" name="territorio" value="nacional">
@@ -1806,7 +1847,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-xl-6 col-md-6 col-lg-6">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group" id="comunas_div">
                                         <label style="font-size: 110%">Comuna</label>
                                         <select class="form-control select2" id="comuna" name="comuna[]" required

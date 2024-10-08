@@ -324,22 +324,23 @@
                 { data: 'inic_codigo', name: 'iniciativas.inic_codigo' },
                 { data: 'inic_nombre', name: 'iniciativas.inic_nombre' },
                 { data: 'escu_nombre', name: 'escuelas.escu_nombre' },
-                {
-                    data: 'amacs',
-                    name: 'amacs',
-                    render: function(data, type, row) {
-                        if(data === null){
-                            return "";
-                        }
+                { data: 'amac_nombre', name: 'ambito_accion.amac_nombre' },
+                // {
+                //     data: 'amacs',
+                //     name: 'amacs',
+                //     render: function(data, type, row) {
+                //         if(data === null){
+                //             return "";
+                //         }
 
-                        const amacsArray = data.split(' / ');
-                        if (amacsArray.length > 6) {
-                            return 'Todas';
-                        } else {
-                            return data;
-                        }
-                    }
-                },
+                //         const amacsArray = data.split(' / ');
+                //         if (amacsArray.length > 6) {
+                //             return 'Todas';
+                //         } else {
+                //             return data;
+                //         }
+                //     }
+                // },
                 { data: 'tiac_nombre', name: 'tipo_actividades.tiac_nombre' },
 
                 {

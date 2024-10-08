@@ -104,10 +104,7 @@ class IniciativasController extends Controller
                 $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
             }
             if ($request->amac != 'all' && $request->amac != null) {
-                $iniciativas = $iniciativas->join('tipoactividad_ambitosaccion as taa1', 'iniciativas.tiac_codigo', '=', 'taa1.tiac_codigo')
-                ->join('tipoactividad_ambitosaccion as taa2', 'taa1.amac_codigo', '=', 'taa2.amac_codigo')
-                ->join('ambito_accion as aa', 'taa2.amac_codigo', '=', 'aa.amac_codigo')
-                ->where('aa.amac_codigo', $request->amac);
+                $iniciativas = $iniciativas->where('ambito_accion.amac_codigo', $request->amac);
             }
 
             if ($request->mecanismo != 'all' && $request->mecanismo != null) {
@@ -194,7 +191,7 @@ class IniciativasController extends Controller
                     'tipo_actividades.tiac_nombre',
                     'escuelas.escu_nombre',
                     // 'ambito_accion.amac_codigo',
-                    // 'ambito_accion.amac_nombre'
+                    'ambito_accion.amac_nombre'
                 );
 
             //quitar duplicados
@@ -236,8 +233,7 @@ class IniciativasController extends Controller
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
             ->leftjoin('escuelas', 'escuelas.escu_codigo', 'iniciativas.inic_escuela_ejecutora')
-            ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
-            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
+            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
             ->select(
                 'iniciativas.inic_codigo',
                 'iniciativas.inic_nombre',
@@ -251,7 +247,8 @@ class IniciativasController extends Controller
                 // 'ambito_accion.amac_codigo',
                 // 'ambito_accion.amac_nombre',
                 'componentes.comp_nombre',
-                DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
+                'ambito_accion.amac_nombre',
+                // DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             );
@@ -822,6 +819,7 @@ class IniciativasController extends Controller
         $asignaturas = Asignaturas::all();
         $dispositivos = Dispositivos::all();
         $subgrupos = SubUnidades::all();
+        $ambitos = AmbitosAccion::all();
 
         $impactosInternos = Ambitos::where('amb_descripcion', 'Impacto Interno')->get();
         $impactosExternos = Ambitos::where('amb_descripcion', 'Impacto Externo')->get();
@@ -832,6 +830,7 @@ class IniciativasController extends Controller
             'editar' => false,
             //para saber si se esta editando o creando una nueva iniciativa
             'iniciativa' => $iniciativa,
+            'ambitos' => $ambitos,
             'mecanismo' => $mecanismo,
             'tipoActividad' => $tipoActividad,
             'convenios' => $convenios,
@@ -906,7 +905,7 @@ class IniciativasController extends Controller
             'inic_escuela_ejecutora' => $request->inic_escuela_ejecutora,
             'inic_asignaturas' => $request->inic_asignaturas,
             'dispositivo_id' => $request->dispositivo_id,
-            'inic_macrozona' => $request->inic_macrozona,
+            'amac_codigo' => $request->ambito,
             'sugr_codigo' => $request->sugr_codigo,
             'inic_formato' => $request->inic_formato,
             'inic_brecha' => $request->brecha,
@@ -1400,6 +1399,8 @@ class IniciativasController extends Controller
         // dd($metasData);
         $dispositivos = Dispositivos::all();
 
+        $ambitos = AmbitosAccion::all();
+
         return view('admin.iniciativas.paso1', [
             'editar' => true,
             //para que se muestre el boton de editar en el formulario
@@ -1409,6 +1410,7 @@ class IniciativasController extends Controller
             'tipoActividad' => $tipoActividad,
             'iniciativaRegion' => $regiSec,
             'iniciativaComuna' => $comuSec,
+            'ambitos' => $ambitos,
             'sedes' => $sedes,
             'comunas' => $comunas,
             'convenios' => $convenios,
@@ -1607,7 +1609,7 @@ class IniciativasController extends Controller
             'inic_brecha' => $request->brecha,
             'inic_diagnostico' => $request->diagnostico,
             'inic_escuela_ejecutora' => $request->inic_escuela_ejecutora,
-            'inic_macrozona' => $request->inic_macrozona,
+            'amac_codigo' => $request->ambito,
             'dispositivo_id' => $request->dispositivo_id,
             'inic_desde' => $request->desde,
             'inic_asignaturas' => $request->inic_asignaturas,
