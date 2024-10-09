@@ -109,23 +109,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-                                <div class="col-md-2 col-lg-2 col-xl-2" hidden>
-                                    <div class="form-group"><label for="anho">Año</label>
-                                        <select name="anho" id="anho" class="form-control select2"
-                                            style="width: 100%">
-                                            <option value="" selected>Seleccione...</option>
-                                            <option value="all">Todos</option>
-                                            @forelse ($anhos as $anho)
-                                                <option value="{{ $anho->inic_anho }}"
-                                                    {{ Request::get('anho') == $anho->inic_anho ? 'selected' : '' }}>
-                                                    {{ $anho->inic_anho }}</option>
-                                            @empty
-                                                <option value="-1">No existen registros</option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="row">
@@ -154,9 +137,8 @@
                                                 <th data-column="inic_codigo">ID</th>
                                                 <th style="width: 20%" data-column="inic_nombre">Nombre</th>
                                                 <th data-column="escu_nombre">Unidad Ejecutora</th>
-                                                <th data-column="amacs">Ámbito </th>
+                                                <th data-column="amacs">Ámbitos</th>
                                                 <th data-column="tiac_nombre">Instrumento</th>
-
                                                 <th data-column="sedes">Sedes</th>
                                                 <th data-column="inic_estado">Estado</th>
                                                 <th data-column="inic_creado">Fecha de creación</th>
@@ -204,33 +186,32 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalUpdateState" tabindex="-1" role="dialog" aria-labelledby="modalUpdateState"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form action="{{ route('admin.iniciativas.updateState') }} " method="POST">
-                @method('POST')
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalUpdateEstado">Actualizar estado</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <i class="fas fa-refresh text-success mb-3" style="font-size: 50px; color"></i>
-                    <h6 class="mt-2" id="mensajeUpdateState"></h6>
-                    <input type="hidden" id="inic_codigo_update" name="inic_codigo" value="">
-                    <input type="hidden" id="estado_update" name="state" value="">
-                </div>
-                <div class="modal-footer bg-whitesmoke br">
-                    <button type="submit" class="btn btn-primary">Continuar</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                </div>
-            </form>
+    <div class="modal fade" id="modalUpdateState" tabindex="-1" role="dialog" aria-labelledby="modalUpdateState" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form action="{{ route('admin.iniciativas.updateState') }} " method="POST">
+                    @method('POST')
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUpdateEstado">Actualizar estado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-refresh text-success mb-3" style="font-size: 50px; color"></i>
+                        <h6 class="mt-2" id="mensajeUpdateState"></h6>
+                        <input type="hidden" id="inic_codigo_update" name="inic_codigo" value="">
+                        <input type="hidden" id="estado_update" name="state" value="">
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                        <button type="submit" class="btn btn-primary">Continuar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="modal fade" id="modalINVI" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
@@ -293,6 +274,7 @@
             </div>
         </div>
     </div>
+
     <link rel="stylesheet" href="{{ asset('/bundles/datatables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -317,32 +299,29 @@
                     d.sede = $('select[name="sede"]').val();
                     d.tiac = $('select[name="tiac"]').val();
                     d.amac = $('select[name="amac"]').val();
-                    d.anho = $('select[name="anho"]').val();
                 }
             },
             columns: [
                 { data: 'inic_codigo', name: 'iniciativas.inic_codigo' },
                 { data: 'inic_nombre', name: 'iniciativas.inic_nombre' },
                 { data: 'escu_nombre', name: 'escuelas.escu_nombre' },
-                { data: 'amac_nombre', name: 'ambito_accion.amac_nombre' },
-                // {
-                //     data: 'amacs',
-                //     name: 'amacs',
-                //     render: function(data, type, row) {
-                //         if(data === null){
-                //             return "";
-                //         }
+                {
+                    data: 'amacs',
+                    name: 'amacs',
+                    render: function(data, type, row) {
+                        if(data === null){
+                            return "";
+                        }
 
-                //         const amacsArray = data.split(' / ');
-                //         if (amacsArray.length > 6) {
-                //             return 'Todas';
-                //         } else {
-                //             return data;
-                //         }
-                //     }
-                // },
+                        const ambitosArray = data.split(' / ');
+                        if (ambitosArray.length > 6) {
+                            return 'Todas';
+                        } else {
+                            return data;
+                        }
+                    }
+                },
                 { data: 'tiac_nombre', name: 'tipo_actividades.tiac_nombre' },
-
                 {
                     data: 'sedes',
                     name: 'sedes',
@@ -480,7 +459,7 @@
         });
 
         $(document).ready(function(){
-            $(document).on('change', 'select[name="sede"], select[name="tiac"],  select[name="amac"], select[name="anho"]', function() {
+            $(document).on('change', 'select[name="sede"], select[name="tiac"], select[name="amac"]', function() {
                 table.draw();  //Refresca la tabla con los nuevos datos
             });
 
@@ -488,7 +467,6 @@
                 $('select[name="sede"]').val('').trigger('change');
                 $('select[name="tiac"]').val('').trigger('change');
                 $('select[name="amac"]').val('').trigger('change');
-                $('select[name="anho"]').val('').trigger('change');
                 $('input[name="search"]').val("");
                 table.draw();
             });

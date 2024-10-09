@@ -94,30 +94,15 @@ class IniciativasController extends Controller
         $iniciativas = $this->getIniciativasQuery($request);
 
         if ($request->ajax()) {
-            // Aplicar filtros (Dropdowns de Sedes/Componentes/Año)
+            // Aplicar filtros
             if ($request->sede != 'all' && $request->sede != null) {
                 $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
-            }else{
-                $iniciativas = $iniciativas;
             }
             if ($request->tiac != 'all' && $request->tiac != null) {
                 $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
             }
             if ($request->amac != 'all' && $request->amac != null) {
                 $iniciativas = $iniciativas->where('ambito_accion.amac_codigo', $request->amac);
-            }
-
-            if ($request->mecanismo != 'all' && $request->mecanismo != null) {
-                $iniciativas = $iniciativas->where('mecanismos.meca_codigo', $request->mecanismo);
-            }
-
-            if ($request->anho != 'all' && $request->anho != null) {
-                $iniciativas = $iniciativas->where('iniciativas.inic_anho', $request->anho);
-            }
-
-            // Filtro por defecto
-            if ($request->escuela == null && $request->mecanismo == null && $request->anho == null) {
-                $iniciativas = $iniciativas->where('iniciativas.inic_anho', Carbon::now()->year);
             }
 
             // Total records before GROUP BY
@@ -135,10 +120,8 @@ class IniciativasController extends Controller
                 $iniciativas->where(function ($query) use ($search) {
                     $query->where('iniciativas.inic_nombre', 'like', "%{$search}%")
                         ->orWhere('mecanismos.meca_nombre', 'like', "%{$search}%")
-                        ->orWhere('componentes.comp_nombre', 'like', "%{$search}%")
-                        ->orWhere('iniciativas.inic_anho', 'like', "%{$search}%")
-                        ->orWhere('tipo_actividades.tiac_nombre', 'like', "%{$search}%")
-                        ->orWhere('dispositivo.nombre', 'like', "%{$search}%");
+                        //->orWhere('componentes.comp_nombre', 'like', "%{$search}%")
+                        ->orWhere('tipo_actividades.tiac_nombre', 'like', "%{$search}%");
                 });
             }
 
@@ -158,13 +141,13 @@ class IniciativasController extends Controller
                     $orderByName = 'iniciativas.inic_nombre';
                     break;
                 case '2':
-                    $orderByName = 'dispositivo';
+                    $orderByName = 'escuelas.escu_nombre';
                     break;
                 case '3':
-                    $orderByName = 'tipo_actividades.tiac_nombre';
+                    $orderByName = 'amacs';
                     break;
                 case '4':
-                    $orderByName = 'iniciativas.inic_anho';
+                    $orderByName = 'tipo_actividades.tiac_nombre';
                     break;
                 case '5':
                     $orderByName = 'sedes';
@@ -184,14 +167,10 @@ class IniciativasController extends Controller
                     'componentes.comp_nombre',
                     'iniciativas.inic_nombre',
                     'iniciativas.inic_estado',
-                    // 'iniciativas.inic_anho',
                     'mecanismos.meca_nombre',
                     'inic_creado',
-                    // 'dispositivo.nombre',
                     'tipo_actividades.tiac_nombre',
                     'escuelas.escu_nombre',
-                    // 'ambito_accion.amac_codigo',
-                    'ambito_accion.amac_nombre'
                 );
 
             //quitar duplicados
@@ -215,12 +194,10 @@ class IniciativasController extends Controller
 
         // No AJAX, renderizar vista
         $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
-        $mecanismos = Mecanismos::select('meca_codigo','meca_nombre')->get();
         $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
         $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
-        $anhos = Iniciativas::select('inic_anho')->distinct('inic_anho')->orderBy('inic_anho', 'asc')->get();
 
-        return view('admin.iniciativas.listar', compact('iniciativas', 'mecanismos', 'anhos', 'sedes', 'tiac', 'amac'));
+        return view('admin.iniciativas.listar', compact('iniciativas', 'sedes', 'tiac', 'amac'));
     }
 
     private function getIniciativasQuery(Request $request)
@@ -229,26 +206,22 @@ class IniciativasController extends Controller
             ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
             ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
             ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
-            // ->leftjoin('dispositivo', 'dispositivo.id', 'iniciativas.dispositivo_id')
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
             ->leftjoin('escuelas', 'escuelas.escu_codigo', 'iniciativas.inic_escuela_ejecutora')
-            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
+            ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
+            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
             ->select(
                 'iniciativas.inic_codigo',
                 'iniciativas.inic_nombre',
                 'iniciativas.inic_estado',
-                // 'iniciativas.inic_anho',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
                 'escuelas.escu_nombre',
                 'tipo_actividades.tiac_nombre',
-                // 'dispositivo.nombre as dispositivo',
-                // 'ambito_accion.amac_codigo',
-                // 'ambito_accion.amac_nombre',
                 'componentes.comp_nombre',
-                'ambito_accion.amac_nombre',
-                // DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
+                //'ambito_accion.amac_nombre',
+                DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             );
