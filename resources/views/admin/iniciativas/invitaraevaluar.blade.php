@@ -77,65 +77,12 @@
                             <input type="hidden" name="iniciativa_codigo" id="iniciativa_codigo"
                                 value="{{ $iniciativa[0]->inic_codigo }}">
 
-                            <div class="card-header-action">
-                                <div class="dropdown d-inline">
-
-                                    <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton2"
-                                        data-toggle="dropdown">Iniciativas</button>
-
-                                    <div class="dropdown-menu dropright">
-                                        <a href="{{ route('admin.editar.paso1', $iniciativa[0]->inic_codigo) }}"
-                                            class="dropdown-item has-item" data-toggle="tooltip" data-placement="top"
-                                            title="Editar iniciativa"><i class="fas fa-edit"></i> Editar
-                                            Iniciativa</a>
-
-                                        <a href="{{ route('admin.iniciativas.detalles', $iniciativa[0]->inic_codigo) }}"
-                                            class="dropdown-item has-item" data-toggle="tooltip" data-placement="top"
-                                            title="Ver detalles de la iniciativa"><i class="fas fa-eye"></i> Mostrar
-                                            detalles</a>
-                                        {{-- <a href="javascript:void(0)" class="btn btn-icon btn-info icon-left"
-                                            data-toggle="tooltip" data-placement="top" title="Calcular INVI"
-                                            onclick="calcularIndice({{ $iniciativa[0]->inic_codigo }})"><i
-                                                class="fas fa-tachometer-alt"></i>INVI</a> --}}
-
-                                        <a href="{{ route('admin.evidencias.listar', $iniciativa[0]->inic_codigo) }}"
-                                            class="dropdown-item has-item" data-toggle="tooltip" data-placement="top"
-                                            title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Adjuntar
-                                            evidencias</a>
-                                    </div>
-
-                                    <div class="dropdown d-inline">
-
-                                        <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
-                                            data-toggle="dropdown"><i class="fas fa-plus-circle"></i> Ingresar</button>
-
-                                        <div class="dropdown-menu dropright">
-
-                                            <a href="{{ route('admin.cobertura.index', $iniciativa[0]->inic_codigo) }}"
-                                                class="dropdown-item has-item" data-toggle="tooltip"
-                                                data-placement="top" title="Ingresar cobertura"><i
-                                                    class="fas fa-users"></i> Ingresaer cobertura</a>
-
-                                            <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
-                                                class="dropdown-item has-item" data-toggle="tooltip"
-                                                data-placement="top" title="Ingresar resultado"><i
-                                                    class="fas fa-flag"></i> Ingresar resultado/s</a>
-                                        </div>
-                                    </div>
-
-
-
-                                    {{-- <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa[0]->inic_codigo) }}"
-                                            class="btn btn-icon btn-success icon-left" data-toggle="tooltip"
-                                            data-placement="top" title="Evaluar iniciativa"><i
-                                                class="fas fa-file-signature"></i>Evaluar</a> --}}
-
-                                    <a href="{{ route('admin.iniciativa.listar') }}"
-                                        class="btn btn-primary mr-1 waves-effect icon-left" type="button">
-                                        <i class="fas fa-angle-left"></i> Volver a listado
+                                <div class="card-header-action">
+                                    <a href="{{ route('admin.iniciativas.detalles', $iniciativa[0]->inic_codigo) }}"
+                                       class="btn btn-primary mr-1 waves-effect icon-left" type="button">
+                                        <i class="fas fa-angle-left"></i> Volver a la Iniciativa
                                     </a>
                                 </div>
-                            </div>
                         </div>
 
 

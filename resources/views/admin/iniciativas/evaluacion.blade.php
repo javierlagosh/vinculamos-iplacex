@@ -137,18 +137,23 @@
                                         <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
                                             data-toggle="dropdown"><i class="fas fa-plus-circle"></i> Ingresar</button>
 
-                                        <div class="dropdown-menu dropright">
+                                            <div class="dropdown-menu dropright">
+                                                <a href="{{ route('admin.cobertura.index', $iniciativa[0]->inic_codigo) }}"
+                                                    class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                                    title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
 
-                                            <a href="{{ route('admin.cobertura.index', $iniciativa[0]->inic_codigo) }}"
-                                                class="dropdown-item has-item" data-toggle="tooltip"
-                                                data-placement="top" title="Ingresar cobertura"><i
-                                                    class="fas fa-users"></i> Ingresaer cobertura</a>
+                                                <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
+                                                    class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                                    title="Ingresar resultado"><i class="fas fa-flag"></i>Ingresar resultado/s</a>
+                                                    <a href="{{ route('admin.evidencias.listar', $iniciativa[0]->inic_codigo) }}"
+                                                        class="dropdown-item has-item" data-toggle="tooltip" data-placement="top"
+                                                        title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Ingresar
+                                                        evidencias</a>
+                                                    <a href="{{ route('admin.evaluar.iniciativa', $iniciativa[0]->inic_codigo) }}" class="dropdown-item has-icon"><i
+                                                        class="fas fa-file-signature"></i>Ingresar evaluación</a>
 
-                                            <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
-                                                class="dropdown-item has-item" data-toggle="tooltip"
-                                                data-placement="top" title="Ingresar resultado"><i
-                                                    class="fas fa-flag"></i> Ingresar resultado/s</a>
-                                        </div>
+
+                                            </div>
                                     </div>
 
 

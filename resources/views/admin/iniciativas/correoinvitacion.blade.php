@@ -79,13 +79,12 @@
                             <input type="hidden" name="iniciativa_codigo" id="iniciativa_codigo"
                                 value="{{ $iniciativa[0]->inic_codigo }}">
 
-                            <div class="card-header-action">
-
-                                    <a href="{{ route('admin.iniciativa.listar') }}"
-                                        class="btn btn-primary mr-1 waves-effect icon-left" type="button">
-                                        <i class="fas fa-angle-left"></i> Volver a listado
+                                <div class="card-header-action">
+                                    <a href="{{ route('admin.iniciativas.detalles', $iniciativa[0]->inic_codigo) }}"
+                                       class="btn btn-primary mr-1 waves-effect icon-left" type="button">
+                                        <i class="fas fa-angle-left"></i> Volver a la Iniciativa
                                     </a>
-                            </div>
+                                </div>
                         </div>
 
                         <div class="mx-5 mt-3">
