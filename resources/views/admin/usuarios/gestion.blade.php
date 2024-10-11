@@ -41,28 +41,28 @@
                                 </div>
                             @endif
                             @if (Session::has('exitoClave'))
-                            <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
-                                <div class="alert-body">
-                                    <strong>{{ Session::get('exitoClave') }}</strong>
-                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
+                                    <div class="alert-body">
+                                        <strong>{{ Session::get('exitoClave') }}</strong>
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
-                        @if (Session::has('errorClave'))
-                        <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
-                            <div class="alert-body">
-                                <strong>{{ Session::get('errorClave') }}</strong>
-                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                            </div>
-                        </div>
-                    @endif
+                            @endif
+                            @if (Session::has('errorClave'))
+                                <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
+                                    <div class="alert-body">
+                                        <strong>{{ Session::get('errorClave') }}</strong>
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         <div class="col-3"></div>
                     </div>
 
                     <div class="card">
                         <div class="card-header">
-                            <h4>Listado de usuarios administradores</h4>
+                            <h4>Listado de usuarios registrados</h4>
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#modalCrearUsuario"><i class="fas fa-plus"></i> Nuevo usuario</button>
@@ -116,7 +116,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($usuario->usua_nickname == Session::get('admin')->usua_nickname)
+
                                                         <div class="card-header-action">
                                                             <a href="javascript:void(0)" class="btn btn-icon btn-primary"
                                                                 onclick="editarClaveUsuario('{{ $usuario->usua_nickname }}')"
@@ -128,19 +128,7 @@
                                                                 data-toggle="tooltip" data-placement="top" title="Editar"><i
                                                                     class="fas fa-edit"></i></a>
                                                         </div>
-                                                    @endif
-                                                    @if (
-                                                        ($usuario->usua_usuario_mod == Session::get('admin')->usua_nickname ||
-                                                            $usuario->usua_nickname != Session::get('admin')->usua_nickname))
-                                                            <a href="javascript:void(0)" class="btn btn-icon btn-primary"
-                                                            onclick="editarClaveUsuario('{{ $usuario->usua_nickname }}')"
-                                                            data-toggle="tooltip" data-placement="top"
-                                                            title="Cambiar contraseña"><i
-                                                                class="fas fa-user-lock"></i></a>
-                                                        <a href="javascript:void(0)" class="btn btn-icon btn-warning"
-                                                            onclick="editarUsuario('{{ $usuario->usua_nickname }}')"
-                                                            data-toggle="tooltip" data-placement="top" title="Editar"><i
-                                                                class="fas fa-edit"></i></a>
+
 
                                                         @if ($usuario->usua_vigente == 0)
                                                             <form
@@ -148,7 +136,7 @@
                                                                 method="POST" style="display: inline-block">
                                                                 @method('PUT')
                                                                 @csrf
-                                                                <button type="submit" class="btn btn-icon btn-primary"
+                                                                <button type="submit" class="btn btn-icon btn-success"
                                                                     data-toggle="tooltip" data-placement="top"
                                                                     title="Habilitar usuario"><i
                                                                         class="fas fa-user-plus"></i></button>
@@ -159,7 +147,7 @@
                                                                 method="POST" style="display: inline-block">
                                                                 @method('PUT')
                                                                 @csrf
-                                                                <button type="submit" class="btn btn-icon btn-warning"
+                                                                <button type="submit" class="btn btn-icon btn-secondary"
                                                                     data-toggle="tooltip" data-placement="top"
                                                                     title="Deshabilitar usuario"><i
                                                                         class="fas fa-user-slash"></i></button>
@@ -169,7 +157,6 @@
                                                             onclick="eliminarUsuario('{{ $usuario->usua_nickname }}')"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Eliminar usuario"><i class="fas fa-trash"></i></a>
-                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -244,7 +231,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6 col-md-6 col-lg-6">
+                            <div class="col-xl-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Nombre de usuario</label>
                                     <div class="input-group">
@@ -255,7 +242,8 @@
                                         </div>
                                         <input type="text" class="form-control"
                                             placeholder="Ingresar nombre de usuario" id="nickname" name="nickname"
-                                            value="{{ old('nickname') }}" autocomplete="off">
+                                            value="{{ old('nickname') }}" autocomplete="off"
+                                            oninput="this.value = this.value.replace(/\s/g, '')">
                                     </div>
                                     @if ($errors->has('nickname'))
                                         <div class="alert alert-warning alert-dismissible show fade mt-2">
@@ -267,7 +255,8 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6 col-lg-6">
+
+                            <div class="col-xl-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Correo electrónico</label>
                                     <div class="input-group">
@@ -291,7 +280,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6 col-md-6 col-lg-6">
+                            <div class="col-xl-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Contraseña</label>
                                     <div class="input-group">
@@ -313,7 +302,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6 col-lg-6">
+                            <div class="col-xl-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label>Confirmar contraseña</label>
                                     <div class="input-group">
@@ -335,10 +324,10 @@
                                     @endif
                                 </div>
                             </div>
-
                         </div>
+
                         <div class="row">
-                            <div class="col-xl-6 col-md-6 col-lg-6">
+                            <div class="col-xl-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                     <label for="rol">Rol</label>
                                     <div class="input-group">
@@ -372,6 +361,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary waves-effect"><i class="fa fa-save"></i>
                                 Registrar</button>
@@ -398,7 +388,7 @@
                             @method('post')
                             @csrf
                             <div class="row">
-                                <div class="col-6 col-md-6 col-lg-6">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label>Nombre</label>
                                         <div class="input-group">
@@ -494,6 +484,41 @@
                                         @endif
                                     </div>
                                 </div>
+
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Rol</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-id-card"></i>
+                                                </div>
+                                                <select name="rol" id="rol" class="form-control"
+                                                    style="width: 100%">
+                                                    <option value="" disabled selected>Seleccione...</option>
+                                                    @forelse ($roles as $rol)
+                                                        <option value="{{ $rol->rous_codigo }}"
+                                                            {{ @$usuario->rous_codigo == $rol->rous_codigo ? 'selected' : '' }}>
+                                                            {{ $rol->rous_nombre }}
+                                                        </option>
+                                                    @empty
+                                                        <option value="" disabled selected>Sin registros</option>
+                                                    @endforelse
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        @if ($errors->has('email'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('email') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
@@ -534,7 +559,7 @@
     </div>
 
     @foreach ($usuarios as $usuario)
-        @if ($usuario->usua_nickname == Session::get('admin')->usua_nickname || $usuario->usua_nickname != Session::get('admin')->usua_nickname)
+    @if (Session::has('admin'))
             <div class="modal fade" id="modalEditarClaveUsuario-{{ $usuario->usua_nickname }}" tabindex="-1"
                 role="dialog" aria-labelledby="modalEditarClaveUsuario" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -561,8 +586,7 @@
                                                     </div>
                                                 </div>
                                                 <input type="password" class="form-control" id="nueva"
-                                                    name="nueva" value="{{ old('nueva') }}"
-                                                    autocomplete="off">
+                                                    name="nueva" value="{{ old('nueva') }}" autocomplete="off">
                                             </div>
                                             @if ($errors->has('nueva'))
                                                 <div class="alert alert-warning alert-dismissible show fade mt-2">
@@ -585,9 +609,7 @@
                                                     </div>
                                                 </div>
                                                 <input type="password" class="form-control" id="repetir"
-                                                    name="repetir"
-                                                    value="{{ old('repetir') }}"
-                                                    autocomplete="off">
+                                                    name="repetir" value="{{ old('repetir') }}" autocomplete="off">
                                             </div>
                                             @if ($errors->has('repetir'))
                                                 <div class="alert alert-warning alert-dismissible show fade mt-2">
@@ -620,6 +642,7 @@
         }
 
         function editarUsuario(usua_nickname) {
+            console.log('editarUsuario');
             $('#modalEditarUsuario-' + usua_nickname).modal('show');
         }
 
