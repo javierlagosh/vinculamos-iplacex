@@ -242,8 +242,7 @@
                                         </div>
                                         <input type="text" class="form-control"
                                             placeholder="Ingresar nombre de usuario" id="nickname" name="nickname"
-                                            value="{{ old('nickname') }}" autocomplete="off"
-                                            oninput="this.value = this.value.replace(/\s/g, '')">
+                                            value="{{ old('nickname') }}" autocomplete="off">
                                     </div>
                                     @if ($errors->has('nickname'))
                                         <div class="alert alert-warning alert-dismissible show fade mt-2">
@@ -255,6 +254,15 @@
                                     @endif
                                 </div>
                             </div>
+
+                            <script>
+                                document.getElementById('nickname').addEventListener('input', function (event) {
+                                    var input = event.target.value;
+                                    // Reemplaza todo lo que no sea letras ni números
+                                    event.target.value = input.replace(/[^a-zA-Z0-9]/g, '');
+                                });
+                            </script>
+
 
                             <div class="col-xl-6 col-md-6 col-lg-6">
                                 <div class="form-group">
