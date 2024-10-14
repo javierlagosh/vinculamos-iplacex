@@ -105,6 +105,10 @@ class IniciativasController extends Controller
                 $iniciativas = $iniciativas->where('ambito_accion.amac_codigo', $request->amac);
             }
 
+            if ($request->estadoInput != 'all' && $request->estadoInput != null) {
+                $iniciativas = $iniciativas->where('iniciativas.inic_estado', $request->estadoInput);
+            }
+
             // Total records before GROUP BY
             $recordsTotal = $iniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
 

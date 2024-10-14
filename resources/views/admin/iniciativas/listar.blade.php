@@ -59,7 +59,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4 col-lg-4 col-xl-4">
+                                <div class="col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-group"><label for="sede">Sedes</label>
                                         <select name="sede" id="sede" class="form-control select2"
                                             style="width: 100%">
@@ -76,7 +76,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-lg-4 col-xl-4">
+                                <div class="col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-group"><label for="tiac">Instrumento</label>
                                         <select name="tiac" id="tiac" class="form-control select2"
                                             style="width: 100%">
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-lg-4 col-xl-4">
+                                <div class="col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-group"><label for="amac">Ámbito de acción</label>
                                         <select name="amac" id="amac" class="form-control select2"
                                             style="width: 100%">
@@ -106,6 +106,22 @@
                                             @empty
                                                 <option value="-1">No existen registros</option>
                                             @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group"><label for="estadoInput">Estado</label>
+                                        <select name="estadoInput" id="estadoInput" class="form-control select2"
+                                            style="width: 100%">
+                                            <option value="" selected>Seleccione...</option>
+                                            <option value="all">Todos</option>
+                                            <option value="1">En revisión</option>
+                                            <option value="2">En ejecución</option>
+                                            <option value="3">Aprobada</option>
+                                            <option value="4">Falta información</option>
+                                            <option value="5">Cerrada</option>
+                                            <option value="6">Finalizada</option>
                                         </select>
                                     </div>
                                 </div>
@@ -299,6 +315,7 @@
                     d.sede = $('select[name="sede"]').val();
                     d.tiac = $('select[name="tiac"]').val();
                     d.amac = $('select[name="amac"]').val();
+                    d.estadoInput = $('select[name="estadoInput"]').val();
                 }
             },
             columns: [
@@ -459,7 +476,7 @@
         });
 
         $(document).ready(function(){
-            $(document).on('change', 'select[name="sede"], select[name="tiac"], select[name="amac"]', function() {
+            $(document).on('change', 'select[name="sede"], select[name="tiac"], select[name="amac"], select[name="estadoInput"]', function() {
                 table.draw();  //Refresca la tabla con los nuevos datos
             });
 
@@ -467,6 +484,7 @@
                 $('select[name="sede"]').val('').trigger('change');
                 $('select[name="tiac"]').val('').trigger('change');
                 $('select[name="amac"]').val('').trigger('change');
+                $('select[name="estadoInput"]').val('').trigger('change');
                 $('input[name="search"]').val("");
                 table.draw();
             });
