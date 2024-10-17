@@ -400,7 +400,7 @@
                             </div>
 
                             <div class="row">
-                                @if ($escu->escu_codigo != 9 && $escu->escu_codigo != 12)
+                                @if ($escu->escu_codigo != 9)
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label>Meta Consejo consultivo</label>
