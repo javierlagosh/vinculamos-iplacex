@@ -12,7 +12,7 @@
   <div class="mt-5 w-100">
     <div class="container bg-white w-100 p-5 rounded mb-3">
         <div class="center-block">
-            <img  style="display: block; margin-left: auto; margin-right: auto;" width="300px" alt="Logo" src="{{ asset('/img/logos/logo_vg_color.png') }}" class="header-logo">
+            <img  style="display: block; margin-left: auto; margin-right: auto;" width="300px" alt="Logo" src="{{ asset('/img/Logo-iplacex-2022.webp') }}" class="header-logo">
 
             <hr style="margin-left: 20%; margin-right: 20%;
             border: 0;
