@@ -542,3 +542,10 @@ Route::post('/send-email', [MailController::class, 'sendEmail'])->name('enviar.e
 Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
 Route::post('admin/actualizar-iniciativa/actualizar-infraestructura', [IniciativasController::class, 'actualizarInfraestructura'])->name('admin.infra.actualizar');
 Route::post('admin/actualizar-iniciativa/actualizar-rrhh', [IniciativasController::class, 'actualizarRrhh'])->name('admin.rrhh.actualizar');
+
+
+Route::post('/evaluaciones/guardar/qr/', [IniciativasController::class, 'guardarEvaluacionQR'])->name('evaluacion.guardar.desde.qr');
+Route::get('/evaluaciones/{evatotal_encriptado}/desde-qr', [IniciativasController::class, 'evaluaEstudianteDesdeQR']);
+//qr evaluacion
+Route::get('evaluaciones/{evatotal_encriptado}/qr', [IniciativasController::class, 'mostrarQr'])->name('admin.qr.evaluacion');
+

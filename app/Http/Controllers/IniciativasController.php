@@ -72,6 +72,8 @@ use App\Models\EvaluacionInvitado;
 use Illuminate\Support\HtmlString;
 use App\Models\ProgramasContribuciones;
 
+use Illuminate\Support\Facades\Http;
+
 class IniciativasController extends Controller
 {
     private function getUserRole()
@@ -4232,6 +4234,177 @@ $contribuciones = ProgramasContribuciones::join('programas', 'programas.prog_cod
         }
 
         return redirect()->back()->with('success', 'El correo electrónico ha sido enviado correctamente.');
+    }
+
+
+    public function evaluaEstudianteDesdeQR($evatotal_encriptado)
+    {
+        $evaluacion = EvaluacionTotal::where('evatotal_encriptado', $evatotal_encriptado)->get();
+        $tipo = $evaluacion[0]->evatotal_tipo;
+
+        $inic_codigo = $evaluacion[0]->inic_codigo;
+
+
+        $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->get();
+        $evaluaciones = Evaluacion::where('inic_codigo', $inic_codigo)->get();
+        $resultados = Resultados::where('inic_codigo', $inic_codigo)->get();
+        $ambitos = Programas::join('programas_contribuciones', 'programas_contribuciones.prog_codigo', 'programas.prog_codigo')
+            ->join('ambito', 'ambito.amb_codigo', 'programas_contribuciones.amb_codigo')
+            ->select('ambito.amb_nombre')
+            ->where('prog_nombre', $iniciativa[0]->inic_nombre)
+            ->get();
+
+        return view('evaestudiantesqr', compact('iniciativa', 'evaluaciones', 'inic_codigo', 'resultados', 'ambitos', 'tipo'));
+
+    }
+
+    public function guardarEvaluacionQR(Request $request)
+    {
+        //obtener evatotal_codigo
+        $evatotal = EvaluacionTotal::where('evatotal_tipo', $request->tipo)
+        ->where('inic_codigo', $request->inic_codigo)
+        ->first();
+        // crear al invitado si no existe
+        $evaluacionInvitado = EvaluacionInvitado::where('evainv_correo', $request->correo)
+            ->where('inic_codigo', $request->inic_codigo)
+            ->where('evatotal_tipo', $request->tipo)
+            ->get();
+        $existe = 0;
+        $existePeroNoRespondido = 0;
+        foreach ($evaluacionInvitado as $eval) {
+            if ($eval->evainv_correo == $request->correo && $eval->evainv_estado == 2) {
+                $existe = 1;
+            }
+            if ($eval->evainv_correo == $request->correo && $eval->evainv_estado == 0) {
+                $existePeroNoRespondido = 1;
+            }
+        }
+        if ($existe == 1) {
+            return redirect()->back()->with('error', '¡Ya has respondido la encuesta!');
+        }
+
+        if($existePeroNoRespondido == 0){
+            $evaluacionInvitado = new EvaluacionInvitado();
+            $evaluacionInvitado->evainv_nombre = "Invitad@";
+            $evaluacionInvitado->evainv_correo = $request->correo;
+            $evaluacionInvitado->inic_codigo = $request->inic_codigo;
+            $evaluacionInvitado->evainv_estado = 2;
+            $evaluacionInvitado->evatotal_tipo = $request->tipo;
+            $evaluacionInvitado->evatotal_codigo = $evatotal->evatotal_codigo;
+            $evaluacionInvitado->save();
+        }else{
+            $evaluacionInvitado = EvaluacionInvitado::where('evainv_correo', $request->correo)
+            ->where('inic_codigo', $request->inic_codigo)
+            ->where('evatotal_tipo', $request->tipo)
+            ->get();
+            $evaluacionInvitado[0]->evainv_estado = 2;
+            $evaluacionInvitado[0]->save();
+        }
+                    $evaluacion = new Evaluacion();
+                    $evaluacion->inic_codigo = $request->inic_codigo;
+                    //objetivo
+                    $evaluacion->eval_conocimiento_1 = $request->conocimientoObjetivo;
+                    $evaluacion->eval_cumplimiento_1 = $request->cumplimientoObjetivo;
+                    // resultado
+                    $evaluacion->eval_conocimiento_2 = $request->conocimientoResultado;
+                    $evaluacion->eval_cumplimiento_2 = $request->cumplimientoResultado;
+                    // calidad plazos
+                    //Revisar si calidad plazos es NA, si es así, se le asigna 999 (no puede ser 0)
+                    if ($request->calidad_plazos == 'NA') {
+                        $request->calidad_plazos = 999;
+                    }
+                    $evaluacion->eval_calidad_1 = $request->calidad_plazos;
+                    // calidad equipamiento
+                    //Revisar si calidad equipamiento es NA, si es así, se le asigna 999 (no puede ser 0)
+                    if ($request->calidad_equipamiento == 'NA') {
+                        $request->calidad_equipamiento = 999;
+                    }
+                    $evaluacion->eval_calidad_2 = $request->calidad_equipamiento;
+                    // calidad logistica
+                    //Revisar si calidad logistica es NA, si es así, se le asigna 999 (no puede ser 0)
+                    if ($request->calidad_logistica == 'NA') {
+                        $request->calidad_logistica = 999;
+                    }
+                    $evaluacion->eval_calidad_3 = $request->calidad_logistica;
+                    // calidad presentaciones
+                    //Revisar si calidad presentaciones es NA, si es así, se le asigna 999 (no puede ser 0)
+                    if ($request->calidad_presentaciones == 'NA') {
+                        $request->calidad_presentaciones = 999;
+                    }
+                    $evaluacion->eval_calidad_4 = $request->calidad_presentaciones;
+                    // estudiantes ejecutar
+                    $evaluacion->eval_competencia_1 = $request->estudiantes_ejecutar;
+                    // estudiantes positividad
+                    $evaluacion->eval_competencia_2 = $request->estudiantes_positividad;
+                    // estudiantes resolucion
+                    $evaluacion->eval_competencia_3 = $request->estudiantes_resolucion;
+                    $evaluacion->eval_evaluador = $request->tipo;
+                    $evaluacion->eval_email = $request->correo;
+                    $evaluacion->evatotal_codigo = $evatotal->evatotal_codigo;
+
+                    //calcular el promedio total
+                    //CONOCIMIENTO
+                    $conocimiento = ($request->conocimientoObjetivo + $request->conocimientoResultado) / 2;
+                    //CUMPLIMIENTO
+                    $cumplimiento = ($request->cumplimientoObjetivo + $request->cumplimientoResultado) / 2;
+
+                    //CALIDAD
+                    // Si el valor es 999 (NA), no se toma en cuenta
+                    if ($request->calidad_plazos != 999) {
+                        $calidad_plazos = $request->calidad_plazos;
+                    } else {
+                        $calidad_plazos = 0;
+                    }
+                    if ($request->calidad_equipamiento != 999) {
+                        $calidad_equipamiento = $request->calidad_equipamiento;
+                    } else {
+                        $calidad_equipamiento = 0;
+                    }
+                    if ($request->calidad_logistica != 999) {
+                        $calidad_logistica = $request->calidad_logistica;
+                    } else {
+                        $calidad_logistica = 0;
+                    }
+                    if ($request->calidad_presentaciones != 999) {
+                        $calidad_presentaciones = $request->calidad_presentaciones;
+                    } else {
+                        $calidad_presentaciones = 0;
+                    }
+
+                    $calidad = ($calidad_plazos + $calidad_equipamiento + $calidad_logistica + $calidad_presentaciones) / 4;
+                    // Si el evaluador es un estudiante
+                    if ($request->tipo == 0) {
+                        $competencia = ($request->estudiantes_ejecutar + $request->estudiantes_positividad + $request->estudiantes_resolucion) / 3;
+                        $evaluacion->eval_puntaje = ($conocimiento + $cumplimiento + $calidad + $competencia) / 4;
+                    } else {
+                        $evaluacion->eval_puntaje = ($conocimiento + $cumplimiento + $calidad) / 3;
+                    }
+                    $evaluacion->save();
+                    return redirect()->back()->with('exito', 'Evaluación ingresada correctamente.');
+    }
+
+
+    public function mostrarQr($evatotal_encriptado)
+    {
+
+        // Realizas la solicitud HTTP
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post('https://wispy-hall-609d.innboard.workers.dev/', [
+            'text' => env('URL_EVALUACIONES').'evaluaciones/'.$evatotal_encriptado.'/desde-qr',
+        ]);
+
+        // Si la respuesta es binaria (como una imagen), la retornas directamente
+        if ($response->header('Content-Type') === 'image/png') {
+            return response($response->body(), 200)
+                    ->header('Content-Type', 'image/png');
+        }
+
+        // Si deseas pasarla a la vista 'evaluacion-qr'
+        $imageData = base64_encode($response->body());
+
+        // Pasar la imagen codificada en base64 a la vista
+        return view('evaluacion-qr', ['imageData' => $imageData]);
     }
 
 
