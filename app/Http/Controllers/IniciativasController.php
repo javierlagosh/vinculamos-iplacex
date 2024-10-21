@@ -3226,7 +3226,7 @@ class IniciativasController extends Controller
             $evaluacion_total = new EvaluacionTotal();
             $evaluacion_total->inic_codigo = $request->inic_codigo;
             $evaluacion_total->evatotal_tipo = $request->tipo;
-            $evaluacion_total->evatotal_encriptado = md5($nombre . $request->tipo);
+            $evaluacion_total->evatotal_encriptado = md5($nombre . $request->tipo . $request->inic_codigo);
             $evaluacion_total->save();
             //redireccionar al paso 2
             return redirect()->route('admin.evaluar.paso2', ['inic_codigo' => $request->inic_codigo, 'invitado' => $request->tipo])->with('exito', '¡Se ha creado la evaluación correctamente!');
