@@ -475,10 +475,10 @@
 
                                 </div>
                                 <input type="text" id="ObjetivoElegido" hidden>
-                                {{-- <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
+                                <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
                                     <span id="asociarODSpinner" class="" role="status" aria-hidden="true"></span>
                                     <span id="asociarODSObjetivoTexto">Asociar ODS</span>
-                                </button> --}}
+                                </button>
                                 <script>
                                     function elegirObjetivo(elegido) {
                                         for (let index = 1; index < 4; index++) {
