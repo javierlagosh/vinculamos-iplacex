@@ -1257,7 +1257,7 @@ class ParametrosController extends Controller
         $verificarDrop = Escuelas::where('escu_codigo', $request->escu_codigo)->first();
         $nombre = Escuelas::select('escu_nombre')->where('escu_codigo', $request->escu_codigo)->first();
         if (!$verificarDrop) {
-            return redirect()->route('admin.listar.escuelas')->with('error', 'La escuela no se encuentra registrada en el sistema.');
+            return redirect()->route('admin.listar.escuelas')->with('error', 'La unidad no se encuentra registrada en el sistema.');
         }
         /*
                 $verificar = Carreras::select('escu_codigo')->where('escu_codigo', $request->escu_codigo);
@@ -1268,10 +1268,10 @@ class ParametrosController extends Controller
 
         $Drop = Escuelas::where('escu_codigo', $request->escu_codigo)->delete();
         if (!$Drop) {
-            return redirect()->back()->with('error', 'La escuela no se pudo eliminar, intente más tarde.');
+            return redirect()->back()->with('error', 'La unidad no se pudo eliminar, intente más tarde.');
         }
 
-        $mensaje = 'La escuela "'. $nombre->escu_nombre . '" fue eliminada correctamente.';
+        $mensaje = 'La unidad "'. $nombre->escu_nombre . '" fue eliminada correctamente.';
         return redirect()->route('admin.listar.escuelas')->with('exito', $mensaje);
     }
 
@@ -1283,7 +1283,7 @@ class ParametrosController extends Controller
 
         // Verificar si la escuela existe
         if (!$escuela) {
-            return redirect()->back()->with('error', 'La escuela no se encuentra registrada en el sistema.');
+            return redirect()->back()->with('error', 'La unidad no se encuentra registrada en el sistema.');
         }
 
         // Validar los campos del formulario
@@ -1327,7 +1327,7 @@ class ParametrosController extends Controller
         }
 
         $relacCrear = SedesEscuelas::insert($sed);
-        $mensaje = 'La escuela "'. $escuela->escu_nombre . '" fue actualizada correctamente.';
+        $mensaje = 'La unidad "'. $escuela->escu_nombre . '" fue actualizada correctamente.';
         return redirect()->back()->with('exito', $mensaje);
     }
 
@@ -1347,7 +1347,7 @@ class ParametrosController extends Controller
             ]
         );
         if (!$validacion)
-            return redirect()->route('admin.listar.escuelas')->with('error', 'Problemas al crear la escuela.');
+            return redirect()->route('admin.listar.escuelas')->with('error', 'Problemas al crear la unidad.');
 
         //$escuela = new Escuelas();
         ///* $escuela->escu_codigo = Escuelas::count() + 1; *///TODO: ERROR DE ESCUELA
@@ -1399,7 +1399,7 @@ class ParametrosController extends Controller
         }
 
         $relacCrear = SedesEscuelas::insert($sed);
-        $mensaje = 'La escuela "'. $request->input('nombre') . '" fue creada correctamente.';
+        $mensaje = 'La unidad "'. $request->input('nombre') . '" fue creada correctamente.';
 
         return redirect()->back()->with('exito', $mensaje);
     }
