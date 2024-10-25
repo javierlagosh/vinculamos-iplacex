@@ -103,9 +103,9 @@ class IniciativasController extends Controller
             if ($request->tiac != 'all' && $request->tiac != null) {
                 $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
             }
-            if ($request->amac != 'all' && $request->amac != null) {
-                $iniciativas = $iniciativas->where('ambito_accion.amac_codigo', $request->amac);
-            }
+            // if ($request->amac != 'all' && $request->amac != null) {
+            //     $iniciativas = $iniciativas->where('ambito_accion.amac_codigo', $request->amac);
+            // }
 
             if ($request->estadoInput != 'all' && $request->estadoInput != null) {
                 $iniciativas = $iniciativas->where('iniciativas.inic_estado', $request->estadoInput);
@@ -151,8 +151,11 @@ class IniciativasController extends Controller
                     $orderByName = 'escuelas.escu_nombre';
                     break;
                 case '3':
-                    $orderByName = 'amacs';
+                    $orderByName = 'iniciativas.amac_codigo';
                     break;
+                // case '4':
+                //     $orderByName = 'amacs';
+                //     break;
                 case '4':
                     $orderByName = 'tipo_actividades.tiac_nombre';
                     break;
@@ -173,6 +176,7 @@ class IniciativasController extends Controller
                     'iniciativas.inic_codigo',
                     'componentes.comp_nombre',
                     'iniciativas.inic_nombre',
+                    'iniciativas.amac_codigo',
                     'iniciativas.inic_estado',
                     'mecanismos.meca_nombre',
                     'inic_creado',
@@ -217,10 +221,12 @@ class IniciativasController extends Controller
             ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
             ->leftjoin('escuelas', 'escuelas.escu_codigo', 'iniciativas.inic_escuela_ejecutora')
             ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
-            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'tipoactividad_ambitosaccion.amac_codigo')
+            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
             ->select(
                 'iniciativas.inic_codigo',
                 'iniciativas.inic_nombre',
+                'iniciativas.amac_codigo',
+
                 'iniciativas.inic_estado',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
@@ -228,7 +234,7 @@ class IniciativasController extends Controller
                 'tipo_actividades.tiac_nombre',
                 'componentes.comp_nombre',
                 //'ambito_accion.amac_nombre',
-                DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
+                // DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             );

@@ -153,7 +153,8 @@
                                                 <th data-column="inic_codigo">ID</th>
                                                 <th style="width: 20%" data-column="inic_nombre">Nombre</th>
                                                 <th data-column="escu_nombre">Unidad Ejecutora</th>
-                                                <th data-column="amacs">Ámbitos</th>
+                                                <th data-column="amac_codigo">Ámbitos</th>
+                                                {{-- <th data-column="amacs">Ámbitos</th> --}}
                                                 <th data-column="tiac_nombre">Instrumento</th>
                                                 <th data-column="sedes">Sedes</th>
                                                 <th data-column="inic_estado">Estado</th>
@@ -300,6 +301,11 @@
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
 
     <script>
+         var amacData = @json($amac);
+         var amacObj = {};
+        amacData.forEach(function(amac) {
+            amacObj[amac.amac_codigo] = amac.amac_nombre;
+        });
         const evaluaRuta = '{{ route("admin.evaluar.iniciativa", ":codigo") }}';
 
         var table = $('#iniciativas').DataTable({
@@ -323,21 +329,28 @@
                 { data: 'inic_nombre', name: 'iniciativas.inic_nombre' },
                 { data: 'escu_nombre', name: 'escuelas.escu_nombre' },
                 {
-                    data: 'amacs',
-                    name: 'amacs',
+                    data: 'amac_codigo',
+                    name: 'iniciativas.amac_codigo',
                     render: function(data, type, row) {
-                        if(data === null){
-                            return "";
-                        }
-
-                        const ambitosArray = data.split(' / ');
-                        if (ambitosArray.length > 6) {
-                            return 'Todas';
-                        } else {
-                            return data;
-                        }
+                        return amacObj[data] ? amacObj[data] : data; // Muestra el nombre si existe en amacObj, de lo contrario, muestra el código
                     }
                 },
+                // {
+                //     data: 'amacs',
+                //     name: 'amacs',
+                //     render: function(data, type, row) {
+                //         if(data === null){
+                //             return "";
+                //         }
+
+                //         const ambitosArray = data.split(' / ');
+                //         if (ambitosArray.length > 6) {
+                //             return 'Todas';
+                //         } else {
+                //             return data;
+                //         }
+                //     }
+                // },
                 { data: 'tiac_nombre', name: 'tipo_actividades.tiac_nombre' },
                 {
                     data: 'sedes',
