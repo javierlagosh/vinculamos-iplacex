@@ -103,9 +103,9 @@ class IniciativasController extends Controller
             if ($request->tiac != 'all' && $request->tiac != null) {
                 $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
             }
-            // if ($request->amac != 'all' && $request->amac != null) {
-            //     $iniciativas = $iniciativas->where('ambito_accion.amac_codigo', $request->amac);
-            // }
+            if ($request->amac != 'all' && $request->amac != null) {
+                $iniciativas = $iniciativas->where('iniciativas.amac_codigo', $request->amac);
+            }
 
             if ($request->estadoInput != 'all' && $request->estadoInput != null) {
                 $iniciativas = $iniciativas->where('iniciativas.inic_estado', $request->estadoInput);

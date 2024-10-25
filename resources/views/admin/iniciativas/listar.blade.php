@@ -153,7 +153,7 @@
                                                 <th data-column="inic_codigo">ID</th>
                                                 <th style="width: 20%" data-column="inic_nombre">Nombre</th>
                                                 <th data-column="escu_nombre">Unidad Ejecutora</th>
-                                                <th data-column="amac_codigo">Ámbitos</th>
+                                                <th data-column="amac_codigo">Ámbito</th>
                                                 {{-- <th data-column="amacs">Ámbitos</th> --}}
                                                 <th data-column="tiac_nombre">Instrumento</th>
                                                 <th data-column="sedes">Sedes</th>
