@@ -125,6 +125,7 @@ class IniciativasController extends Controller
 
                 $iniciativas->where(function ($query) use ($search) {
                     $query->where('iniciativas.inic_nombre', 'like', "%{$search}%")
+                    ->orWhere('iniciativas.inic_codigo', 'like', "%{$search}%")
                         ->orWhere('mecanismos.meca_nombre', 'like', "%{$search}%")
                         //->orWhere('componentes.comp_nombre', 'like', "%{$search}%")
                         ->orWhere('tipo_actividades.tiac_nombre', 'like', "%{$search}%");
