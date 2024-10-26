@@ -1193,8 +1193,7 @@
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Unidades colaboradoras</label> <label
-                                        for="" style="color: red;">*</label>
+                                        <label style="font-size: 110%">Unidades colaboradoras</label>
                                         <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
                                             for="selectAllEscuelas">Todas</label>
                                         <select class="form-control select2" name="escuelas[]" multiple=""
@@ -1398,7 +1397,6 @@
                                         <select class="form-control select2" required id="ambito" name="ambito" required
                                             style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
-                                                <option value="" selected>No Aplica</option>
                                                 @foreach ($ambitos as $ambito)
                                                     <option value="{{ $ambito->amac_codigo }}"
                                                         {{ $iniciativa->amac_codigo == $ambito->amac_codigo ? 'selected' : '' }}>
@@ -1625,7 +1623,6 @@
                                         <select class="form-control select2" required id="convenio" name="convenio"
                                             style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
-                                                <option value="" selected>No Aplica</option>
                                                 @foreach ($convenios as $convenio)
                                                     <option value="{{ $convenio->conv_codigo }}"
                                                         {{ $iniciativa->conv_codigo == $convenio->conv_codigo ? 'selected' : '' }}>
