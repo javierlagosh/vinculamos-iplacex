@@ -17,35 +17,47 @@
 </head>
 
 <body
-    style=" background-color: #515151;border-color: #515151; background:  url({{ asset('/img/fonologin.jpg') }})   ;background-size:cover; background-repeat:repeat;background-attachment: fixed;background-position: center;">
+    style=" background-color: #515151;border-color: #515151; background:  url({{ asset('/img/iplacex.webp') }})   ;background-size:cover; background-repeat:repeat;background-attachment: fixed;background-position: center;">
     <section class="ftco-section" style="margin-right: 1%; display: flex; align-items:center;">
         <div class="container" style="background: rgba(255,255,255,0.50);  border-radius: 50px; width:500px;">
             <div class="row">
                 <div class="col-md-12">
                     <div class="text-center" style="border-radius: 50px; margin: 0 auto;">
-                        <img src="" alt="Imagen" class="img-fluid">
+                        <img src="{{ asset('/img/Logo-iplacex-2022.webp') }}" alt="Imagen" class="img-fluid">
                     </div>
                 </div>
             </div>
-            <div class="row mt-4" style="background-color:; width:100%;  margin-left: 0%;">
+            <div class="row mt-4" style="width:100%;  margin-left: 0%;">
                 <div class="col-md-10 offset-md-3" style="background-color:;margin: 0 auto;">
                     <!-- <div style=" color:black;">{{ __('Reset Password') }}</div> -->
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
+
+                        @if (Session::has('exito'))
+                        <div class="alert alert-success alert-dismissible show fade text-center">
+                            <div class="alert-body">
+                                <strong>{{ Session::get('exito') }}</strong>
+                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
                             </div>
-                        @endif
+                        </div>
+                      @endif
+
+                      @if (Session::has('error'))
+                          <div class="alert alert-danger alert-dismissible show fade text-center">
+                              <div class="alert-body">
+                                  <strong>{{ Session::get('error') }}</strong>
+                                  <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                              </div>
+                          </div>
+                      @endif
+
 
                         <form action="{{ route('reset.password.post') }}" method="POST">
                             @csrf
                             <input type="hidden" name="token" value="{{ $token }}">
-
-                            <div class="form-group ">
-                                <label for="email_address" class="label">Correo</label>
+                            <label style="color:black;" class="font-weight-bold">Correo: <span class="font-weight-normal">{{$usuario->email}}</span></label>
 
                                 <input style="background-color:white; color:black; border: 1px solid #e76800;"
-                                    type="text" id="email_address" class="form-control" name="email" required
+                                    type="hidden" id="email_address" class="form-control" name="email" required value="{{$usuario->email}}"
                                     autofocus>
                                 @if ($errors->has('email'))
                                     <span class="text-danger">{{ $errors->first('email') }}</span>
