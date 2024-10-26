@@ -326,6 +326,13 @@
                                             </tr>
 
                                             <tr>
+                                                <td><strong>Ámbito de acción</strong></td>
+                                                <td>{{ $iniciativa->amac_nombre ?? "No se ha seleccionado un Ámbito de acción." }}</td>
+                                            </tr>
+
+
+
+                                            <tr>
                                                 <td><strong>Mecanismo</strong></td>
                                                 <td>{{ $iniciativa->meca_nombre }}</td>
                                             </tr>
