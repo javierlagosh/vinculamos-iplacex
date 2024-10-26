@@ -45,10 +45,15 @@ class ForgotPasswordController extends Controller
 
     public function showResetPasswordForm($token)
     {
-        $usuario = DB::table('password_resets')
+        try {
+            $usuario = DB::table('password_resets')
             ->where('token', $token)
             ->first();
-        return view('auth.passwords.forgetPasswordLink', ['token' => $token, 'usuario' => $usuario]);
+            return view('auth.passwords.forgetPasswordLink', ['token' => $token, 'usuario' => $usuario]);
+        } catch (\Throwable $th) {
+            return redirect('/ingresar')->with('error', 'El token no es válido!');
+        }
+
     }
 
     public function submitResetPasswordForm(Request $request)
