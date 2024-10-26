@@ -50,10 +50,11 @@
                           </div>
                       @endif
 
-
+                      @if($usuario)
                         <form action="{{ route('reset.password.post') }}" method="POST">
                             @csrf
                             <input type="hidden" name="token" value="{{ $token }}">
+
                             <label style="color:black;" class="font-weight-bold">Correo: <span class="font-weight-normal">{{$usuario->email}}</span></label>
 
                                 <input style="background-color:white; color:black; border: 1px solid #e76800;"
@@ -96,6 +97,16 @@
                                 </button>
                             </div>
                         </form>
+                    @else
+                        <div class="alert alert-danger alert-dismissible show fade text-center">
+                            <div class="alert-body text-center">
+                                <strong>El token de recuperación de contraseña no es válido.
+                                    <br>
+                                    <a class="btn btn-primary" href="/ingresar">Volver</a>
+                                </strong>
+                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                            </div>
+                    @endif
                     </div>
                 </div>
             </div>
