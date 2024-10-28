@@ -135,6 +135,7 @@ class UsuariosController extends Controller
             'usua_email' => $request->email,
             'usua_nombre' => $request->nombre,
             'usua_apellido' => $request->apellido,
+            'rous_codigo' => $request->rol,
             'usua_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'usua_usuario_mod' => Session::get('admin')->usua_nickname,
         ]);
@@ -158,7 +159,7 @@ class UsuariosController extends Controller
             ]
         );
 
-        $claveActualizar = Usuarios::where(['usua_nickname' => $usua_nickname, 'rous_codigo' => 1])->update([
+        $claveActualizar = Usuarios::where(['usua_nickname' => $usua_nickname])->update([
             'usua_clave' => Hash::make($request->nueva),
             'usua_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'usua_usuario_mod' => Session::get('admin')->usua_nickname,
