@@ -357,6 +357,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/iniciativas/obtener-carreras', [IniciativasController::class, 'carrerasByEscuelas1']);
     Route::post('admin/iniciativas/obtener-regiones', [IniciativasController::class, 'regionesByMacrozonas']);
     Route::post('admin/iniciativas/obtener-Dispositivo', [IniciativasController::class, 'DispositivoByInstrumento']);
+    Route::post('admin/iniciativas/obtener-ambitos', [IniciativasController::class, 'AmbitosByInstrumento']);
     Route::post('admin/iniciativas/obtener-ImpactoInterno', [IniciativasController::class, 'ImpactoInternoByInstrumento']);
     Route::post('admin/iniciativas/obtener-ImpactoExterno', [IniciativasController::class, 'ImpactoExternoByInstrumento']);
     Route::post('admin/inicitiativa/eliminar-externo', [IniciativasController::class, 'eliminarExterno']);

@@ -58,6 +58,7 @@ use App\Models\CentroSimulacion;
 use App\Models\IniciativasCentroSimulacion;
 use App\Models\Ambitos;
 use App\Models\AmbitoTiac;
+use App\Models\TipoActividadAmbitoAccion;
 use App\Models\IniciativasAmbitos;
 use App\Models\IniciativasEscuelas;
 use App\Models\AmbitosAccion;
@@ -1335,6 +1336,7 @@ class IniciativasController extends Controller
         // $asignaturaSecCod = $asignaturaSecCod2->pluck('asignatura_id')->toArray();
         $csSecCod = $centro_simulacion->pluck('cs_codigo')->toArray();
 
+
         $impactosInternosSec = [];
         $impactosInternosSec2 = IniciativasAmbitos::select('iniciativas_ambitos.amb_codigo')->where('iniciativas_ambitos.inic_codigo', $inic_codigo)
         ->leftjoin('ambito', 'ambito.amb_codigo', 'iniciativas_ambitos.amb_codigo')
@@ -2374,6 +2376,30 @@ class IniciativasController extends Controller
 
         return response()->json($dispositivos);
     }
+
+
+    public function AmbitosByInstrumento(Request $request)
+    {
+        $instrumento = $request->input('tactividad');
+
+
+       try {
+
+        $ambitos = DB::table('ambito_accion')
+            ->join('tipoactividad_ambitosaccion', 'ambito_accion.amac_codigo', '=', 'tipoactividad_ambitosaccion.amac_codigo')
+            ->where('tipoactividad_ambitosaccion.tiac_codigo', $instrumento)
+            ->select('ambito_accion.amac_codigo', 'ambito_accion.amac_nombre')
+            ->get();
+
+
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'No se encontraron ambitos asociados a este instrumento']);
+       }
+
+        return response()->json($ambitos);
+
+    }
+
 
     public function ImpactoInternoByInstrumento(Request $request)
     {

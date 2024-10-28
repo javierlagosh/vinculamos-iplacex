@@ -1998,6 +1998,10 @@
 
         var impactosInternosSeleccionados = @json($impactosInternosSec ?? []);
         var impactosExternosSeleccionados = @json($impactosExternosSec ?? []);
+
+        var amac_seleccionado = @json(optional($iniciativa)->amac_codigo ?? null);
+
+
     </script>
 
     <script>
@@ -2317,6 +2321,31 @@
                 }
             });
 
+            // Cargar ambitos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-ambitos',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("ambitos: ", data);
+                    $('#ambito').empty();
+                    $.each(data, function(key, value) {
+                        console.log("amac servidor: ", value.amac_codigo + " - " + "amac iniciativa: " + amac_seleccionado);
+                        var selected = amac_seleccionado == value.amac_codigo ? 'selected' : '';
+                        $('#ambito').append(
+                            `<option value="${value.amac_codigo}" ${selected}>${value.amac_nombre}</option>`
+                        );
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener impactos internos: ", error);
+                }
+            });
+
             // Cargar impactos internos
             $.ajax({
                 url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-ImpactoInterno',
@@ -2336,6 +2365,7 @@
                             `<option value="${value.amb_codigo}" ${selected}>${value.amb_nombre}</option>`
                         );
                     });
+                    $('#ambito').val(amac_seleccionado);
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al obtener impactos internos: ", error);
@@ -2377,8 +2407,13 @@
     $(document).ready(function() {
         cargarDispositivosImpactos();
         //poner selected en los selectores de impactos
+
         $('#impactosInternos').val(impactosInternosSeleccionados);
         $('#impactosExternos').val(impactosExternosSeleccionados);
+
+        //en el select de ambito poner selected el que está en la variable amac_seleccionado
+        $('#ambito').val(amac_seleccionado);
+        console.log("amac_seleccionado cambiado: " + amac_seleccionado);
 
 
     });
