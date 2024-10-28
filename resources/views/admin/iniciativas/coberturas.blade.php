@@ -127,7 +127,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Sede</th>
-                                                                <th scope="col">Área</th>
+                                                                <th scope="col">Unidad ejecutora</th>
                                                                 <th scope="col">Carrera</th>
                                                                 <th scope="col">Estudiantes inicial</th>
                                                                 <th scope="col">Estudiantes final</th>
