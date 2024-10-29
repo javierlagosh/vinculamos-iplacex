@@ -149,7 +149,7 @@ class IniciativasController extends Controller
                     $orderByName = 'iniciativas.inic_nombre';
                     break;
                 case '2':
-                    $orderByName = 'escuelas.escu_nombre';
+                    $orderByName = 'carreras';
                     break;
                 case '3':
                     $orderByName = 'iniciativas.amac_codigo';
@@ -182,7 +182,6 @@ class IniciativasController extends Controller
                     'mecanismos.meca_nombre',
                     'inic_creado',
                     'tipo_actividades.tiac_nombre',
-                    'escuelas.escu_nombre',
                 );
 
             //quitar duplicados
@@ -219,8 +218,9 @@ class IniciativasController extends Controller
             ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
             ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
             ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
-            ->leftjoin('carreras', 'carreras.care_codigo', 'participantes_internos.care_codigo')
-            ->leftjoin('escuelas', 'escuelas.escu_codigo', 'iniciativas.inic_escuela_ejecutora')
+            ->leftJoin('escuelas', function($join) {
+                $join->on('escuelas.escu_codigo', '=', 'participantes_internos.escu_codigo');
+            })
             ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
             ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
             ->select(
@@ -231,11 +231,11 @@ class IniciativasController extends Controller
                 'iniciativas.inic_estado',
                 'iniciativas.meca_codigo',
                 'mecanismos.meca_nombre',
-                'escuelas.escu_nombre',
                 'tipo_actividades.tiac_nombre',
                 'componentes.comp_nombre',
                 //'ambito_accion.amac_nombre',
                 // DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
+                DB::raw('GROUP_CONCAT(DISTINCT escuelas.escu_nombre SEPARATOR ", ") as carreras'),
                 DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
                 DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
             );

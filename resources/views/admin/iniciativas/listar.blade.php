@@ -152,7 +152,7 @@
                                             <tr>
                                                 <th data-column="inic_codigo">ID</th>
                                                 <th style="width: 20%" data-column="inic_nombre">Nombre</th>
-                                                <th data-column="escu_nombre">Unidad Ejecutora</th>
+                                                <th data-column="carreras">Unidad Ejecutora</th>
                                                 <th data-column="amac_codigo">Ámbito</th>
                                                 {{-- <th data-column="amacs">Ámbitos</th> --}}
                                                 <th data-column="tiac_nombre">Instrumento</th>
@@ -327,7 +327,22 @@
             columns: [
                 { data: 'inic_codigo', name: 'iniciativas.inic_codigo' },
                 { data: 'inic_nombre', name: 'iniciativas.inic_nombre' },
-                { data: 'escu_nombre', name: 'escuelas.escu_nombre' },
+                {
+                    data: 'carreras',
+                    name: 'carreras',
+                    render: function(data, type, row) {
+                        if(data === null){
+                            return "";
+                        }
+
+                        const carrerasArray = data.split(' / ');
+                        if (carrerasArray.length > 6) {
+                            return 'Todas';
+                        } else {
+                            return data;
+                        }
+                    }
+                },
                 {
                     data: 'amac_codigo',
                     name: 'iniciativas.amac_codigo',
