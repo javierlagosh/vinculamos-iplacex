@@ -159,9 +159,9 @@ Route::middleware('verificar.admin')->group(function () {
     Route::delete('admin/eliminar-asignatura/', [ParametrosController::class, 'eliminarAsignatura'])->name('admin.eliminar.asignatura');
 
     //Centro de costos
-    Route::get('admin/listar-centro-costos', [ParametrosController::class, 'listarCentroCostos'])->name('admin.listar.ccosto');
+    Route::get('admin/listar-centro-costos', [ParametrosController::class, 'listarCentroCostos'])->name('admin.listar.ccostos');
     Route::post('admin/crear-centro-costos', [ParametrosController::class, 'crearCentroCostos'])->name('admin.crear.ccostos');
-    // Route::put('admin/editar-centro-simulacion/{cs_codigo}', [ParametrosController::class, 'actualizarCentroSimulacion'])->name('admin.actualizar.centro-simulacion');
+    Route::put('admin/editar-centro-costos/{ceco_codigo}', [ParametrosController::class, 'actualizarCentroCostos'])->name('admin.actualizar.ccostos');
     Route::delete('admin/eliminar-centro-costos/', [ParametrosController::class, 'eliminarCentroCosotos'])->name('admin.eliminar.ccostos');
 
     //Centro de simulacion

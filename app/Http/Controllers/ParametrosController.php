@@ -56,6 +56,10 @@ use App\Models\CarrerasAsignaturas;
 use App\Models\DispositivosTiac;
 use App\Models\TipoActividadAmbitoAccion;
 use App\Models\EvaluacionInvitado;
+use App\Models\CentroCostos;
+use App\Models\CostosDinero;
+use App\Models\CostosInfraestructura;
+use App\Models\CostosRrhh;
 
 class ParametrosController extends Controller
 {
@@ -124,8 +128,7 @@ class ParametrosController extends Controller
         $ambito = Ambitos::find($amb_codigo);
         //return redirect()->route('admin.listar.ambitos')->with('errorAmbito', $amb_codigo);
         if (!$ambito) {
-            return redirect()->route('admin.listar.ambitos')->with('errorAmbito', 'El impacto no se encuentra registrado en el sistema.')->withInput();
-            ;
+            return redirect()->route('admin.listar.ambitos')->with('errorAmbito', 'El impacto no se encuentra registrado en el sistema.')->withInput();;
         }
 
         $ambito->amb_nombre = $request->input('nombre');
@@ -137,8 +140,7 @@ class ParametrosController extends Controller
         // Guardar la actualización del programa en la base de datos
         $ambito->save();
 
-        return redirect()->back()->with('exitoAmbito', 'Impacto actualizado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exitoAmbito', 'Impacto actualizado exitosamente')->withInput();;
     }
 
     //TODO: Ambito de acción
@@ -204,8 +206,7 @@ class ParametrosController extends Controller
         $ambito = AmbitosAccion::find($amac_codigo);
         //return redirect()->route('admin.listar.ambitos')->with('errorAmbito', $amb_codigo);
         if (!$ambito) {
-            return redirect()->route('admin.listar.ambitosaccion')->with('errorAmbito', 'El ámbito de acción no se encuentra registrado en el sistema.')->withInput();
-            ;
+            return redirect()->route('admin.listar.ambitosaccion')->with('errorAmbito', 'El ámbito de acción no se encuentra registrado en el sistema.')->withInput();;
         }
 
         $ambito->amac_nombre = $request->input('nombre_aa');
@@ -217,8 +218,7 @@ class ParametrosController extends Controller
         // Guardar la actualización del programa en la base de datos
         $ambito->save();
 
-        return redirect()->back()->with('exitoAmbito', 'Ámbito de acción  actualizado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exitoAmbito', 'Ámbito de acción  actualizado exitosamente')->withInput();;
     }
 
     //TODO: Programas
@@ -297,8 +297,7 @@ class ParametrosController extends Controller
             return redirect()->back()->with('errorPrograma', 'Ocurrió un error durante el registro de las sedes, intente más tarde.')->withInput();
         }
 
-        return redirect()->back()->with('exitoPrograma', 'Programa creado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exitoPrograma', 'Programa creado exitosamente')->withInput();;
     }
 
     public function eliminarProgramas(Request $request)
@@ -343,9 +342,7 @@ class ParametrosController extends Controller
         $programa = Programas::find($prog_codigo);
 
         if (!$programa) {
-            return redirect()->route('admin.listar.programas')->with('errorPrograma', 'El programa no se encuentra registrado en el sistema.')->withInput();
-            ;
-
+            return redirect()->route('admin.listar.programas')->with('errorPrograma', 'El programa no se encuentra registrado en el sistema.')->withInput();;
         }
 
         ProgramasContribuciones::where('prog_codigo', $prog_codigo)->delete();
@@ -394,7 +391,6 @@ class ParametrosController extends Controller
         }
 
         return redirect()->back()->with('exitoPrograma', 'Programa actualizado exitosamente');
-
     }
 
     //TODO: Parametro Convenios
@@ -408,9 +404,9 @@ class ParametrosController extends Controller
     public function descargarConvenios($conv_codigo)
     {
         try {
-            $convenio = Convenios::where('conv_codigo',$conv_codigo)->first();
-            if(!$convenio){
-                return redirect()->back()->with('errorConvenio','El convenio no se encuentra registrado o no esta vigente en el sistema');
+            $convenio = Convenios::where('conv_codigo', $conv_codigo)->first();
+            if (!$convenio) {
+                return redirect()->back()->with('errorConvenio', 'El convenio no se encuentra registrado o no esta vigente en el sistema');
             }
 
             $archivo = public_path($convenio->conv_ruta_archivo);
@@ -421,8 +417,8 @@ class ParametrosController extends Controller
                 'Pragma: no-cache'
             );
             return Response::download($archivo, $convenio->conv_nombre_archivo, $cabeceras);
-        } catch (\Throwable $th){
-            return redirect()->back()->with('errorConvenio','Ocurrió un problema al descargar el conveio, intente mas tarde');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorConvenio', 'Ocurrió un problema al descargar el conveio, intente mas tarde');
         }
     }
 
@@ -478,8 +474,7 @@ class ParametrosController extends Controller
         $rutaCompleta = str_replace("/", "\\", $rutaCompleta);
 
         if (!$validacion) {
-            return redirect()->route('admin.listar.convenios')->with('errorConvenio', 'Problemas al actualizar el documento de colaboración.')->withInput();
-            ;
+            return redirect()->route('admin.listar.convenios')->with('errorConvenio', 'Problemas al actualizar el documento de colaboración.')->withInput();;
         }
 
         $archivo = $request->file('archivo');
@@ -493,8 +488,7 @@ class ParametrosController extends Controller
                 File::delete(public_path($rutaConvenio));
             $moverArchivo = $archivo->move(public_path('files/convenios'), $request->input('nombrearchivo') . '.' . $extension);
             if (!$moverArchivo) {
-                return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del documento de colaboración, intente más tarde.')->withInput();
-                ;
+                return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del documento de colaboración, intente más tarde.')->withInput();;
             }
 
 
@@ -579,7 +573,7 @@ class ParametrosController extends Controller
             'conv_nickname_mod' => Session::get('admin')->usua_nickname
         ]);
 
-        if(!$convGuardar){
+        if (!$convGuardar) {
             return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del documento de colaboración, intente más tarde.')->withInput();
         }
 
@@ -595,13 +589,13 @@ class ParametrosController extends Controller
             return redirect()->back()->with('errorConvenio', 'Ocurrió un error al registrar el docuemnto de colaboracion, intente más tarde.');
         }
 
-        $convActualizar = Convenios::where('conv_codigo',$convGuardar)->update([
+        $convActualizar = Convenios::where('conv_codigo', $convGuardar)->update([
             'conv_ruta_archivo' => 'files/convenios/' . $convGuardar,
             'conv_mime' => $archivo->getClientMimeType(),
             'conv_nombre_archivo' => $archivo->getClientOriginalName()
         ]);
 
-        if(!$convActualizar){
+        if (!$convActualizar) {
             return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
         }
         return redirect()->back()->with('exitoConvenio', 'Documento de colaboración creado existosamente')->withInput();
@@ -771,7 +765,8 @@ class ParametrosController extends Controller
 
         ]);
     }
-    public function crearDispositivo(Request $request){
+    public function crearDispositivo(Request $request)
+    {
         $request->validate([
             'dispositivo_nombre' => 'required|max:255',
         ], [
@@ -795,7 +790,8 @@ class ParametrosController extends Controller
         return redirect()->back()->with('exitoDispositivo', 'Dispositivo creado exitosamente');
     }
 
-    public function  actualizarDispositivo(Request $request, $dispositivo_id){
+    public function  actualizarDispositivo(Request $request, $dispositivo_id)
+    {
         $dispositivo = Dispositivos::where('id', $dispositivo_id)->first();
         $dispositivo->nombre = $request->asignatura_nombre;
         $dispositivo->tiac_codigo = $request->tiac_codigo;
@@ -813,11 +809,11 @@ class ParametrosController extends Controller
     }
 
 
-    public function eliminarDispositivo(Request $request){
+    public function eliminarDispositivo(Request $request)
+    {
         $dispositivo = Dispositivos::where('id', $request->dispositivo_id)->first();
         $dispositivo->delete();
         return redirect()->route('admin.listar.dispositivos')->with('exitoDispositivo', 'Dispositivo eliminado correctamente.');
-
     }
 
     //TODO: Parametro asignaturas
@@ -841,7 +837,7 @@ class ParametrosController extends Controller
 
     public function crearAsignatura(Request $request)
     {
-        if($request->asignatura_nombre == null){
+        if ($request->asignatura_nombre == null) {
             return redirect()->back()->with('errorAsignatura', 'El nombre de la asignatura es requerido.');
         }
 
@@ -861,7 +857,7 @@ class ParametrosController extends Controller
         return redirect()->back()->with('exitoAsignatura', 'Asignatura creada exitosamente');
     }
 
-    public function actualizarAsignatura(Request $request , $asignatura_id)
+    public function actualizarAsignatura(Request $request, $asignatura_id)
     {
 
         $asignatura = Asignaturas::where('id', $asignatura_id)->first();
@@ -883,7 +879,6 @@ class ParametrosController extends Controller
         $asignatura->save();
 
         return redirect()->back()->with('exitoAsignatura', 'Asignatura actualizada exitosamente');
-
     }
 
     public function eliminarAsignatura(Request $request)
@@ -918,7 +913,7 @@ class ParametrosController extends Controller
 
     public function crearCentroSimulacion(Request $request)
     {
-        if($request->cs_nombre == null){
+        if ($request->cs_nombre == null) {
             return redirect()->back()->with('errorAsignatura', 'El nombre del centro de simulacion es requerido.');
         }
 
@@ -928,7 +923,7 @@ class ParametrosController extends Controller
         return redirect()->back()->with('exitoAsignatura', 'Centro de simulación creado exitosamente');
     }
 
-    public function actualizarCentroSimulacion(Request $request , $cs_codigo)
+    public function actualizarCentroSimulacion(Request $request, $cs_codigo)
     {
 
         $centroSimulacion = CentroSimulacion::where('cs_codigo', $cs_codigo)->first();
@@ -938,7 +933,6 @@ class ParametrosController extends Controller
         $centroSimulacion->save();
 
         return redirect()->back()->with('exitoAsignatura', 'Centro de simulación actualizado exitosamente');
-
     }
 
     public function eliminarCentroSimulacion(Request $request)
@@ -960,6 +954,74 @@ class ParametrosController extends Controller
 
         return redirect()->route('admin.listar.centro-simulacion')->with('exitoAsignatura', 'El centro de simulación fue eliminado correctamente.');
     }
+
+    //TODO: INICIO Centro de costos
+
+    public function listarCentroCostos()
+    {
+        $centroCostos = CentroCostos::select('ceco_codigo', 'ceco_nombre', 'ceco_visible')
+            ->orderBy('ceco_codigo', 'asc')
+            ->get();
+        return view('admin.parametros.centrocostos', compact('centroCostos'));
+    }
+
+    public function crearCentroCostos(Request $request)
+    {
+        if ($request->ceco_nombre == null) {
+            return redirect()->back()->with('errorCentroCosto', 'El nombre del centro de costos es requerido.');
+        }
+
+        $centroCostos = new CentroCostos();
+        $centroCostos->ceco_nombre = $request->ceco_nombre;
+        $centroCostos->ceco_visible = 1;
+        $centroCostos->ceco_creado = now();
+        $centroCostos->ceco_actualizado = now();
+        $user = Session::get('admin') ?? Session::get('digitador');
+        if ($user) {
+            $centroCostos->ceco_nickname_mod = $user->usua_nickname;
+            $centroCostos->ceco_rol_mod = $user->rous_codigo;
+        }
+        $centroCostos->save();
+        return redirect()->back()->with('exitoCentroCosto', 'Centro de costos creado exitosamente');
+    }
+    public function actualizarCentroCostos(Request $request, $ceco_codigo)
+    {
+
+        $centroCostos = CentroCostos::where('ceco_codigo', $ceco_codigo)->first();
+
+        //actualizar asignatura
+        $centroCostos->ceco_nombre = $request->ceco_nombre;
+        $centroCostos->ceco_actualizado = now();
+        $user = Session::get('admin') ?? Session::get('digitador');
+        if ($user) {
+            $centroCostos->ceco_nickname_mod = $user->usua_nickname;
+            $centroCostos->ceco_rol_mod = $user->rous_codigo;
+        }
+        $centroCostos->save();
+
+        return redirect()->back()->with('exitoCentroCosto', 'Centro de costos actualizado exitosamente');
+    }
+
+    public function eliminarCentroCosotos(Request $request)
+    {
+
+        $centroCostos = CentroCostos::where('ceco_codigo', $request->ceco_codigo)->first();
+
+        if (!$centroCostos) {
+            return redirect()->route('admin.listar.ccostos')->with('errorCentroCostos', 'El centro de costos no se encuentra registrada en el sistema.');
+        }
+
+        $CostosDinero = CostosDinero::where('ceco_codigo',$request->ceco_codigo)->delete();
+        $CostosInfraestructura = CostosInfraestructura::where('ceco_codigo',$request->ceco_codigo)->delete();
+        $CostosRrhh = CostosRrhh::where('ceco_codigo',$request->ceco_codigo)->delete();
+
+        //se elimina la asignatura
+        $centroCostos->delete();
+
+
+        return redirect()->route('admin.listar.ccostos')->with('exitoCentroCostos', 'El centro de simulación fue eliminado correctamente.');
+    }
+    //TODO: FIN Centro de costos
 
     //TODO: Parametro Carreras
     public function listarCarreras()
@@ -1263,15 +1325,15 @@ class ParametrosController extends Controller
         //$escuela->escu_descripcion = $request->input('descripcion');
         //$escuela->escu_director = $request->input('director');
         ///* $escuela->escu_intitucion = $request->input('institucion',1); */
-//
+        //
         //$escuela->escu_visible = $request->input('care_visible', 1);
         ////TODO: SI NO QUEREMOS MORIR, CAMBIAR ESTO
         //$escuela->escu_creado = now();
         //$escuela->escu_actualizado = now();
-//
+        //
         //$escuela->escu_nikcname_mod = Session::get('admin')->usua_nickname;
         //$escuela->escu_rol_mod = Session::get('admin')->rous_codigo;
-//
+        //
         //$escuela->save();
 
         $escuela = Escuelas::insertGetId([
@@ -1316,7 +1378,6 @@ class ParametrosController extends Controller
         $grupos = GruposInteres::orderBy('grin_codigo', 'asc')->get();
         $subgrupos = SubGruposInteres::all();
         return view('admin.parametros.socios', compact('sedesT', 'socios', 'SedeSocios', 'grupos', 'subgrupos'));
-
     }
     public function subgruposBygrupos(Request $request)
     {
@@ -1908,9 +1969,9 @@ class ParametrosController extends Controller
     $socio->soco_rol_mod = Session::get('admin')->rous_codigo; */
 
     //TODO: Unidad
-//--------------------------------------
-//CAMBIAR NOMBRE MODELO POR: Unidades
-//--------------------------------------
+    //--------------------------------------
+    //CAMBIAR NOMBRE MODELO POR: Unidades
+    //--------------------------------------
 
     public function listarUnidades()
     {
@@ -2007,8 +2068,7 @@ class ParametrosController extends Controller
         $editado->unid_rol_mod = Session::get('admin')->rous_codigo;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'Unidad actualizada exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exito', 'Unidad actualizada exitosamente')->withInput();;
     }
     //TODO: SubUnidad
     //--------------------------------------
@@ -2109,13 +2169,12 @@ class ParametrosController extends Controller
         $editado->suni_meta5 = $request->input('suni_meta5') ?? 0;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'SubUnidad actualizada exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exito', 'SubUnidad actualizada exitosamente')->withInput();;
     }
     //TODO: Tipo de iniciativa
-//--------------------------------------
-//CAMBIAR NOMBRE MODELO POR: TipoIniciativas
-//--------------------------------------
+    //--------------------------------------
+    //CAMBIAR NOMBRE MODELO POR: TipoIniciativas
+    //--------------------------------------
 
     public function listarTipoIniciativa()
     {
@@ -2189,8 +2248,7 @@ class ParametrosController extends Controller
         $editado->tmec_rol_mod = Session::get('admin')->rous_codigo;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'Tipo de iniciativa actualizado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exito', 'Tipo de iniciativa actualizado exitosamente')->withInput();;
     }
 
     //Todo: funciones de actividades
@@ -2294,9 +2352,9 @@ class ParametrosController extends Controller
     }
 
     //TODO: Sub-grupo de interés
-//--------------------------------------
-//CAMBIAR NOMBRE MODELO POR: SubGruposInteres
-//--------------------------------------
+    //--------------------------------------
+    //CAMBIAR NOMBRE MODELO POR: SubGruposInteres
+    //--------------------------------------
 
     public function listarSubGrupoInteres()
     {
@@ -2378,14 +2436,13 @@ class ParametrosController extends Controller
         $editado->sugr_rol_mod = Session::get('admin')->rous_codigo;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'Sub-grupo de interés actualizado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exito', 'Sub-grupo de interés actualizado exitosamente')->withInput();;
     }
 
     //TODO: Recurso Humano
-//--------------------------------------
-//CAMBIAR NOMBRE MODELO POR: TipoRRHH
-//--------------------------------------
+    //--------------------------------------
+    //CAMBIAR NOMBRE MODELO POR: TipoRRHH
+    //--------------------------------------
 
     public function listarRecursosHumanos()
     {
@@ -2460,14 +2517,13 @@ class ParametrosController extends Controller
         $editado->trrhh_rol_mod = Session::get('admin')->rous_codigo;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'Recurso Humano actualizado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exito', 'Recurso Humano actualizado exitosamente')->withInput();;
     }
 
     //TODO: tipo de infraestrutura
-//--------------------------------------
-//CAMBIAR NOMBRE MODELO POR: TipoInfraestructura
-//--------------------------------------
+    //--------------------------------------
+    //CAMBIAR NOMBRE MODELO POR: TipoInfraestructura
+    //--------------------------------------
 
     public function listarTipoInfraestructuras()
     {
@@ -2554,8 +2610,7 @@ class ParametrosController extends Controller
         $editado->tinf_rol_mod = Session::get('admin')->rous_codigo;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'tipo de infraestrutura actualizado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exito', 'tipo de infraestrutura actualizado exitosamente')->withInput();;
     }
 
     public function listarComponentes()
@@ -2637,8 +2692,7 @@ class ParametrosController extends Controller
         $editado->comp_rol_mod = Session::get('admin')->rous_codigo;
         $editado->save();
 
-        return redirect()->back()->with('exito', 'componente actualizado exitosamente')->withInput();
-        ;
+        return redirect()->back()->with('exito', 'componente actualizado exitosamente')->withInput();;
     }
 
     public function actualizarInvitado(Request $request, $evainv_codigo)
