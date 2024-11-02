@@ -113,7 +113,8 @@
 
                                     <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
                                         class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                        title="Evaluar iniciativa"><i class="fas fa-file-signature"></i> Evaluar iniciativa</a>
+                                        title="Evaluar iniciativa"><i class="fas fa-file-signature"></i> Evaluar
+                                        iniciativa</a>
                                 </div>
 
 
@@ -150,23 +151,46 @@
                                                     <tbody>
                                                         <tr>
                                                             <td class="text-center"><strong></strong>Sede</td>
-                                                            <td  id="empresadinero" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td id="empresadinero" hidden></td>
+                                                            <td class="text-center"><input type="number"
+                                                                    class="form-control" id="empresadinerovalue"
+                                                                    value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="text-center" >VcM Sede</td>
+                                                            <td class="text-center">VcM Sede</td>
                                                             <td class="text-center" hidden id="vcm_sede"></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_sedevalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number"
+                                                                    class="form-control" id="vcm_sedevalue"
+                                                                    value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center">VcM Escuela</td>
                                                             <td class="text-center" id="vcm_escuela" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number"
+                                                                    class="form-control" id="vcm_escuelavalue"
+                                                                    value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center">VRA</td>
                                                             <td class="text-center" id="vra" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number"
+                                                                    class="form-control" id="vravalue" value="0"
+                                                                    placeholder="Ingrese el monto..."></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">Centro de Costos</td>
+
+                                                            <td class="text-center">
+                                                                <select class="select2" style="width: 90%"
+                                                                    name="centroInterno" id="centroInterno">
+                                                                    <option value="" selected disabled>Seleccione...
+                                                                    </option>
+                                                                    @foreach ($centroCostos as $ceco)
+                                                                        <option value="{{ $ceco->ceco_codigo }}">
+                                                                            {{ $ceco->ceco_nombre }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -175,7 +199,8 @@
                                             <div class="row">
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center" hidden>
                                                     <label for="tipoaporteempresa">Seleccione una opción:</label>
-                                                    <select name="tipoaporteempresa" id="tipoaporteempresa" class="form-control">
+                                                    <select name="tipoaporteempresa" id="tipoaporteempresa"
+                                                        class="form-control">
                                                         <option value="" selected disabled>Seleccione...</option>
                                                         <option value="primero">Sede</option>
                                                         <option value="vcmsede">VcM Sede</option>
@@ -185,8 +210,9 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
-                                                    <input hidden type="number" class="form-control" id="aporteempresa" placeholder="Ingrese el monto..."
-                                                        name="aporteempresa" autocomplete="off">
+                                                    <input hidden type="number" class="form-control" id="aporteempresa"
+                                                        placeholder="Ingrese el monto..." name="aporteempresa"
+                                                        autocomplete="off">
                                                     <div class="mt-2">
                                                         <button type="button" class="btn btn-icon btn-primary"
                                                             onclick="guardarDinero(1)"><i
@@ -261,23 +287,40 @@
                                         <td><strong>Aportado por externos</strong></td>
                                         <td>
                                             <div class="row mb-2">
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" id="externodinero">
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="number" class="form-control" id="aporteexterno"
+                                                                    placeholder="Ingrese el monto..." name="aporteexterno"
+                                                                    style="display: inline-block; margin-right: 5px;"
+                                                                    autocomplete="off">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="select2" style="width: 100%"
+                                                                    name="centroExterno" id="centroExterno">
+                                                                    <option value="" selected disabled>Seleccione...
+                                                                    </option>
+                                                                    @foreach ($centroCostos as $ceco)
+                                                                        <option value="{{ $ceco->ceco_codigo }}">
+                                                                            {{ $ceco->ceco_nombre }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="mt-2 text-center">
+                                                                    <button type="button" class="btn btn-icon btn-primary"
+                                                                        onclick="guardarDinero(2)"><i class="fas fa-plus"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
 
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center">
-                                                    <input type="number" class="form-control" id="aporteexterno"
-                                                    placeholder="Ingrese el monto..."
-                                                        name="aporteexterno"
-                                                        style="display: inline-block; margin-right: 5px;"
-                                                        autocomplete="off">
-                                                    <div class="mt-2">
-                                                        <button type="button" class="btn btn-icon btn-primary"
-                                                            onclick="guardarDinero(2)"><i
-                                                                class="fas fa-plus"></i></button>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </td>
                                         <td>
@@ -395,6 +438,24 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label>Centro de costos</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-bank"></i>
+                                    </div>
+                                </div>
+                                <select class="select2" style="width: 90%" name="centroCostos" id="centroCostos">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    @foreach ($centroCostos as $ceco)
+                                        <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label>Horas de uso</label>
                             <div class="input-group">
@@ -471,6 +532,24 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label>Centro de costos</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-bank"></i>
+                                    </div>
+                                </div>
+                                <select class="select2" style="width: 90%" name="centroRrhh" id="centroRrhh">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    @foreach ($centroCostos as $ceco)
+                                        <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label>Cantidad de horas</label>
                             <div class="input-group">
