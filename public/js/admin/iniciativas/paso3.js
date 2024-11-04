@@ -15,7 +15,7 @@ function cargarRecursos() {
     // petición que trae la suma total de todos los recursos organizados por entidad
     $.ajax({
         type: "GET",
-        url: window.location.origin + "/admin/crear-iniciativa/recursos",
+        url: "/admin/crear-iniciativa/recursos",
         data: {
             iniciativa: inic_codigo,
         },
@@ -108,7 +108,7 @@ function cargarDinero() {
     $.ajax({
         type: "GET",
         url:
-            window.location.origin + "/admin/crear-iniciativa/consultar-dinero",
+            "/admin/crear-iniciativa/consultar-dinero",
         data: {
             iniciativa: inic_codigo,
         },
@@ -194,8 +194,6 @@ function cargarEspecies() {
     $.ajax({
         type: "GET",
         url:
-            window.location.origin +
-            window.location.origin +
             "/admin/crear-iniciativa/consultar-especies",
         data: {
             iniciativa: inic_codigo,
@@ -249,7 +247,6 @@ function cargarInfraestructura() {
     $.ajax({
         type: "GET",
         url:
-            window.location.origin +
             "/admin/crear-iniciativa/consultar-infraestructura",
         data: {
             iniciativa: inic_codigo,
@@ -305,8 +302,6 @@ function cargarRrhh() {
     $.ajax({
         type: "GET",
         url:
-            window.location.origin +
-            window.location.origin +
             "/admin/crear-iniciativa/consultar-rrhh",
         data: {
             iniciativa: inic_codigo,
@@ -390,7 +385,7 @@ function guardarDinero(enti_codigo) {
     // petición para guardar/actualizar el monto de dinero aportado por la entidad
     $.ajax({
         type: "POST",
-        url: window.location.origin + "/admin/crear-iniciativa/guardar-dinero",
+        url: "/admin/crear-iniciativa/guardar-dinero",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -447,7 +442,7 @@ function crearInfra(enti_codigo) {
     $.ajax({
         type: "GET",
         url:
-            window.location.origin + "/admin/crear-iniciativa/listar-tipoinfra",
+            "/admin/crear-iniciativa/listar-tipoinfra",
         success: function (resListar) {
             $("#codigoinfra").find("option").not(":first").remove();
             $("#codigoinfra").prop("selectedIndex", 0);
@@ -480,7 +475,7 @@ function buscarTipoInfra() {
     $.ajax({
         type: "GET",
         url:
-            window.location.origin + "/admin/crear-iniciativa/buscar-tipoinfra",
+            "/admin/crear-iniciativa/buscar-tipoinfra",
         data: {
             tipoinfra: tinf_codigo,
         },
@@ -517,7 +512,6 @@ function guardarInfra() {
     $.ajax({
         type: "POST",
         url:
-            window.location.origin +
             "/admin/crear-iniciativa/guardar-infraestructura",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -556,7 +550,7 @@ function listarInfraestructura() {
     $.ajax({
         type: "GET",
         url:
-            window.location.origin +
+
             "/admin/crear-iniciativa/listar-infraestructura",
         data: {
             iniciativa: inic_codigo,
@@ -624,7 +618,6 @@ function eliminarInfraestructura(inic_codigo, enti_codigo, tiin_codigo) {
     $.ajax({
         type: "POST",
         url:
-            window.location.origin +
             "/admin/crear-iniciativa/eliminar-infraestructura",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -663,7 +656,7 @@ function crearRrhh(enti_codigo) {
     // petición para consultar los tipos de recursos humanos disponibles
     $.ajax({
         type: "GET",
-        url: window.location.origin + "/admin/crear-iniciativa/listar-tiporrhh",
+        url: "/admin/crear-iniciativa/listar-tiporrhh",
         success: function (resListar) {
             console.log(resListar);
             $("#codigorrhh").find("option").not(":first").remove();
@@ -696,7 +689,7 @@ function buscarTipoRrhh() {
     // petición para consultar información del tipo de RRHH seleccionado
     $.ajax({
         type: "GET",
-        url: window.location.origin + "/admin/crear-iniciativa/buscar-tiporrhh",
+        url: "/admin/crear-iniciativa/buscar-tiporrhh",
         data: {
             tiporrhh: trrhh_codigo,
         },
@@ -731,8 +724,6 @@ function guardarRrhh() {
     $.ajax({
         type: "POST",
         url:
-            window.location.origin +
-            window.location.origin +
             "/admin/crear-iniciativa/guardar-rrhh",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -770,7 +761,7 @@ function listarRrhh() {
     // petición para listar los RRHH aportados por las entidades
     $.ajax({
         type: "GET",
-        url: window.location.origin + "/admin/crear-iniciativa/listar-rrhh",
+        url: "/admin/crear-iniciativa/listar-rrhh",
         data: {
             iniciativa: inic_codigo,
         },
@@ -838,8 +829,6 @@ function eliminarRrhh(inic_codigo, enti_codigo, trrhh_codigo) {
     $.ajax({
         type: "POST",
         url:
-            window.location.origin +
-            window.location.origin +
             "/admin/crear-iniciativa/eliminar-rrhh",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),

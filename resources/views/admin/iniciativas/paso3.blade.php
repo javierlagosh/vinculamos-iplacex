@@ -186,7 +186,8 @@
                                                                     <option value="" selected disabled>Seleccione...
                                                                     </option>
                                                                     @foreach ($centroCostos as $ceco)
-                                                                        <option value="{{ $ceco->ceco_codigo }}">
+                                                                        <option value="{{ $ceco->ceco_codigo }}"
+                                                                            {{$costo->ceco_codigo == $ceco->ceco_codigo}}>
                                                                             {{ $ceco->ceco_nombre }}</option>
                                                                     @endforeach
                                                                 </select>
@@ -304,7 +305,8 @@
                                                                     <option value="" selected disabled>Seleccione centro de costos...
                                                                     </option>
                                                                     @foreach ($centroCostos as $ceco)
-                                                                        <option value="{{ $ceco->ceco_codigo }}">
+                                                                        <option value="{{ $ceco->ceco_codigo }}"
+                                                                            {{$costo->ceco_codigo == $ceco->ceco_codigo}}>
                                                                             {{ $ceco->ceco_nombre }}</option>
                                                                     @endforeach
                                                                 </select>
