@@ -15,6 +15,7 @@ class CostosDinero extends Model {
     protected $fillable = [
         'inic_codigo',
         'enti_codigo',
+        'ceco_codigo',
         'codi_valorizacion',
         'codi_valorizacion_vcm_sede',
         'codi_valorizacion_vcm_escuela',

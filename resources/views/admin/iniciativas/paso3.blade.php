@@ -187,7 +187,7 @@
                                                                     </option>
                                                                     @foreach ($centroCostos as $ceco)
                                                                         <option value="{{ $ceco->ceco_codigo }}"
-                                                                            {{$costo->ceco_codigo == $ceco->ceco_codigo}}>
+                                                                            {{$costo->ceco_codigo == $ceco->ceco_codigo ? 'selected' : ''}}>
                                                                             {{ $ceco->ceco_nombre }}</option>
                                                                     @endforeach
                                                                 </select>
@@ -288,6 +288,9 @@
                                         <td><strong>Aportado por externos</strong></td>
                                         <td>
                                             <div class="row mb-2">
+                                                <div class="col-12 col-md-12 col-lg-12 text-center" id="externodinero">
+
+                                                </div>
                                                 <table class="table">
                                                     <tbody>
                                                         <tr>
@@ -306,7 +309,7 @@
                                                                     </option>
                                                                     @foreach ($centroCostos as $ceco)
                                                                         <option value="{{ $ceco->ceco_codigo }}"
-                                                                            {{$costo->ceco_codigo == $ceco->ceco_codigo}}>
+                                                                            {{$costo->ceco_codigo == $ceco->ceco_codigo ? 'selected' : ''}}>
                                                                             {{ $ceco->ceco_nombre }}</option>
                                                                     @endforeach
                                                                 </select>
