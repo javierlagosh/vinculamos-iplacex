@@ -301,7 +301,7 @@
                                                             <td>
                                                                 <select class="select2" style="width: 100%"
                                                                     name="centroExterno" id="centroExterno">
-                                                                    <option value="" selected disabled>Seleccione...
+                                                                    <option value="" selected disabled>Seleccione centro de costos...
                                                                     </option>
                                                                     @foreach ($centroCostos as $ceco)
                                                                         <option value="{{ $ceco->ceco_codigo }}">
