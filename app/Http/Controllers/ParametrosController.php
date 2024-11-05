@@ -1306,6 +1306,52 @@ class ParametrosController extends Controller
         $escuela->escu_meta_con = $request->input('escu_meta_con');
         $escuela->escu_meta_red = $request->input('escu_meta_red');
 
+        // actualizar tabla metas: servicio disciplinar
+        $meta_serv = DB::table('metas')
+                    ->where('escu_codigo', $escu_codigo)
+                    ->where('tiac_codigo', 5)
+                    ->first();
+        if($meta_serv){
+            $meta_serv = DB::table('metas')
+                   ->where('escu_codigo', $escu_codigo)
+                   ->where('tiac_codigo', 5)
+                   ->update(['meta' => $request->input('escu_meta_serv')]);
+        }
+        // actualizar tabla metas: extensión academica
+        $meta_ext = DB::table('metas')
+                        ->where('escu_codigo', $escu_codigo)
+                        ->where('tiac_codigo', 3)
+                        ->first();
+        if ($meta_ext) {
+        DB::table('metas')
+            ->where('escu_codigo', $escu_codigo)
+            ->where('tiac_codigo', 3)
+            ->update(['meta' => $request->input('escu_meta_ext')]);
+        }
+
+        // actualizar tabla metas: consejos consultivos
+        $meta_con = DB::table('metas')
+                        ->where('escu_codigo', $escu_codigo)
+                        ->where('tiac_codigo', 1)
+                        ->first();
+        if ($meta_con) {
+                DB::table('metas')
+                    ->where('escu_codigo', $escu_codigo)
+                    ->where('tiac_codigo', 1)
+                    ->update(['meta' => $request->input('escu_meta_con')]);
+            }
+
+    // actualizar tabla metas: red laboral
+        $meta_red = DB::table('metas')
+                        ->where('escu_codigo', $escu_codigo)
+                        ->where('tiac_codigo', 2)
+                        ->first();
+        if ($meta_red) {
+        DB::table('metas')
+            ->where('escu_codigo', $escu_codigo)
+            ->where('tiac_codigo', 2)
+            ->update(['meta' => $request->input('escu_meta_red')]);
+        }
         // Guardar los cambios en la escuela
         $escuela->save();
 
