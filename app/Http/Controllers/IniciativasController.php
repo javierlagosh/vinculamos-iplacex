@@ -2247,7 +2247,7 @@ class IniciativasController extends Controller
     public function editarPaso3($inic_codigo)
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
-        $costo = CostosDinero::where('inic_codigo',$inic_codigo)->first();
+        $costo = CostosDinero::where('inic_codigo', $inic_codigo)->first();
         // $inicEditar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         // $listarRegiones = Regiones::select('regi_codigo', 'regi_nombre')->orderBy('regi_codigo')->get();
         // $listarParticipantes = DB::table('participantes')
@@ -2257,70 +2257,84 @@ class IniciativasController extends Controller
         //     ->orderBy('part_creado', 'asc')
         //     ->get();
         $centroCostos = CentroCostos::select('ceco_codigo', 'ceco_nombre')->get();
+
+        $estudiantes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+            ->sum('pain_estudiantes_final');
+
+        $docentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+            ->sum('pain_docentes_final');
+
+        $funcionarios  = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+            ->sum('pain_funcionarios_final');
+
+
         return view('admin.iniciativas.paso3', [
             'iniciativa' => $iniciativa,
             'costo' => $costo,
-            'centroCostos' => $centroCostos
+            'centroCostos' => $centroCostos,
+            'estudiantes' => $estudiantes,
+            'docentes' => $docentes,
+            'funcionarios' => $funcionarios,
         ]);
     }
 
     public function guardarDinero(Request $request)
-{
-    // Validación de datos
-    $validacion = Validator::make(
-        $request->all(),
-        [
-            'iniciativa' => 'exists:iniciativas,inic_codigo',
-            'entidad' => 'exists:entidades,enti_codigo'
-        ],
-        [
-            'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
-            'entidad.exists' => 'La entidad no se encuentra registrada.'
-        ]
-    );
+    {
+        // Validación de datos
+        $validacion = Validator::make(
+            $request->all(),
+            [
+                'iniciativa' => 'exists:iniciativas,inic_codigo',
+                'entidad' => 'exists:entidades,enti_codigo'
+            ],
+            [
+                'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
+                'entidad.exists' => 'La entidad no se encuentra registrada.'
+            ]
+        );
 
-    if ($validacion->fails()) {
-        return response()->json(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails()) {
+            return response()->json(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        }
+
+        // Determinación de valores según entidad
+        $isEntidad2 = $request->entidad == 2;
+        $codi_valorizacion = $isEntidad2 ? $request->aporteExterno : $request->empresadinerovalue;
+        $ceco_data = [
+            'inic_codigo' => $request->iniciativa,
+            'enti_codigo' => $request->entidad,
+            // 'ceco_codigo' => $request->centro,
+        ];
+
+        // Verificar si ya existe el registro
+        $codiVerificar = CostosDinero::where($ceco_data)->first();
+
+        // Preparar datos comunes para inserción o actualización
+        $data = [
+            'ceco_codigo' => $request->centro,
+            'codi_valorizacion' => $codi_valorizacion,
+            'codi_valorizacion_vcm_sede' => $request->vcm_sedevalue ?? null,
+            'codi_valorizacion_vcm_escuela' => $request->vcm_escuelavalue ?? null,
+            'codi_valorizacion_vra' => $request->vravalue ?? null,
+            'codi_nickname_mod' => Session::get('admin')->usua_nickname,
+            'codi_rol_mod' => Session::get('admin')->rous_codigo
+        ];
+
+        if (!$codiVerificar) {
+            $data['codi_creado'] = Carbon::now()->format('Y-m-d H:i:s');
+            $codiGuardar = CostosDinero::create($ceco_data + $data);
+        } else {
+            $data['codi_actualizado'] = Carbon::now()->format('Y-m-d H:i:s');
+            $codiGuardar = CostosDinero::where($ceco_data)->update($data);
+        }
+
+        // Respuesta de éxito o error
+        if (!$codiGuardar) {
+            return response()->json(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el recurso, intente más tarde.']);
+        }
+
+        return response()->json(['estado' => true, 'resultado' => 'El recurso fue guardado correctamente.']);
     }
-
-    // Determinación de valores según entidad
-    $isEntidad2 = $request->entidad == 2;
-    $codi_valorizacion = $isEntidad2 ? $request->aporteExterno : $request->empresadinerovalue;
-    $ceco_data = [
-        'inic_codigo' => $request->iniciativa,
-        'enti_codigo' => $request->entidad,
-        // 'ceco_codigo' => $request->centro,
-    ];
-
-    // Verificar si ya existe el registro
-    $codiVerificar = CostosDinero::where($ceco_data)->first();
-
-    // Preparar datos comunes para inserción o actualización
-    $data = [
-        'ceco_codigo' => $request->centro,
-        'codi_valorizacion' => $codi_valorizacion,
-        'codi_valorizacion_vcm_sede' => $request->vcm_sedevalue ?? null,
-        'codi_valorizacion_vcm_escuela' => $request->vcm_escuelavalue ?? null,
-        'codi_valorizacion_vra' => $request->vravalue ?? null,
-        'codi_nickname_mod' => Session::get('admin')->usua_nickname,
-        'codi_rol_mod' => Session::get('admin')->rous_codigo
-    ];
-
-    if (!$codiVerificar) {
-        $data['codi_creado'] = Carbon::now()->format('Y-m-d H:i:s');
-        $codiGuardar = CostosDinero::create($ceco_data + $data);
-    } else {
-        $data['codi_actualizado'] = Carbon::now()->format('Y-m-d H:i:s');
-        $codiGuardar = CostosDinero::where($ceco_data)->update($data);
-    }
-
-    // Respuesta de éxito o error
-    if (!$codiGuardar) {
-        return response()->json(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el recurso, intente más tarde.']);
-    }
-
-    return response()->json(['estado' => true, 'resultado' => 'El recurso fue guardado correctamente.']);
-}
 
 
 

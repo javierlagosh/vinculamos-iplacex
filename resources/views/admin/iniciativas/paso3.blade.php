@@ -511,7 +511,7 @@
 
     <div class="modal fade" id="modalRrhh" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="formModal">Agregar RRHH</h5>
@@ -520,84 +520,120 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="text-center" id="div-alert-rrhh">
-                        </div>
-                        <div class="form-group">
-                            <label>Tipo RRHH</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-user-tie"></i>
+                    <div class="col-xl-12">
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <form>
+                                    <div class="text-center" id="div-alert-rrhh">
                                     </div>
-                                </div>
-                                <select class="form-control" id="codigorrhh" name="codigorrhh"
-                                    onchange="buscarTipoRrhh()">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                </select>
-                            </div>
-                        </div>
+                                    <div class="form-group">
+                                        <label>Tipo RRHH</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-user-tie"></i>
+                                                </div>
+                                            </div>
+                                            <select class="form-control" id="codigorrhh" name="codigorrhh"
+                                                onchange="buscarTipoRrhh()">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
-                        <div class="form-group">
-                            <label>Centro de costos</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-bank"></i>
+                                    <div class="form-group">
+                                        <label>Centro de costos</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-bank"></i>
+                                                </div>
+                                            </div>
+                                            <select class="select2" style="width: 85%" name="centroRrhh" id="centroRrhh">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                                @foreach ($centroCostos as $ceco)
+                                                    <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <select class="select2" style="width: 90%" name="centroRrhh" id="centroRrhh">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                    @foreach ($centroCostos as $ceco)
-                                        <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label>Cantidad de horas</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-stopwatch"></i>
+                                    <div class="form-group">
+                                        <label>Cantidad de horas</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-stopwatch"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="horasrrhh" name="horasrrhh"
+                                                autocomplete="off">
+                                        </div>
                                     </div>
-                                </div>
-                                <input type="number" class="form-control" id="horasrrhh" name="horasrrhh"
-                                    autocomplete="off">
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label>Cantidad de personal</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-users"></i>
+                                    <div class="form-group">
+                                        <label>Cantidad de personal</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-users"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="cantidadhh" name="cantidadhh"
+                                                autocomplete="off">
+                                        </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Valorización</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-dollar-sign"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="valorrrhh" name="valorrrhh" disabled>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">Resumen de RRHH estimados</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Total de estudiantes contemplados:</td>
+                                                <td>{{$estudiantes != null ? $estudiantes : 'Sin registrar'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total de docentes contemplados:</td>
+                                                <td>{{$docentes != null ? $docentes : 'Sin registrar'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total de funcionarios contemplados:</td>
+                                                <td>{{$funcionarios != null ? $funcionarios : 'Sin registrar'}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <input type="number" class="form-control" id="cantidadhh" name="cantidadhh"
-                                    autocomplete="off">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Valorización</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="text-center">
+                                    <input type="hidden" id="entidadrrhh" name="entidadrrhh">
+                                    <input type="hidden" id="valorrrhh" name="valorrrhh">
+                                    <button type="button" class="btn btn-primary waves-effect"
+                                        onclick="guardarRrhh()">Guardar</button>
                                 </div>
-                                <input type="number" class="form-control" id="valorrrhh" name="valorrrhh" disabled>
                             </div>
                         </div>
-                        <div class="text-center">
-                            <input type="hidden" id="entidadrrhh" name="entidadrrhh">
-                            <input type="hidden" id="valorrrhh" name="valorrrhh">
-                            <button type="button" class="btn btn-primary waves-effect"
-                                onclick="guardarRrhh()">Guardar</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
