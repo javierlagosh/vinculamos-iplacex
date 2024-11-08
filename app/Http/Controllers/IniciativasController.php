@@ -1052,99 +1052,40 @@ class IniciativasController extends Controller
 
 
 
+        // Insertar ods
+        // Obtener y decodificar el JSON recibido
+        $jsonAportes = $request->input('json_aportes');
+        if($jsonAportes){
+            // Ejemplo de JSON recibido
+            // "{"aportes":[{"ods_numero":1,"metas":["1.2","1.4"],"descripcion_metas":["1.2 Para 2030, reducir al menos a la mitad la proporción de hombres, mujeres y niños de todas las edades que viven en la pobreza en todas sus dimensiones según las definiciones nacionales","1.4 Para 2030, garantizar que todos los hombres y mujeres, en particular los pobres y vulnerables, tengan los mismos derechos a los recursos económicos, así como acceso a los servicios básicos, la propiedad y el control de la tierra y otros tipos de propiedad, la herencia, los recursos naturales, las nuevas tecnologías y los servicios financieros, incluida la microfinanciación"],"fundamento":"La coalición de estudiantes tiene como propósito reducir la pobreza, lo cual se alinea directamente con el ODS 1 que busca poner fin a la pobreza en todas sus formas en todo el mundo."},{"ods_numero":4,"metas":["4.7"],"descripcion_metas":["4.7 Para 2030, asegurar que todos los alumnos adquieran los conocimientos teóricos y prácticos necesarios para promover el desarrollo sostenible, incluida, entre otros, la educación para el desarrollo sostenible y estilos de vida sostenibles, los derechos humanos, la igualdad de género, la promoción de una cultura de paz y no violencia, la ciudadanía mundial y la valoración de la diversidad cultural y de la contribución de la cultura al desarrollo sostenible"],"fundamento":"La iniciativa implica una coalición de estudiantes, lo que implica la participación de la educación y el aprendizaje para la implementación del propósito de la coalición, lo que se alinea con el ODS 4 que tiene por objetivo garantizar una educación inclusiva, equitativa y de calidad y promover oportunidades de aprendizaje durante toda la vida para todos."},{"ods_numero":11,"metas":["11.1"],"descripcion_metas":["11.1 Para 2030, garantizar el acceso de todas las personas a viviendas y servicios básicos adecuados, seguros y asequibles y mejorar los barrios marginales"],"fundamento":"Al mencionar la formación de una coalición, se implica la búsqueda de soluciones inclusivas y sostenibles para los asentamientos humanos, lo cual es parte del objetivo del ODS 11, orientado a lograr que las ciudades y los asentamientos humanos sean inclusivos, seguros, resilientes y sostenibles."},{"ods_numero":14,"metas":["14.a","14.b"],"descripcion_metas":["14.a Aumentar los conocimientos científicos, desarrollar la capacidad de investigación y transferir tecnología marina para mejorar la salud de los océanos, teniendo en cuenta los criterios y directrices de la Comisión Oceanográfica Intergubernamental para la transferencia de tecnología marina, con el fin de mejorar la salud oceánica y potenciar la contribución de la biodiversidad marina al desarrollo de los países en desarrollo, en particular los pequeños Estados insulares en desarrollo y los países menos adelantados","14.b Proporcionar acceso de los pescadores artesanales a los recursos marinos y los mercados"],"fundamento":"La iniciativa se centra en regiones costeras, por lo que se relaciona directamente con el ODS 14, que tiene por objetivo conservar y utilizar sosteniblemente los océanos, los mares y los recursos marinos para el desarrollo sostenible."}]}"
+            $aportes = json_decode($jsonAportes, true);
 
-        try {
-            $odsValues = $request->ods_values ?? [];
-        $odsMetasValues = $request->ods_metas_values ?? [];
-        $odsMetasDescValues = $request->ods_metas_desc_values ?? [];
-        $fundamentoOds = $request->ods_fundamentos_values ?? [];
+            // Cargar los ods en las tablas pivote_ods y metas_inic
 
-        //Eliminar valores nulos de los arreglo
-        $odsValues = array_filter($odsValues, function ($value) {
-            return $value !== null;
-        });
+            foreach ($aportes['aportes'] as $aporte) {
+                $ods = Ods::where('id_ods', $aporte['ods_numero'])->first();
+                if ($ods) {
+                    $inicOds = pivoteOds::create([
+                        'inic_codigo' => $inic_codigo,
+                        'id_ods' => $aporte['ods_numero'],
+                    ]);
 
-        $odsMetasValues = array_filter($odsMetasValues, function ($value) {
-            return $value !== null;
-        });
-
-        $odsMetasDescValues = array_filter($odsMetasDescValues, function ($value) {
-            return $value !== null;
-        });
-
-        $fundamentoOds = array_filter($fundamentoOds, function ($value) {
-            return $value !== null;
-        });
-
-        // Eliminar duplicados de $fundamentoOds
-        $fundamentoOds = array_unique($fundamentoOds);
-
-        // dd($request->all());
-
-        foreach ($odsValues as $ods) {
-            $idOds = Ods::where('id_ods', $ods)->value('id_ods');
-            PivoteOds::create([
-                'inic_codigo' => $inic_codigo,
-                'id_ods' => $idOds,
-            ]);
-        }
-        //contar total de elementos en el arreglo de fundamentoOds
-        $totalFundamentos = count($fundamentoOds);
-
-
-        $fundamentoOds = array_values($fundamentoOds);
-
-        for ($i=0; $i < 100; $i++) {
-            try {
-                $fundamentosNew = explode('.', ($fundamentoOds[$i]));
-                break;
-            } catch (\Throwable $th) {
-                //
+                    if ($inicOds) {
+                        foreach ($aporte['metas'] as $key => $meta) {
+                            $inicMeta = MetasInic::create([
+                                'inic_codigo' => $inic_codigo,
+                                'ods_numero' => $aporte['ods_numero'],
+                                'meta_ods' => $meta,
+                                'desc_meta' => $aporte['descripcion_metas'][$key],
+                                'fundamento' => $aporte['fundamento'],
+                            ]);
+                        }
+                    }
+                }
             }
         }
 
-        try {
-            $fundamentosNew = array_map('trim', $fundamentosNew);
-            //quitar elemento si es ""
-            foreach ($fundamentosNew as $key => $value) {
-                if ($value == "") {
-                    unset($fundamentosNew[$key]);
-                }
 
-            $fundamentosNew = array_values($fundamentosNew);
-        }
-        } catch (\Throwable $th) {
-            //
-        }
-
-        //indexar todos los arreglos para las metas
-        $odsMetasValues = array_values($odsMetasValues);
-        $odsMetasDescValues = array_values($odsMetasDescValues);
-
-
-        //TODO: QUE LOS FUNDAMENTOS SE GUARDEN EN LA DB (CREA UNA COLUMNA EN metas_inic LLAMADA 'fundamento' varchar(4096))
-        for ($i = 0; $i < count($odsMetasValues); $i++) {
-            MetasInic::create([
-                'inic_codigo' => $inic_codigo,
-                'meta_ods' => $odsMetasValues[$i],
-                'desc_meta' => $odsMetasDescValues[$i],
-                'fundamento' => $fundamentosNew[$i],
-            ]);
-        }
-        } catch (\Throwable $th) {
-            $errorODS = 'Ocurrió un error durante el registro de los ODS, intente más tarde.';
-        }
-
-        // foreach ($fundamentoOds as $fundamentoValue){
-        //     FundamentoInic::create([
-        //         'inic_codigo' => $inic_codigo,
-        //         'fund_ods' => $fundamentoValue
-        //     ]);
-        // }
-
-        if (isset($errorODS)) {
-            return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente, Lamentablemente ocurrió un error al registrar los ODS, por favor intente nuevamente...');
-        }
 
         $rolCreador = Session::get('admin')->rous_codigo ?? Session::get('digitador')->rous_codigo;
         if($rolCreador == 1){
@@ -1672,120 +1613,49 @@ class IniciativasController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('comuError', 'Ocurrió un error durante el registro de las comunas, intente más tarde.')->withInput();
         }
-        $odsValues = $request->ods_values ?? [];
-        $odsMetasValues = $request->ods_metas_values ?? [];
-        $odsMetasDescValues = $request->ods_metas_desc_values ?? [];
-        $fundamentoOds = $request->ods_fundamentos_values ?? [];
 
-        // Eliminar registros existentes
 
-        $odsValues = array_filter($odsValues, function ($value) {
-            return $value !== null;
-        });
-
-        $odsMetasValues = array_filter($odsMetasValues, function ($value) {
-            return $value !== null;
-        });
-
-        $odsMetasDescValues = array_filter($odsMetasDescValues, function ($value) {
-            return $value !== null;
-        });
-
-        $fundamentoOds = array_filter($fundamentoOds, function ($value) {
-            return $value !== null;
-        });
-
-        // dd($odsMetasValues);
-        //Verifica si viene en request existe el campo ods_values, ods_metas_values, ods_metas_desc_values, ods_fundamentos_values tienen valores asignados, si no los tienen no se actualizan
-        if (empty($odsValues) && empty($odsMetasValues) && empty($odsMetasDescValues) && empty($fundamentoOds)) {
-            // if(empty($request->ods_values) && empty($request->ods_metas_values) && empty($request->ods_metas_desc_values) && empty($request->ods_fundamentos_values)){
-            // dd('estoy aca');
-            $rolCreador = Session::get('admin')->rous_codigo ?? Session::get('digitador')->rous_codigo;
-        if($rolCreador == 1){
-            return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
-        }else{
-            return redirect()->route('digitador.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+        if (!$comuCrear) {
+            IniciativasComunas::where('inic_codigo', $inic_codigo)->delete();
+            return redirect()->back()->with('comuError', 'Ocurrió un error durante el registro de las comunas, intente más tarde.')->withInput();
         }
 
-        } else {
-            // dd('estoy aqui');
-
-            //Verifica si existen registros con el inic_codigo en la tabla pivote_ods y metas_inic, si existen los elimina
-
-            PivoteOds::where('inic_codigo', $inic_codigo)->delete();
+        // Insertar ods
+        // Obtener y decodificar el JSON recibido
+        $jsonAportes = $request->input('json_aportes');
+        if($jsonAportes){
+            // eliminar valores de ods anteriores
+            pivoteOds::where('inic_codigo', $inic_codigo)->delete();
             MetasInic::where('inic_codigo', $inic_codigo)->delete();
+            // Ejemplo de JSON recibido
+            // "{"aportes":[{"ods_numero":1,"metas":["1.2","1.4"],"descripcion_metas":["1.2 Para 2030, reducir al menos a la mitad la proporción de hombres, mujeres y niños de todas las edades que viven en la pobreza en todas sus dimensiones según las definiciones nacionales","1.4 Para 2030, garantizar que todos los hombres y mujeres, en particular los pobres y vulnerables, tengan los mismos derechos a los recursos económicos, así como acceso a los servicios básicos, la propiedad y el control de la tierra y otros tipos de propiedad, la herencia, los recursos naturales, las nuevas tecnologías y los servicios financieros, incluida la microfinanciación"],"fundamento":"La coalición de estudiantes tiene como propósito reducir la pobreza, lo cual se alinea directamente con el ODS 1 que busca poner fin a la pobreza en todas sus formas en todo el mundo."},{"ods_numero":4,"metas":["4.7"],"descripcion_metas":["4.7 Para 2030, asegurar que todos los alumnos adquieran los conocimientos teóricos y prácticos necesarios para promover el desarrollo sostenible, incluida, entre otros, la educación para el desarrollo sostenible y estilos de vida sostenibles, los derechos humanos, la igualdad de género, la promoción de una cultura de paz y no violencia, la ciudadanía mundial y la valoración de la diversidad cultural y de la contribución de la cultura al desarrollo sostenible"],"fundamento":"La iniciativa implica una coalición de estudiantes, lo que implica la participación de la educación y el aprendizaje para la implementación del propósito de la coalición, lo que se alinea con el ODS 4 que tiene por objetivo garantizar una educación inclusiva, equitativa y de calidad y promover oportunidades de aprendizaje durante toda la vida para todos."},{"ods_numero":11,"metas":["11.1"],"descripcion_metas":["11.1 Para 2030, garantizar el acceso de todas las personas a viviendas y servicios básicos adecuados, seguros y asequibles y mejorar los barrios marginales"],"fundamento":"Al mencionar la formación de una coalición, se implica la búsqueda de soluciones inclusivas y sostenibles para los asentamientos humanos, lo cual es parte del objetivo del ODS 11, orientado a lograr que las ciudades y los asentamientos humanos sean inclusivos, seguros, resilientes y sostenibles."},{"ods_numero":14,"metas":["14.a","14.b"],"descripcion_metas":["14.a Aumentar los conocimientos científicos, desarrollar la capacidad de investigación y transferir tecnología marina para mejorar la salud de los océanos, teniendo en cuenta los criterios y directrices de la Comisión Oceanográfica Intergubernamental para la transferencia de tecnología marina, con el fin de mejorar la salud oceánica y potenciar la contribución de la biodiversidad marina al desarrollo de los países en desarrollo, en particular los pequeños Estados insulares en desarrollo y los países menos adelantados","14.b Proporcionar acceso de los pescadores artesanales a los recursos marinos y los mercados"],"fundamento":"La iniciativa se centra en regiones costeras, por lo que se relaciona directamente con el ODS 14, que tiene por objetivo conservar y utilizar sosteniblemente los océanos, los mares y los recursos marinos para el desarrollo sostenible."}]}"
+            $aportes = json_decode($jsonAportes, true);
 
-            // Eliminar duplicados de $fundamentoOds
-            $fundamentoOds = array_unique($fundamentoOds);
+            // Cargar los ods en las tablas pivote_ods y metas_inic
 
+            foreach ($aportes['aportes'] as $aporte) {
+                $ods = Ods::where('id_ods', $aporte['ods_numero'])->first();
+                if ($ods) {
+                    $inicOds = pivoteOds::create([
+                        'inic_codigo' => $inic_codigo,
+                        'id_ods' => $aporte['ods_numero'],
+                    ]);
 
-            foreach ($odsValues as $ods) {
-                $idOds = Ods::where('id_ods', $ods)->value('id_ods');
-                PivoteOds::create([
-                    'inic_codigo' => $inic_codigo,
-                    'id_ods' => $idOds,
-                ]);
-            }
-            //contar total de elementos en el arreglo de fundamentoOds
-            $totalFundamentos = count($fundamentoOds);
-            try {
-                $fundamentosNew = explode('.', ($fundamentoOds[0]));
-            } catch (\Throwable $th) {
-                try {
-                    $fundamentosNew = explode('.', ($fundamentoOds[1]));
-                } catch (\Throwable $th) {
-                    try {
-                        $fundamentosNew = explode('.', ($fundamentoOds[2]));
-                    } catch (\Throwable $th) {
-                        try {
-                            $fundamentosNew = explode('.', ($fundamentoOds[3]));
-                        } catch (\Throwable $th) {
-                            try {
-                                $fundamentosNew = explode('.', ($fundamentoOds[4]));
-                            } catch (\Throwable $th) {
-                                try {
-                                    $fundamentosNew = explode('.', ($fundamentoOds[5]));
-                                } catch (\Throwable $th) {
-                                    dd('error, Contacte un administrador para obtener ayuda y crear la iniciativa');
-                                }
-                            }
+                    if ($inicOds) {
+                        foreach ($aporte['metas'] as $key => $meta) {
+                            $inicMeta = MetasInic::create([
+                                'inic_codigo' => $inic_codigo,
+                                'ods_numero' => $aporte['ods_numero'],
+                                'meta_ods' => $meta,
+                                'desc_meta' => $aporte['descripcion_metas'][$key],
+                                'fundamento' => $aporte['fundamento'],
+                            ]);
                         }
                     }
                 }
             }
 
-            $fundamentosNew = array_map('trim', $fundamentosNew);
 
-
-
-            //quitar elemento si es ""
-            foreach ($fundamentosNew as $key => $value) {
-                if ($value == "") {
-                    unset($fundamentosNew[$key]);
-                }
-            }
-
-            //indexar todos los arreglos para las metas
-            $odsMetasValues = array_values($odsMetasValues);
-            $odsMetasDescValues = array_values($odsMetasDescValues);
-            $fundamentosNew = array_values($fundamentosNew);
-
-            $metasExistentes = MetasInic::where('inic_codigo', $inic_codigo)->get();
-
-            // dd( $request->all(),$odsMetasValues, $odsMetasDescValues, $fundamentosNew, $metasExistentes);
-            for ($i = 0; $i < count($odsMetasValues); $i++) {
-                MetasInic::create([
-                    'inic_codigo' => $inic_codigo,
-                    'meta_ods' => $odsMetasValues[$i],
-                    'desc_meta' => $odsMetasDescValues[$i],
-                    'fundamento' => $fundamentosNew[$i],
-                ]);
-            }
-        }
-
-        if (!$comuCrear) {
-            IniciativasComunas::where('inic_codigo', $inic_codigo)->delete();
-            return redirect()->back()->with('comuError', 'Ocurrió un error durante el registro de las comunas, intente más tarde.')->withInput();
         }
 
 
