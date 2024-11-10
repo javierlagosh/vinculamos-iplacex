@@ -12,6 +12,7 @@ class Evaluacion extends Model
     protected $table = 'evaluacion';
 
     public $timestamps = false;
+    protected $primaryKey = 'inic_codigo';
 
     protected $fillable = [
         'eval_codigo',

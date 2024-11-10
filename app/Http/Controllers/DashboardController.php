@@ -139,6 +139,11 @@ class DashboardController extends Controller
         );
     }
 
+    public function reportes(){
+
+        return view('admin.reportes');
+    }
+
     public function IndexObservador()
     {
         $nIniciativas = ParticipantesInternos::select('inic_codigo')->distinct()->get();

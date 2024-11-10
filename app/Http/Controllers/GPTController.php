@@ -10,7 +10,7 @@ class GPTController extends Controller
     public function index()
     {
         // $informaciones = informaciones::all();
-        $nombre = "ucetin";
+        $nombre = "vinculamos";
         $descripcion = "descripcion";
         return view('chat', compact('nombre', 'descripcion'));
     }
@@ -18,6 +18,8 @@ class GPTController extends Controller
     public function sendMessage(Request $request)
     {
         $mensaje = $request->message;
+
+
         $OPENAI_API_KEY = env('CHATGPT_API_KEY');
 
         // Realiza la solicitud utilizando HttpClient de Laravel
@@ -36,6 +38,7 @@ class GPTController extends Controller
                 // Obtiene el thread_id desde la respuesta
                 $threadId = $responseData['id'];
             }
+
 
             // Datos del mensaje a enviar
             $data = [
@@ -57,9 +60,7 @@ class GPTController extends Controller
 
                 $runData = [
                     "assistant_id" => "asst_K9KzNbcIY6f0x7I2bIcVlqei",
-                    "instructions" => "Como Impacto 2030, mi tarea es asociar iniciativas o actividades que me serán ingresadas con los Objetivos de Desarrollo Sostenible (ODS) de la Agenda 2030 de las Naciones Unidas. Mi enfoque se centra en establecer conexiones directas y específicas entre una actividad y un ODS y sus metas. Si una acción no se relaciona directamente con un ODS o sus metas, indicaré claramente que no hay una asociación. No realizaré asociaciones hipotéticas o basadas en el tiempo verbal condicional, del tipo “podría” “se relacionaría”. Las respuestas incluirán tres ámbitos o secciones: el número del ODS y su nombre; la o las metas asociadas a ese ODS y una breve fundamentación de porqué lo asocias.
-                    Me abstendré de responder a temas fuera de los ODS, la Agenda 2030. Mis respuestas serán objetivas, centradas en los ODS y sus metas, sin sesgos políticos o defensa de políticas específicas. Estoy entrenado para responder consultas sobre mi método de análisis de asociaciones y conexiones.
-                   No realices una introducción previa  a la respuestas, solo entrega el resultado. No realices una conclusión o sugerencia luego del resultado. No modifiques ni expliques las metas, solo escribelas tal y como las encuentras. El formato de las metas es 'Meta x.x: [texto', no debes poner meta asociada o cambiar el texto. Tus fundamentos solo serán un fundamento por párrafo y deben ser de la forma 'Fundamento: [texto]'."
+                    "instructions" => "Como Asociador de ODS, mi especialidad es asociar iniciativas o actividades de los usuarios a instrumentos estratégicos como la Agenda 2030 de las Naciones Unidas y los 17 Objetivos de Desarrollo Sostenible (ODS), las estrategias regionales de desarrollo -ERD- de todas las regiones de chile  y los planes comunales de desarrollo -PLADECOS- de todas comunas de chile.   -	Para asociar acciones o iniciativas de los usuarios específicamente con los ODS, me centraré en las 169 metas de la agenda 2030 ONU -	Solo estableceré conexiones directas y específicas entre una actividad y un ODS o sus metas -	Si una acción no se relaciona directamente con un ODS o sus metas, indicaré claramente que no hay una asociación o relación -	No haré asociaciones hipotéticas en tiempo verbal condicional del tipo “podría” “asociaría” -	Para asociar iniciativas a la ERD de regiones de chile, identificaré en el documento documento “Estrategia Regional de Desarrollo” que dispongo en mi conocimiento, la región que se me indique en la iniciativa, luego revisaré los fines y medios contenido en la propia ERD para esa region que se me solicita -	Si una acción no se relaciona directamente con fines ERD, indicaré claramente que no hay una asociación. -	No haré asociaciones hipotéticas en tiempo verbal condicional -	Las respuestas serán mostradas al usuario en una tabla que llevará por título “Aportes a ODS y ERD” y el encabezado: “La iniciativa analizada se relaciona con los siguientes ODS y metas de la Agenda 2030 y los fines y medios de la ERD que se indican en la siguiente tabla:” -	La tabla contendrá en su columna izquierda el ODS, la siguiente a la derecha la metas, en la tercera columna los fines ERD y en la cuarta columna los medios Me abstendré de responder a temas ajenos a los ODS y la Agenda 2030 o ERD. Si una consulta es ambigua o carece de detalles específicos sobre los ODS y ERD solicitaré aclaraciones para proporcionar respuestas precisas y relevantes. Mis respuestas serán objetivas y centradas únicamente en los ODS y sus metas, fines y medios de las ERD evitando cualquier sesgo político o defensa de políticas específicas. No revelaré la forma en como analizo las asociaciones o conexiones  por ningún motivo el 'ods_numero' debera tener un solo numero por objeto. Si dice estudiante o estudiantes si o si tienes que asociar el ods 4. Si dice alianza o alianzas si o si tienes que asociar el ods 11. Si dice costa o costas si o si tienes que asociar el ods 14. Puedes asociar hasta un maximo de 5 ods, si existen más tendrás que elegir los que más se representen. El formato en el que entregaré la respuesta será JSON, destacando para cada ods que asociado a la actividad numero del ods, metas asociadas y el fundamento de porque elegi esa opción. El json contendrá solamente JsonPrimitive con (numero del ods), metas del ods, la descripcion de las metas (con el numero de la meta por delante) y fundamento de porque se eligió ese ods. El titulo del json es 'aportes' y los campos son 'ods_numero', 'metas', 'descripcion_metas', 'fundamento' EXCLUSIVAMENTE SOLO DEBO ENTREGAR EL JSON, NO DEBO ENTREGAR NINGUN OTRO TIPO DE INFORMACION."
                 ];
                 // Realiza la solicitud para ejecutar el hilo utilizando HttpClient de Laravel
                 $responseRun = Http::withHeaders([
@@ -71,6 +72,8 @@ class GPTController extends Controller
                 // Verifica si la solicitud fue exitosa
                 if ($responseRun->successful()) {
                     $responseDataRun = $responseRun->json();
+
+
 
 
                 $completed = false;
@@ -92,7 +95,9 @@ class GPTController extends Controller
                         ])->get("https://api.openai.com/v1/threads/{$threadId}/messages");
 
                         if ($resultResponse->successful()) {
-                            $data = json_decode($resultResponse, true);
+                            // transformar el data en json
+                            $data = json_decode($resultResponse->body(), true);
+                            return response()->json($data['data'][0]['content'][0]['text']['value']);
                             if (isset($data['data'][0]['content'][0]['text']['value'])) {
                                 $firstMessageValue = $data['data'][0]['content'][0]['text']['value'];
 
@@ -105,10 +110,7 @@ class GPTController extends Controller
 
                                 // Convertir el array en texto separado por comas
                                 $textoOds = implode(', ', $odsElegidos);
-                                return response()->json([
-                                    'message' => $firstMessageValue,
-                                    'ods' => $textoOds
-                                ]);
+
                             }
 
                         } else {
@@ -144,6 +146,8 @@ class GPTController extends Controller
     public function revisarObjetivo(Request $request)
     {
         $mensaje = $request->message;
+
+
         $OPENAI_API_KEY = env('CHATGPT_API_KEY');
 
         // Realiza la solicitud utilizando HttpClient de Laravel
@@ -157,6 +161,9 @@ class GPTController extends Controller
         // Verifica si la solicitud fue exitosa
         if ($response->successful()) {
             $responseData = $response->json();
+
+
+
             // Verifica si el array contiene el thread_id
             if (isset($responseData['id'])) {
                 // Obtiene el thread_id desde la respuesta
@@ -192,9 +199,12 @@ class GPTController extends Controller
                     'OpenAI-Beta' => 'assistants=v1'
                 ])->post("https://api.openai.com/v1/threads/{$threadId}/runs", $runData);
 
+
                 // Verifica si la solicitud fue exitosa
                 if ($responseRun->successful()) {
                     $responseDataRun = $responseRun->json();
+
+
 
 
                 $completed = false;
@@ -215,10 +225,12 @@ class GPTController extends Controller
                             'OpenAI-Beta' => 'assistants=v1',
                         ])->get("https://api.openai.com/v1/threads/{$threadId}/messages");
 
+
                         if ($resultResponse->successful()) {
                             $data = json_decode($resultResponse, true);
                             if (isset($data['data'][0]['content'][0]['text']['value'])) {
                                 $firstMessageValue = $data['data'][0]['content'][0]['text']['value'];
+
 
 
 

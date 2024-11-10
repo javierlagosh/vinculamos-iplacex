@@ -25,6 +25,8 @@ class Sedes extends Model
         'sede_meta_iniciativas',
         'sede_meta_beneficiarios',
         'sede_meta_egresados',
+        'sede_meta_serv',
+        'sede_meta_ext',
         'sede_visible',
         'sede_creado',
         'sede_actualizado',

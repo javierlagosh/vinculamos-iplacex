@@ -545,7 +545,6 @@ function listarInfraestructura() {
     let inic_codigo = $("#codigo").val();
     let datosInfra, fila, alertError;
 
-    // petición para listar las infraestructuras aportadas por las entidades
     $.ajax({
         type: "GET",
         url:
@@ -641,6 +640,22 @@ function eliminarInfraestructura(inic_codigo, enti_codigo, tiin_codigo) {
             //console.error(error);
         },
     });
+}
+
+function editarInfraestructura(inic_codigo, enti_codigo, tinf_codigo, coin_horas, coin_cantidad) {
+    // Asignar los valores a los campos del modal
+    $('#editar-iniccodigo').val(inic_codigo);
+    $('#editar-entidadinfra').val(enti_codigo);
+    $('#editar-tipoinfra').val(tinf_codigo);
+    $('#editar-codigoinfra').val(tinf_codigo);
+    $('#editar-horasinfra').val(coin_horas);
+    $('#editar-cantidadinfra').val(coin_cantidad);
+
+    // Llamar a la función para mostrar el nombre de la infraestructura basado en el tinf_codigo
+    mostrarNombreInfraestructura(tinf_codigo);
+
+    // Mostrar el modal
+    $('#modalEditarInfraestructura').modal('show');
 }
 
 function crearRrhh(enti_codigo) {
@@ -818,6 +833,22 @@ function listarRrhh() {
             //console.error(error);
         },
     });
+}
+
+function editarRrhh(inic_codigo, enti_codigo, trrhh_codigo, corh_horas, corh_cantidad, corh_valorizacion) {
+    // Rellenar los campos del formulario con los valores seleccionados
+    $('#editar-iniccodigorrhh').val(inic_codigo);
+    $('#editar-entidadrrhh').val(enti_codigo);
+    $('#editar-codigorrhh').val(trrhh_codigo);  // Tipo RRHH ahora es editable
+    $('#editar-horasrrhh').val(corh_horas);
+    $('#editar-cantidadhh').val(corh_cantidad);
+    $('#editar-valorrrhh').val(corh_valorizacion);
+
+    // Llamar a la función para mostrar el nombre de la infraestructura basado en el tinf_codigo
+    mostrarNombreRrhh(trrhh_codigo);
+
+    // Mostrar el modal de edición
+    $('#modalEditarRrhh').modal('show');
 }
 
 function eliminarRrhh(inic_codigo, enti_codigo, trrhh_codigo) {

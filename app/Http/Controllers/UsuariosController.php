@@ -103,12 +103,16 @@ class UsuariosController extends Controller
     }
 
     public function eliminarUsuario(Request $request) {
-        $usuaVerificar = Usuarios::where(['usua_nickname' => $request->usua_nickname, 'rous_codigo' => 1])->first();
-        if (!$usuaVerificar) return redirect()->back()->with('errorUsuario', 'El usuario no se encuentra registrado.');
+        //verificar si el usuario logeado es admin
+        if (Session::get('admin')->rous_codigo != 1) return redirect()->back()->with('errorUsuario', 'No tiene permisos para realizar esta acción.');
 
-        $usuaEliminar = Usuarios::where(['usua_nickname' => $request->usua_nickname, 'rous_codigo' => 1])->delete();
+        $usuaVerificar = Usuarios::where(['usua_nickname' => $request->usua_nickname])->first();
+        if (!$usuaVerificar) return redirect()->back()->with('errorUsuario', 'El usuario no se encuentra registrado.');
+        $nombre = $usuaVerificar->usua_nombre .' '. $usuaVerificar->usua_apellido;
+        $usuaEliminar = Usuarios::where(['usua_nickname' => $request->usua_nickname])->delete();
         if (!$usuaEliminar) return redirect()->back()->with('errorUsuario', 'Ocurrió un error al eliminar el usuario, intente más tarde.');
-        return redirect()->route('admin.listar.usuarios')->with('exitoUsuario', 'El usuario fue eliminado correctamente.');
+        $mensaje = 'El usuario de "'. $nombre .'" fue eliminado correctamente.';
+        return redirect()->route('admin.listar.usuarios')->with('exitoUsuario', $mensaje);
     }
 
     public function editarUsuario(Request $request, $usua_nickname) {
@@ -131,6 +135,7 @@ class UsuariosController extends Controller
             'usua_email' => $request->email,
             'usua_nombre' => $request->nombre,
             'usua_apellido' => $request->apellido,
+            'rous_codigo' => $request->rol,
             'usua_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'usua_usuario_mod' => Session::get('admin')->usua_nickname,
         ]);
@@ -154,7 +159,7 @@ class UsuariosController extends Controller
             ]
         );
 
-        $claveActualizar = Usuarios::where(['usua_nickname' => $usua_nickname, 'rous_codigo' => 1])->update([
+        $claveActualizar = Usuarios::where(['usua_nickname' => $usua_nickname])->update([
             'usua_clave' => Hash::make($request->nueva),
             'usua_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'usua_usuario_mod' => Session::get('admin')->usua_nickname,

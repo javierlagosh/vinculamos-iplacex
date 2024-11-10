@@ -60,7 +60,13 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route('admin.ingresar.donaciones')}}">Ingresar donación</a></li> --}}
             </ul>
         </li>
+
+        <li class="dropdown">
+            <a href="{{route('reportes.ver')}}" class="nav-link">
+                <i data-feather="bar-chart-2" id="saludo"></i><span>Reportes</span></a>
+        </li>
         @endif
+
         <li class="{{ Route::is('admin.listar.sedes') ||
             Route::is('admin.listar.escuelas')||
             Route::is('admin.listar.carreras')||
@@ -86,13 +92,13 @@
                     data-feather="command"></i><span>Parámetros</span></a>
             <ul class="dropdown-menu">
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.sedes")}}">Sedes</a></li>
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.escuelas")}}">Escuelas</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.escuelas")}}">Unidades Ejecutoras</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.aespecialidad")}}">Áreas de especialidad</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.carreras")}}">Carreras</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.centro-simulacion")}}">Centros de Simulación</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.dispositivos")}}">Dispositivos</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.asignaturas")}}">Asignaturas</a></li>
-                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Impactos</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitos")}}">Contribuciones</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ambitosaccion")}}">Ambitos Acción</a></li>
                 {{-- <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.componente")}}">Componentes</a></li> --}}
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tipoact")}}">Instrumentos</a></li>
@@ -113,7 +119,7 @@
             @endif
         </li>
         @if (Session::has('admin'))
-        <li class="dropdown">
+        <li class="dropdown" hidden>
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="star"></i><span>Impactos Externos</span></a>
             <ul class="dropdown-menu">

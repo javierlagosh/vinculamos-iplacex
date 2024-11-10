@@ -88,9 +88,6 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Sección 1 - Antecedentes generales</h4>
-                        </div>
-
-                        <div class="card-header">
 
                             @if (isset($iniciativa) && $editar)
                                 <div class="card-header-action">
@@ -114,41 +111,42 @@
                                                 onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
                                                     class="fas fa-tachometer-alt"></i> INVI</a>
 
-                                            <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                            {{-- <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
                                                 title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Adjuntar
-                                                evidencia</a>
+                                                evidencia</a> --}}
                                         </div>
                                     </div>
                                     <div class="dropdown d-inline">
                                         <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
                                             data-toggle="dropdown"title="ingresar">
                                             <i class="fas fa-plus-circle"></i> Ingresar</button>
-                                        <div class="dropdown-menu dropright">
+                                            <div class="dropdown-menu dropright">
+                                                <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                                    class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                                    title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
 
-                                            <a href="{{ route($role . '.cobertura.index', $iniciativa->inic_codigo) }}"
-                                                class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                                title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar
-                                                cobertura</a>
+                                                <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
+                                                    class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                                    title="Ingresar resultado"><i class="fas fa-flag"></i>Ingresar resultado/s</a>
+                                                    <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                                        class="dropdown-item has-item" data-toggle="tooltip" data-placement="top"
+                                                        title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Ingresar
+                                                        evidencias</a>
+                                                    <a href="{{ route('admin.evaluar.iniciativa', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i
+                                                        class="fas fa-file-signature"></i>Ingresar evaluación</a>
 
-                                            <a href="{{ route($role . '.resultados.listado', $iniciativa->inic_codigo) }}"
-                                                class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                                title="Ingresar resultado"><i class="fas fa-flag"></i> Ingresar
-                                                resultado/s</a>
 
-                                            <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
-                                                class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                                title="Evaluar iniciativa"><i class="fas fa-file-signature"></i> Evaluar
-                                                iniciativa</a>
-                                        </div>
+                                            </div>
                                     </div>
                                     <a href="{{ route($role . '.iniciativa.listar') }}"
                                         class="btn btn-primary mr-1 waves-effect icon-left" type="button">
                                         <i class="fas fa-angle-left"></i> Volver a listado
                                     </a>
                                 </div>
+                            @endif
                         </div>
-                        @endif
+
 
                         <div class="card-body">
                             @if (isset($iniciativa) && $editar)
@@ -162,7 +160,7 @@
                                         @csrf
                             @endif
                             <div class="row">
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Nombre de iniciativa</label> <label for=""
                                             style="color: red;">*</label>
@@ -184,15 +182,15 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                <div class="col-xl-6 col-md-6 col-lg-6">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Responsable</label> <label for=""
                                             style="color: red;">*</label>
                                         @if (isset($iniciativa) && $editar)
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                            <input required type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
                                                 value="{{ old('inic_responsable') ?? @$iniciativa->inic_responsable }}">
                                         @else
-                                            <input type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
+                                            <input required type="text" class="form-control" style="border-radius:5px;" id="inic_responsable" name="inic_responsable"
                                                 value="{{ old('inic_responsable') }}">
                                         @endif
                                         @if ($errors->has('inic_responsable'))
@@ -235,7 +233,7 @@
                                         @endif
                                     </div>
                                 </div> --}}
-                                <div class="col-xl-3">
+                                <div class="col-xl-4">
                                     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
                                     <script src="assets/plugins/global/plugins.bundle.js"></script>
                                     <div class="form-group">
@@ -252,7 +250,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-3">
+                                <div class="col-xl-4">
                                     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
                                     <script src="assets/plugins/global/plugins.bundle.js"></script>
                                     <div class="form-group">
@@ -268,7 +266,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
 
                                     <div class="form-group">
                                         <label style="font-size: 110%">Formato de implementación</label> <label
@@ -459,28 +457,23 @@
 
                                 </div>
                                 <div id="objetivosPlanteados">
-                                    {{-- ods --}}
-                                    {{-- @if (isset($iniciativa) && $editar)
-                                    <br> <br>
-                                    <label style="font-size: 110%">Objetivos asociados</label>
-                                    <br>
+                                    @if (isset($iniciativa) && $editar)
                                         @forelse ($ods_array as $ods)
-                                                    <!-- Código para mostrar ODS -->
-                                                        <img src="https://cftpucv.vinculamos.org/img/ods/{{ $ods->id_ods }}.png" alt="Ods {{ $ods->id_ods }}" style="width: 100px; height: 100px;">
-                                                    @empty
+                                            <!-- Código para mostrar ODS -->
+                                            <img src="https://cftpucv.vinculamos.org/img/ods/{{ $ods->id_ods }}.png" alt="Ods {{ $ods->id_ods }}" style="width: 100px; height: 100px;">
+                                        @empty
 
                                         @endforelse
-                                    @endif --}}
 
+                                    @endif
 
-                                    {{-- fin ods --}}
 
                                 </div>
                                 <input type="text" id="ObjetivoElegido" hidden>
-                                {{-- <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
+                                <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
                                     <span id="asociarODSpinner" class="" role="status" aria-hidden="true"></span>
                                     <span id="asociarODSObjetivoTexto">Asociar ODS</span>
-                                </button> --}}
+                                </button>
                                 <script>
                                     function elegirObjetivo(elegido) {
                                         for (let index = 1; index < 4; index++) {
@@ -750,395 +743,306 @@
 
 
                                     function enviarMensaje() {
-                                        var userInput = $('#description').val();
-                                        var objetivoSeleccionado = $('#ObjetivoElegido').val();
-                                        console.log(objetivoSeleccionado);
-                                        // Enviar el mensaje al servidor
-                                        $.ajax({
-                                            url: '{{ route($role . '.chat.sendMessage') }}',
-                                            type: 'POST',
-                                            data: {
-                                                '_token': '{{ csrf_token() }}',
-                                                'message': objetivoSeleccionado
-                                            },
-                                            success: function(response) {
-                                                try {
-                                                    //Segun el contador, si su valor es 1 o mayor, elimina los valores que se agregaron
-                                                    //anteriormente con el comando document.getElementById("iniciativas-paso1").appendChild(odsHiddenInput);
-                                                    //document.getElementById("iniciativas-paso1").appendChild(metasHiddenInput);
-                                                    //document.getElementById("iniciativas-paso1").appendChild(fundamentosHiddenInput);
+                                                var userInput = $('#description').val();
+                                                var objetivoSeleccionado = $('#ObjetivoElegido').val();
+                                                console.log(objetivoSeleccionado);
+                                                // Enviar el mensaje al servidor
+                                                $.ajax({
+                                                    url: '{{ route("admin.chat.sendMessage") }}',
+                                                    type: 'POST',
+                                                    data: {
+                                                        '_token': '{{ csrf_token() }}',
+                                                        'message': objetivoSeleccionado
+                                                    },
+                                                    success: function(response) {
+                                                        try {
+
+                                                            //Segun el contador, si su valor es 1 o mayor, elimina los valores que se agregaron
+                                                            //anteriormente con el comando document.getElementById("iniciativas-paso1").appendChild(odsHiddenInput);
+                                                            limpiarElementosAntiguos();
+                                                            if (repeat==true) {
+                                                                //Crea un for que recorra #iniciativas-paso1 [name^="ods_values"] y elimine los elementos
+                                                                //que se encuentren dentro de el
+                                                                var odsValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_values"]');
+                                                                odsValues.forEach(function(odsValue) {
+                                                                    odsValue.remove();
+                                                                });
+                                                                var metasValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_metas_values"]');
+                                                                metasValues.forEach(function(metasValue) {
+                                                                    metasValue.remove();
+                                                                });
+                                                                var metasDescValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_metas_desc_values"]');
+                                                                metasDescValues.forEach(function(metasDescValue) {
+                                                                    metasDescValue.remove();
+                                                                });
+                                                                var fundamentosValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_fundamentos_values"]');
+                                                                fundamentosValues.forEach(function(fundamentosValue) {
+                                                                    fundamentosValue.remove();
+                                                                });
+                                                            }
+
+                                                            // Obtener los divs correspondientes
+                                                            var fundamentos = [];
+                                                            var metas = []
+                                                            var metasDesc = [];
+                                                            var respuestaBot = response;
+                                                            // Expresión regular para extraer el JSON dentro de los backticks
+                                                            let jsonMatch = respuestaBot.match(/```json\s*([\s\S]*?)\s*```/);
+
+                                                            // Verificamos si se encontró una coincidencia y la analizamos
+                                                            if (jsonMatch && jsonMatch[1]) {
+                                                            try {
+                                                                var jsonObtenido = JSON.parse(jsonMatch[1]);
+                                                                console.log(jsonObtenido); // Imprime el JSON en la consola
+                                                            } catch (error) {
+                                                                console.error("El JSON extraído no es válido:", error);
+                                                            }
+                                                            } else {
+                                                            console.log("No se encontró un JSON en el texto.");
+                                                            }
+
+                                                            console.log('Pasando datos a los campos ocultos');
+
+                                                            document.getElementById('json_aportes').value = JSON.stringify(jsonObtenido);
+
+                                                            console.log('Creando tabla de ODS');
+
+                                                            //eliminar todo lo dentro del div tablaOds
+                                                            $('#tablaOds').empty();
+
+                                                            // Referencia al div donde se mostrará la tabla
+                                                            const tablaDiv = document.getElementById("tablaOds");
+
+                                                            // Crear la tabla y sus elementos
+                                                            const tabla = document.createElement("table");
+                                                            tabla.classList.add("table", "table-bordered", "table-striped", "table-hover");
+
+                                                            // Crear la fila de encabezados
+                                                            const encabezado = document.createElement("tr");
+                                                            const columnas = ["ODS", "Metas", "Descripción de las metas", "Fundamento"];
+                                                            columnas.forEach(texto => {
+                                                                const th = document.createElement("th");
+                                                                th.classList.add("table-dark");
+                                                                th.style.textAlign = "left";
+                                                                th.textContent = texto;
+                                                                encabezado.appendChild(th);
+                                                            });
+                                                            tabla.appendChild(encabezado);
+
+                                                            // Crear las filas de datos
+                                                            jsonObtenido.aportes.forEach(aporte => {
+                                                                const fila = document.createElement("tr");
+
+                                                                // Columna ODS Imagen
+                                                                const celdaImagen = document.createElement("td");
+                                                                const imagen = document.createElement("img");
+                                                                imagen.src = `https://cftpucv.vinculamos.org/img/ods/${aporte.ods_numero}.png`;
+                                                                imagen.alt = `ods${aporte.ods_numero}`;
+                                                                imagen.classList.add("img-fluid");
+                                                                imagen.style.maxWidth = "150px";
+                                                                celdaImagen.appendChild(imagen);
+                                                                fila.appendChild(celdaImagen);
+
+                                                                // Columna Metas
+                                                                const celdaMetas = document.createElement("td");
+                                                                celdaMetas.textContent = aporte.metas.join("\n\n");
+                                                                fila.appendChild(celdaMetas);
+
+                                                                // Columna descripcionMetas
+                                                                console.log(aporte.descripcion_metas);
+                                                                // transformar de array a string separando con salto de linea
+                                                                var descripcionMetas = aporte.descripcion_metas.join("\n\n");
+
+                                                                const celdadescripcionMetas = document.createElement("td");
+                                                                celdadescripcionMetas.textContent = descripcionMetas;
+                                                                fila.appendChild(celdadescripcionMetas);
+
+                                                                // Columna Fundamento
+                                                                const celdaFundamento = document.createElement("td");
+                                                                celdaFundamento.textContent = aporte.fundamento;
+                                                                fila.appendChild(celdaFundamento);
+
+                                                                tabla.appendChild(fila);
+                                                            });
+
+                                                            // Agregar la tabla al div
+                                                            tablaDiv.appendChild(tabla);
+
+                                                            $('#asociarODSObjetivoTexto').text('Asociar ODS');
 
 
-                                                    limpiarElementosAntiguos();
-                                                    console.log('paso1');
-                                                    if (repeat == true) {
-                                                        //Crea un for que recorra #iniciativas-paso1 [name^="ods_values"] y elimine los elementos
-                                                        //que se encuentren dentro de el
-                                                        var odsValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_values"]');
-                                                        odsValues.forEach(function(odsValue) {
-                                                            odsValue.remove();
-                                                        });
-                                                        var metasValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_metas_values"]');
-                                                        metasValues.forEach(function(metasValue) {
-                                                            metasValue.remove();
-                                                        });
-                                                        var metasDescValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_metas_desc_values"]');
-                                                        metasDescValues.forEach(function(metasDescValue) {
-                                                            metasDescValue.remove();
-                                                        });
-                                                        var fundamentosValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_fundamentos_values"]');
-                                                        fundamentosValues.forEach(function(fundamentosValue) {
-                                                            fundamentosValue.remove();
-                                                        });
-                                                    }
-                                                    console.log('paso2');
-                                                    // Obtener los divs correspondientes
 
-                                                    var fundamentos = [];
-                                                    var metas = []
-                                                    var metasDesc = [];
-                                                    var respuestaBot = response.message;
-                                                    console.log(respuestaBot);
-                                                    console.log('paso3');
 
-                                                    metas = extraerMetas(respuestaBot);
-                                                    metas = metas.sort((a, b) => {
-                                                        const parteEnteraA = parseInt(a, 10);
-                                                        const parteEnteraB = parseInt(b, 10);
 
-                                                        if (!isNaN(parteEnteraA) && !isNaN(parteEnteraB)) {
-                                                            return parteEnteraA - parteEnteraB;
+
+
+                                                        } catch (error) {
+                                                            if (contadorerror >= 10){
+                                                                alert('Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.');
+                                                            }else{
+                                                                contadorerror++;
+                                                                $('#send-button').prop('disabled', true);
+
+                                                            document.getElementById("asociarODSObjetivoTexto").innerText = 'Asociando ODS, intento: '+contadorerror+' ...';
+                                                            // Bloque de código ejecutado si hay un error en la solicitud
+
+                                                            console.error('Error en la solicitud:', error);
+
+
+                                                            setTimeout(function() {
+                                                            enviarMensaje();
+                                                            }, 1000); // 5000 milisegundos = 5 segundos
+                                                            console.log('error numero: '+contadorerror);
+                                                            }
                                                         }
 
-                                                        return 0;
-                                                    })
-                                                    console.log('prueba de metas largo');
-                                                    console.log(metas);
-                                                    metas = [...new Set(metas)];
+                                                        $('#asociarODSpinner').removeClass('spinner-border spinner-border-sm');
+                                                        $('#send-button').prop('disabled', false);
+                                                        $('#boton-revisar').prop('disabled', false);
 
-                                                    metasDesc = extraerDescripcionesMetas(respuestaBot);
-                                                    fundamentos = extraerFundamentos(respuestaBot);
-                                                    console.log(metas);
-                                                    metasDesc.sort(compararMetas);
-                                                    console.log(metasDesc);
-                                                    console.log(fundamentos);
-                                                    console.log('paso4');
+                                                    },
+                                                    error: function(xhr, status, error) {
+                                                        if (contadorerror >= 10){
+                                                            alert('Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.');
+                                                        } else {
+                                                            contadorerror++;
+                                                            $('#send-button').prop('disabled', true);
+                                                            document.getElementById("asociarODSObjetivoTexto").innerText = 'Asociando ODS, intento: '+contadorerror+' ...';
+                                                            // Bloque de código ejecutado si hay un error en la solicitud
+                                                            setTimeout(function() {
+                                                                enviarMensaje();
+                                                            }, 1000); // 5000 milisegundos = 5 segundos
+                                                            document.getElementById("asociarODSObjetivoTexto").innerText = 'Asociar ODS';
 
-
-                                                    var ods = response.ods;
-                                                    // ods a array
-                                                    var odsArray = ods.split(',');
-                                                    odsArray = odsArray.sort(function(a, b) {
-                                                        return a - b;
-                                                    })
-                                                    // Obtener el div donde se agregarán las fotos
-                                                    var fotosDiv = document.getElementById("fotosods");
-
-                                                    // Limpiar el contenido actual del div
-                                                    fotosDiv.innerHTML = '';
-
-                                                    // Obtener el div donde se mostrarán los valores de odsArray
-                                                    var odsValuesDiv = document.getElementById("ods-values");
-                                                    var metasDiv = document.getElementById("metasods");
-                                                    var fundamentosDiv = document.getElementById("fundamentosods");
-
-                                                    // var odsHiddenField = document.getElementById("ods-hidden-field");
-                                                    // odsHiddenField.innerHTML = ''; // Limpiar el contenido actual
-                                                    // // Iterar sobre el arreglo
-
-                                                    const arraySinEspacios = odsArray.map(elemento => elemento.trim());
-                                                    console.log(arraySinEspacios);
-                                                    console.log('paso1');
-                                                    console.log('ods:' + ods);
-                                                    console.log('odsArray' + odsArray);
-                                                    console.log('arraySinEspacios' + arraySinEspacios);
-                                                    var odsHiddenInput;
-
-                                                    arraySinEspacios.forEach(function(ods) {
-                                                        // Agregar un campo de entrada oculto para cada elemento del arreglo
-                                                        odsHiddenInput = document.createElement("input");
-                                                        odsHiddenInput.type = "hidden";
-                                                        odsHiddenInput.name = "ods_values[]";
-                                                        odsHiddenInput.value = ods;
-                                                        console.log(odsHiddenInput);
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            odsHiddenInput);
-                                                    })
-                                                    console.log('paso2');
-
-                                                    metas.forEach(function(meta, index) {
-                                                        // Crear un nuevo elemento <p>
-                                                        var nuevoParrafo = document.createElement("p");
-
-                                                        // Establecer el texto del párrafo
-                                                        nuevoParrafo.textContent = 'Meta ' + meta;
-
-                                                        // Agregar el párrafo al contenedor
-                                                        metasDiv.appendChild(nuevoParrafo);
-
-                                                        // Configurar el evento hover con el evento del mouse
-                                                        nuevoParrafo.addEventListener("mouseover", function(event) {
-                                                            mostrarDescripcionMeta(metasDesc[index], event);
-                                                        });
-
-                                                        nuevoParrafo.addEventListener("mouseout", function() {
-                                                            ocultarDescripcionMeta();
-                                                        });
-
-
-                                                        // Crear el campo de entrada oculto para metas
-                                                        var metasHiddenInput = document.createElement("input");
-                                                        var metasDescHiddenInput = document.createElement("input");
-                                                        metasHiddenInput.type = "hidden";
-                                                        metasDescHiddenInput.type = "hidden";
-                                                        metasHiddenInput.name = "ods_metas_values[]";
-                                                        metasDescHiddenInput.name = "ods_metas_desc_values[]";
-                                                        metasHiddenInput.value = meta;
-                                                        metasDescHiddenInput.value = metasDesc[index];
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            metasHiddenInput);
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            metasDescHiddenInput);
-                                                    });
-                                                    console.log('paso3');
-                                                    var cc = 0;
-
-                                                    fundamentos.forEach(function(fundamento) {
-                                                        fundamentosDiv.innerHTML += '<p>Fundamento ' + metas[cc] +
-                                                            ': ' + fundamento + '</p>';
-                                                        // Crear el campo de entrada oculto para fundamentos
-                                                        //Agrega un input hidden para los fundamentos
-                                                        var fundamentosHiddenInput = document.createElement("input");
-                                                        fundamentosHiddenInput.type = "hidden";
-                                                        fundamentosHiddenInput.name = "ods_fundamentos_values[]";
-                                                        fundamentosHiddenInput.value = fundamentos;
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            fundamentosHiddenInput);
-                                                        cc++;
-                                                    });
-
-
-                                                    repeat = true;
-
-                                                    $('#fotosods').empty();
-
-                                                    arraySinEspacios.forEach(function(numero) {
-
-                                                        $('#fotosods').append('<div><img src="https://cftpucv.vinculamos.org/img/ods/'+numero+'.png" height="150px" width="150px" alt="ods'+numero+'"></div>');
-                                                        $('#fotosods').css({
-                                                            'display': 'flex',
-                                                            'flexDirection': 'row', // Alinear los elementos en fila
-                                                            'justifyContent': 'center', // Justificar al inicio (izquierda)
-                                                            'alignItems': 'center' // Alinear verticalmente al centro
-                                                        });
-
-
-                                                    });
-
-                                                    $('#metasods').css({
-                                                        'display': 'flex',
-                                                        'flexDirection': 'row', // Alinear los elementos en fila
-                                                        'justifyContent': 'center', // Centrar horizontalmente
-                                                        'alignItems': 'center' // Centrar verticalmente
-                                                    });
-
-                                                    $('#asociarODSpinner').removeClass('spinner-border spinner-border-sm');
-                                                    $('#asociarODSObjetivoTexto').text('Asociar ODS');
-                                                    $('#send-button').prop('disabled', false);
-                                                    $('#boton-revisar').prop('disabled', false);
-                                                    $('#send-button').addClass('d-none');
-
-
-
-                                                    // Crear el contenido de la tabla
-                                                    var tablaHTML = `
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">ODS</th>
-                                                                <th scope="col">Meta</th>
-                                                                <th scope="col">Fundamento  </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                `;
-
-
-
-                                                    // Ordenar el array usando la función de comparación personalizada
-                                                    metasDesc.sort(compararMetas);
-                                                    console.log('#############################################');
-                                                    var tablaOds = document.getElementById("tablaOds");
-                                                    tablaOds.innerHTML = '';
-                                                    console.log(metasDesc);
-
-                                                    // Llenar el cuerpo de la tabla con los datos de los arreglos
-                                                    for (var i = 0; i < arraySinEspacios.length; i++) {
-                                                        tablaHTML += `
-                                                        <tr>
-                                                            <td><div data-toggle="tooltip" data-placement="top" title="ods ${arraySinEspacios[i]}"><img src="https://cftpucv.vinculamos.org/img/ods/${arraySinEspacios[i]}.png" height="150px" width="150px" alt="ods'+numero+'"></div></td>
-                                                            <td>${metasDesc[i]}</td>
-                                                            <td>${fundamentos[i]}</td>
-                                                        </tr>
-                                                    `;
+                                                        }
                                                     }
-
-                                                    // Cerrar la etiqueta del cuerpo y de la tabla
-                                                    tablaHTML += `
-                                                        </tbody>
-                                                    </table>
-                                                `;
-
-                                                    // Actualizar el contenido de fundamentosDiv
-                                                    tablaOds.innerHTML += tablaHTML;
-
-                                                    // $('#ods-input').value(odsArray.join(','))
-
-                                                    // // Crear el contenido HTML de la tabla
-                                                    // var tableHTML = '<table border="1">';
-                                                    // tableHTML += '<tr><th>ODS</th><th>Metas</th><th>Fundamentos</th></tr>';
-
-                                                    // for (var j = 0; j < arraySinEspacios.length; j++) {
-                                                    //     tableHTML += '<tr>';
-                                                    //     tableHTML += '<td><div><img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-'+arraySinEspacios[j]+'.png" height="150px" width="150px" alt="ods'+arraySinEspacios[j]+'"></div></td>';
-                                                    //     tableHTML += '<td>' + metas[j] + '</td>';
-                                                    //     tableHTML += '<td>' + fundamentos[j] + '</td>';
-                                                    //     tableHTML += '</tr>';
-                                                    // }
-
-                                                    // tableHTML += '</table>';
-
-                                                    // // Insertar el contenido HTML en el elemento con id "tablaconlainfoods"
-                                                    // document.getElementById('tablaconlainfoods').innerHTML = tableHTML;
-                                                } catch (error) {
-                                                    if (contadorerror >= 10) {
-                                                        alert(
-                                                            'Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.'
-                                                        );
-                                                    } else {
-                                                        contadorerror++;
-
-                                                        document.getElementById("asociarODSObjetivoTexto").innerText =
-                                                            'Asociando ODS, intento: ' + contadorerror + ' ...';
-                                                        // Bloque de código ejecutado si hay un error en la solicitud
-
-                                                        console.error('Error en la solicitud:', error);
-                                                        setTimeout(function() {
-                                                            enviarMensaje();
-                                                        }, 1000); // 5000 milisegundos = 5 segundos
-                                                        console.log('error numero: ' + contadorerror);
-
-                                                    }
-
-                                                }
-
-                                            },
-                                            error: function(xhr, status, error) {
-                                                if (contadorerror >= 10) {
-                                                    alert(
-                                                        'Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.'
-                                                    );
-                                                } else {
-                                                    contadorerror++;
-
-                                                    document.getElementById("asociarODSObjetivoTexto").innerText =
-                                                        'Asociando ODS, intento: ' + contadorerror + ' ...';
-                                                    // Bloque de código ejecutado si hay un error en la solicitud
-
-                                                    console.error('Error en la solicitud:', error);
-                                                    setTimeout(function() {
-                                                        enviarMensaje();
-                                                    }, 1000); // 5000 milisegundos = 5 segundos
-                                                    console.log('error numero: ' + contadorerror);
-
-                                                }
-
-
+                                                });
                                             }
-
-                                        });
-                                    }
                                 });
                             </script>
 
+<div class="row">
+    <div class="col-xl-4 col-md-4 col-lg-4">
+        <div class="form-group">
+            <label style="font-size: 110%">Sedes</label> <label for=""
+                style="color: red;">*</label>
+            <select class="form-control select2" name="sedes[]" multiple=""
+                style="width: 100%" id="sedes" required>
+                @if (isset($iniciativa) && $editar)
+                    @forelse ($sedes as $sede)
+                        <option value="{{ $sede->sede_codigo }}"
+                            {{ in_array($sede->sede_codigo, old('sedes', [])) || in_array($sede->sede_codigo, $sedeSec) ? 'selected' : '' }}>
+                            {{ $sede->sede_nombre }}</option>
+                    @empty
+                        <option value="-1">No existen registros</option>
+                    @endforelse
+                @else
+                    @forelse ($sedes as $sede)
+                        <option value="{{ $sede->sede_codigo }}"
+                            {{ collect(old('sedes'))->contains($sede->sede_codigo) ? 'selected' : '' }}>
+                            {{ $sede->sede_nombre }}</option>
+                    @empty
+                        <option value="-1">No existen registros</option>
+                    @endforelse
+                @endif
+            </select>
+            @if ($errors->has('escuelas'))
+                <div class="alert alert-warning alert-dismissible show fade mt-2">
+                    <div class="alert-body">
+                        <button class="close"
+                            data-dismiss="alert"><span>&times;</span></button>
+                        <strong>{{ $errors->first('escuelas') }}</strong>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+
+
+
+    <div class="col-xl-4 col-md-4 col-lg-4">
+        <div class="form-group">
+            <label style="font-size: 110%">Unidad ejecutora </label>
+            <label for="" style="color: red;">*</label>
+            <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%">
+            <label for="selectAllEscuelas">Todas</label>
+            <select class="form-control select2" name="escuelas[]" multiple=""
+                style="width: 100%" id="escuelas" required>
+                @if (isset($iniciativa) && $editar)
+                    @forelse ($escuelas as $escuela)
+                        <option value="{{ $escuela->escu_codigo }}"
+                            {{ in_array($escuela->escu_codigo, old('escuelas', [])) || in_array($escuela->escu_codigo, $escuSec) ? 'selected' : '' }}>
+                            {{ $escuela->escu_nombre }}</option>
+                    @empty
+                        <option value="-1">No existen registros</option>
+                    @endforelse
+                @else
+                    @forelse ($escuelas as $escuela)
+                        <option value="{{ $escuela->escu_codigo }}"
+                            {{ collect(old('escuela'))->contains($escuela->escu_codigo) ? 'selected' : '' }}>
+                            {{ $escuela->escu_nombre }}</option>
+                    @empty
+                        <option value="-1">No existen registros</option>
+                    @endforelse
+                @endif
+            </select>
+            @if ($errors->has('escuelas'))
+                <div class="alert alert-warning alert-dismissible show fade mt-2">
+                    <div class="alert-body">
+                        <button class="close"
+                            data-dismiss="alert"><span>&times;</span></button>
+                        <strong>{{ $errors->first('escuelas') }}</strong>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4 col-lg-4">
+        <div class="form-group">
+            <label style="font-size: 110%">Carreras</label> <label for=""
+                style="color: red;">*</label><input type="checkbox" id="selectAllCarreras"
+                style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label>
+
+            <select class="form-control select2" multiple="" id="carreras"
+                name="carreras[]" style="width: 100%" required>
+                @if (isset($iniciativa) && $editar)
+                    estoy aca
+                    {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                    @forelse ($carreras as $carrera)
+                        <option value="{{ $carrera->care_codigo }}"
+                            {{ in_array($carrera->care_codigo, old('carreras', [])) || in_array($carrera->care_codigo, $careSec) ? 'selected' : '' }}>
+                            {{ $carrera->care_nombre }}</option>
+                    @empty
+                        <option value="-1">No existen registros</option>
+                    @endforelse
+                @else
+                    {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                    @forelse ($carreras as $carrera)
+                        <option value="{{ $carrera->care_codigo }}"
+                            {{ collect(old('carreras'))->contains($carrera->care_codigo) ? 'selected' : '' }}>
+                            {{ $carrera->care_nombre }}</option>
+                    @empty
+                        <option value="-1">No existen registros</option>
+                    @endforelse
+                @endif
+            </select>
+
+            @if ($errors->has('carreras'))
+                <div class="alert alert-warning alert-dismissible show fade mt-2">
+                    <div class="alert-body">
+                        <button class="close"
+                            data-dismiss="alert"><span>&times;</span></button>
+                        <strong>{{ $errors->first('carreras') }}</strong>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
                             <div class="row">
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Sedes</label> <label for=""
-                                            style="color: red;">*</label>
-                                        {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
-                                            for="selectAllEscuelas">Todas</label> --}}
-                                        <select class="form-control select2" name="sedes[]" multiple="" required
-                                            style="width: 100%" id="sedes">
-                                            @if (isset($iniciativa) && $editar)
-                                                @forelse ($sedes as $sede)
-                                                    <option value="{{ $sede->sede_codigo }}"
-                                                        {{ in_array($sede->sede_codigo, old('sedes', [])) || in_array($sede->sede_codigo, $sedeSec) ? 'selected' : '' }}>
-                                                        {{ $sede->sede_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                @forelse ($sedes as $sede)
-                                                    <option value="{{ $sede->sede_codigo }}"
-                                                        {{ collect(old('sedes'))->contains($sede->sede_codigo) ? 'selected' : '' }}>
-                                                        {{ $sede->sede_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-                                        @if ($errors->has('sedes'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('sedes') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-xl-4 col-md-4 col-lg-4" id="prueba" hidden>
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Centros de simulación</label>
-                                        {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
-                                            for="selectAllEscuelas">Todas</label> --}}
-                                        <select class="form-control select2" name="centro_simulacion[]" multiple=""
-                                            style="width: 100%" id="centro_simulacion">
-                                            @if (isset($iniciativa) && $editar)
-                                                @forelse ($centro_simulacion as $cs)
-                                                    <option value="{{ $cs->cs_codigo }}"
-                                                        {{ in_array($cs->cs_codigo, old('centro_simulacion', [])) || in_array($cs->cs_codigo, $csSec) ? 'selected' : '' }}>
-                                                        {{ $cs->cs_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                @forelse ($centro_simulacion as $cs)
-                                                    <option value="{{ $cs->cs_codigo }}"
-                                                        {{ collect(old('centro_simulacion'))->contains($cs->cs_codigo) ? 'selected' : '' }}>
-                                                        {{ $cs->cs_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-                                        @if ($errors->has('centro_simulacion'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('centro_simulacion') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
+
+
                                 <script>
                                     //si está seleccionado value = 6 del select de sedes quitar el hidden del div id="prueba"
                                     $(document).ready(function() {
@@ -1153,85 +1057,8 @@
                                     });
 
                                 </script>
-                                {{-- TODO: CREAR TABLA ESCUELA EJECUTORA  Y PASARLO A SELECT --}}
-                                <div class="col-xl-3 col-md-3 col-lg-3">
-
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Escuela ejecutora</label> <label
-                                            for="" style="color: red;">*</label>
-
-                                        <select class="form-control select2" id="inic_escuela_ejecutora" name="inic_escuela_ejecutora"
-                                            style="width: 100%">
-                                            <option disabled selected>Seleccione...</option>
-                                            @if (isset($iniciativa) && $editar)
-                                                @foreach ($escuelas as $escuela)
-                                                    @if ($escuela->escu_codigo == $iniciativa->inic_escuela_ejecutora)
-                                                        <option value="{{ $escuela->escu_codigo }}"
-                                                            {{ old('inic_escuela_ejecutora', $iniciativa->inic_escuela_ejecutora) == $escuela->escu_codigo ? 'selected' : '' }}>
-                                                            {{ $escuela->escu_nombre }}</option>
-                                                    @else
-                                                        <option value="{{ $escuela->escu_codigo }}">{{ $escuela->escu_nombre }}
-                                                        </option>
-                                                    @endif
 
 
-                                                @endforeach
-                                            @else
-                                            @foreach ($escuelas as $escuela)
-                                                <option value="{{$escuela->escu_codigo}}">{{$escuela->escu_nombre}}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-                                        @if ($errors->has('inic_escuela_ejecutora'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('inic_escuela_ejecutora') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-
-
-                                </div>
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Escuelas colaboradoras</label> <label
-                                        for="" style="color: red;">*</label>
-                                        <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
-                                            for="selectAllEscuelas">Todas</label>
-                                        <select class="form-control select2" name="escuelas[]" multiple=""
-                                            style="width: 100%" id="escuelas">
-                                            @if (isset($iniciativa) && $editar)
-                                                @forelse ($escuelas as $escuela)
-                                                    <option value="{{ $escuela->escu_codigo }}"
-                                                        {{ in_array($escuela->escu_codigo, old('escuelas', [])) || in_array($escuela->escu_codigo, $escuSec) ? 'selected' : '' }}>
-                                                        {{ $escuela->escu_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                @forelse ($escuelas as $escuela)
-                                                    <option value="{{ $escuela->escu_codigo }}"
-                                                        {{ collect(old('escuela'))->contains($escuela->escu_codigo) ? 'selected' : '' }}>
-                                                        {{ $escuela->escu_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-                                        @if ($errors->has('escuelas'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('escuelas') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
 
@@ -1298,6 +1125,19 @@
                                             @endif
                                         </select>
 
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#dispositivo_id').change(function() {
+                                                    var dispositivo = $('#dispositivo_id').val();
+                                                    if (dispositivo == 11) {
+                                                        $('#bloque_asignatura').show();
+                                                    } else {
+                                                        $('#bloque_asignatura').hide();
+                                                    }
+                                                });
+                                            });
+                                        </script>
+
                                         @if ($errors->has('dispositivo_id'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
@@ -1311,48 +1151,6 @@
 
 
 
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Carreras</label> <label for=""
-                                            style="color: red;">*</label><input type="checkbox" id="selectAllCarreras"
-                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label>
-
-                                        <select class="form-control select2" multiple="" id="carreras" required
-                                            name="carreras[]" style="width: 100%">
-                                            @if (isset($iniciativa) && $editar)
-                                                estoy aca
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($carreras as $carrera)
-                                                    <option value="{{ $carrera->care_codigo }}"
-                                                        {{ in_array($carrera->care_codigo, old('carreras', [])) || in_array($carrera->care_codigo, $careSec) ? 'selected' : '' }}>
-                                                        {{ $carrera->care_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($carreras as $carrera)
-                                                    <option value="{{ $carrera->care_codigo }}"
-                                                        {{ collect(old('carreras'))->contains($carrera->care_codigo) ? 'selected' : '' }}>
-                                                        {{ $carrera->care_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('carreras'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('carreras') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                </div>
 
                                 {{-- TODO: CREAR TABLA ASIGNATURA --}}
                                 <div class="col-xl-4 col-md-4 col-lg-4" id="bloque_asignatura" style="display: none;">
@@ -1384,23 +1182,22 @@
 
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
-                                        <label style="font-size: 110%">Convenio</label> <label for=""
+                                        <label style="font-size: 110%">Ámbito</label> <label for=""
                                             style="color: red;">*</label>
-                                        <select class="form-control select2" required id="convenio" name="convenio"
+                                        <select class="form-control select2" required id="ambito" name="ambito" required
                                             style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
-                                                <option value="" selected>No Aplica</option>
-                                                @foreach ($convenios as $convenio)
-                                                    <option value="{{ $convenio->conv_codigo }}"
-                                                        {{ $iniciativa->conv_codigo == $convenio->conv_codigo ? 'selected' : '' }}>
-                                                        {{ $convenio->conv_nombre }}</option>
+                                                @foreach ($ambitos as $ambito)
+                                                    <option value="{{ $ambito->amac_codigo }}"
+                                                        {{ $iniciativa->amac_codigo == $ambito->amac_codigo ? 'selected' : '' }}>
+                                                        {{ $ambito->amac_nombre }}</option>
                                                 @endforeach
                                             @else
-                                                @if (count($convenios) > 0)
+                                                @if (count($ambitos) > 0)
                                                     <option value="" disabled selected>Seleccione...</option>
-                                                    @foreach ($convenios as $convenio)
-                                                        <option value="{{ $convenio->conv_codigo }}">
-                                                            {{ $convenio->conv_nombre }}</option>
+                                                    @foreach ($ambitos as $ambito)
+                                                        <option value="{{ $ambito->amac_codigo }}">
+                                                            {{ $ambito->amac_nombre }}</option>
                                                     @endforeach
                                                 @else
                                                     <option value="-1" disabled selected>No existen registros</option>
@@ -1410,12 +1207,12 @@
                                         </select>
 
 
-                                        @if ($errors->has('convenio'))
+                                        @if ($errors->has('ambito'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
                                                     <button class="close"
                                                         data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('convenio') }}</strong>
+                                                    <strong>{{ $errors->first('ambito') }}</strong>
                                                 </div>
                                             </div>
                                         @endif
@@ -1423,7 +1220,96 @@
                                 </div>
 
 
-                                <div class="col-xl-3 col-md-3 col-lg-3">
+
+                                <div class="col-xl-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Contribuciones internas</label>
+                                            {{-- <input type="checkbox" id="selectAllCarreras"
+                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
+
+                                        <select class="form-control select2" required multiple="" id="impactosInternos"
+                                            name="impactosInternos[]" style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                estoy aca
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosInternos as $impactosInterno)
+                                                    <option value="{{ $impactosInterno->amb_codigo }}"
+                                                        {{ in_array($impactosInterno->amb_nombre, old('impactosInternos', [])) || in_array($impactosInterno->amb_codigo, $impactosInternosSec) ? 'selected' : '' }}>
+                                                        {{ $impactosInterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosInternos as $impactosInterno)
+                                                    <option value="{{ $impactosInterno->amb_codigo }}"
+                                                        {{ collect(old('impactosInternos'))->contains($impactosInterno->amb_codigo) ? 'selected' : '' }}>
+                                                        {{ $impactosInterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('impactosInternos'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('impactosInternos') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 110%">Contribuciones externas</label>
+                                            {{-- <input type="checkbox" id="selectAllCarreras"
+                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
+
+                                        <select class="form-control select2" required multiple="" id="impactosExternos"
+                                            name="impactosExternos[]" style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                estoy aca
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosExternos as $impactosExterno)
+                                                    <option value="{{ $impactosExterno->amb_codigo }}"
+                                                        {{ in_array($impactosExterno->amb_nombre, old('impactosExternos', [])) || in_array($impactosExterno->amb_codigo, $impactosExternosSec) ? 'selected' : '' }}>
+                                                        {{ $impactosExterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @else
+                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
+                                                @forelse ($impactosExternos as $impactosExterno)
+                                                    <option value="{{ $impactosExterno->amb_codigo }}"
+                                                        {{ collect(old('impactosExternos'))->contains($impactosExterno->amb_codigo) ? 'selected' : '' }}>
+                                                        {{ $impactosExterno->amb_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+
+                                        @if ($errors->has('impactosExternos'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('impactosExternos') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xl-3 col-md-3 col-lg-3" hidden>
 
                                     <div class="form-group">
                                         <label style="font-size: 110%">Sub-unidad ejecutora</label>
@@ -1473,91 +1359,7 @@
 
 
 
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Impactos internos</label>
-                                            {{-- <input type="checkbox" id="selectAllCarreras"
-                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
 
-                                        <select class="form-control select2" required multiple="" id="impactosInternos"
-                                            name="impactosInternos[]" style="width: 100%">
-                                            @if (isset($iniciativa) && $editar)
-                                                estoy aca
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosInternos as $impactosInterno)
-                                                    <option value="{{ $impactosInterno->amb_codigo }}"
-                                                        {{ in_array($impactosInterno->amb_nombre, old('impactosInternos', [])) || in_array($impactosInterno->amb_codigo, $impactosInternosSec) ? 'selected' : '' }}>
-                                                        {{ $impactosInterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosInternos as $impactosInterno)
-                                                    <option value="{{ $impactosInterno->amb_codigo }}"
-                                                        {{ collect(old('impactosInternos'))->contains($impactosInterno->amb_codigo) ? 'selected' : '' }}>
-                                                        {{ $impactosInterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('impactosInternos'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('impactosInternos') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group">
-                                        <label style="font-size: 110%">Impactos externos</label>
-                                            {{-- <input type="checkbox" id="selectAllCarreras"
-                                            style="margin-left: 60%"> <label for="selectAllCarreras">Todas</label> --}}
-
-                                        <select class="form-control select2" required multiple="" id="impactosExternos"
-                                            name="impactosExternos[]" style="width: 100%">
-                                            @if (isset($iniciativa) && $editar)
-                                                estoy aca
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosExternos as $impactosExterno)
-                                                    <option value="{{ $impactosExterno->amb_codigo }}"
-                                                        {{ in_array($impactosExterno->amb_nombre, old('impactosExternos', [])) || in_array($impactosExterno->amb_codigo, $impactosExternosSec) ? 'selected' : '' }}>
-                                                        {{ $impactosExterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @else
-                                                {{-- <select class="form-control select2" name="sedes[]" multiple id="sedes"> --}}
-                                                @forelse ($impactosExternos as $impactosExterno)
-                                                    <option value="{{ $impactosExterno->amb_codigo }}"
-                                                        {{ collect(old('impactosExternos'))->contains($impactosExterno->amb_codigo) ? 'selected' : '' }}>
-                                                        {{ $impactosExterno->amb_nombre }}</option>
-                                                @empty
-                                                    <option value="-1">No existen registros</option>
-                                                @endforelse
-                                            @endif
-                                        </select>
-
-                                        @if ($errors->has('impactosExternos'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('impactosExternos') }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                </div>
 
 
 
@@ -1605,8 +1407,46 @@
 
                             <div class="row">
                                 <div class="col-xl-4 col-md-4 col-lg-4">
-
                                     <div class="form-group">
+                                        <label style="font-size: 110%">Convenio</label> <label for=""
+                                            style="color: red;">*</label>
+                                        <select class="form-control select2" required id="convenio" name="convenio"
+                                            style="width: 100%">
+                                            @if (isset($iniciativa) && $editar)
+                                                @foreach ($convenios as $convenio)
+                                                    <option value="{{ $convenio->conv_codigo }}"
+                                                        {{ $iniciativa->conv_codigo == $convenio->conv_codigo ? 'selected' : '' }}>
+                                                        {{ $convenio->conv_nombre }}</option>
+                                                @endforeach
+                                            @else
+                                                @if (count($convenios) > 0)
+                                                    <option value="" disabled selected>Seleccione...</option>
+                                                    @foreach ($convenios as $convenio)
+                                                        <option value="{{ $convenio->conv_codigo }}">
+                                                            {{ $convenio->conv_nombre }}</option>
+                                                    @endforeach
+                                                @else
+                                                    <option value="-1" disabled selected>No existen registros</option>
+                                                @endif
+
+                                            @endif
+                                        </select>
+
+
+                                        @if ($errors->has('convenio'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('convenio') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- <div class="col-xl-4 col-md-4 col-lg-4" hidden>
+
+                                    <div class="form-group" >
                                         <label style="font-size: 110%">Macrozona</label> <label
                                             for="" style="color: red;">*</label>
 
@@ -1671,14 +1511,14 @@
                                     </div>
 
 
-                                </div>
-                                @if (isset($iniciativa) && $editar && $iniciativa->inic_macrozona == 'Nacional')
+                                </div> --}}
+                                @if (isset($iniciativa) && $editar )
                                 <div class="col-xl-4 col-md-4 col-lg-4">
-                                    <div class="form-group" id="regiones_div" style="display: none;">
+                                    <div class="form-group" id="regiones_div" >
                                         <label style="font-size: 110%">Región</label>
                                         <input type="hidden" id="territorio" name="territorio" value="nacional">
                                         <input type="hidden" id="pais" name="pais" value="1">
-                                        <select class="form-control select2" id="region" multiple=""
+                                        <select class="form-control select2" id="region" multiple="" required
                                             name="region[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 @forelse ($regiones as $region)
@@ -1712,13 +1552,17 @@
                                 </div>
 
                                     <div class="col-xl-4 col-md-4 col-lg-4">
-                                        <div class="form-group" id="comunas_div" style="display: none;">
+                                        <div class="form-group" id="comunas_div" >
                                             <label style="font-size: 110%">Comuna</label>
-                                            <select class="form-control select2" id="comuna" name="comuna[]"
+                                            <select class="form-control select2" id="comuna" name="comuna[]" required
                                                 multiple="" style="width: 100%">
                                                 <option value="" disabled>Seleccione...</option>
                                                 @if (isset($iniciativa) && $editar)
                                                     @forelse ($comunas as $comuna)
+                                                    {{-- si el array $comuSec es = $comuna->comu_codigo se pone selected --}}
+                                                        <option value="{{ $comuna->comu_codigo }}"
+                                                            {{ in_array($comuna->comu_codigo, $iniciativaComuna) ? 'selected' : '' }}>
+                                                            {{ $comuna->comu_nombre }}</option>
                                                         <option value="{{ $comuna->comu_codigo }}"
                                                             >
                                                             {{ $comuna->comu_nombre }}</option>
@@ -1757,7 +1601,7 @@
                                         <label style="font-size: 110%">Región</label>
                                         <input type="hidden" id="territorio" name="territorio" value="nacional">
                                         <input type="hidden" id="pais" name="pais" value="1">
-                                        <select class="form-control select2" id="region" multiple=""
+                                        <select class="form-control select2" id="region" multiple="" required
                                             name="region[]" style="width: 100%">
                                             @if (isset($iniciativa) && $editar)
                                                 @forelse ($regiones as $region)
@@ -1793,7 +1637,7 @@
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group" id="comunas_div">
                                         <label style="font-size: 110%">Comuna</label>
-                                        <select class="form-control select2" id="comuna" name="comuna[]"
+                                        <select class="form-control select2" id="comuna" name="comuna[]" required
                                             multiple="" style="width: 100%">
                                             <option value="" disabled>Seleccione...</option>
                                             @if (isset($iniciativa) && $editar)
@@ -1851,6 +1695,7 @@
                                     </script>
 
                                 </div>
+                                <input type="hidden" name="json_aportes" id="json_aportes">
                                 <input type="hidden" name="ods_values[]" id="ods-hidden-field" value="">
                                 <input type="hidden" name="ods_metas_values[]" id="ods-meta-hidden-field">
                                 <input type="hidden" name="ods_metas_desc_values[]" id="ods-meta-desc-hidden-field">
@@ -1859,7 +1704,8 @@
 
 
                             </div>
-                            <div class="row">
+
+                            <div class="row mb-3 mr-2">
                                 <div class="col-xl-12 col-md-12 col-lg-12">
                                     <div class="text-right">
                                         <button type="submit" class="btn btn-primary mr-1 waves-effect">Siguiente <i
@@ -1934,10 +1780,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
     <script>
+        // Comunas seleccionadas al editar
+        var comunasSeleccionadas = @json($comuSec ?? []);
+        // Dispositivos, impactos internos y externos seleccionados al editar
+
+        var dispositivoSeleccionado = @json(optional($iniciativa)->dispositivo_id ?? null);
+
+
+        var impactosInternosSeleccionados = @json($impactosInternosSec ?? []);
+        var impactosExternosSeleccionados = @json($impactosExternosSec ?? []);
+
+        var amac_seleccionado = @json(optional($iniciativa)->amac_codigo ?? null);
+
+
+    </script>
+
+    <script>
         $(document).ready(function() {
 
-            // si se esta editando y tiac_codigo es 5 se muestra las asignatura
-            if ($('#tactividad').val() == 5) {
+            // si se esta editando y dispositivo_id es 1 se muestra las asignatura
+            if ($('#dispositivo_id').val() == 11) {
                 $('#bloque_asignatura').show();
             }
 
@@ -1961,6 +1823,8 @@
             // // Llamada inicial
             // selectTiposActividades();
         });
+
+
 
         function selectAllRegiones() {
             $('#selectAllRegiones').change(function() {
@@ -2133,14 +1997,14 @@
         }
 
         function comunasByRegiones() {
-            $('#region').on('change', function() {
-                var regionesId = $(this).val();
+            // Lógica para cargar comunas por regiones
+            function cargarComunas() {
+                var regionesId = $('#region').val();
                 if (regionesId) {
                     $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-comunas',
+                        url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-comunas',
                         type: 'POST',
                         dataType: 'json',
-
                         data: {
                             _token: '{{ csrf_token() }}',
                             regiones: regionesId
@@ -2148,15 +2012,27 @@
                         success: function(data) {
                             $('#comuna').empty();
                             $.each(data, function(key, value) {
+                                // Si la comuna está en el array de comunas seleccionadas, marcarla como seleccionada
+                                var selected = comunasSeleccionadas.includes(value.comu_codigo) ? 'selected' : '';
                                 $('#comuna').append(
-                                    `<option value="${value.comu_codigo}">${value.comu_nombre}</option>`
+                                    `<option value="${value.comu_codigo}" ${selected}>${value.comu_nombre}</option>`
                                 );
                             });
                         }
                     });
                 }
-            })
+            }
+
+            // Ejecutar la función al cambiar la región
+            $('#region').on('change', cargarComunas);
+
+            // Ejecutar la función cuando se carga la página
+            $(document).ready(function() {
+                cargarComunas();
+            });
         }
+
+
 
         function regionesByMacrozonas(){
             $('#inic_macrozona').on('change', function() {
@@ -2199,128 +2075,142 @@
 
 
 
-        function DispositivoImpactoByInstrumento(){
-            $('#tactividad').on('change', function() {
-                var tactividad = $(this).val();
-                if(tactividad == 5){
-                    //quitar el display none del bloque_asignatura
-                    document.getElementById('bloque_asignatura').style.display = 'block';
-                }else{
-                    document.getElementById('bloque_asignatura').style.display = 'none';
+        function DispositivoImpactoByInstrumento() {
+    // Lógica para cargar dispositivos e impactos
+    function cargarDispositivosImpactos() {
+        var tactividad = $('#tactividad').val();
 
+        if (tactividad) {
+            // Cargar dispositivos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-Dispositivo',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("Dispositivos recibidos: ", data);
+                    $('#dispositivo_id').empty();
+                    $('#dispositivo_id').append('<option value="" disabled>Seleccione...</option>'); // Opción por defecto
 
-
+                    if (data.length > 0) {
+                        $.each(data, function(key, value) {
+                            // Si el dispositivo coincide con el seleccionado, marcarlo como 'selected'
+                            var selected = (dispositivoSeleccionado == value.id) ? 'selected' : '';
+                            $('#dispositivo_id').append(
+                                `<option value="${value.id}" ${selected}>${value.nombre}</option>`
+                            );
+                        });
+                    } else {
+                        $('#dispositivo_id').append('<option value="-1">No existen registros</option>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener dispositivos: ", error);
                 }
-                if (tactividad) {
-                    console.log("tactividad: " + tactividad);
-                    $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-Dispositivo',
-                        type: 'POST',
-                        dataType: 'json',
+            });
 
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            tactividad: tactividad
-                        },
-                        success: function(data) {
-                            console.log("datos: " + data);
-                            $('#dispositivo_id').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#dispositivo_id').append(
-                                    `<option value="${value.id}">${value.nombre}</option>`
-                                );
-                            });
-                        },
-                        error: function(data) {
-                            console.log("error: " + data);
-
-                            $('#dispositivo_id').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + key);
-                                $('#dispositivo_id').append(
-                                    `<option value="${value.id}">${value.nombre}</option>`
-                                );
-                            });
-                        }
+            // Cargar ambitos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-ambitos',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("ambitos: ", data);
+                    $('#ambito').empty();
+                    $.each(data, function(key, value) {
+                        console.log("amac servidor: ", value.amac_codigo + " - " + "amac iniciativa: " + amac_seleccionado);
+                        var selected = amac_seleccionado == value.amac_codigo ? 'selected' : '';
+                        $('#ambito').append(
+                            `<option value="${value.amac_codigo}" ${selected}>${value.amac_nombre}</option>`
+                        );
                     });
-
-                    $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-ImpactoInterno',
-                        type: 'POST',
-                        dataType: 'json',
-
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            tactividad: tactividad
-                        },
-                        success: function(data) {
-                            console.log("datos: " + data);
-                            $('#impactosInternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosInternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        },
-                        error: function(data) {
-                            console.log("error: " + data);
-
-                            $('#impactosInternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosInternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        }
-                    });
-
-
-
-                    $.ajax({
-                        url: window.location.origin + '/' + @json($role)+'/iniciativas/obtener-ImpactoExterno',
-                        type: 'POST',
-                        dataType: 'json',
-
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            tactividad: tactividad
-                        },
-                        success: function(data) {
-                            console.log("datos: " + data);
-                            $('#impactosExternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosExternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        },
-                        error: function(data) {
-                            console.log("error: " + data);
-
-                            $('#impactosExternos').empty();
-                            $.each(data, function(key, value) {
-                                console.log("value: " + value);
-                                $('#impactosExternos').append(
-                                    `<option value="${value.amb_codigo}">${value.amb_nombre}</option>`
-                                );
-                            });
-                        }
-                    });
-
-
-
-
-
-
-
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener impactos internos: ", error);
                 }
-            })
+            });
 
+            // Cargar impactos internos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-ImpactoInterno',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("Impactos Internos recibidos: ", data);
+                    $('#impactosInternos').empty();
+                    $.each(data, function(key, value) {
+                        console.log("value interno: ", value.amb_codigo + " - " + impactosInternosSeleccionados);
+                        var selected = impactosInternosSeleccionados.includes(value.amb_codigo) ? 'selected' : '';
+                        $('#impactosInternos').append(
+                            `<option value="${value.amb_codigo}" ${selected}>${value.amb_nombre}</option>`
+                        );
+                    });
+                    $('#ambito').val(amac_seleccionado);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener impactos internos: ", error);
+                }
+            });
+
+            // Cargar impactos externos
+            $.ajax({
+                url: window.location.origin + '/' + @json($role) + '/iniciativas/obtener-ImpactoExterno',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    tactividad: tactividad
+                },
+                success: function(data) {
+                    console.log("Impactos Externos recibidos: ", data);
+                    $('#impactosExternos').empty();
+                    $.each(data, function(key, value) {
+                        console.log("value externo: " + value.amb_codigo + " - " + impactosExternosSeleccionados);
+
+                        var selected = impactosExternosSeleccionados.includes(value.amb_codigo) ? 'selected' : '';
+                        $('#impactosExternos').append(
+                            `<option value="${value.amb_codigo}" ${selected}>${value.amb_nombre}</option>`
+                        );
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al obtener impactos externos: ", error);
+                }
+            });
         }
+    }
+
+    // Ejecutar la función al cambiar la actividad
+    $('#tactividad').on('change', cargarDispositivosImpactos);
+
+    // Ejecutar la función cuando se carga la página
+    $(document).ready(function() {
+        cargarDispositivosImpactos();
+        //poner selected en los selectores de impactos
+
+        $('#impactosInternos').val(impactosInternosSeleccionados);
+        $('#impactosExternos').val(impactosExternosSeleccionados);
+
+        //en el select de ambito poner selected el que está en la variable amac_seleccionado
+        $('#ambito').val(amac_seleccionado);
+        console.log("amac_seleccionado cambiado: " + amac_seleccionado);
+
+
+    });
+}
+
+
 
         function carrerasByEscuelas(){
             $('#escuelas').on('change', function() {

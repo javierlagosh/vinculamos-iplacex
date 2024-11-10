@@ -33,7 +33,22 @@
                     <form action="{{ route('auth.ingresar') }}" class="signin-form" method="POST"
                         style="margin-top: 5%; margin-bottom: 10%;">
                         @csrf
-
+                        @if (Session::has('message'))
+                        <div class="alert alert-success alert-dismissible show fade text-center">
+                            <div class="alert-body">
+                                <strong>{{ Session::get('message') }}</strong>
+                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                            </div>
+                        </div>
+                      @endif
+                      @if (Session::has('error'))
+                        <div class="alert alert-danger alert-dismissible show fade text-center">
+                            <div class="alert-body">
+                                <strong>{{ Session::get('error') }}</strong>
+                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                            </div>
+                        </div>
+                      @endif
                         @if (Session::has('errorName'))
                             <div class="alert alert-danger alert-dismissible show fade text-center">
                                 <div class="alert-body">
