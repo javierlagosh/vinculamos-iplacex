@@ -192,6 +192,15 @@
                                                         <option value="vra">VRA</option>
 
                                                     </select>
+
+                                                </div>
+                                                <div class="col-xl-12">
+                                                    <select class="select2" style="width: 100%" name="centroInterno" id="centroInterno">
+                                                        <option value="" selected disabled>Seleccione...</option>
+                                                        @foreach ($centroCostos as $ceco)
+                                                            <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
                                                     <input hidden type="number" class="form-control" id="aporteempresa"
@@ -852,38 +861,6 @@
             </div>
         </div>
     </div>
-    <script>
-        // Función para mostrar el nombre de la infraestructura
-    function mostrarNombreInfraestructura(tinf_codigo) {
-        // Obtenemos el array de infraestructura desde PHP
-        const infraestructuras = {!! json_encode($infraestructura) !!};
-
-        // Buscar en el array el nombre que corresponde al código
-        const infraestructura = infraestructuras.find(infra => infra.tinf_codigo == tinf_codigo);
-
-        // Si se encuentra una infraestructura con ese código, mostrar el nombre
-        if (infraestructura) {
-            document.getElementById('editar-nombretipoinfra').textContent = infraestructura.tinf_nombre;
-        } else {
-            document.getElementById('editar-nombretipoinfra').textContent = 'Infraestructura no encontrada';
-        }
-    }
-
-        // Función para mostrar el nombre de rrhh
-        function mostrarNombreRrhh(trrhh_codigo) {
-        // Obtenemos el array de infraestructura desde PHP
-        const rrhhs = {!! json_encode($rrhh) !!};
-
-        // Buscar en el array el nombre que corresponde al código
-        const rrhh = rrhhs.find(rh => rh.trrhh_codigo == trrhh_codigo);
-
-        // Si se encuentra una rrhh con ese código, mostrar el nombre
-        if (rrhh) {
-            document.getElementById('editar-nombrerrhh').textContent = rrhh.trrhh_nombre;
-        } else {
-            document.getElementById('editar-nombrerrhh').textContent = 'Rrhh no encontrado';
-        }
-    }
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ '/js/admin/iniciativas/paso3.js' }}"></script>
