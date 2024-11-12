@@ -195,7 +195,7 @@
                                 <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label style="font-size: 110%">Personas beneficiarias</label>
-                                        <input type="number" class="form-control" id="npersonas" name="npersonas"
+                                        <input type="number" class="form-control" id="npersonas" name="npersonas" oninput="checkNumber('npersonas')" min="0"
                                             value="{{ old('npersonas') }}">
 
                                         @if ($errors->has('npersonas'))
@@ -321,7 +321,7 @@
                                     <div class="form-group">
                                         <label style="font-size: 110%">Estudiantes</label> <label for=""
                                             style="color: red;">*</label>
-                                        <input type="number" class="form-control" id="nestudiantes"
+                                        <input type="number" class="form-control" id="nestudiantes" oninput="checkNumber('nestudiantes')" min="0"
                                             name="nestudiantes">
 
                                         @if ($errors->has('nestudiantes'))
@@ -340,7 +340,7 @@
                                     <div class="form-group">
                                         <label style="font-size: 110%">Docentes</label> <label for=""
                                             style="color: red;">*</label>
-                                        <input type="number" class="form-control" id="ndocentes" name="ndocentes">
+                                        <input type="number" class="form-control" id="ndocentes" name="ndocentes" oninput="checkNumber('ndocentes')" min="0">
 
                                         @if ($errors->has('ndocentes'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
@@ -358,7 +358,7 @@
                                     <div class="form-group">
                                         <label style="font-size: 110%">Funcionarios/as</label> <label for=""
                                             style="color: red;">*</label>
-                                        <input type="number" class="form-control" id="nfuncionarios"
+                                        <input type="number" class="form-control" id="nfuncionarios" oninput="checkNumber('nfuncionarios')" min="0"
                                             name="nfuncionarios">
 
                                         @if ($errors->has('nfuncionarios'))
@@ -422,7 +422,7 @@
                                                 <label>Cuantificación</label> <label for=""
                                                     style="color: red;">*</label>
                                                 <input type="number" class="form-control" id="cuantificacion"
-                                                    name="cuantificacion" autocomplete="off" min="0">
+                                                    name="cuantificacion" autocomplete="off" min="0" oninput="checkNumber('cuantificacion')">
                                             </div>
                                         </div>
                                         <div class="col-xl-7 col-md-7 col-lg-7">
@@ -1281,4 +1281,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    function checkNumber(inputId) {
+                var input = document.getElementById(inputId);
+                if (input.value < 0) {
+                    input.value = ''; // Dejar el valor vacío si es negativo
+                }
+            }
+
+</script>
 @endsection

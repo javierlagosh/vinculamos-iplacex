@@ -159,22 +159,22 @@
                                                         <tr>
                                                             <td class="text-center"><strong></strong>Sede</td>
                                                             <td  id="empresadinero" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" oninput="checkNumber('empresadinerovalue')" min="0" value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center" >VcM Sede</td>
                                                             <td class="text-center" hidden id="vcm_sede"></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_sedevalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_sedevalue" value="0" oninput="checkNumber('vcm_sedevalue')" min="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center">VcM Escuela</td>
                                                             <td class="text-center" id="vcm_escuela" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" oninput="checkNumber('vcm_escuelavalue')" min="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center">Unidad de titulados</td>
                                                             <td class="text-center" id="vra" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" oninput="checkNumber('vravalue')" min="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -289,6 +289,7 @@
                                                             <td>
                                                                 <input type="number" class="form-control" id="aporteexterno"
                                                                     placeholder="Ingrese el monto..." name="aporteexterno"
+                                                                    oninput="checkNumber('aporteexterno')" min="0"
                                                                     style="display: inline-block; margin-right: 5px;"
                                                                     autocomplete="off">
                                                             </td>
@@ -866,6 +867,12 @@
     <script src="{{ '/js/admin/iniciativas/paso3.js' }}"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
     <script>
+        function checkNumber(inputId) {
+                var input = document.getElementById(inputId);
+                if (input.value < 0) {
+                    input.value = ''; // Dejar el valor vacío si es negativo
+                }
+            }
         function MostrarIngreso() {
             var alerta = document.getElementById("exito_ingresar");
             alerta.style.display = "block";
