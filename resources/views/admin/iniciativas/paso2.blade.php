@@ -1239,7 +1239,7 @@
                                         <i class="fas fa-calculator"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="personasBeneficiadas" name="personasBeneficiadas" autocomplete="off">
+                                <input type="number" class="form-control" id="personasBeneficiadas" name="personasBeneficiadas" autocomplete="off" oninput="checkNumber('personasBeneficiadas')" min="0">
                             </div>
                         </div>
                         <div class="text-center">
@@ -1256,7 +1256,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarResultadoLabel">Editar Resultado</h5>
+                <h5 class="modal-title" id="modalEditarResultadoLabel">Editar resultado esperado</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1273,7 +1273,7 @@
                     </div>
                     <div class="form-group">
                         <label for="resu_cuantificacion_inicial">Cuantificación Inicial</label>
-                        <input type="number" class="form-control" id="resu_cuantificacion_inicial" name="resu_cuantificacion_inicial">
+                        <input type="number" class="form-control" id="resu_cuantificacion_inicial" name="resu_cuantificacion_inicial" oninput="checkNumber('resu_cuantificacion_inicial')" min="0">
                     </div>
                     <button type="submit" class="btn btn-primary" id="btnGuardarCambios">Guardar Cambios</button>
                 </form>

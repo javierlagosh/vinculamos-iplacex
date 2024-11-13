@@ -127,7 +127,9 @@
                                                                     </td>
                                                                     <td>
                                                                         <input type="number"
+                                                                            id="resultados[{{ $participante->resu_codigo }}]"
                                                                             name="resultados[{{ $participante->resu_codigo }}]"
+                                                                            oninput="checkNumber('resultados[{{ $participante->resu_codigo }}]')" min="0"
                                                                             class="form-control"
                                                                             value="{{ $participante->resu_cuantificacion_final }}">
                                                                     </td>
@@ -215,4 +217,13 @@
         </div>
     </div>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
+    <script>
+        function checkNumber(inputId) {
+                    var input = document.getElementById(inputId);
+                    if (input.value < 0) {
+                        input.value = ''; // Dejar el valor vacío si es negativo
+                    }
+                }
+
+    </script>
 @endsection
