@@ -650,6 +650,15 @@ class IniciativasController extends Controller
     public function guardarEvidencia(Request $request, $inic_codigo)
     {
 
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        } elseif (Session::has('observador')) {
+            $rolePrefix = 'observador';
+        } elseif (Session::has('supervisor')) {
+            $rolePrefix = 'supervisor';
+        }
         $inicVerificar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         if (!$inicVerificar)
             return redirect()->route('admin.iniciativa.listar')->with('errorIniciativa', 'La iniciativa no se encuentra registrada en el sistema.');
@@ -682,8 +691,9 @@ class IniciativasController extends Controller
             'inev_descripcion' => $request->inev_descripcion,
             'inev_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'inev_rol_mod' => 1,
-            'inev_nickname_mod' => 'jcarpincho'
+            'inev_rol_mod' => Session::get($rolePrefix)->rous_codigo,
+            'inev_nickname_creado' => Session::get($rolePrefix)->usua_nickname,
+            'inev_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
         ]);
         if (!$inevGuardar)
             redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
@@ -703,8 +713,8 @@ class IniciativasController extends Controller
             'inev_mime' => $archivo->getClientMimeType(),
             'inev_nombre_origen' => $archivo->getClientOriginalName(),
             'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'inev_rol_mod' => 1,
-            'inev_nickname_mod' => 'jcarpincho'
+            'inev_rol_mod' => Session::get($rolePrefix)->rous_codigo,
+            'inev_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
         ]);
         if (!$inevActualizar)
             return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
@@ -713,6 +723,16 @@ class IniciativasController extends Controller
 
     public function actualizarEvidencia(Request $request, $inev_codigo)
     {
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        } elseif (Session::has('observador')) {
+            $rolePrefix = 'observador';
+        } elseif (Session::has('supervisor')) {
+            $rolePrefix = 'supervisor';
+        }
+
         try {
             $evidencia = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->first();
             if (!$evidencia)
@@ -739,8 +759,8 @@ class IniciativasController extends Controller
                 'inev_descripcion' => $request->inev_descripcion_edit,
                 // 'inev_tipo' => $request->inev_tipo_edit,
                 'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-                'inev_rol_mod' => 1,
-                'inev_nickname_mod' => 'jcarpincho'
+                'inev_rol_mod' => Session::get($rolePrefix)->rous_codigo,
+                'inev_nickname_mod' => Session::get($rolePrefix)->usua_nickname,
             ]);
             if (!$inevActualizar)
                 return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al actualizar la evidencia, intente más tarde.');
