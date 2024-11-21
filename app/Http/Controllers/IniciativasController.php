@@ -2263,12 +2263,12 @@ class IniciativasController extends Controller
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $costo = CostosDinero::where('inic_codigo', $inic_codigo)->first();
-
+        $centroCostos = CentroCostos::all();
         $estudiantes = [];
         $docentes = [];
         $funcionarios = [];
 
-        if($iniciativa->inic_estado != 6){
+        if($iniciativa->inic_estado != 5){
             $estudiantes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
                 ->sum('pain_estudiantes');
 
