@@ -161,17 +161,17 @@
                                                         <tr>
                                                             <td class="text-center"><strong></strong>Sede</td>
                                                             <td  id="empresadinero" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" oninput="checkNumber('empresadinerovalue')" min="0" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center">Escuela</td>
                                                             <td class="text-center" id="vcm_escuela" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" oninput="checkNumber('vcm_escuelavalue')" min="0" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center">Unidad de titulados</td>
                                                             <td class="text-center" id="vra" hidden></td>
-                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" oninput="checkNumber('vravalue')" min="0" value="0" placeholder="Ingrese el monto..." style="width: 130px;"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -276,6 +276,7 @@
                                                     placeholder="Ingrese el monto..."
                                                         name="aporteexterno"
                                                         style="display: inline-block; margin-right: 5px;"
+                                                        oninput="checkNumber('aporteexterno')" min="0"
                                                         autocomplete="off">
                                                     <div class="mt-2">
                                                         <button type="button" class="btn btn-icon btn-primary"
@@ -409,6 +410,7 @@
                                     </div>
                                 </div>
                                 <input type="number" class="form-control" id="horasinfra" name="horasinfra"
+                                oninput="checkNumber('horasinfra')" min="0"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -422,6 +424,7 @@
                                     </div>
                                 </div>
                                 <input type="number" class="form-control" id="cantidadinfra" name="cantidadinfra"
+                                oninput="checkNumber('cantidadinfra')" min="0"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -487,7 +490,7 @@
                                         <i class="fas fa-stopwatch"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="editar-horasinfra" name="horasinfra" autocomplete="off">
+                                <input type="number" class="form-control" id="editar-horasinfra" name="horasinfra" oninput="checkNumber('editar-horasinfra')" min="0" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group">
@@ -498,7 +501,7 @@
                                         <i class="fas fa-home"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="editar-cantidadinfra" name="cantidadinfra" autocomplete="off">
+                                <input type="number" class="form-control" id="editar-cantidadinfra" name="cantidadinfra" oninput="checkNumber('editar-cantidadinfra')" min="0" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group" hidden>
@@ -561,6 +564,7 @@
                                     </div>
                                 </div>
                                 <input type="number" class="form-control" id="horasrrhh" name="horasrrhh"
+                                oninput="checkNumber('horasrrhh')" min="0"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -574,6 +578,7 @@
                                     </div>
                                 </div>
                                 <input type="number" class="form-control" id="cantidadhh" name="cantidadhh"
+                                oninput="checkNumber('cantidadhh')" min="0"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -637,7 +642,7 @@
                                         <i class="fas fa-stopwatch"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh" autocomplete="off">
+                                <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh" oninput="checkNumber('editar-horasrrhh')" min="0" autocomplete="off">
                             </div>
                         </div>
 
@@ -649,7 +654,7 @@
                                         <i class="fas fa-users"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh" autocomplete="off">
+                                <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh" oninput="checkNumber('editar-cantidadhh')" min="0" autocomplete="off">
                             </div>
                         </div>
 
@@ -786,6 +791,15 @@
             document.getElementById('editar-nombrerrhh').textContent = 'Rrhh no encontrado';
         }
     }
+    </script>
+    <script>
+        function checkNumber(inputId) {
+                    var input = document.getElementById(inputId);
+                    if (input.value < 0) {
+                        input.value = ''; // Dejar el valor vacío si es negativo
+                    }
+                }
+
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ '/js/admin/iniciativas/paso3.js' }}"></script>

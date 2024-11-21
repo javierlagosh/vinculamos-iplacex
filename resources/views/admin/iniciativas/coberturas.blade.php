@@ -151,7 +151,7 @@
                                                                             id="cantidad-estudiantes-final-{{ $resultado->pain_codigo }}"
                                                                             name="estudiantes_final[{{ $resultado->pain_codigo }}]"
                                                                             value="{{ $resultado->pain_estudiantes_final }}"
-                                                                            min="0">
+                                                                            oninput="checkNumber('cantidad-estudiantes-final-{{ $resultado->pain_codigo }}')" min="0">
                                                                     </td>
                                                                     <td>{{ $resultado->pain_docentes }}</td>
                                                                     <td>
@@ -159,7 +159,7 @@
                                                                             id="cantidad-docentes-final-{{ $resultado->pain_codigo }}"
                                                                             name="docentes_final[{{ $resultado->pain_codigo }}]"
                                                                             value="{{ $resultado->pain_docentes_final }}"
-                                                                            min="0">
+                                                                            oninput="checkNumber('cantidad-docentes-final-{{ $resultado->pain_codigo }}')" min="0">
                                                                     </td>
 
                                                                     <td>{{ $resultado->pain_funcionarios }}</td>
@@ -168,7 +168,7 @@
                                                                             id="cantidad-funcionarios-final-{{ $resultado->pain_codigo }}"
                                                                             name="funcionarios_final[{{ $resultado->pain_codigo }}]"
                                                                             value="{{ $resultado->pain_funcionarios_final }}"
-                                                                            min="0">
+                                                                            oninput="checkNumber('cantidad-funcionarios-final-{{ $resultado->pain_codigo }}')" min="0">
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -231,9 +231,12 @@
                                                                         </td>
                                                                         <td>
                                                                             <input type="number"
+                                                                                id = "participantes[{{ $participante->inpr_codigo }}]"
                                                                                 name="participantes[{{ $participante->inpr_codigo }}]"
                                                                                 class="form-control"
-                                                                                value="{{ $participante->inpr_total_final }}">
+                                                                                value="{{ $participante->inpr_total_final }}"
+                                                                                oninput="checkNumber('participantes[{{ $participante->inpr_codigo }}]')" min="0"
+                                                                                >
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -367,7 +370,15 @@
             $('#modalEliminarIniciativa').modal('show');
         }
     </script>
+    <script>
+        function checkNumber(inputId) {
+                    var input = document.getElementById(inputId);
+                    if (input.value < 0) {
+                        input.value = ''; // Dejar el valor vacío si es negativo
+                    }
+                }
 
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('/js/admin/iniciativas/listar.js') }}"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
