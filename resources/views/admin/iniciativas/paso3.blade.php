@@ -76,36 +76,42 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4>{{ $iniciativa->inic_nombre }} - Paso 3 de 3</h4>
+                        <h4>{{ $iniciativa->inic_nombre }} </h4>
                         <div class="card-header-action">
                             <div class="dropdown d-inline">
                                 <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton2"
                                     data-toggle="dropdown"title="Iniciativa">
                                     Iniciativa</button>
                                 <div class="dropdown-menu dropright">
-                                    <a href="{{ route('admin.iniciativas.detalles', $iniciativa->inic_codigo) }}"
+                                    <a href="{{ route($role . '.iniciativas.detalles', $iniciativa->inic_codigo) }}"
                                         class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                        title="Ver detalles de la iniciativa"><i class="fas fa-eye"></i> Ver detalle</a>
+                                        title="Ver detalles de la iniciativa"><i class="fas fa-eye"></i> Ver
+                                        detalle</a>
 
-                                    <a href="javascript:void(0)" class="dropdown-item has-icon" data-toggle="tooltip"
-                                        data-placement="top" title="Calcular INVI"
+                                    {{-- <a href="{{ route('admin.editar.paso1', $iniciativa->inic_codigo) }}"
+                                                        class="btn btn-icon btn-primary icon-left" data-toggle="tooltip"
+                                                        data-placement="top" title="Editar iniciativa"><i
+                                                            class="fas fa-edit"></i>Editar Iniciativa</a> --}}
+
+                                    {{-- <a href="javascript:void(0)" class="dropdown-item has-icon"
+                                        data-toggle="tooltip" data-placement="top" title="Calcular INVI"
                                         onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i
-                                            class="fas fa-tachometer-alt"></i> INVI</a>
+                                            class="fas fa-tachometer-alt"></i> INVI</a> --}}
 
-                                    <a href="{{ route('admin.evidencias.listar', $iniciativa->inic_codigo) }}"
+                                    {{-- <a href="{{ route($role . '.evidencias.listar', $iniciativa->inic_codigo) }}"
                                         class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                        title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Adjuntar evidencia</a>
+                                        title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Adjuntar
+                                        evidencia</a> --}}
                                 </div>
                             </div>
                             <div class="dropdown d-inline">
                                 <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
                                     data-toggle="dropdown"title="ingresar">
                                     <i class="fas fa-plus-circle"></i> Ingresar</button>
-                                <div class="dropdown-menu dropright">
-
-                                    <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
-                                        class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                        title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
+                                    <div class="dropdown-menu dropright">
+                                        <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                            class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                            title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
 
                                     <a href="{{ route('admin.resultados.listado', $iniciativa->inic_codigo) }}"
                                         class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
@@ -113,8 +119,7 @@
 
                                     <a href="{{ route($role . '.evaluar.iniciativa', $iniciativa->inic_codigo) }}"
                                         class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
-                                        title="Evaluar iniciativa"><i class="fas fa-file-signature"></i> Evaluar
-                                        iniciativa</a>
+                                        title="Evaluar iniciativa"><i class="fas fa-file-signature"></i> Evaluar iniciativa</a>
                                 </div>
 
 
@@ -126,7 +131,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <h6>Recursos</h6>
+                        <div class="col-xl-6 col-md-6 col-lg-6">
+                            <h5>Sección 5 - Recursos</h5>
+                        </div>
                         <div class="row mt-3">
                             <div class="col-3 col-md-3 col-lg-3"></div>
                             <div class="col-6 col-md-6 col-lg-6 text-center" id="div-alert-recursos"></div>
@@ -151,47 +158,23 @@
                                                     <tbody>
                                                         <tr>
                                                             <td class="text-center"><strong></strong>Sede</td>
-                                                            <td id="empresadinero" hidden></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="empresadinerovalue"
-                                                                    value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td  id="empresadinero" hidden></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="empresadinerovalue" value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="text-center">VcM Sede</td>
+                                                            <td class="text-center" >VcM Sede</td>
                                                             <td class="text-center" hidden id="vcm_sede"></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="vcm_sedevalue"
-                                                                    value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_sedevalue" value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="text-center">VcM Escuela</td>
                                                             <td class="text-center" id="vcm_escuela" hidden></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="vcm_escuelavalue"
-                                                                    value="0" placeholder="Ingrese el monto..."></td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vcm_escuelavalue" value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="text-center">VRA</td>
+                                                            <td class="text-center">Unidad de titulados</td>
                                                             <td class="text-center" id="vra" hidden></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="vravalue" value="0"
-                                                                    placeholder="Ingrese el monto..."></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-center">Centro de Costos</td>
-
-                                                            <td class="text-center">
-                                                                <select class="select2" style="width: 90%"
-                                                                    name="centroInterno" id="centroInterno">
-                                                                    <option value="" selected disabled>Seleccione...
-                                                                    </option>
-                                                                    @foreach ($centroCostos as $ceco)
-                                                                        <option value="{{ $ceco->ceco_codigo }}"
-                                                                            {{$costo->ceco_codigo == $ceco->ceco_codigo ? 'selected' : ''}}>
-                                                                            {{ $ceco->ceco_nombre }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </td>
+                                                            <td class="text-center"><input type="number" class="form-control" id="vravalue" value="0" placeholder="Ingrese el monto..."></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -208,6 +191,15 @@
                                                         <option value="vcmescuela">VcM Escuela</option>
                                                         <option value="vra">VRA</option>
 
+                                                    </select>
+
+                                                </div>
+                                                <div class="col-xl-12">
+                                                    <select class="select2" style="width: 100%" name="centroInterno" id="centroInterno">
+                                                        <option value="" selected disabled>Seleccione...</option>
+                                                        @foreach ($centroCostos as $ceco)
+                                                            <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-xl-12 col-md-12 col-lg-12 text-center">
@@ -509,6 +501,82 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalEditarInfraestructura" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar Infraestructura</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('admin.infra.actualizar')}}" method="post">
+                        @method('POST')
+                        @csrf
+                        <div class="text-center" id="div-alert-editar-infraestructura">
+                        </div>
+                        <div class="form-group">
+
+                            <label>Tipo de Infraestructura</label>
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                </div>
+                                <p id="editar-nombretipoinfra" class="form-control">Nombre infraestructura</p>
+
+
+                                <input type="number" id="editar-tipoinfra" hidden name="tipoinfra" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Horas de uso</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-stopwatch"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-horasinfra" name="horasinfra" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cantidad de Infraestructuras</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-cantidadinfra" name="cantidadinfra" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label>Valorización</label>
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                                <input type="number"  class="form-control" id="editar-valorinfra" name="editar-valorinfra" disabled>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <input type="hidden" id="editar-entidadinfra" name="entidadinfra">
+                            <input type="hidden" id="editar-iniccodigo" name="iniccodigo">
+                            <input type="hidden" id="editar-tinf_codigo" name="tinf_codigo">
+                            <button type="submit" class="btn btn-primary waves-effect" >Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="modalRrhh" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -639,6 +707,83 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalEditarRrhh" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar RRHH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action=" {{route('admin.rrhh.actualizar')}} " method="post">
+                        @method('POST')
+                        @csrf
+                        <div class="text-center" id="div-alert-editar-rrhh"></div>
+
+                        <div class="form-group">
+                            <label>Tipo RRHH</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                </div>
+                                <p id="editar-nombrerrhh" class="form-control">Nombre infraestructura</p>
+                                <!-- Cambiado de <select> a <input> para edición directa -->
+                                <input type="text" hidden class="form-control" id="editar-codigorrhh" name="codigorrhh" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cantidad de horas</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-stopwatch"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cantidad de personal</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group" hidden>
+                            <label>Valorización</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="editar-valorrrhh" name="valorrrhh" disabled>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <input type="hidden" id="editar-entidadrrhh" name="entidadrrhh">
+                            <input type="hidden" id="editar-iniccodigorrhh" name="iniccodigo">
+                            <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="tituloModalFinalizar"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -716,7 +861,7 @@
             </div>
         </div>
     </div>
-
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ '/js/admin/iniciativas/paso3.js' }}"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>

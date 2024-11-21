@@ -19,6 +19,35 @@
 @extends('admin.panel')
 
 @section('contenido')
+<div class="modal fade" id="modalEliminaEvaluacion" tabindex="-1" role="dialog" aria-labelledby="modalEliminar"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <form action="{{ route('admin.eliminar.todas.las.evaluaciones') }} " method="POST">
+                    @method('DELETE')
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEliminar">Cambiando modalidad de evaluación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-ban text-danger" style="font-size: 50px; color"></i>
+                        <h6 class="mt-2">Para cambiar de modalidad de evaluación, todas las evaluaciones relacionadas a la iniciativa <span style="color:black;">dejarán de existir dentro del sistema</span>. <br> ¿Desea continuar de
+                            todos
+                            modos?</h6>
+                        <input  id="inic_codigo" hidden name="inic_codigo" value="">
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                        <button type="submit" class="btn btn-primary">Continuar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="section">
         <div class="section-body">
             <div class="row">
@@ -74,8 +103,7 @@
                         <div class="card-header d-flex justify-content-between">
 
                             <h4>Evaluación de la iniciativa: {{ $iniciativa[0]->inic_nombre }} </h4>
-                            <input type="hidden" name="iniciativa_codigo" id="iniciativa_codigo"
-                            value="{{ $iniciativa[0]->inic_codigo }}">
+
 
                             <div class="card-header-action">
                                 <div class="dropdown d-inline">
@@ -109,18 +137,23 @@
                                         <button class="btn btn-success dropdown-toggle" id="dropdownMenuButton2"
                                             data-toggle="dropdown"><i class="fas fa-plus-circle"></i> Ingresar</button>
 
-                                        <div class="dropdown-menu dropright">
+                                            <div class="dropdown-menu dropright">
+                                                <a href="{{ route('admin.cobertura.index', $iniciativa[0]->inic_codigo) }}"
+                                                    class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                                    title="Ingresar cobertura"><i class="fas fa-users"></i> Ingresar cobertura</a>
 
-                                            <a href="{{ route('admin.cobertura.index', $iniciativa[0]->inic_codigo) }}"
-                                                class="dropdown-item has-item" data-toggle="tooltip"
-                                                data-placement="top" title="Ingresar cobertura"><i
-                                                    class="fas fa-users"></i> Ingresaer cobertura</a>
+                                                <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
+                                                    class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top"
+                                                    title="Ingresar resultado"><i class="fas fa-flag"></i>Ingresar resultado/s</a>
+                                                    <a href="{{ route('admin.evidencias.listar', $iniciativa[0]->inic_codigo) }}"
+                                                        class="dropdown-item has-item" data-toggle="tooltip" data-placement="top"
+                                                        title="Adjuntar evidencia"><i class="fas fa-paperclip"></i> Ingresar
+                                                        evidencias</a>
+                                                    <a href="{{ route('admin.evaluar.iniciativa', $iniciativa[0]->inic_codigo) }}" class="dropdown-item has-icon"><i
+                                                        class="fas fa-file-signature"></i>Ingresar evaluación</a>
 
-                                            <a href="{{ route('admin.resultados.listado', $iniciativa[0]->inic_codigo) }}"
-                                                class="dropdown-item has-item" data-toggle="tooltip"
-                                                data-placement="top" title="Ingresar resultado"><i
-                                                    class="fas fa-flag"></i> Ingresar resultado/s</a>
-                                        </div>
+
+                                            </div>
                                     </div>
 
 
@@ -137,1996 +170,521 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="container-fluid">
+                        <div class="card-body">
+                            @if ($evaluacionManualPredeterminada == 0)
                             <div class="row">
-                                <div class="col-md-12 mt-3 mb-3">
-                                    <h4 class="card-title">Ingresar evaluación con plantilla</h4>
+                                <div class="col-xl-6 col-md-6 col-lg-6">
+                                    <h5>Ingresar evaluación </h5>
+
+                                    <table class="table table-bordered text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Evaluador Interno</th>
+                                                <th>Puntaje</th>
+                                                <th>Resultado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width:33%;">Estudiantes</td>
+                                                <td>
+                                                    <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                        @method('POST')
+                                                        @csrf
+                                                        <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                        <input type="number" hidden name="eval_evaluador" value="0">
+                                                        <div class="d-flex flex-column flex-md-row w-100">
+                                                            <input id="evaestudiantes" type="number" value="{{$evaluacion_estudiantes->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                            <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                          </div>
+
+                                                    </form>
+                                                </td>
+                                                <td rowspan="3" class="align-middle">
+                                                    <br>
+                                                    <h3 id="resultados-internos">0</h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Docentes</td>
+                                                <td>
+                                                    <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                        @method('POST')
+                                                        @csrf
+                                                        <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                        <input type="number" hidden name="eval_evaluador" value="1">
+                                                        <div class="d-flex flex-column flex-md-row w-100">
+                                                            <input id="evadocentes" type="number" value="{{$evaluacion_docentes->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                            <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                          </div>
+
+                                                    </form>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Directivos/Funcionarios</td>
+                                                <td>
+                                                    <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                        @method('POST')
+                                                        @csrf
+                                                        <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                        <input type="number" hidden name="eval_evaluador" value="12">
+                                                        <div class="d-flex flex-column flex-md-row w-100">
+                                                            <input id="evadirectivos" type="number" value="{{$evaluacion_directivos->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                            <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                          </div>
+
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-bordered text-center">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:33%;">Evaluador Externo</th>
+                                                <th>Puntaje</th>
+                                                <th>Resultado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Beneficiarios</td>
+                                                <td>
+                                                    <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                        @method('POST')
+                                                        @csrf
+                                                        <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                        <input type="number" hidden name="eval_evaluador" value="13">
+                                                        <div class="d-flex flex-column flex-md-row w-100">
+                                                            <input id="evabeneficiarios" type="number" value="{{$evaluacion_beneficiarios->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                            <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                          </div>
+
+                                                    </form>
+                                                </td>
+                                                <td rowspan="3" class="align-middle">
+                                                    <br>
+                                                    <h3 id="resultados-externos">0</h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Socios comunitarios</td>
+                                                <td>
+                                                    <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                        @method('POST')
+                                                        @csrf
+                                                        <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                        <input type="number" hidden name="eval_evaluador" value="14">
+                                                        <div class="d-flex flex-column flex-md-row w-100">
+                                                            <input id="evasocios" type="number" value="{{$evaluacion_socios->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                            <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                          </div>
+
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <script>
+                                        function sumarValores() {
+                                            // Obtener los valores de los inputs
+                                            const evaEstudiantes = parseFloat(document.getElementById('evaestudiantes').value) || 0;
+                                            const evaDocentes = parseFloat(document.getElementById('evadocentes').value) || 0;
+                                            const evaDirectivos = parseFloat(document.getElementById('evadirectivos').value) || 0;
+
+                                            const evabeneficiarios = parseFloat(document.getElementById('evabeneficiarios').value) || 0;
+                                            const evasocios = parseFloat(document.getElementById('evasocios').value) || 0;
+
+                                            // Contadores para valores válidos
+                                            let contadorInternos = 0;
+                                            let contadorExternos = 0;
+
+                                            // Sumar los valores solo si son mayores que 0 y contar cuántos son válidos
+                                            const sumaTotalInternos = (evaEstudiantes > 0 ? (contadorInternos++, evaEstudiantes) : 0) +
+                                                                    (evaDocentes > 0 ? (contadorInternos++, evaDocentes) : 0) +
+                                                                    (evaDirectivos > 0 ? (contadorInternos++, evaDirectivos) : 0);
+
+                                            const sumaTotalExternos = (evabeneficiarios > 0 ? (contadorExternos++, evabeneficiarios) : 0) +
+                                                                    (evasocios > 0 ? (contadorExternos++, evasocios) : 0);
+
+                                            // Evitar divisiones por cero
+                                            const PromedioInternos = contadorInternos > 0 ? sumaTotalInternos / contadorInternos : 0;
+                                            const PromedioExternos = contadorExternos > 0 ? sumaTotalExternos / contadorExternos : 0;
+
+                                            // Verificar si los valores no son válidos (NaN) o si están fuera de rango
+                                            if (isNaN(PromedioInternos)) {
+                                                document.getElementById('resultados-internos').innerText = 0;
+                                                return;
+                                            }
+                                            if (isNaN(PromedioExternos)) {
+                                                document.getElementById('resultados-externos').innerText = 0;
+                                                return;
+                                            }
+
+                                            // Limitar el resultado máximo a 100
+                                            const PromedioInternosAplicado = Math.min(PromedioInternos, 100).toFixed(2);
+                                            const PromedioExternosAplicado = Math.min(PromedioExternos, 100).toFixed(2);
+
+                                            // Actualizar el resultado en el h3
+                                            document.getElementById('resultados-internos').innerText = PromedioInternosAplicado;
+                                            document.getElementById('resultados-externos').innerText = PromedioExternosAplicado;
+                                        }
+
+                                        // Llamar a la función cuando la página se carga
+                                        window.onload = sumarValores;
+
+                                    </script>
+
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-lg-6">
+
+                                    <h5>Crear evaluación</h5>
+                                    <table class="table table-bordered text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Seleccione un tipo de evaluador</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <form method="POST" action="{{route('admin.crear.evaluacion')}}">
+                                                        @method('POST')
+                                                        @csrf
+                                                        <div class="form-group">
+
+                                                            <div class="w-100 mt-2">
+                                                                <input type="text" hidden name="inic_codigo" id="inic_codigo"
+                                                                value="{{ $iniciativa[0]->inic_codigo }}">
+                                                                <select class="form-control" name="tipo" id="tipo" onchange="cambiodeTipo();" required>
+                                                                    <option value="" disabled selected>Seleccione...</option>
+                                                                    <option value="" disabled>--- Evaluador Interno ---</option>
+                                                                    <option value="0">Evaluador interno - Estudiante</option>
+                                                                    <option value="1">Evaluador interno - Docente</option>
+                                                                    <option value="12">Evaluador interno - Directivo</option>
+                                                                    <option value="" disabled>--- Evaluador Externo ---</option>
+                                                                    <option value="13">Evaluador Externo - Beneficiario</option>
+                                                                    <option value="14">Evaluador Externo - Socio comunitario</option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit" id="botonEnviar" class="btn btn-primary w-100">
+                                                            Paso Siguiente &nbsp;<i class="fas fa-chevron-right"></i>
+                                                        </button>
+
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+
+                                        <script>
+                                            function cambiodeTipo(){
+                                                var tipo = document.getElementById('tipo').value;
+                                                if(tipo == 0){
+                                                    document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/0';
+                                                    document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/0';
+                                                }else if(tipo == 1){
+                                                    document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/1';
+                                                    document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/1';
+                                                }else if(tipo == 12){
+                                                    document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/12';
+                                                    document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/12';
+                                                }else if(tipo == 13){
+                                                    document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/13';
+                                                    document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/13';
+                                                }else if(tipo == 14){
+                                                    document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/14';
+                                                    document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/14';
+                                                }
+                                            }
+                                        </script>
+
+
+
+                                        <script>
+                                            //funcion donde si cambia el tipo de evaluador se muestra el boton de enviar
+                                            onchange = function() {
+                                                document.getElementById('botonEnviar').hidden = false;
+                                            }
+
+                                        </script>
+
+
+                                </div>
+                            </div>
+
+                            @elseif($evaluacionManualPredeterminada == 1)
+                            <div class="d-flex justify-content-center">
+                            <div class="col-xl-6 col-md-6 col-lg-6">
+                                <h5>Ingresar evaluación </h5>
+
+                                <table class="table table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Evaluador Interno</th>
+                                            <th>Puntaje</th>
+                                            <th>Resultado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:33%;">Estudiantes</td>
+                                            <td>
+                                                <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                    @method('POST')
+                                                    @csrf
+                                                    <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                    <input type="number" hidden name="eval_evaluador" value="0">
+                                                    <div class="d-flex flex-column flex-md-row w-100">
+                                                        <input id="evaestudiantes" type="number" value="{{$evaluacion_estudiantes->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                        <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                      </div>
+
+                                                </form>
+                                            </td>
+                                            <td rowspan="3" class="align-middle">Resultados Internos
+                                                <br>
+                                                <h3 id="resultados-internos">0</h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Docentes</td>
+                                            <td>
+                                                <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                    @method('POST')
+                                                    @csrf
+                                                    <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                    <input type="number" hidden name="eval_evaluador" value="1">
+                                                    <div class="d-flex flex-column flex-md-row w-100">
+                                                        <input id="evadocentes" type="number" value="{{$evaluacion_docentes->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                        <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                      </div>
+
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Directivos/Funcionarios</td>
+                                            <td>
+                                                <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                    @method('POST')
+                                                    @csrf
+                                                    <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                    <input type="number" hidden name="eval_evaluador" value="12">
+                                                    <div class="d-flex flex-column flex-md-row w-100">
+                                                        <input id="evadirectivos" type="number" value="{{$evaluacion_directivos->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                        <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                      </div>
+
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:33%;">Evaluador Externo</th>
+                                            <th>Puntaje</th>
+                                            <th>Resultado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Beneficiarios</td>
+                                            <td>
+                                                <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                    @method('POST')
+                                                    @csrf
+                                                    <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                    <input type="number" hidden name="eval_evaluador" value="13">
+                                                    <div class="d-flex flex-column flex-md-row w-100">
+                                                        <input id="evabeneficiarios" type="number" value="{{$evaluacion_beneficiarios->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                        <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                      </div>
+
+                                                </form>
+                                            </td>
+                                            <td rowspan="3" class="align-middle">
+                                                <br>
+                                                <h3 id="resultados-externos">0</h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Socios comunitarios</td>
+                                            <td>
+                                                <form action="{{route('admin.guardar.evaluacion.manual')}}" method="post">
+                                                    @method('POST')
+                                                    @csrf
+                                                    <input type="number" hidden name="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}">
+                                                    <input type="number" hidden name="eval_evaluador" value="14">
+                                                    <div class="d-flex flex-column flex-md-row w-100">
+                                                        <input id="evasocios" type="number" value="{{$evaluacion_socios->eval_puntaje  ?? 0}}" name="puntaje" min="0" max="100" class="form-control mr-md-2 mb-2 mb-md-0" style="flex: 0 0 80%;" placeholder="Ingresa Puntaje">
+                                                        <button type="submit" class="btn btn-primary" style="flex: 0 0 20%;"><i class="fas fa-save"></i></button>
+                                                      </div>
+
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <script>
+                                    function sumarValores() {
+                                        // Obtener los valores de los inputs
+                                        const evaEstudiantes = parseFloat(document.getElementById('evaestudiantes').value) || 0;
+                                        const evaDocentes = parseFloat(document.getElementById('evadocentes').value) || 0;
+                                        const evaDirectivos = parseFloat(document.getElementById('evadirectivos').value) || 0;
+
+                                        const evabeneficiarios = parseFloat(document.getElementById('evabeneficiarios').value) || 0;
+                                        const evasocios = parseFloat(document.getElementById('evasocios').value) || 0;
+
+                                        // Contadores para valores válidos
+                                        let contadorInternos = 0;
+                                        let contadorExternos = 0;
+
+                                        // Sumar los valores solo si son mayores que 0 y contar cuántos son válidos
+                                        const sumaTotalInternos = (evaEstudiantes > 0 ? (contadorInternos++, evaEstudiantes) : 0) +
+                                                                (evaDocentes > 0 ? (contadorInternos++, evaDocentes) : 0) +
+                                                                (evaDirectivos > 0 ? (contadorInternos++, evaDirectivos) : 0);
+
+                                        const sumaTotalExternos = (evabeneficiarios > 0 ? (contadorExternos++, evabeneficiarios) : 0) +
+                                                                (evasocios > 0 ? (contadorExternos++, evasocios) : 0);
+
+                                        // Evitar divisiones por cero
+                                        const PromedioInternos = contadorInternos > 0 ? sumaTotalInternos / contadorInternos : 0;
+                                        const PromedioExternos = contadorExternos > 0 ? sumaTotalExternos / contadorExternos : 0;
+
+                                        // Verificar si los valores no son válidos (NaN) o si están fuera de rango
+                                        if (isNaN(PromedioInternos)) {
+                                            document.getElementById('resultados-internos').innerText = 0;
+                                            return;
+                                        }
+                                        if (isNaN(PromedioExternos)) {
+                                            document.getElementById('resultados-externos').innerText = 0;
+                                            return;
+                                        }
+
+                                        // Limitar el resultado máximo a 100
+                                        const PromedioInternosAplicado = Math.min(PromedioInternos, 100).toFixed(2);
+                                        const PromedioExternosAplicado = Math.min(PromedioExternos, 100).toFixed(2);
+
+                                        // Actualizar el resultado en el h3
+                                        document.getElementById('resultados-internos').innerText = PromedioInternosAplicado;
+                                        document.getElementById('resultados-externos').innerText = PromedioExternosAplicado;
+                                    }
+
+                                    // Llamar a la función cuando la página se carga
+                                    window.onload = sumarValores;
+
+                                </script>
+
+                            <div class="d-flex justify-content-center mb-5">
+                                <button class="btn btn-danger" onclick="eliminarEvaluaciones({{$iniciativa[0]->inic_codigo}});"> Cambiar tipo de evaluación</button>
+                            </div>
+                            </div>
+                            </div>
+
+                            @elseif($evaluacionManualPredeterminada == 2)
+                            <div class="col-xl-12 col-md-12 col-lg-12">
+                                <h5>Crear evaluación</h5>
+                                <div class="d-flex justify-content-center mb-3">
                                     <form method="POST" action="{{route('admin.crear.evaluacion')}}">
+                                        @method('POST')
                                         @csrf
                                         <div class="form-group">
                                             <label for="tipo">
-                                                <strong>Tipo de evaluador:</strong>
+                                                <strong>Seleccione un tipo de evaluador:</strong>
                                             </label>
-                                            <div class="w-50">
+                                            <div class="w-100">
                                                 <input type="text" hidden name="inic_codigo" id="inic_codigo"
                                                 value="{{ $iniciativa[0]->inic_codigo }}">
-                                                <select class="form-control select2" name="tipo" id="tipo" onchange="cambioTipo();">
+                                                <select class="form-control" name="tipo" id="tipo" onchange="cambiodeTipo();" required>
                                                     <option value="" disabled selected>Seleccione...</option>
+                                                    <option value="" disabled>--- Evaluador Interno ---</option>
                                                     <option value="0">Evaluador interno - Estudiante</option>
-                                                    <option value="1">Evaluador interno - Docente/Directivo</option>
-                                                    <option value="2">Evaluador externo</option>
-                                                    {{-- <option value="4">Limpiar</option> --}}
+                                                    <option value="1">Evaluador interno - Docente</option>
+                                                    <option value="12">Evaluador interno - Directivo</option>
+                                                    <option value="" disabled>--- Evaluador Externo ---</option>
+                                                    <option value="13">Evaluador Externo - Beneficiario</option>
+                                                    <option value="14">Evaluador Externo - Socio comunitario</option>
+
                                                 </select>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary" >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height="15" width="15"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                                            Agregar evaluación
+                                        <button type="submit" id="botonEnviar" class="btn btn-primary w-100">
+                                            Paso Siguiente &nbsp;<i class="fas fa-chevron-right"></i>
                                         </button>
+                                        <div>
+                                            <a href="" hidden id="verResultadosButton" class="btn btn-primary w-100 mt-2">Ver resultados</a>
+                                            <a href="" hidden id="agregarParticipantesButton" class="btn btn-primary w-100 mt-2">Agregar participantes</a>
+
+                                        </div>
                                     </form>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display:none;" id="EstudiantesBloque">
-                            @if ($evaEstudiantesTotal == 1)
-                        <hr>
-                        <br>
-                        <div >
-                            <div class="card-header d-flex justify-content-between">
-                                <h4>
-                                    Propuesta evaluación vinculamos:
-                                </h4>
-                            </div>
+
+                                    <script>
+                                        function cambiodeTipo(){
+                                            var tipo = document.getElementById('tipo').value;
+                                            if(tipo == 0){
+                                                //mostrar botones
+                                                document.getElementById('verResultadosButton').hidden = false;
+                                                document.getElementById('agregarParticipantesButton').hidden = false;
+                                                document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/0';
+                                                document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/0';
+                                            }else if(tipo == 1){
+                                                document.getElementById('verResultadosButton').hidden = false;
+                                                document.getElementById('agregarParticipantesButton').hidden = false;
+                                                document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/1';
+                                                document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/1';
+                                            }else if(tipo == 12){
+                                                document.getElementById('verResultadosButton').hidden = false;
+                                                document.getElementById('agregarParticipantesButton').hidden = false;
+                                                document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/12';
+                                                document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/12';
+                                            }else if(tipo == 13){
+                                                document.getElementById('verResultadosButton').hidden = false;
+                                                document.getElementById('agregarParticipantesButton').hidden = false;
+                                                document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/13';
+                                                document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/13';
+                                            }else if(tipo == 14){
+                                                document.getElementById('verResultadosButton').hidden = false;
+                                                document.getElementById('agregarParticipantesButton').hidden = false;
+                                                document.getElementById('verResultadosButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluacion/resultados/14';
+                                                document.getElementById('agregarParticipantesButton').href = '/admin/iniciativas/{{$iniciativa[0]->inic_codigo}}/evaluar/invitar/14';
+                                            }
+                                        }
+                                    </script>
 
 
-                            <div class="mx-3">
-                                Estimado/a,
-                                En el marco de las actividades que Iplacex, hemos realizado la iniciativa denominada <strong>{{$iniciativa[0]->inic_nombre}}</strong>, en la cual le agradecemos haber participado.
-                                Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente encuesta, que nos permitirá evaluar esta actividad.
-                                Saluda atentamente a usted.
-                            </div>
-                            <div class="w-100">
-                                <div class="container bg-white w-100 p-5 rounded-bottom">
-                                    <div class="row w-100">
-                                      <div>
-                                        <div >
-                                          <div class="card-body">
-                                              <div class="row">
-                                                  <div class="col-12 col-md-6 col-lg-6">
 
-                                                      <div class="card card-primary">
-                                                          <div class="card-header" style="background-color: rgb(103,119,239);">
-                                                              <h4 style="color:aliceblue">Conocimiento de la evaluación</h4>
-                                                          </div>
-                                                          <div class="card-body">
+                                    <script>
+                                        //funcion donde si cambia el tipo de evaluador se muestra el boton de enviar
+                                        onchange = function() {
+                                            document.getElementById('botonEnviar').hidden = false;
+                                        }
 
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped">
+                                    </script>
 
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que el propósito de ésta
-                                                                                  actividad
-                                                                                  era?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  {{ $iniciativa[0]->inic_descripcion }}
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_1_SINO_1"
-                                                                                              id="conocimiento_1_SINO_1_si"
-                                                                                              value="100" checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_1_SINO_1_si">
-                                                                                              SI</label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_1_SINO_1"
-                                                                                              id="conocimiento_1_SINO_1_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_1_SINO_1_no">NO</label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-
-                                                                          </tr>
-                                                                      </tbody>
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que los resultados esperados de
-                                                                                  la
-                                                                                  actividad eran?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <ul>
-                                                                                      @foreach ($resultados as $resultado)
-                                                                                          <li>{{ $resultado->resu_cuantificacion_inicial }}
-                                                                                              x {{ $resultado->resu_nombre }}
-                                                                                          </li>
-                                                                                      @endforeach
-                                                                                  </ul>
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_2_SINO"
-                                                                                              id="conocimiento_2_SINO_si" value="100"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_2_SINO_si">
-                                                                                              SI </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_2_SINO"
-                                                                                              id="conocimiento_2_SINO_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_2_SINO_no">
-                                                                                              NO </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que los impactos esperados
-                                                                                  eran?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                              {{-- <th>¿En qué % cree usted que se cumplirán las contribuciones?</th> --}}
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <ul>
-                                                                                    @foreach ($impactos as $impacto)
-                                                                                    <li>{{ $impacto->amb_nombre }}</li>
-                                                                                @endforeach
-                                                                                  </ul>
-
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_3_SINO"
-                                                                                              id="conocimiento_3_SINO_si" value="100"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_3_SINO_si">
-                                                                                              SI </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_3_SINO"
-                                                                                              id="conocimiento_3_SINO_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_3_SINO_no">
-                                                                                              NO </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div class="card card-primary">
-                                                          <div class="card-header" style="background-color: rgb(103,119,239);">
-                                                              <h4 style="color:aliceblue">Cumplimiento de la Iniciativa</h4>
-                                                          </div>
-                                                          <div class="card-body">
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped" id="table-1">
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplió el
-                                                                                  objetivo?
-                                                                              </th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_0">
-                                                                                              No se cumplió </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplió el
-                                                                                  resultado
-                                                                                  esperado?</th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_0">
-                                                                                              No se cumplió </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplirán los impactos?</th>
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_0">
-                                                                                              No se cumplirán </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </div>
-
-                                              <div class="row">
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div class="card card-info">
-                                                          <div class="card-header" style="background-color: rgb(58,186,244);">
-                                                              <h4 style="color:aliceblue">Calidad de ejecución</h4>
-                                                          </div>
-                                                          <div class="card-body" style="color:black;">
-                                                              <label name="etiquetasEstudiante">A continuación te pedimos que
-                                                                  evalúes de 0 a 3 la calidad
-                                                                  en la ejecución de la actividad, según los compromisos
-                                                                  asumidos por la institución, en que
-                                                                  <ol>
-                                                                      <li>0= no cumple.</li>
-                                                                      <li>1= cumple mínimamente.</li>
-                                                                      <li>2= cumple medianamente.</li>
-                                                                      <li>3= cumple totalmente.</li>
-                                                                  </ol>
-                                                                  Si considera que algunos ítemes no estaban
-                                                                  comprometidos,
-                                                                  marque <b>No Aplica.</b>
-                                                              </label>
-
-                                                              <label name="etiquetasOtras">A continuación le pedimos que
-                                                                  evalúe de 0 a 3 la calidad
-                                                                  en la ejecución de la actividad, según los compromisos
-                                                                  asumidos por la institución, en que
-                                                                  <ol>
-                                                                      <li>0= no cumple.</li>
-                                                                      <li>1= cumple mínimamente.</li>
-                                                                      <li>2= cumple medianamente.</li>
-                                                                      <li>3= cumple totalmente.</li>
-                                                                  </ol>
-                                                                  Si considera que algunos ítemes no estaban
-                                                                  comprometidos,
-                                                                  marque <b>No Aplica.</b>
-                                                              </label>
-
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped">
-                                                                      <tr>
-                                                                          <th>Con qué nota evalúa usted la calidad en la
-                                                                              ejecución de la actividad, en las siguientes
-                                                                              dimensiones:</th>
-                                                                          <th>Cumplimiento</th>
-                                                                      </tr>
-                                                                      <tbody>
-                                                                          @for ($i = 1; $i <= 4; $i++)
-                                                                              <tr>
-                                                                                  @if ($i === 1)
-                                                                                      <td>
-                                                                                          Plazo y horarios
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 2)
-                                                                                      <td>
-                                                                                          Equipamiento y/o infraestructura
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 3)
-                                                                                      <td>
-                                                                                          Conexión Digital y/ logística
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 4)
-                                                                                      <td>
-                                                                                          Presentación y/o desarrollo de la
-                                                                                          actividad
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  <td>
-                                                                                      <div class="form-group">
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_0"
-                                                                                                  value="0">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_0">
-                                                                                                  0 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_1"
-                                                                                                  value="33">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_1">
-                                                                                                  1 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_2"
-                                                                                                  value="66">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_2">
-                                                                                                  2 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_3"
-                                                                                                  value="100">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_3">
-                                                                                                  3 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_NO"
-                                                                                                  checked value="">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_NO">
-                                                                                                  No Aplica </label>
-                                                                                          </div>
-                                                                                      </div>
-                                                                                  </td>
-                                                                              </tr>
-                                                                          @endfor
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div id="divAMostrar" name="divAMostrar">
-                                                          <div class="card card-secondary">
-                                                              <div class="card-header" style="background-color: rgb(55,60,97);">
-                                                                  <h4 style="color:aliceblue">Competencia de estudiantes</h4>
-                                                              </div>
-                                                              <div class="card-body" style="color:black;">
-                                                                  <label name="etiquetasEstudiante">Ahora, siguiendo la misma
-                                                                      escala de 0 a 3, te pedimos que evalúes si te sirvió la
-                                                                      actividad para desarrollar
-                                                                      algunas de las siguientes dimensiones de las competencias
-                                                                      comprometidas.</label>
-
-                                                                  <label name="etiquetasOtras"> Ahora, siguiendo la misma escala
-                                                                      de 0 a 3, le pedimos que evalúe si la actividad le sirvió a
-                                                                      los estudiantes para
-                                                                      desarrollar algunas de las siguientes dimensiones de las
-                                                                      competencias comprometidas.</label>
-
-                                                                  <div class="table-responsive">
-                                                                      <table class="table table-striped">
-                                                                          <tbody>
-                                                                              <tr>
-                                                                                  <th>Te sirvió la actividad para desarrollar
-                                                                                      algunas
-                                                                                      de las siguientes dimensiones de las
-                                                                                      competencias comprometidas?</th>
-                                                                                  <th>Cumplimiento</th>
-                                                                              </tr>
-
-                                                                              @for ($i = 1; $i <= 3; $i++)
-                                                                                  <tr>
-                                                                                      @if ($i === 1)
-                                                                                          <td>
-                                                                                              Capacidad para ejecutar las
-                                                                                              actividades.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      @if ($i === 2)
-                                                                                          <td>
-                                                                                              Actitud positiva para ejecutar
-                                                                                              actividades.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      @if ($i === 3)
-                                                                                          <td>
-                                                                                              Habilidad para resolver problemas.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      <td>
-                                                                                          <div class="form-group">
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_0"
-                                                                                                      value="0">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_0">
-                                                                                                      0 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_1"
-                                                                                                      value="33">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_1">
-                                                                                                      1 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_2"
-                                                                                                      value="66">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_2">
-                                                                                                      2 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_3"
-                                                                                                      value="100">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_3">
-                                                                                                      3 </label>
-                                                                                              </div>
-                                                                                          </div>
-                                                                                      </td>
-                                                                                  </tr>
-                                                                              @endfor
-                                                                          </tbody>
-                                                                      </table>
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      </div>
-                                    </div>
 
                                 </div>
 
-                              </div>
-
-                        </div>
-
-
-                        @endif
-
-                        </div>
-                        <div style="display:none;" id="DocentesBloque">
-                            @if ($evaDocentesTotal == 1)
-                        <hr>
-                        <br>
-                        <div >
-                            <div class="card-header d-flex justify-content-between">
-                                <h4>
-                                    Propuesta evaluación vinculamos:
-                                </h4>
-                            </div>
-
-
-
-                            <div class="mx-3">
-                                Estimado/a,
-                                En el marco de las actividades que Iplacex, hemos realizado la iniciativa denominada <strong>{{$iniciativa[0]->inic_nombre}}</strong>, en la cual le agradecemos haber participado.
-                                Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente encuesta, que nos permitirá evaluar esta actividad.
-                                Saluda atentamente a usted.
-                            </div>
-                            <div class="w-100">
-                                <div class="container bg-white w-100 p-5 rounded-bottom">
-                                    <div class="row w-100">
-                                      <div>
-                                        <div >
-                                          <div class="card-body">
-                                              <div class="row">
-                                                  <div class="col-12 col-md-6 col-lg-6">
-
-                                                      <div class="card card-primary">
-                                                          <div class="card-header" style="background-color: rgb(103,119,239);">
-                                                              <h4 style="color:aliceblue">Conocimiento de la evaluación</h4>
-                                                          </div>
-                                                          <div class="card-body">
-
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped">
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que el propósito de ésta
-                                                                                  actividad
-                                                                                  era?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  {{ $iniciativa[0]->inic_descripcion }}
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_1_SINO_1"
-                                                                                              id="conocimiento_1_SINO_1_si"
-                                                                                              value="100" checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_1_SINO_1_si">
-                                                                                              SI</label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_1_SINO_1"
-                                                                                              id="conocimiento_1_SINO_1_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_1_SINO_1_no">NO</label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-
-                                                                          </tr>
-                                                                      </tbody>
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que los resultados esperados de
-                                                                                  la
-                                                                                  actividad eran?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <ul>
-                                                                                      @foreach ($resultados as $resultado)
-                                                                                          <li>{{ $resultado->resu_cuantificacion_inicial }}
-                                                                                              x {{ $resultado->resu_nombre }}
-                                                                                          </li>
-                                                                                      @endforeach
-                                                                                  </ul>
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_2_SINO"
-                                                                                              id="conocimiento_2_SINO_si" value="100"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_2_SINO_si">
-                                                                                              SI </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_2_SINO"
-                                                                                              id="conocimiento_2_SINO_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_2_SINO_no">
-                                                                                              NO </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que los impactos esperados
-                                                                                  eran?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                              {{-- <th>¿En qué % cree usted que se cumplirán las contribuciones?</th> --}}
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <ul>
-                                                                                    @foreach ($impactos as $impacto)
-                                                                                    <li>{{ $impacto->amb_nombre }}</li>
-                                                                                @endforeach
-                                                                                  </ul>
-
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_3_SINO"
-                                                                                              id="conocimiento_3_SINO_si" value="100"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_3_SINO_si">
-                                                                                              SI </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_3_SINO"
-                                                                                              id="conocimiento_3_SINO_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_3_SINO_no">
-                                                                                              NO </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div class="card card-primary">
-                                                          <div class="card-header" style="background-color: rgb(103,119,239);">
-                                                              <h4 style="color:aliceblue">Cumplimiento de la Iniciativa</h4>
-                                                          </div>
-                                                          <div class="card-body">
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped" id="table-1">
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplió el
-                                                                                  objetivo?
-                                                                              </th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_0">
-                                                                                              No se cumplió </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplió el
-                                                                                  resultado
-                                                                                  esperado?</th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_0">
-                                                                                              No se cumplió </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplirán los impactos?</th>
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_0">
-                                                                                              No se cumplirán </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </div>
-
-                                              <div class="row">
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div class="card card-info">
-                                                          <div class="card-header" style="background-color: rgb(58,186,244);">
-                                                              <h4 style="color:aliceblue">Calidad de ejecución</h4>
-                                                          </div>
-                                                          <div class="card-body" style="color:black;">
-                                                              <label name="etiquetasEstudiante">A continuación te pedimos que
-                                                                  evalúes de 0 a 3 la calidad
-                                                                  en la ejecución de la actividad, según los compromisos
-                                                                  asumidos por la institución, en que
-                                                                  <ol>
-                                                                      <li>0= no cumple.</li>
-                                                                      <li>1= cumple mínimamente.</li>
-                                                                      <li>2= cumple medianamente.</li>
-                                                                      <li>3= cumple totalmente.</li>
-                                                                  </ol>
-                                                                  Si considera que algunos ítemes no estaban
-                                                                  comprometidos,
-                                                                  marque <b>No Aplica.</b>
-                                                              </label>
-
-                                                              <label name="etiquetasOtras">A continuación le pedimos que
-                                                                  evalúe de 0 a 3 la calidad
-                                                                  en la ejecución de la actividad, según los compromisos
-                                                                  asumidos por la institución, en que
-                                                                  <ol>
-                                                                      <li>0= no cumple.</li>
-                                                                      <li>1= cumple mínimamente.</li>
-                                                                      <li>2= cumple medianamente.</li>
-                                                                      <li>3= cumple totalmente.</li>
-                                                                  </ol>
-                                                                  Si considera que algunos ítemes no estaban
-                                                                  comprometidos,
-                                                                  marque <b>No Aplica.</b>
-                                                              </label>
-
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped">
-                                                                      <tr>
-                                                                          <th>Con qué nota evalúa usted la calidad en la
-                                                                              ejecución de la actividad, en las siguientes
-                                                                              dimensiones:</th>
-                                                                          <th>Cumplimiento</th>
-                                                                      </tr>
-                                                                      <tbody>
-                                                                          @for ($i = 1; $i <= 4; $i++)
-                                                                              <tr>
-                                                                                  @if ($i === 1)
-                                                                                      <td>
-                                                                                          Plazo y horarios
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 2)
-                                                                                      <td>
-                                                                                          Equipamiento y/o infraestructura
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 3)
-                                                                                      <td>
-                                                                                          Conexión Digital y/ logística
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 4)
-                                                                                      <td>
-                                                                                          Presentación y/o desarrollo de la
-                                                                                          actividad
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  <td>
-                                                                                      <div class="form-group">
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_0"
-                                                                                                  value="0">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_0">
-                                                                                                  0 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_1"
-                                                                                                  value="33">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_1">
-                                                                                                  1 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_2"
-                                                                                                  value="66">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_2">
-                                                                                                  2 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_3"
-                                                                                                  value="100">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_3">
-                                                                                                  3 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_NO"
-                                                                                                  checked value="">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_NO">
-                                                                                                  No Aplica </label>
-                                                                                          </div>
-                                                                                      </div>
-                                                                                  </td>
-                                                                              </tr>
-                                                                          @endfor
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div id="divAMostrar" name="divAMostrar">
-                                                          <div class="card card-secondary">
-                                                              <div class="card-header" style="background-color: rgb(55,60,97);">
-                                                                  <h4 style="color:aliceblue">Competencia de estudiantes</h4>
-                                                              </div>
-                                                              <div class="card-body" style="color:black;">
-                                                                  <label name="etiquetasEstudiante">Ahora, siguiendo la misma
-                                                                      escala de 0 a 3, te pedimos que evalúes si te sirvió la
-                                                                      actividad para desarrollar
-                                                                      algunas de las siguientes dimensiones de las competencias
-                                                                      comprometidas.</label>
-
-                                                                  <label name="etiquetasOtras"> Ahora, siguiendo la misma escala
-                                                                      de 0 a 3, le pedimos que evalúe si la actividad le sirvió a
-                                                                      los estudiantes para
-                                                                      desarrollar algunas de las siguientes dimensiones de las
-                                                                      competencias comprometidas.</label>
-
-                                                                  <div class="table-responsive">
-                                                                      <table class="table table-striped">
-                                                                          <tbody>
-                                                                              <tr>
-                                                                                  <th>Te sirvió la actividad para desarrollar
-                                                                                      algunas
-                                                                                      de las siguientes dimensiones de las
-                                                                                      competencias comprometidas?</th>
-                                                                                  <th>Cumplimiento</th>
-                                                                              </tr>
-
-                                                                              @for ($i = 1; $i <= 3; $i++)
-                                                                                  <tr>
-                                                                                      @if ($i === 1)
-                                                                                          <td>
-                                                                                              Capacidad para ejecutar las
-                                                                                              actividades.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      @if ($i === 2)
-                                                                                          <td>
-                                                                                              Actitud positiva para ejecutar
-                                                                                              actividades.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      @if ($i === 3)
-                                                                                          <td>
-                                                                                              Habilidad para resolver problemas.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      <td>
-                                                                                          <div class="form-group">
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_0"
-                                                                                                      value="0">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_0">
-                                                                                                      0 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_1"
-                                                                                                      value="33">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_1">
-                                                                                                      1 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_2"
-                                                                                                      value="66">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_2">
-                                                                                                      2 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_3"
-                                                                                                      value="100">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_3">
-                                                                                                      3 </label>
-                                                                                              </div>
-                                                                                          </div>
-                                                                                      </td>
-                                                                                  </tr>
-                                                                              @endfor
-                                                                          </tbody>
-                                                                      </table>
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      </div>
-                                    </div>
-
-                                </div>
-
-                              </div>
-
-                        </div>
-
-
-                        @endif
-
-                        </div>
-                        <div style="display:none;" id="ExternosBloque">
-                            @if ($evaExternosTotal == 1)
-                        <hr>
-                        <br>
-                        <div >
-                            <div class="card-header d-flex justify-content-between">
-                                <h4>
-                                    Propuesta evaluación vinculamos:
-                                </h4>
-                            </div>
-                            <div class="mx-3">
-                                Estimado/a,
-                                En el marco de las actividades que el Iplacex, hemos realizado la iniciativa denominada <strong>{{$iniciativa[0]->inic_nombre}}</strong>, en la cual le agradecemos haber participado.
-                                Con el propósito de continuar mejorando nuestro trabajo, le pedimos que responda la siguiente encuesta, que nos permitirá evaluar esta actividad.
-                                Saluda atentamente a usted.
-                            </div>
-                            <div class="w-100">
-                                <div class="container bg-white w-100 p-5 rounded-bottom">
-                                    <div class="row w-100">
-                                      <div>
-                                        <div >
-                                          <div class="card-body">
-                                              <div class="row">
-                                                  <div class="col-12 col-md-6 col-lg-6">
-
-                                                      <div class="card card-primary">
-                                                          <div class="card-header" style="background-color: rgb(103,119,239);">
-                                                              <h4 style="color:aliceblue">Conocimiento de la evaluación</h4>
-                                                          </div>
-                                                          <div class="card-body">
-
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped">
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que el propósito de ésta
-                                                                                  actividad
-                                                                                  era?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  {{ $iniciativa[0]->inic_descripcion }}
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_1_SINO_1"
-                                                                                              id="conocimiento_1_SINO_1_si"
-                                                                                              value="100" checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_1_SINO_1_si">
-                                                                                              SI</label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_1_SINO_1"
-                                                                                              id="conocimiento_1_SINO_1_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_1_SINO_1_no">NO</label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-
-                                                                          </tr>
-                                                                      </tbody>
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que los resultados esperados de
-                                                                                  la
-                                                                                  actividad eran?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <ul>
-                                                                                      @foreach ($resultados as $resultado)
-                                                                                          <li>{{ $resultado->resu_cuantificacion_inicial }}
-                                                                                              x {{ $resultado->resu_nombre }}
-                                                                                          </li>
-                                                                                      @endforeach
-                                                                                  </ul>
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_2_SINO"
-                                                                                              id="conocimiento_2_SINO_si" value="100"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_2_SINO_si">
-                                                                                              SI </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_2_SINO"
-                                                                                              id="conocimiento_2_SINO_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_2_SINO_no">
-                                                                                              NO </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿Sabía usted que los impactos esperados
-                                                                                  eran?</th>
-                                                                              <th>¿Sí o No?</th>
-                                                                              {{-- <th>¿En qué % cree usted que se cumplirán las contribuciones?</th> --}}
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <ul>
-                                                                                      @foreach ($impactos as $impacto)
-                                                                                          <li>{{ $impacto->amb_nombre }}</li>
-                                                                                      @endforeach
-                                                                                  </ul>
-
-                                                                              </td>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_3_SINO"
-                                                                                              id="conocimiento_3_SINO_si" value="100"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_3_SINO_si">
-                                                                                              SI </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="conocimiento_3_SINO"
-                                                                                              id="conocimiento_3_SINO_no"
-                                                                                              value="0">
-                                                                                          <label class="form-check-label"
-                                                                                              for="conocimiento_3_SINO_no">
-                                                                                              NO </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div class="card card-primary">
-                                                          <div class="card-header" style="background-color: rgb(103,119,239);">
-                                                              <h4 style="color:aliceblue">Cumplimiento de la Iniciativa</h4>
-                                                          </div>
-                                                          <div class="card-body">
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped" id="table-1">
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplió el
-                                                                                  objetivo?
-                                                                              </th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_0">
-                                                                                              No se cumplió </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_1"
-                                                                                              id="cumplimiento_1_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_1_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplió el
-                                                                                  resultado
-                                                                                  esperado?</th>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_0">
-                                                                                              No se cumplió </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_2"
-                                                                                              id="cumplimiento_2_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_2_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <th>¿En qué % cree usted que se cumplirán los impactos?</th>
-                                                                          </tr>
-
-                                                                          <tr>
-                                                                              <td>
-                                                                                  <div class="form-group">
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_0" value="0"
-                                                                                              checked>
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_0">
-                                                                                              No se cumplirán </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_25" value="25">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_25">
-                                                                                              25 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_50" value="50">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_50">
-                                                                                              50 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_75" value="75">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_75">
-                                                                                              75 % </label>
-                                                                                      </div>
-                                                                                      <div class="form-check form-check-inline">
-                                                                                          <input class="form-check-input" type="radio"
-                                                                                              name="cumplimiento_3"
-                                                                                              id="cumplimiento_3_100" value="100">
-                                                                                          <label class="form-check-label"
-                                                                                              for="cumplimiento_3_100">
-                                                                                              100 % </label>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </div>
-
-                                              <div class="row">
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div class="card card-info">
-                                                          <div class="card-header" style="background-color: rgb(58,186,244);">
-                                                              <h4 style="color:aliceblue">Calidad de ejecución</h4>
-                                                          </div>
-                                                          <div class="card-body" style="color:black;">
-                                                              <label name="etiquetasEstudiante">A continuación te pedimos que
-                                                                  evalúes de 0 a 3 la calidad
-                                                                  en la ejecución de la actividad, según los compromisos
-                                                                  asumidos por la institución, en que
-                                                                  <ol>
-                                                                      <li>0= no cumple.</li>
-                                                                      <li>1= cumple mínimamente.</li>
-                                                                      <li>2= cumple medianamente.</li>
-                                                                      <li>3= cumple totalmente.</li>
-                                                                  </ol>
-                                                                  Si considera que algunos ítemes no estaban
-                                                                  comprometidos,
-                                                                  marque <b>No Aplica.</b>
-                                                              </label>
-
-                                                              <label name="etiquetasOtras">A continuación le pedimos que
-                                                                  evalúe de 0 a 3 la calidad
-                                                                  en la ejecución de la actividad, según los compromisos
-                                                                  asumidos por la institución, en que
-                                                                  <ol>
-                                                                      <li>0= no cumple.</li>
-                                                                      <li>1= cumple mínimamente.</li>
-                                                                      <li>2= cumple medianamente.</li>
-                                                                      <li>3= cumple totalmente.</li>
-                                                                  </ol>
-                                                                  Si considera que algunos ítemes no estaban
-                                                                  comprometidos,
-                                                                  marque <b>No Aplica.</b>
-                                                              </label>
-
-                                                              <div class="table-responsive">
-                                                                  <table class="table table-striped">
-                                                                      <tr>
-                                                                          <th>Con qué nota evalúa usted la calidad en la
-                                                                              ejecución de la actividad, en las siguientes
-                                                                              dimensiones:</th>
-                                                                          <th>Cumplimiento</th>
-                                                                      </tr>
-                                                                      <tbody>
-                                                                          @for ($i = 1; $i <= 4; $i++)
-                                                                              <tr>
-                                                                                  @if ($i === 1)
-                                                                                      <td>
-                                                                                          Plazo y horarios
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 2)
-                                                                                      <td>
-                                                                                          Equipamiento y/o infraestructura
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 3)
-                                                                                      <td>
-                                                                                          Conexión Digital y/ logística
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  @if ($i === 4)
-                                                                                      <td>
-                                                                                          Presentación y/o desarrollo de la
-                                                                                          actividad
-                                                                                      </td>
-                                                                                  @endif
-                                                                                  <td>
-                                                                                      <div class="form-group">
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_0"
-                                                                                                  value="0">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_0">
-                                                                                                  0 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_1"
-                                                                                                  value="33">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_1">
-                                                                                                  1 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_2"
-                                                                                                  value="66">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_2">
-                                                                                                  2 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_3"
-                                                                                                  value="100">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_3">
-                                                                                                  3 </label>
-                                                                                          </div>
-                                                                                          <div class="form-check form-check-inline">
-                                                                                              <input class="form-check-input"
-                                                                                                  type="radio"
-                                                                                                  name="calidad_{{ $i }}"
-                                                                                                  id="calidad_{{ $i }}_NO"
-                                                                                                  checked value="">
-                                                                                              <label class="form-check-label"
-                                                                                                  for="calidad_{{ $i }}_NO">
-                                                                                                  No Aplica </label>
-                                                                                          </div>
-                                                                                      </div>
-                                                                                  </td>
-                                                                              </tr>
-                                                                          @endfor
-                                                                      </tbody>
-                                                                  </table>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-
-                                                  <div class="col-12 col-md-6 col-lg-6">
-                                                      <div id="divAMostrar" name="divAMostrar">
-                                                          <div class="card card-secondary">
-                                                              <div class="card-header" style="background-color: rgb(55,60,97);">
-                                                                  <h4 style="color:aliceblue">Competencia de estudiantes</h4>
-                                                              </div>
-                                                              <div class="card-body" style="color:black;">
-                                                                  <label name="etiquetasEstudiante">Ahora, siguiendo la misma
-                                                                      escala de 0 a 3, te pedimos que evalúes si te sirvió la
-                                                                      actividad para desarrollar
-                                                                      algunas de las siguientes dimensiones de las competencias
-                                                                      comprometidas.</label>
-
-                                                                  <label name="etiquetasOtras"> Ahora, siguiendo la misma escala
-                                                                      de 0 a 3, le pedimos que evalúe si la actividad le sirvió a
-                                                                      los estudiantes para
-                                                                      desarrollar algunas de las siguientes dimensiones de las
-                                                                      competencias comprometidas.</label>
-
-                                                                  <div class="table-responsive">
-                                                                      <table class="table table-striped">
-                                                                          <tbody>
-                                                                              <tr>
-                                                                                  <th>Te sirvió la actividad para desarrollar
-                                                                                      algunas
-                                                                                      de las siguientes dimensiones de las
-                                                                                      competencias comprometidas?</th>
-                                                                                  <th>Cumplimiento</th>
-                                                                              </tr>
-
-                                                                              @for ($i = 1; $i <= 3; $i++)
-                                                                                  <tr>
-                                                                                      @if ($i === 1)
-                                                                                          <td>
-                                                                                              Capacidad para ejecutar las
-                                                                                              actividades.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      @if ($i === 2)
-                                                                                          <td>
-                                                                                              Actitud positiva para ejecutar
-                                                                                              actividades.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      @if ($i === 3)
-                                                                                          <td>
-                                                                                              Habilidad para resolver problemas.
-                                                                                          </td>
-                                                                                      @endif
-                                                                                      <td>
-                                                                                          <div class="form-group">
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_0"
-                                                                                                      value="0">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_0">
-                                                                                                      0 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_1"
-                                                                                                      value="33">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_1">
-                                                                                                      1 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_2"
-                                                                                                      value="66">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_2">
-                                                                                                      2 </label>
-                                                                                              </div>
-                                                                                              <div class="form-check form-check-inline">
-                                                                                                  <input class="form-check-input"
-                                                                                                      type="radio"
-                                                                                                      name="competencia_{{ $i }}"
-                                                                                                      id="competencia_{{ $i }}_3"
-                                                                                                      value="100">
-                                                                                                  <label class="form-check-label"
-                                                                                                      for="competencia_{{ $i }}_3">
-                                                                                                      3 </label>
-                                                                                              </div>
-                                                                                          </div>
-                                                                                      </td>
-                                                                                  </tr>
-                                                                              @endfor
-                                                                          </tbody>
-                                                                      </table>
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      </div>
-                                    </div>
-
-                                </div>
-
-                              </div>
-
-                        </div>
-
-
-                        @endif
-
-                        </div>
-
-
-                        <div class="container-fluid mb-3" style="display: none;" id="botonesdeAbajo">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="row justify-content-end mb-3">
-                                                <div >
-
-                                                    <button type="button" class="btn btn-light " onclick="window.location.href='{{ route('admin.iniciativa.listar') }}'">
-                                                        Ir al listado
-                                                    </button>
-                                                </div>
-                                                <div>
-
-                                                    <button type="button" class="btn btn-primary ml-1" onclick="redireccionarEvaluadores();">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="15" height="15"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
-                                                        Ver evaluadores
-                                                    </button>
-                                                </div>
-                                                <div >
-
-                                                    <button type="button" class="btn btn-primary ml-1" onclick="redireccionarResultados();">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="15" height="15"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M32 32c17.7 0 32 14.3 32 32V400c0 8.8 7.2 16 16 16H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H80c-44.2 0-80-35.8-80-80V64C0 46.3 14.3 32 32 32zM160 224c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm128-64V320c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm64 32c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32zM480 96V320c0 17.7-14.3 32-32 32s-32-14.3-32-32V96c0-17.7 14.3-32 32-32s32 14.3 32 32z"/></svg>
-                                                        Ver resultados
-                                                    </button>
-                                                </div>
-                                                <div >
-
-                                                    <form action="{{route('admin.eliminar.evaluacion.iniciativa')}}" method="post">
-                                                        {{-- <form action="redirect('hola')"></form> --}}
-                                                        @csrf
-                                                        <input  type="number" hidden name="inic_codigo" id="inic_codigo" value="{{$iniciativa[0]->inic_codigo}}" required>
-                                                        <input  type="number" hidden name="invitado_rol" id="invitado_rol" required>
-                                                        <button type="submit" class="btn btn-light ml-1 mr-3">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="15" height="15"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#000000" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
-                                                            Eliminar evaluación
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                <div class="d-flex justify-content-center mb-5">
+                                    <button class="btn btn-danger" onclick="eliminarEvaluaciones({{$iniciativa[0]->inic_codigo}});">Cambiar tipo de evaluación</button>
                                 </div>
                             </div>
-                        </div>
+
+                            @endif
 
 
-                        </div>
-
-
-
-                        <div class="card">
-                            <div class="col-xl-5 col-lg-6 mt-3 mb-3">
-                                        <div class="card-content">
-                                            <h4 class="card-title mt-10">Ingresar evaluación con manualmente</h4>
-                                            <span>Tipo de Evalaución</span>
-                                            <select class="form-control select2" name="ingresar" id="ingresar"
-                                                onchange="ingresarEVAL()">
-                                                <option value="" disabled selected>Seleccione...</option>
-                                                <option value="2">Evaluación interno</option>
-                                                <option value="3">Evaluación externa</option>
-                                            </select>
-                                        </div>
-
-                            </div>
-
-                            <div id="AllTable" style="display: none">
-                                            <div class="card-body">
-
-                                                <div class="row mt-3">
-                                                    <div class="col-3"></div>
-                                                    <div class="col-6">
-                                                        <div class="card">
-                                                            <div class="card-body p-0">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-bordered table-md">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th scope="col">Item</th>
-                                                                                <th scope="col">Año de la Iniciativa</th>
-                                                                                <th scope="col">Puntaje</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody id="body-tabla-participantes">
-                                                                            {{-- {{$resultados}} --}}
-
-                                                                            <tr>
-                                                                                <td name="Eval_Interna">Evaluación Interna</td>
-                                                                                <td name="Eval_Externa">Evaluación Externa</td>
-                                                                                <td>{{ $iniciativa[0]->inic_anho }}</td>
-                                                                                <td>
-                                                                                    <input type="number" class="form-control"
-                                                                                        id="puntaje_obtenido" name="puntaje_obtenido"
-                                                                                        value="" min="0" max="100">
-                                                                                </td>
-                                                                            </tr>
-
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-12 col-md-12 col-lg-12 text-right">
-                                                                <input type="hidden" id="inic_codigo" name="inic_codigo"
-                                                                    value="">
-                                                                <button type="submit" class="btn btn-primary mr-1 waves-effect"
-                                                                    onclick="enviarEval()"><i class="fas fa-save"></i> Guardar</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                        <div class="card-header">
-                                            <a class="btn btn-primary collapsed" data-toggle="collapse" href="#collapseExample" role="button"
-                                                aria-expanded="false" aria-controls="collapseExample" onclick="listarEval({{ $iniciativa[0]->inic_codigo }})">
-                                                Evaluaciones creadas manualmente
-                                            </a>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="collapse" id="collapseExample">
-                                                <?php
-                                                $totalEvaluaciones = count($evaluaciones);
-                                                $promedioPuntajes = $totalEvaluaciones > 0 ? round($evaluaciones->sum('eval_puntaje') / $totalEvaluaciones) : 0;
-                                                ?>
-                                                <div class="row">
-                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
-                                                    </div>
-                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
-                                                        <div class="card card-statistic-2">
-                                                            <div class="card-icon l-bg-green">
-                                                                <i class="fas fa-file-signature"></i>
-                                                            </div>
-                                                            <div class="card-wrap">
-                                                                <div class="padding-20">
-                                                                    <div class="text-right">
-                                                                        <h3 class="font-light mb-0">
-                                                                            <i class="ti-arrow-up text-success"></i> <label id="N_evaluacion"></label>
-                                                                        </h3>
-                                                                        <span class="text-muted">Evaluaciones</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
-                                                        <div class="card card-statistic-2">
-                                                            <div class="card-icon l-bg-cyan">
-                                                                <i class="fas fa-chart-bar"></i>
-                                                            </div>
-                                                            <div class="card-wrap">
-                                                                <div class="padding-20">
-                                                                    <div class="text-right">
-                                                                        <h3 class="font-light mb-0">
-                                                                            <i class="ti-arrow-up text-success"></i> <label id="P_evaluacion"></label>
-                                                                        </h3>
-                                                                        <span class="text-muted">Puntaje Promedio</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
-                                                    </div>
-                                                </div>
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-striped" id="table-1" style="font-size: 110%;">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>Ingresada por</th>
-                                                                <th>Tipo de evaluación</th>
-                                                                <th>Puntaje de la evaluación</th>
-                                                                <th>Acciones</th>
-                                                            </tr>
-                                                        </thead>
-                                                        {{-- {{}} --}}
-                                                        <tbody id="body-tabla-evaluaciones">
-
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
 
 
                         </div>
@@ -2134,302 +692,7 @@
                 </div>
             </div>
         </div>
-
-
-
-        <div class="modal fade" id="modalEliminaEvaluacion" tabindex="-1" role="dialog" aria-labelledby="modalEliminar"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form action="{{ route('admin.eliminar.evaluacion.manual') }}" method="POST">
-                    @method('DELETE')
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalEliminar">Eliminar Evaluación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <i class="fas fa-ban text-danger" style="font-size: 50px; color"></i>
-                        <h6 class="mt-2">La evaluación dejará de existir dentro del sistema. <br> ¿Desea continuar de
-                            todos modos? <br> Considere que su decición influirá en el valor del indicador INVI</h6>
-                        <input type="hidden" id="eval_codigo" name="eval_codigo" value="">
-                        <input type="hidden" id="inic_codigo" name="inic_codigo" value="{{ $iniciativa[0]->inic_codigo }}">
-                    </div>
-                    <div class="modal-footer bg-whitesmoke br">
-                        <button type="submit" class="btn btn-primary">Continuar</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
         <script>
-
-var token = '{{ csrf_token() }}';
-
-            function listarEval(inic_code) {
-            $.ajax({
-                type: 'GET',
-                url: `${window.location.origin}/admin/iniciativa/listar-evaluaciones`,
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    inic_codigo: inic_code
-                },
-
-                success: function(resConsultar) {
-                    respuesta = JSON.parse(resConsultar);
-                    $('#body-tabla-evaluaciones').empty();
-                    $('#N_evaluacion').empty();
-                    $('#P_evaluacion').empty();
-
-                    datos_evaluaciones = respuesta.resultado;
-                    let contador = 0;
-                    let ptj = 0;
-
-                    datos_evaluaciones.forEach(registro => {
-                        contador = contador + 1;
-                        ptj = ptj + registro.eval_puntaje;
-                        let evaluacionTipo = registro.eval_evaluador === 2 ? 'Evaluación Interna' : 'Evaluación Externa';
-
-                        fila = `<tr>
-                            <td>${contador}</td>
-                            <td>${registro.eval_nickname_mod}</td>
-                            <td>${evaluacionTipo}</td>
-                            <td>${registro.eval_puntaje}</td>
-                            <td>
-                                <a href="javascript:void(0)" class="btn btn-icon btn-danger"
-                                    onclick="eliminarEval(${registro.eval_codigo})"
-                                    data-toggle="tooltip" data-placement="top"
-                                    title="Eliminar mecanismo"><i class="fas fa-trash"></i></a>
-                            </td>
-                        </tr>`
-
-                        $('#body-tabla-evaluaciones').append(fila);
-                    });
-
-                    $('#N_evaluacion').text(contador);
-                    $('#P_evaluacion').text(Math.round(ptj / contador));
-                }
-            })
-        }
-
-function eliminarEval(eval_codigo) {
-    $('#modalEliminaEvaluacion').find('#eval_codigo').val(eval_codigo);
-    $('#modalEliminaEvaluacion').modal('show');
-}
-
-function ingresarEVAL() {
-    var selectBox = document.getElementById("ingresar");
-    var etiquetasInterna = document.getElementsByName('Eval_Interna');
-    var etiquetasExterna = document.getElementsByName('Eval_Externa');
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    /* Mostrar Tabla */
-    var MostrarTabla = document.getElementById("AllTable");
-    MostrarTabla.style.display = "block";
-    /* Ocultar Formulario */
-
-
-    /* Interna */
-    if (selectedValue === "2") {
-        mostrarEtiquetas(etiquetasInterna);
-        ocultarEtiquetas(etiquetasExterna);
-    }
-    /* Externa */
-    if (selectedValue === "3") {
-        ocultarEtiquetas(etiquetasInterna);
-        mostrarEtiquetas(etiquetasExterna);
-    }
-    /* Limpiar */
-    if (selectedValue === "4") {
-        MostrarTabla.style.display = "none";
-        MostrarSiempre.style.display = "none";
-    }
-
-}
-
-function mostrarOcultar() {
-    var selectBox = document.getElementById("tipo");
-
-    var etiquetasEstudiante = document.getElementsByName('etiquetasEstudiante');
-    var etiquetasOtras = document.getElementsByName('etiquetasOtras');
-
-
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-
-    // Obtén el div por su ID
-    var divAMostrar = document.getElementById("divAMostrar");
-    /* Mostrar Formulario */
-
-    /* Ocultar Tabla */
-    var MostrarTabla = document.getElementById("AllTable");
-    MostrarTabla.style.display = "none";
-
-
-    ocultarEtiquetas(etiquetasEstudiante);
-    ocultarEtiquetas(etiquetasOtras);
-
-    // Oculta el div si la opción seleccionada es "Evaluador externo", de lo contrario, muéstralo
-    if (selectedValue === "1") {
-        mostrarEtiquetas(etiquetasEstudiante);
-    } else {
-        mostrarEtiquetas(etiquetasOtras);
-    }
-
-    if (selectedValue === "3") {
-        divAMostrar.style.display = "none";
-    } else {
-        divAMostrar.style.display = "block";
-    }
-    if (selectedValue === "4") {
-        MostrarSiempre.style.display = "none";
-        MostrarTabla.style.display = "none";
-    }
-}
-
-function ocultarEtiquetas(etiquetas) {
-    for (let i = 0; i < etiquetas.length; i++) {
-        etiquetas[i].style.display = 'none';
-    }
-}
-
-function mostrarEtiquetas(etiquetas) {
-    for (let i = 0; i < etiquetas.length; i++) {
-        etiquetas[i].style.display = 'block';
-    }
-}
-
-function enviarDatos() {
-    var tipo_data = $("#tipo").val();
-    var competencia1Seleccionada = false;
-    var competencia2Seleccionada = false;
-    var competencia3Seleccionada = false;
-    // Recopilar los datos
-    var Validation1 = document.querySelectorAll('input[name="competencia_1"]');
-    var Validation2 = document.querySelectorAll('input[name="competencia_2"]');
-    var Validation3 = document.querySelectorAll('input[name="competencia_3"]');
-
-    Validation1.forEach(function(Validatio) {
-        if (Validatio.checked) {
-            competencia1Seleccionada = true;
-        }
-    });
-
-    Validation2.forEach(function(Validatio) {
-        if (Validatio.checked) {
-            competencia2Seleccionada = true;
-        }
-    });
-
-    Validation3.forEach(function(Validatio) {
-        if (Validatio.checked) {
-            competencia3Seleccionada = true;
-        }
-    });
-
-    if (tipo_data === "1" || tipo_data === "2") {
-        if (competencia1Seleccionada === false || competencia2Seleccionada === false || competencia3Seleccionada ===
-            false) {
-            alert('No olvides evaluar TODAS las competencias');
-            return false;
-        }
-    }
-
-
-    var datos = {
-        iniciativa_codigo: $("#iniciativa_codigo").val(),
-        tipo_data: $("#tipo").val(),
-        conocimiento_1_data: $("input[name='conocimiento_1_SINO_1']:checked").val(),
-        conocimiento_2_data: $("input[name='conocimiento_2_SINO']:checked").val(),
-        conocimiento_3_data: $("input[name='conocimiento_3_SINO']:checked").val(),
-        cumplimiento_1_data: $("input[name='cumplimiento_1']:checked").val(),
-        cumplimiento_2_data: $("input[name='cumplimiento_2']:checked").val(),
-        cumplimiento_3_data: $("input[name='cumplimiento_3']:checked").val(),
-        calidad_1_data: $("input[name='calidad_1']:checked").val(),
-        calidad_2_data: $("input[name='calidad_2']:checked").val(),
-        calidad_3_data: $("input[name='calidad_3']:checked").val(),
-        calidad_4_data: $("input[name='calidad_4']:checked").val(),
-        competencia_1_data: $("input[name='competencia_1']:checked").val(),
-        competencia_2_data: $("input[name='competencia_2']:checked").val(),
-        competencia_3_data: $("input[name='competencia_3']:checked").val(),
-    };
-
-    $.ajax({
-        type: "GET",
-        url: window.location.origin + '/admin/iniciativas/evaluar',
-        data: datos,
-        headers: {
-            'X-CSRF-TOKEN': token
-        },
-        success: function(response) {
-            /* Mostrar Formulario */
-
-            /* Ocultar Tabla */
-            var MostrarTabla = document.getElementById("AllTable");
-            MostrarTabla.style.display = "none";
-
-            var alerta = document.getElementById("exito_crear");
-            alerta.style.display = "block";
-
-            reiniciarRadios();
-
-            $("#puntaje_obtenido").val("");
-            setTimeout(function() {
-                alerta.style.display = "none";
-            }, 2000);
-        },
-        error: function(error) {
-            console.error(error);
-            /* $('.alert-container').hide();
-            $('#error').show(); */
-        }
-    });
-}
-
-function enviarEval() {
-    var tipo_data = $("#tipo").val();
-    // Recopilar los datos
-
-    var datos = {
-        iniciativa_codigo: $("#iniciativa_codigo").val(),
-        tipo_data: $("#ingresar").val(),
-        puntaje: $("#puntaje_obtenido").val(),
-    };
-
-    $.ajax({
-        type: "GET",
-        url: window.location.origin + '/admin/iniciativas/ingresoEvaluacion',
-        data: datos,
-        headers: {
-            'X-CSRF-TOKEN': token
-        },
-        success: function(response) {
-            /* Mostrar Formulario */
-            console.log(response);
-            /* Ocultar Tabla */
-            var MostrarTabla = document.getElementById("AllTable");
-            MostrarTabla.style.display = "none";
-
-            var alerta = document.getElementById("exito_ingresar");
-            alerta.style.display = "block";
-            $("#puntaje_obtenido").val("");
-
-
-
-            setTimeout(function() {
-                alerta.style.display = "none";
-            }, 2000);
-
-        },
-        error: function(error) {
-            console.error(error);
-        }
-    });
-}
-
-
-
             function cambioTipo() {
                 var tipo = document.getElementById('tipo').value;
                 document.getElementById('invitado_rol').value = document.getElementById('tipo').value;
@@ -2476,5 +739,14 @@ function enviarEval() {
                 console.log('inic_codigo: {{$iniciativa[0]->inic_codigo}}' );
                 window.location.href = '/admin/iniciativas/'+{{$iniciativa[0]->inic_codigo}}+'/evaluacion/resultados/'+evaluador;
             }
+
+            function eliminarEvaluaciones(inic_codigo) {
+            $('#inic_codigo').val(inic_codigo);
+            $('#modalEliminaEvaluacion').modal('show');
+        }
         </script>
+
+
+
+
 @endsection

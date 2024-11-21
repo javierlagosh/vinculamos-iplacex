@@ -121,7 +121,7 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" hidden>
                             <label>Dirección de la sede</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -130,12 +130,46 @@
                                     </div>
                                 </div>
                                 <input type="text" class="form-control" id="direccion" name="direccion"
-                                    value="{{ old('direccion') }}" autocomplete="off">
+                                    value=" - " autocomplete="off">
                             </div>
                             @error('direccion')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="row">
+                            <div class="col-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>Meta Servicio Disciplinar</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-calendar-check"></i>
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control" id="meta_iniciativas"
+                                            name="sede_meta_serv" value="" placeholder="0"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>Meta Extensión Académica</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-calendar-check"></i>
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control" id="meta_estudiantes"
+                                            name="sede_meta_ext" value="" placeholder="0"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                         {{-- <div class="row">
                             <div class="col-6 col-md-6 col-lg-6">
@@ -361,7 +395,7 @@
                                         value="{{ $sede->sede_nombre }}" autocomplete="off">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" hidden>
                                 <label>Dirección de la sede</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -371,6 +405,42 @@
                                     </div>
                                     <input type="text" class="form-control" id="direccion" name="direccion"
                                         value="{{ $sede->sede_direccion }}" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Meta servicio disciplinar</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="sede_meta_serv"
+                                                name="sede_meta_serv" value="{{$sede->sede_meta_serv}}" placeholder="0"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Meta extensión académica</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="sede_meta_ext"
+                                                name="sede_meta_ext" value="{{$sede->sede_meta_ext}}" placeholder="0"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {{-- <div class="form-group">

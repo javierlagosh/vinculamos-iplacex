@@ -25,6 +25,10 @@ class Escuelas extends Model
         'escu_creado',
         'escu_actualizado',
         'escu_nickname_mod',
-        'escu_rol_mod'
+        'escu_rol_mod',
+        'escu_meta_serv',
+        'escu_meta_ext',
+        'escu_meta_con',
+        'escu_meta_red',
     ];
 }

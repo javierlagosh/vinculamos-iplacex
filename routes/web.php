@@ -78,6 +78,7 @@ Route::middleware('verificar.superadmin')->group(function () {
 });
 
 Route::get('dashboard', [DashboardController::class, 'Index'])->name('dashboard.ver');
+Route::get('reportes', [DashboardController::class, 'reportes'])->name('reportes.ver');
 
 Route::post('dashboard/sedes-datos', [DashboardController::class, 'sedesDatos']);
 Route::post('dashboard/componentes-datos', [DashboardController::class, 'componentesDatos']);
@@ -100,7 +101,6 @@ Route::middleware('verificar.admin')->group(function () {
     Route::delete('admin/eliminar-invitado-externo/{evainv_codigo}', [IniciativasController::class, 'eliminarInvitadoEvaluacionExterno'])->name('admin.eliminar.invitacion.externo');
     Route::post('admin/iniciativas/carga-individual-evaluacion', [IniciativasController::class, 'cargaIndividualEvaluacion'])->name('admin.iniciativa.evaluar.enviar.cargaIndividual');
     //Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarArchivo'])->name('procesarArchivo');
-    Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
     //ver resultados de la evaluacion
     Route::get('admin/iniciativas/{inic_codigo}/evaluacion/resultados/{invitado}', [IniciativasController::class, 'verEvaluacion'])->name('admin.ver.evaluacion');
 
@@ -364,6 +364,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/iniciativas/obtener-carreras', [IniciativasController::class, 'carrerasByEscuelas1']);
     Route::post('admin/iniciativas/obtener-regiones', [IniciativasController::class, 'regionesByMacrozonas']);
     Route::post('admin/iniciativas/obtener-Dispositivo', [IniciativasController::class, 'DispositivoByInstrumento']);
+    Route::post('admin/iniciativas/obtener-ambitos', [IniciativasController::class, 'AmbitosByInstrumento']);
     Route::post('admin/iniciativas/obtener-ImpactoInterno', [IniciativasController::class, 'ImpactoInternoByInstrumento']);
     Route::post('admin/iniciativas/obtener-ImpactoExterno', [IniciativasController::class, 'ImpactoExternoByInstrumento']);
     Route::post('admin/inicitiativa/eliminar-externo', [IniciativasController::class, 'eliminarExterno']);
@@ -508,7 +509,6 @@ Route::middleware('verificar.digitador')->group(function () {
     Route::delete('digitador/eliminar-invitado-externo/{evainv_codigo}', [IniciativasController::class, 'eliminarInvitadoEvaluacionExterno'])->name('digitador.eliminar.invitacion.externo');
     Route::post('digitador/iniciativas/carga-individual-evaluacion', [IniciativasController::class, 'cargaIndividualEvaluacion'])->name('digitador.iniciativa.evaluar.enviar.cargaIndividual');
     //Route::post('digitador/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarArchivo'])->name('procesarArchivo');
-    Route::post('digitador/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
     //ver resultados de la evaluacion
     Route::get('digitador/iniciativas/{inic_codigo}/evaluacion/resultados/{invitado}', [IniciativasController::class, 'verEvaluacion'])->name('digitador.ver.evaluacion');
 
@@ -539,3 +539,23 @@ use App\Http\Controllers\EmailController;
 
 Route::post('/send-email-estudiante', [IniciativasController::class, 'sendEmailEstudiante'])->name('send.email');
 //fin de rutas para evaluacion de iniciativas
+//eliminar todas las evaluaciones relacionadas a un id admin.eliminar.todas.las.evaluaciones
+Route::get('admin/iniciativas/{inic_codigo}/evaluar/propuesta/{invitado}', [IniciativasController::class, 'evaluarIniciativaPaso2'])->name('admin.evaluar.paso2');
+Route::delete('admin/eliminar-todas-las-evaluaciones', [IniciativasController::class, 'eliminarTodasLasEvaluaciones'])->name('admin.eliminar.todas.las.evaluaciones');
+Route::post('admin/iniciativas/evaluar/manual', [IniciativasController::class, 'guardarEvaluacionManual'])->name('admin.guardar.evaluacion.manual');
+
+use App\Http\Controllers\MailController;
+
+Route::post('/send-email', [MailController::class, 'sendEmail'])->name('enviar.email');
+Route::post('admin/iniciativas/procesar-archivo', [IniciativasController::class, 'procesarTexto'])->name('procesarTexto');
+Route::post('admin/actualizar-iniciativa/actualizar-infraestructura', [IniciativasController::class, 'actualizarInfraestructura'])->name('admin.infra.actualizar');
+Route::post('admin/actualizar-iniciativa/actualizar-rrhh', [IniciativasController::class, 'actualizarRrhh'])->name('admin.rrhh.actualizar');
+
+
+Route::post('/evaluaciones/guardar/qr/', [IniciativasController::class, 'guardarEvaluacionQR'])->name('evaluacion.guardar.desde.qr');
+Route::get('/evaluaciones/{evatotal_encriptado}/desde-qr', [IniciativasController::class, 'evaluaEstudianteDesdeQR']);
+//qr evaluacion
+Route::get('evaluaciones/{evatotal_encriptado}/qr', [IniciativasController::class, 'mostrarQr'])->name('admin.qr.evaluacion');
+
+
+Route::post('/recuperar/send-email', [ForgotPasswordController::class, 'sendRecoveryEmail'])->name('enviar.correo.recuperacion');

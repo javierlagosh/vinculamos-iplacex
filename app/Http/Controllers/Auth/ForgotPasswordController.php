@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 use App\Models\Usuarios;
-use Mail;
 use Hash;
 use Illuminate\Support\Str;
+
+use Mailjet\Client;
+use Mailjet\Resources;
 
 class ForgotPasswordController extends Controller
 {
@@ -43,7 +45,15 @@ class ForgotPasswordController extends Controller
 
     public function showResetPasswordForm($token)
     {
-        return view('auth.passwords.forgetPasswordLink', ['token' => $token]);
+        try {
+            $usuario = DB::table('password_resets')
+            ->where('token', $token)
+            ->first();
+            return view('auth.passwords.forgetPasswordLink', ['token' => $token, 'usuario' => $usuario]);
+        } catch (\Throwable $th) {
+            return redirect('/ingresar')->with('error', 'El token no es válido!');
+        }
+
     }
 
     public function submitResetPasswordForm(Request $request)
@@ -62,7 +72,7 @@ class ForgotPasswordController extends Controller
             ->first();
 
         if (!$updatePassword) {
-            return back()->withInput()->with('error', 'Invalid token!');
+            return back()->withInput()->with('error', 'Token  inválido!');
         }
 
         $user = Usuarios::where('usua_email', $request->email)
@@ -70,6 +80,78 @@ class ForgotPasswordController extends Controller
 
         DB::table('password_resets')->where(['email' => $request->email])->delete();
 
-        return redirect('/')->with('message', 'Your password has been changed!');
+        return redirect('/ingresar')->with('message', 'La contraseña ha sido cambiada correctamente!');
     }
+
+
+
+    public function sendRecoveryEmail(Request $request)
+    {
+
+        // Validar el email
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        // Crear instancia de Mailjet Client
+        $mj = new Client(env('MJ_APIKEY_PUBLIC'), env('MJ_APIKEY_PRIVATE'), true, ['version' => 'v3.1']);
+
+        // Obtener el usuario
+        $email = $request->email;
+        $usuario = Usuarios::where('usua_email', $email)->first();
+
+        // Verificar si el usuario existe
+        if (!$usuario) {
+            return redirect()->back()->with('error', 'No se encontró un usuario con ese correo.');
+        }
+
+        // Generar el token para la recuperación
+        $token = Str::random(64);
+
+        // Insertar el token en la tabla password_resets
+        DB::table('password_resets')->insert([
+            'email' => $email,
+            'token' => $token,
+            'created_at' => Carbon::now()
+        ]);
+
+        // Crear el mensaje
+        $mensaje = "Hola, " . $usuario->usua_nombre . ".<br>Para restablecer tu contraseña, haz clic en el siguiente enlace: <a href='" . env('URL_EVALUACIONES'). 'reset-password/' . $token . "'>Restablecer contraseña</a><br>Si no solicitaste restablecer tu contraseña, ignora este mensaje.<br>Saludos,<br>Equipo de VINCULAMOS IPLACEX";
+
+        // Configurar el cuerpo del mensaje
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => env('SENDER_EMAIL'),
+                        'Name'  => "VINCULAMOS IPLACEX"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $email,
+                            'Name' => $usuario->usua_nombre
+                        ]
+                    ],
+                    'Subject' => 'Recuperación de contraseña - VINCULAMOS IPLACEX',
+                    'HTMLPart' => $mensaje,
+                ]
+            ]
+        ];
+
+        try {
+            // Enviar el correo
+            $response = $mj->post(Resources::$Email, ['body' => $body]);
+
+            // Verificar si se envió correctamente
+            if ($response->success()) {
+                return redirect()->back()->with('exito', '¡Correo enviado correctamente!');
+            } else {
+                return redirect()->back()->with('error', 'Error al enviar el correo.');
+            }
+        } catch (\Exception $e) {
+            // Capturar cualquier excepción y retornar error
+            return redirect()->back()->with('error', 'Ocurrió un error al intentar enviar el correo: ' . $e->getMessage());
+        }
+    }
+
 }

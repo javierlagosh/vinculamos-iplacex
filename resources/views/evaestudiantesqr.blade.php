@@ -39,7 +39,7 @@
             <p class="">Por favor, haznos saber qué opinas acerca de la iniciativa
                 <strong>"{{$iniciativa[0]->inic_nombre}}"</strong>
               </p>
-            <form action="{{ route('evaluacion.guardar.estudiante') }}" method="POST">
+            <form action="{{ route('evaluacion.guardar.desde.qr') }}" method="POST">
                 @csrf
                 <div class=" mb-3">
                     <h5>Contacto</h5>

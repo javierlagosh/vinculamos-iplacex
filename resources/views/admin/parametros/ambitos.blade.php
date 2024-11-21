@@ -33,10 +33,10 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h4>Listado de Impactos</h4>
+                            <h4>Listado de contribuciones</h4>
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#modalCrearAmbito"><i class="fas fa-plus"></i> Nueva impacto</button>
+                                    data-target="#modalCrearAmbito"><i class="fas fa-plus"></i> Nueva contribución</button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -66,7 +66,7 @@
                                                         data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                                     <a href="javascript:void(0)" class="btn btn-icon btn-danger"
                                                         onclick="eliminarAmbi({{ $ambi->amb_codigo }})"
-                                                        data-toggle="tooltip" data-placement="top" title="Eliminar ambi"><i
+                                                        data-toggle="tooltip" data-placement="top" title="Eliminar"><i
                                                             class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
@@ -123,7 +123,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditarAmbito">Editar Impacto</h5>
+                        <h5 class="modal-title" id="modalEditarAmbito">Editar contribución</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -134,7 +134,7 @@
                             @csrf
 
                             <div class="form-group">
-                                <label>Nombre del impacto</label>
+                                <label>Nombre de la contribución</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -146,17 +146,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Tipo de impacto</label>
+                                <label>Tipo de contribución</label>
                                 <div class="input-group">
                                     <select class="form-control @error('descripcion') is-invalid @enderror" id="descripcion"
                                         name="descripcion">
                                         <option value="" selected disable d>Seleccione...</option>
                                         <option value="Impacto Interno"
-                                            {{ 'Impacto Interno' == $ambi->amb_descripcion ? 'selected' : '' }}>Impacto
-                                            Interno </option>
+                                            {{ 'Impacto Interno' == $ambi->amb_descripcion ? 'selected' : '' }}>Contribución
+                                            Interna </option>
                                         <option value="Impacto Externo"
-                                            {{ 'Impacto Externo' == $ambi->amb_descripcion ? 'selected' : '' }}>Impacto
-                                            Externo </option>
+                                            {{ 'Impacto Externo' == $ambi->amb_descripcion ? 'selected' : '' }}>Contribución
+                                            Externa </option>
                                     </select>
                                     @error('descripcion')
                                         <div class="invalid-feedback">
@@ -164,6 +164,31 @@
                                         </div>
                                     @enderror
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-size: 110%">Instrumentos</label> {{-- <label for=""
+                                    style="color: red;">*</label> --}}
+                                {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
+                                    for="selectAllEscuelas">Todas</label> --}}
+                                <select class="form-control select2" name="tiacs[]" multiple=""
+                                    style="width: 100%" id="tiacs">
+                                    @if (isset($tiacs))
+                                        @forelse ($tiacs as $tiac)
+                                            @php
+                                                // Comprueba si $escu->escu_codigo y $sede->sede_codigo están en la misma fila de ambitosTiac
+                                                $relationExists = $ambitosTiac->where('amb_codigo', $ambi->amb_codigo)
+                                                    ->where('tiac_codigo', $tiac->tiac_codigo)
+                                                    ->isNotEmpty();
+                                            @endphp
+                                            <option value="{{ $tiac->tiac_codigo }}" {{ $relationExists ? 'selected' : '' }}>
+                                                {{ $tiac->tiac_nombre }}
+                                            </option>
+                                        @empty
+                                            <option value="-1">No existen registros</option>
+                                        @endforelse
+                                    @endif
+                                </select>
                             </div>
                             {{-- <div class="form-group">
                                 <label>Descripción del impacto</label>
@@ -200,7 +225,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Nuevo Impacto</h5>
+                    <h5 class="modal-title" id="formModal">Nueva contribución</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -209,7 +234,7 @@
                     <form action="{{ route('admin.crear.ambitos') }} " method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Nombre del impacto</label>
+                            <label>Nombre de la contribución</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -230,12 +255,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Tipo de Impacto</label>
+                            <label>Tipo de Contribución</label>
                             <div class="input-group">
                                 <select class="form-control @error('descripcion') is-invalid @enderror" id="descripcion"
                                     name="descripcion">
-                                    <option value="Impacto Interno" selected> Impacto Interno</option>
-                                    <option value="Impacto Externo">Impacto Externo</option>
+                                    <option value="Impacto Interno" selected> Contribución Interna</option>
+                                    <option value="Impacto Externo">Contribución Externa</option>
                                 </select>
                                 @error('descripcion')
                                     <div class="invalid-feedback">
@@ -243,6 +268,24 @@
                                     </div>
                                 @enderror
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-size: 110%">Instrumentos</label> {{-- <label for=""
+                                style="color: red;">*</label> --}}
+                            {{-- <input type="checkbox" id="selectAllEscuelas" style="margin-left: 60%"> <label
+                                for="selectAllEscuelas">Todas</label> --}}
+                            <select class="form-control select2" name="tiacs[]" multiple=""
+                                style="width: 100%" id="tiacs">
+                                @if (isset($tiacs))
+                                    @forelse ($tiacs as $tiac)
+                                        <option value="{{ $tiac->tiac_codigo }}">
+                                            {{ $tiac->tiac_nombre }}</option>
+                                    @empty
+                                        <option value="-1">No existen registros</option>
+                                    @endforelse
+                                @endif
+                            </select>
                         </div>
                         {{-- <div class="form-group">
                             <label>Descripción del impacto</label>
@@ -300,6 +343,7 @@
                 <form action="{{ route('admin.eliminar.ambitos') }} " method="POST">
                     @method('DELETE')
                     @csrf
+
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalEliminar">Eliminar Contribución</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
