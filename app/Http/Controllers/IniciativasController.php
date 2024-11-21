@@ -2587,24 +2587,30 @@ private function formatearFecha($fecha, $meses)
     {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $costo = CostosDinero::where('inic_codigo', $inic_codigo)->first();
-        // $inicEditar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
-        // $listarRegiones = Regiones::select('regi_codigo', 'regi_nombre')->orderBy('regi_codigo')->get();
-        // $listarParticipantes = DB::table('participantes')
-        //     ->select('inic_codigo', 'participantes.sube_codigo', 'sube_nombre')
-        //     ->join('subentornos', 'subentornos.sube_codigo', '=', 'participantes.sube_codigo')
-        //     ->where('inic_codigo', $inic_codigo)
-        //     ->orderBy('part_creado', 'asc')
-        //     ->get();
-        $centroCostos = CentroCostos::select('ceco_codigo', 'ceco_nombre')->get();
+        $centroCostos = CentroCostos::all();
+        $estudiantes = [];
+        $docentes = [];
+        $funcionarios = [];
 
-        $estudiantes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
-            ->sum('pain_estudiantes_final');
+        if($iniciativa->inic_estado != 5){
+            $estudiantes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+                ->sum('pain_estudiantes');
 
-        $docentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
-            ->sum('pain_docentes_final');
+            $docentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+                ->sum('pain_docentes');
 
-        $funcionarios  = ParticipantesInternos::where('inic_codigo', $inic_codigo)
-            ->sum('pain_funcionarios_final');
+            $funcionarios  = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+                ->sum('pain_funcionarios');
+        }else{
+            $estudiantes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+                ->sum('pain_estudiantes_final');
+
+            $docentes = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+                ->sum('pain_docentes_final');
+
+            $funcionarios  = ParticipantesInternos::where('inic_codigo', $inic_codigo)
+                ->sum('pain_funcionarios_final');
+        }
 
 
         return view('admin.iniciativas.paso3', [
