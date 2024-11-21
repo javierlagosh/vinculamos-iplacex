@@ -76,6 +76,15 @@ use App\Models\ProgramasContribuciones;
 
 use Illuminate\Support\Facades\Http;
 
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpParser\Node\Stmt\Return_;
+
 class IniciativasController extends Controller
 {
     private function getUserRole()
@@ -243,6 +252,242 @@ class IniciativasController extends Controller
 
         return $iniciativas;
     }
+
+    public function generarExcel()
+    {
+        try {
+            // Obtener datos de las iniciativas con la misma lógica del PDF
+            $iniciativas = Iniciativas::leftJoin('convenios', 'convenios.conv_codigo', '=', 'iniciativas.conv_codigo')
+                ->leftJoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
+                ->leftJoin('mecanismos', 'mecanismos.meca_codigo', '=', 'iniciativas.meca_codigo')
+                ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
+                ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
+                ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
+                ->select(
+                    'iniciativas.inic_codigo',
+                    'iniciativas.inic_nombre',
+                    'iniciativas.inic_descripcion',
+                    'iniciativas.inic_anho',
+                    'iniciativas.inic_estado',
+                    'convenios.conv_nombre',
+                    'inic_objetivo',
+                    'inic_brecha',
+                    'inic_diagnostico',
+                    'inic_desde',
+                    'inic_hasta',
+                    'mecanismos.meca_nombre',
+                    'tipo_actividades.tiac_nombre',
+                    'componentes.comp_nombre',
+                    'ambito_accion.amac_nombre'
+                )
+                ->get();
+
+
+            foreach ($iniciativas as $iniciativa) {
+                if ($iniciativa->inic_estado == 0) {
+                    $iniciativa->inic_estado = 'En revisión';
+                } elseif ($iniciativa->inic_estado == 1) {
+                    $iniciativa->inic_estado = 'En revisión';
+                } elseif ($iniciativa->inic_estado == 2) {
+                    $iniciativa->inic_estado = 'En ejecución';
+                } elseif ($iniciativa->inic_estado == 3) {
+                    $iniciativa->inic_estado = 'Aprobada';
+                } elseif ($iniciativa->inic_estado == 4) {
+                    $iniciativa->inic_estado = 'Falta información';
+                } elseif ($iniciativa->inic_estado == 5) {
+                    $iniciativa->inic_estado = 'Cerrada';
+                } elseif ($iniciativa->inic_estado == 6) {
+                    $iniciativa->inic_estado = 'Finalizada';
+                }
+            }
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Encabezados
+            $sheet->fromArray([
+                'Código',
+                'Nombre',
+                'Descripción',
+                'Año',
+                'Estado',
+                'Convenio',
+                'Objetivo',
+                'Brecha',
+                'Diagnóstico',
+                'Desde',
+                'Hasta',
+                'Mecanismo',
+                'Tipo de Actividad',
+                'Componente',
+                'Ámbito de Acción'
+            ], null, 'A1');
+
+            // Estilo de encabezados
+            $headStyle = [
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => '2574BA']
+                ],
+                'font' => [
+                    'bold' => true,
+                    'color' => ['rgb' => 'FFFFFF']
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['rgb' => '000000']
+                    ]
+                ]
+            ];
+
+            $sheet->getStyle('A1:O1')->applyFromArray($headStyle);
+
+            // Ajustar ancho automático para las columnas
+            foreach (range('A', 'O') as $columnID) {
+                $sheet->getColumnDimension($columnID)->setAutoSize(true);
+            }
+
+            // Contenido de las filas
+            $row = 2;
+            foreach ($iniciativas as $iniciativa) {
+                $sheet->fromArray([
+                    $iniciativa->inic_codigo,
+                    $iniciativa->inic_nombre,
+                    $iniciativa->inic_descripcion,
+                    $iniciativa->inic_anho,
+                    $iniciativa->inic_estado,
+                    $iniciativa->conv_nombre,
+                    $iniciativa->inic_objetivo,
+                    $iniciativa->inic_brecha,
+                    $iniciativa->inic_diagnostico,
+                    $iniciativa->inic_desde,
+                    $iniciativa->inic_hasta,
+                    $iniciativa->meca_nombre,
+                    $iniciativa->tiac_nombre,
+                    $iniciativa->comp_nombre,
+                    $iniciativa->amac_nombre
+                ], null, 'A' . $row);
+                $row++;
+            }
+
+            $writer = new Xlsx($spreadsheet);
+
+            // Definir el nombre del archivo
+            $fileName = "iniciativas_completas.xlsx";
+
+            // Generar el archivo en el navegador sin guardarlo
+            $response = Response::make(null, 200);
+            $response->header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            $response->header('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+            $response->header('Cache-Control', 'max-age=0');
+
+            ob_start();
+            $writer->save('php://output');
+            $content = ob_get_clean();
+
+            return $response->setContent($content);
+        } catch (\Exception $e) {
+            // Manejo de errores
+            return response()->json(['error' => 'Error al generar el Excel: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+
+
+
+    public function descargarPDF(Request $request)
+{
+    try {
+        // Extender tiempo de ejecución y memoria
+        set_time_limit(300);
+        ini_set('memory_limit', '256M');
+
+        // Obtener datos de las iniciativas
+        $iniciativas = Iniciativas::leftJoin('convenios', 'convenios.conv_codigo', '=', 'iniciativas.conv_codigo')
+        ->leftJoin('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
+        ->leftJoin('mecanismos', 'mecanismos.meca_codigo', '=', 'iniciativas.meca_codigo')
+        ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
+        // ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
+        // ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
+        // ->leftJoin('escuelas', function($join) {
+        //     $join->on('escuelas.escu_codigo', '=', 'participantes_internos.escu_codigo');
+        // })
+        ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
+        ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
+        ->select(
+            'iniciativas.inic_codigo',
+            'iniciativas.inic_nombre',
+            'iniciativas.inic_descripcion',
+            'iniciativas.inic_anho',
+            'iniciativas.inic_estado',
+            'convenios.conv_nombre',
+            'inic_objetivo',
+            'inic_brecha',
+            'inic_diagnostico',
+            'inic_desde',
+            'inic_hasta',
+            'mecanismos.meca_nombre',
+            'tipo_actividades.tiac_nombre',
+            'componentes.comp_nombre',
+            'ambito_accion.amac_nombre',
+        )
+        ->get();
+
+        // Array de meses para formatear fechas
+        $meses = [
+            '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo',
+            '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio',
+            '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre',
+            '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
+        ];
+
+        // Formatear fechas de las iniciativas
+        foreach ($iniciativas as $iniciativa) {
+            $iniciativa->inic_desde_formateada = $this->formatearFecha($iniciativa->inic_desde, $meses);
+            $iniciativa->inic_hasta_formateada = $this->formatearFecha($iniciativa->inic_hasta, $meses);
+        }
+
+        // Generar PDF con la vista correspondiente
+        $pdf = Pdf::loadView('admin.iniciativas.resumenPDF', compact('iniciativas'));
+
+        // Descargar el PDF
+        return $pdf->download('iniciativas.pdf');
+
+    } catch (\Exception $e) {
+        // Manejo de errores
+        return response()->json(['error' => 'Error al generar el PDF: ' . $e->getMessage()], 500);
+    }
+}
+
+/**
+ * Formatea una fecha en formato 'YYYY-MM-DD' a 'día de mes de año'.
+ *
+ * @param string|null $fecha
+ * @param array $meses
+ * @return string
+ */
+private function formatearFecha($fecha, $meses)
+{
+    if (!$fecha) {
+        return 'Sin fecha';
+    }
+
+    $partes = explode('-', $fecha);
+    if (count($partes) === 3) {
+        $dia = $partes[2];
+        $mes = $meses[$partes[1]] ?? 'Mes desconocido';
+        $anio = $partes[0];
+        return "{$dia} de {$mes} de {$anio}";
+    }
+
+    return 'Fecha inválida';
+}
 
     public function completarCobertura($inic_codigo)
     {

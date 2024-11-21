@@ -54,9 +54,57 @@
 
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" onclick="obtenerIDs()"><i class="fas fa-tachometer-alt"></i> Almacenar INVI</button>
+
+                                <a type="button" class="btn btn-success" href="{{route('admin.iniciativas.excel')}}"><i class="fas fa-file-excel"></i> Exportar excel</a>
+                                <a type="button"
+                                class="btn btn-danger text-white"
+                                id="pdfButton"
+                                onclick="handlePdfDownload()">
+                                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                                </a>
+
                             </div>
                             @endif
                         </div>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                            <script>
+                                function handlePdfDownload() {
+                                    const button = $('#pdfButton');
+                                    const originalText = button.html(); // Guardar el texto original del botón
+
+                                    // Cambiar texto del botón a "Generando PDF..."
+                                    button.html('<i class="fas fa-spinner fa-spin"></i> Generando PDF (tiempo estimado: 1 min)...');
+                                    button.prop('disabled', true); // Desactivar el botón
+
+                                    // Realizar la petición AJAX
+                                    $.ajax({
+                                        url: "{{ route('iniciativas.resumenPDF') }}", // URL del controlador
+                                        method: "GET",
+                                        xhrFields: {
+                                            responseType: 'blob' // Para manejar la respuesta como un archivo
+                                        },
+                                        success: function (data) {
+                                            // Crear un enlace invisible para descargar el archivo
+                                            const link = document.createElement('a');
+                                            const url = window.URL.createObjectURL(data);
+                                            link.href = url;
+                                            link.download = 'iniciativas.pdf'; // Nombre del archivo
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            window.URL.revokeObjectURL(url); // Liberar memoria
+                                            document.body.removeChild(link);
+                                        },
+                                        error: function () {
+                                            alert('Ocurrió un error al generar el PDF. Intenta nuevamente.');
+                                        },
+                                        complete: function () {
+                                            // Restaurar el texto original y habilitar el botón
+                                            button.html(originalText);
+                                            button.prop('disabled', false);
+                                        }
+                                    });
+                                }
+                            </script>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3 col-lg-3 col-xl-3">

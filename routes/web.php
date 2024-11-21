@@ -282,7 +282,10 @@ Route::middleware('verificar.admin')->group(function () {
 
     //TODO: Inicio de rutas para iniciativas
     Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
-    Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
+
+    Route::get('admin/iniciativas/excel',[IniciativasController::class,'generarExcel'])->name('admin.iniciativas.excel');
+    Route::get('/iniciativas/pdf', [IniciativasController::class, 'descargarPDF'])->name('iniciativas.resumenPDF');
+
     Route::get('admin/iniciativas/{inic_codigo}/detalles', [IniciativasController::class, 'mostrarDetalles'])->name('admin.iniciativas.detalles');
     Route::get('admin/iniciativas/{inic_codigo}/pdf', [IniciativasController::class, 'mostrarPDF'])->name('admin.iniciativas.pdf');
     Route::get('admin/iniciativas/{inic_codigo}/listar/resultado',[IniciativasController::class,'listadoResultados'])->name('admin.resultados.listado');
