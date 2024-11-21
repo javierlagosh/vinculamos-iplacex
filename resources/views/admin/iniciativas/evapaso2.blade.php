@@ -51,7 +51,7 @@
 
                             <div class="mx-5">
                                 Estimado/a, <br>
-                                                Le agradecemos haber participado en la actividad "{{$iniciativa[0]->inic_nombre}}" en el marco de las acciones de Vinculación con el medio que implementa CFT Coquimbo.
+                                                Le agradecemos haber participado en la actividad "{{$iniciativa[0]->inic_nombre}}" en el marco de las acciones de Vinculación con el medio que implementa IPLACEX.
                             </div>
                             <div class="mx-5 mt-5">
                                 <form>

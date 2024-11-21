@@ -562,3 +562,4 @@ Route::get('evaluaciones/{evatotal_encriptado}/qr', [IniciativasController::clas
 
 
 Route::post('/recuperar/send-email', [ForgotPasswordController::class, 'sendRecoveryEmail'])->name('enviar.correo.recuperacion');
+Route::get('evaluaciones/{evatotal_encriptado}/qr', [IniciativasController::class, 'mostrarQr'])->name('admin.qr.evaluacion');
