@@ -457,28 +457,23 @@
 
                                 </div>
                                 <div id="objetivosPlanteados">
-                                    {{-- ods --}}
-                                    {{-- @if (isset($iniciativa) && $editar)
-                                    <br> <br>
-                                    <label style="font-size: 110%">Objetivos asociados</label>
-                                    <br>
+                                    @if (isset($iniciativa) && $editar)
                                         @forelse ($ods_array as $ods)
-                                                    <!-- Código para mostrar ODS -->
-                                                        <img src="https://cftpucv.vinculamos.org/img/ods/{{ $ods->id_ods }}.png" alt="Ods {{ $ods->id_ods }}" style="width: 100px; height: 100px;">
-                                                    @empty
+                                            <!-- Código para mostrar ODS -->
+                                            <img src="https://cftpucv.vinculamos.org/img/ods/{{ $ods->id_ods }}.png" alt="Ods {{ $ods->id_ods }}" style="width: 100px; height: 100px;">
+                                        @empty
 
                                         @endforelse
-                                    @endif --}}
 
+                                    @endif
 
-                                    {{-- fin ods --}}
 
                                 </div>
                                 <input type="text" id="ObjetivoElegido" hidden>
-                                {{-- <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
+                                <button id="send-button" class="btn btn-primary mr-1 text-white mt-2 d-none">
                                     <span id="asociarODSpinner" class="" role="status" aria-hidden="true"></span>
                                     <span id="asociarODSObjetivoTexto">Asociar ODS</span>
-                                </button> --}}
+                                </button>
                                 <script>
                                     function elegirObjetivo(elegido) {
                                         for (let index = 1; index < 4; index++) {
@@ -748,318 +743,181 @@
 
 
                                     function enviarMensaje() {
-                                        var userInput = $('#description').val();
-                                        var objetivoSeleccionado = $('#ObjetivoElegido').val();
-                                        console.log(objetivoSeleccionado);
-                                        // Enviar el mensaje al servidor
-                                        $.ajax({
-                                            url: '{{ route($role . '.chat.sendMessage') }}',
-                                            type: 'POST',
-                                            data: {
-                                                '_token': '{{ csrf_token() }}',
-                                                'message': objetivoSeleccionado
-                                            },
-                                            success: function(response) {
-                                                try {
-                                                    //Segun el contador, si su valor es 1 o mayor, elimina los valores que se agregaron
-                                                    //anteriormente con el comando document.getElementById("iniciativas-paso1").appendChild(odsHiddenInput);
-                                                    //document.getElementById("iniciativas-paso1").appendChild(metasHiddenInput);
-                                                    //document.getElementById("iniciativas-paso1").appendChild(fundamentosHiddenInput);
+                                                var userInput = $('#description').val();
+                                                var objetivoSeleccionado = $('#ObjetivoElegido').val();
+                                                console.log(objetivoSeleccionado);
+                                                // Enviar el mensaje al servidor
+                                                $.ajax({
+                                                    url: '{{ route("admin.chat.sendMessage") }}',
+                                                    type: 'POST',
+                                                    data: {
+                                                        '_token': '{{ csrf_token() }}',
+                                                        'message': objetivoSeleccionado
+                                                    },
+                                                    success: function(response) {
+                                                        try {
+
+                                                            //Segun el contador, si su valor es 1 o mayor, elimina los valores que se agregaron
+                                                            //anteriormente con el comando document.getElementById("iniciativas-paso1").appendChild(odsHiddenInput);
+                                                            limpiarElementosAntiguos();
+                                                            if (repeat==true) {
+                                                                //Crea un for que recorra #iniciativas-paso1 [name^="ods_values"] y elimine los elementos
+                                                                //que se encuentren dentro de el
+                                                                var odsValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_values"]');
+                                                                odsValues.forEach(function(odsValue) {
+                                                                    odsValue.remove();
+                                                                });
+                                                                var metasValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_metas_values"]');
+                                                                metasValues.forEach(function(metasValue) {
+                                                                    metasValue.remove();
+                                                                });
+                                                                var metasDescValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_metas_desc_values"]');
+                                                                metasDescValues.forEach(function(metasDescValue) {
+                                                                    metasDescValue.remove();
+                                                                });
+                                                                var fundamentosValues = document.querySelectorAll('#iniciativas-paso1 [name^="ods_fundamentos_values"]');
+                                                                fundamentosValues.forEach(function(fundamentosValue) {
+                                                                    fundamentosValue.remove();
+                                                                });
+                                                            }
+
+                                                            // Obtener los divs correspondientes
+                                                            var fundamentos = [];
+                                                            var metas = []
+                                                            var metasDesc = [];
+                                                            var respuestaBot = response;
+                                                            // Expresión regular para extraer el JSON dentro de los backticks
+                                                            let jsonMatch = respuestaBot.match(/```json\s*([\s\S]*?)\s*```/);
+
+                                                            // Verificamos si se encontró una coincidencia y la analizamos
+                                                            if (jsonMatch && jsonMatch[1]) {
+                                                            try {
+                                                                var jsonObtenido = JSON.parse(jsonMatch[1]);
+                                                                console.log(jsonObtenido); // Imprime el JSON en la consola
+                                                            } catch (error) {
+                                                                console.error("El JSON extraído no es válido:", error);
+                                                            }
+                                                            } else {
+                                                            console.log("No se encontró un JSON en el texto.");
+                                                            }
+
+                                                            console.log('Pasando datos a los campos ocultos');
+
+                                                            document.getElementById('json_aportes').value = JSON.stringify(jsonObtenido);
+
+                                                            console.log('Creando tabla de ODS');
+
+                                                            //eliminar todo lo dentro del div tablaOds
+                                                            $('#tablaOds').empty();
+
+                                                            // Referencia al div donde se mostrará la tabla
+                                                            const tablaDiv = document.getElementById("tablaOds");
+
+                                                            // Crear la tabla y sus elementos
+                                                            const tabla = document.createElement("table");
+                                                            tabla.classList.add("table", "table-bordered", "table-striped", "table-hover");
+
+                                                            // Crear la fila de encabezados
+                                                            const encabezado = document.createElement("tr");
+                                                            const columnas = ["ODS", "Metas", "Descripción de las metas", "Fundamento"];
+                                                            columnas.forEach(texto => {
+                                                                const th = document.createElement("th");
+                                                                th.classList.add("table-dark");
+                                                                th.style.textAlign = "left";
+                                                                th.textContent = texto;
+                                                                encabezado.appendChild(th);
+                                                            });
+                                                            tabla.appendChild(encabezado);
+
+                                                            // Crear las filas de datos
+                                                            jsonObtenido.aportes.forEach(aporte => {
+                                                                const fila = document.createElement("tr");
+
+                                                                // Columna ODS Imagen
+                                                                const celdaImagen = document.createElement("td");
+                                                                const imagen = document.createElement("img");
+                                                                imagen.src = `https://cftpucv.vinculamos.org/img/ods/${aporte.ods_numero}.png`;
+                                                                imagen.alt = `ods${aporte.ods_numero}`;
+                                                                imagen.classList.add("img-fluid");
+                                                                imagen.style.maxWidth = "150px";
+                                                                celdaImagen.appendChild(imagen);
+                                                                fila.appendChild(celdaImagen);
+
+                                                                // Columna Metas
+                                                                const celdaMetas = document.createElement("td");
+                                                                celdaMetas.textContent = aporte.metas.join("\n\n");
+                                                                fila.appendChild(celdaMetas);
+
+                                                                // Columna descripcionMetas
+                                                                console.log(aporte.descripcion_metas);
+                                                                // transformar de array a string separando con salto de linea
+                                                                var descripcionMetas = aporte.descripcion_metas.join("\n\n");
+
+                                                                const celdadescripcionMetas = document.createElement("td");
+                                                                celdadescripcionMetas.textContent = descripcionMetas;
+                                                                fila.appendChild(celdadescripcionMetas);
+
+                                                                // Columna Fundamento
+                                                                const celdaFundamento = document.createElement("td");
+                                                                celdaFundamento.textContent = aporte.fundamento;
+                                                                fila.appendChild(celdaFundamento);
+
+                                                                tabla.appendChild(fila);
+                                                            });
+
+                                                            // Agregar la tabla al div
+                                                            tablaDiv.appendChild(tabla);
+
+                                                            $('#asociarODSObjetivoTexto').text('Asociar ODS');
 
 
-                                                    limpiarElementosAntiguos();
-                                                    console.log('paso1');
-                                                    if (repeat == true) {
-                                                        //Crea un for que recorra #iniciativas-paso1 [name^="ods_values"] y elimine los elementos
-                                                        //que se encuentren dentro de el
-                                                        var odsValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_values"]');
-                                                        odsValues.forEach(function(odsValue) {
-                                                            odsValue.remove();
-                                                        });
-                                                        var metasValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_metas_values"]');
-                                                        metasValues.forEach(function(metasValue) {
-                                                            metasValue.remove();
-                                                        });
-                                                        var metasDescValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_metas_desc_values"]');
-                                                        metasDescValues.forEach(function(metasDescValue) {
-                                                            metasDescValue.remove();
-                                                        });
-                                                        var fundamentosValues = document.querySelectorAll(
-                                                            '#iniciativas-paso1 [name^="ods_fundamentos_values"]');
-                                                        fundamentosValues.forEach(function(fundamentosValue) {
-                                                            fundamentosValue.remove();
-                                                        });
-                                                    }
-                                                    console.log('paso2');
-                                                    // Obtener los divs correspondientes
 
-                                                    var fundamentos = [];
-                                                    var metas = []
-                                                    var metasDesc = [];
-                                                    var respuestaBot = response.message;
-                                                    console.log(respuestaBot);
-                                                    console.log('paso3');
 
-                                                    metas = extraerMetas(respuestaBot);
-                                                    metas = metas.sort((a, b) => {
-                                                        const parteEnteraA = parseInt(a, 10);
-                                                        const parteEnteraB = parseInt(b, 10);
 
-                                                        if (!isNaN(parteEnteraA) && !isNaN(parteEnteraB)) {
-                                                            return parteEnteraA - parteEnteraB;
+
+
+                                                        } catch (error) {
+                                                            if (contadorerror >= 10){
+                                                                alert('Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.');
+                                                            }else{
+                                                                contadorerror++;
+                                                                $('#send-button').prop('disabled', true);
+
+                                                            document.getElementById("asociarODSObjetivoTexto").innerText = 'Asociando ODS, intento: '+contadorerror+' ...';
+                                                            // Bloque de código ejecutado si hay un error en la solicitud
+
+                                                            console.error('Error en la solicitud:', error);
+
+
+                                                            setTimeout(function() {
+                                                            enviarMensaje();
+                                                            }, 1000); // 5000 milisegundos = 5 segundos
+                                                            console.log('error numero: '+contadorerror);
+                                                            }
                                                         }
 
-                                                        return 0;
-                                                    })
-                                                    console.log('prueba de metas largo');
-                                                    console.log(metas);
-                                                    metas = [...new Set(metas)];
+                                                        $('#asociarODSpinner').removeClass('spinner-border spinner-border-sm');
+                                                        $('#send-button').prop('disabled', false);
+                                                        $('#boton-revisar').prop('disabled', false);
 
-                                                    metasDesc = extraerDescripcionesMetas(respuestaBot);
-                                                    fundamentos = extraerFundamentos(respuestaBot);
-                                                    console.log(metas);
-                                                    metasDesc.sort(compararMetas);
-                                                    console.log(metasDesc);
-                                                    console.log(fundamentos);
-                                                    console.log('paso4');
+                                                    },
+                                                    error: function(xhr, status, error) {
+                                                        if (contadorerror >= 10){
+                                                            alert('Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.');
+                                                        } else {
+                                                            contadorerror++;
+                                                            $('#send-button').prop('disabled', true);
+                                                            document.getElementById("asociarODSObjetivoTexto").innerText = 'Asociando ODS, intento: '+contadorerror+' ...';
+                                                            // Bloque de código ejecutado si hay un error en la solicitud
+                                                            setTimeout(function() {
+                                                                enviarMensaje();
+                                                            }, 1000); // 5000 milisegundos = 5 segundos
+                                                            document.getElementById("asociarODSObjetivoTexto").innerText = 'Asociar ODS';
 
-
-                                                    var ods = response.ods;
-                                                    // ods a array
-                                                    var odsArray = ods.split(',');
-                                                    odsArray = odsArray.sort(function(a, b) {
-                                                        return a - b;
-                                                    })
-                                                    // Obtener el div donde se agregarán las fotos
-                                                    var fotosDiv = document.getElementById("fotosods");
-
-                                                    // Limpiar el contenido actual del div
-                                                    fotosDiv.innerHTML = '';
-
-                                                    // Obtener el div donde se mostrarán los valores de odsArray
-                                                    var odsValuesDiv = document.getElementById("ods-values");
-                                                    var metasDiv = document.getElementById("metasods");
-                                                    var fundamentosDiv = document.getElementById("fundamentosods");
-
-                                                    // var odsHiddenField = document.getElementById("ods-hidden-field");
-                                                    // odsHiddenField.innerHTML = ''; // Limpiar el contenido actual
-                                                    // // Iterar sobre el arreglo
-
-                                                    const arraySinEspacios = odsArray.map(elemento => elemento.trim());
-                                                    console.log(arraySinEspacios);
-                                                    console.log('paso1');
-                                                    console.log('ods:' + ods);
-                                                    console.log('odsArray' + odsArray);
-                                                    console.log('arraySinEspacios' + arraySinEspacios);
-                                                    var odsHiddenInput;
-
-                                                    arraySinEspacios.forEach(function(ods) {
-                                                        // Agregar un campo de entrada oculto para cada elemento del arreglo
-                                                        odsHiddenInput = document.createElement("input");
-                                                        odsHiddenInput.type = "hidden";
-                                                        odsHiddenInput.name = "ods_values[]";
-                                                        odsHiddenInput.value = ods;
-                                                        console.log(odsHiddenInput);
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            odsHiddenInput);
-                                                    })
-                                                    console.log('paso2');
-
-                                                    metas.forEach(function(meta, index) {
-                                                        // Crear un nuevo elemento <p>
-                                                        var nuevoParrafo = document.createElement("p");
-
-                                                        // Establecer el texto del párrafo
-                                                        nuevoParrafo.textContent = 'Meta ' + meta;
-
-                                                        // Agregar el párrafo al contenedor
-                                                        metasDiv.appendChild(nuevoParrafo);
-
-                                                        // Configurar el evento hover con el evento del mouse
-                                                        nuevoParrafo.addEventListener("mouseover", function(event) {
-                                                            mostrarDescripcionMeta(metasDesc[index], event);
-                                                        });
-
-                                                        nuevoParrafo.addEventListener("mouseout", function() {
-                                                            ocultarDescripcionMeta();
-                                                        });
-
-
-                                                        // Crear el campo de entrada oculto para metas
-                                                        var metasHiddenInput = document.createElement("input");
-                                                        var metasDescHiddenInput = document.createElement("input");
-                                                        metasHiddenInput.type = "hidden";
-                                                        metasDescHiddenInput.type = "hidden";
-                                                        metasHiddenInput.name = "ods_metas_values[]";
-                                                        metasDescHiddenInput.name = "ods_metas_desc_values[]";
-                                                        metasHiddenInput.value = meta;
-                                                        metasDescHiddenInput.value = metasDesc[index];
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            metasHiddenInput);
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            metasDescHiddenInput);
-                                                    });
-                                                    console.log('paso3');
-                                                    var cc = 0;
-
-                                                    fundamentos.forEach(function(fundamento) {
-                                                        fundamentosDiv.innerHTML += '<p>Fundamento ' + metas[cc] +
-                                                            ': ' + fundamento + '</p>';
-                                                        // Crear el campo de entrada oculto para fundamentos
-                                                        //Agrega un input hidden para los fundamentos
-                                                        var fundamentosHiddenInput = document.createElement("input");
-                                                        fundamentosHiddenInput.type = "hidden";
-                                                        fundamentosHiddenInput.name = "ods_fundamentos_values[]";
-                                                        fundamentosHiddenInput.value = fundamentos;
-                                                        document.getElementById("iniciativas-paso1").appendChild(
-                                                            fundamentosHiddenInput);
-                                                        cc++;
-                                                    });
-
-
-                                                    repeat = true;
-
-                                                    $('#fotosods').empty();
-
-                                                    arraySinEspacios.forEach(function(numero) {
-
-                                                        $('#fotosods').append('<div><img src="https://cftpucv.vinculamos.org/img/ods/'+numero+'.png" height="150px" width="150px" alt="ods'+numero+'"></div>');
-                                                        $('#fotosods').css({
-                                                            'display': 'flex',
-                                                            'flexDirection': 'row', // Alinear los elementos en fila
-                                                            'justifyContent': 'center', // Justificar al inicio (izquierda)
-                                                            'alignItems': 'center' // Alinear verticalmente al centro
-                                                        });
-
-
-                                                    });
-
-                                                    $('#metasods').css({
-                                                        'display': 'flex',
-                                                        'flexDirection': 'row', // Alinear los elementos en fila
-                                                        'justifyContent': 'center', // Centrar horizontalmente
-                                                        'alignItems': 'center' // Centrar verticalmente
-                                                    });
-
-                                                    $('#asociarODSpinner').removeClass('spinner-border spinner-border-sm');
-                                                    $('#asociarODSObjetivoTexto').text('Asociar ODS');
-                                                    $('#send-button').prop('disabled', false);
-                                                    $('#boton-revisar').prop('disabled', false);
-                                                    $('#send-button').addClass('d-none');
-
-
-
-                                                    // Crear el contenido de la tabla
-                                                    var tablaHTML = `
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">ODS</th>
-                                                                <th scope="col">Meta</th>
-                                                                <th scope="col">Fundamento  </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                `;
-
-
-
-                                                    // Ordenar el array usando la función de comparación personalizada
-                                                    metasDesc.sort(compararMetas);
-                                                    console.log('#############################################');
-                                                    var tablaOds = document.getElementById("tablaOds");
-                                                    tablaOds.innerHTML = '';
-                                                    console.log(metasDesc);
-
-                                                    // Llenar el cuerpo de la tabla con los datos de los arreglos
-                                                    for (var i = 0; i < arraySinEspacios.length; i++) {
-                                                        tablaHTML += `
-                                                        <tr>
-                                                            <td><div data-toggle="tooltip" data-placement="top" title="ods ${arraySinEspacios[i]}"><img src="https://cftpucv.vinculamos.org/img/ods/${arraySinEspacios[i]}.png" height="150px" width="150px" alt="ods'+numero+'"></div></td>
-                                                            <td>${metasDesc[i]}</td>
-                                                            <td>${fundamentos[i]}</td>
-                                                        </tr>
-                                                    `;
+                                                        }
                                                     }
-
-                                                    // Cerrar la etiqueta del cuerpo y de la tabla
-                                                    tablaHTML += `
-                                                        </tbody>
-                                                    </table>
-                                                `;
-
-                                                    // Actualizar el contenido de fundamentosDiv
-                                                    tablaOds.innerHTML += tablaHTML;
-
-                                                    // $('#ods-input').value(odsArray.join(','))
-
-                                                    // // Crear el contenido HTML de la tabla
-                                                    // var tableHTML = '<table border="1">';
-                                                    // tableHTML += '<tr><th>ODS</th><th>Metas</th><th>Fundamentos</th></tr>';
-
-                                                    // for (var j = 0; j < arraySinEspacios.length; j++) {
-                                                    //     tableHTML += '<tr>';
-                                                    //     tableHTML += '<td><div><img src="https://cftpucv.vinculamosvm02.cl/vinculamos_v5_cftpucv/app/img/ods-'+arraySinEspacios[j]+'.png" height="150px" width="150px" alt="ods'+arraySinEspacios[j]+'"></div></td>';
-                                                    //     tableHTML += '<td>' + metas[j] + '</td>';
-                                                    //     tableHTML += '<td>' + fundamentos[j] + '</td>';
-                                                    //     tableHTML += '</tr>';
-                                                    // }
-
-                                                    // tableHTML += '</table>';
-
-                                                    // // Insertar el contenido HTML en el elemento con id "tablaconlainfoods"
-                                                    // document.getElementById('tablaconlainfoods').innerHTML = tableHTML;
-                                                } catch (error) {
-                                                    if (contadorerror >= 10) {
-                                                        alert(
-                                                            'Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.'
-                                                        );
-                                                    } else {
-                                                        contadorerror++;
-
-                                                        document.getElementById("asociarODSObjetivoTexto").innerText =
-                                                            'Asociando ODS, intento: ' + contadorerror + ' ...';
-                                                        // Bloque de código ejecutado si hay un error en la solicitud
-
-                                                        console.error('Error en la solicitud:', error);
-                                                        setTimeout(function() {
-                                                            enviarMensaje();
-                                                        }, 1000); // 5000 milisegundos = 5 segundos
-                                                        console.log('error numero: ' + contadorerror);
-
-                                                    }
-
-                                                }
-
-                                            },
-                                            error: function(xhr, status, error) {
-                                                if (contadorerror >= 10) {
-                                                    alert(
-                                                        'Lo siento, ha surgido un error asociando ODS, por favor reinicie la página e intente nuevamente.'
-                                                    );
-                                                } else {
-                                                    contadorerror++;
-
-                                                    document.getElementById("asociarODSObjetivoTexto").innerText =
-                                                        'Asociando ODS, intento: ' + contadorerror + ' ...';
-                                                    // Bloque de código ejecutado si hay un error en la solicitud
-
-                                                    console.error('Error en la solicitud:', error);
-                                                    setTimeout(function() {
-                                                        enviarMensaje();
-                                                    }, 1000); // 5000 milisegundos = 5 segundos
-                                                    console.log('error numero: ' + contadorerror);
-
-                                                }
-
-
+                                                });
                                             }
-
-                                        });
-                                    }
                                 });
                             </script>
 
@@ -1837,6 +1695,7 @@
                                     </script>
 
                                 </div>
+                                <input type="hidden" name="json_aportes" id="json_aportes">
                                 <input type="hidden" name="ods_values[]" id="ods-hidden-field" value="">
                                 <input type="hidden" name="ods_metas_values[]" id="ods-meta-hidden-field">
                                 <input type="hidden" name="ods_metas_desc_values[]" id="ods-meta-desc-hidden-field">
