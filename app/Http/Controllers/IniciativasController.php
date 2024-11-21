@@ -278,7 +278,9 @@ class IniciativasController extends Controller
                     'mecanismos.meca_nombre',
                     'tipo_actividades.tiac_nombre',
                     'componentes.comp_nombre',
-                    'ambito_accion.amac_nombre'
+                    'ambito_accion.amac_nombre',
+                    'iniciativas.inic_asignaturas',
+                    'iniciativas.inic_formato',
                 )
                 ->get();
 
@@ -320,7 +322,9 @@ class IniciativasController extends Controller
                 'Mecanismo',
                 'Tipo de Actividad',
                 'Componente',
-                'Ámbito de Acción'
+                'Ámbito de Acción',
+                'Asignaturas',
+                'Formato'
             ], null, 'A1');
 
             // Estilo de encabezados
@@ -345,10 +349,10 @@ class IniciativasController extends Controller
                 ]
             ];
 
-            $sheet->getStyle('A1:O1')->applyFromArray($headStyle);
+            $sheet->getStyle('A1:Q1')->applyFromArray($headStyle);
 
             // Ajustar ancho automático para las columnas
-            foreach (range('A', 'O') as $columnID) {
+            foreach (range('A', 'Q') as $columnID) {
                 $sheet->getColumnDimension($columnID)->setAutoSize(true);
             }
 
@@ -370,7 +374,9 @@ class IniciativasController extends Controller
                     $iniciativa->meca_nombre,
                     $iniciativa->tiac_nombre,
                     $iniciativa->comp_nombre,
-                    $iniciativa->amac_nombre
+                    $iniciativa->amac_nombre,
+                    $iniciativa->inic_asignaturas,
+                    $iniciativa->inic_formato,
                 ], null, 'A' . $row);
                 $row++;
             }
@@ -430,6 +436,8 @@ class IniciativasController extends Controller
             'inic_objetivo',
             'inic_brecha',
             'inic_diagnostico',
+            'inic_asignaturas',
+            'inic_formato',
             'inic_desde',
             'inic_hasta',
             'mecanismos.meca_nombre',
