@@ -49,14 +49,63 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Listado de Iniciativas</h4>
-                            @if (Session::has('admin'))
+
 
 
                             <div class="card-header-action">
+                                @if (Session::has('admin'))
                                 <button type="button" class="btn btn-primary" onclick="obtenerIDs()"><i class="fas fa-tachometer-alt"></i> Almacenar INVI</button>
+                                @endif
+                                <a type="button" class="btn btn-success" href="{{route('admin.iniciativas.excel')}}"><i class="fas fa-file-excel"></i> Exportar excel</a>
+                                <a type="button"
+                                class="btn btn-danger text-white"
+                                id="pdfButton"
+                                onclick="handlePdfDownload()">
+                                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                                </a>
+
                             </div>
-                            @endif
+
                         </div>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                            <script>
+                                function handlePdfDownload() {
+                                    const button = $('#pdfButton');
+                                    const originalText = button.html(); // Guardar el texto original del botón
+
+                                    // Cambiar texto del botón a "Generando PDF..."
+                                    button.html('<i class="fas fa-spinner fa-spin"></i> Generando PDF (tiempo estimado: 1 min)...');
+                                    button.prop('disabled', true); // Desactivar el botón
+
+                                    // Realizar la petición AJAX
+                                    $.ajax({
+                                        url: "{{ route('iniciativas.resumenPDF') }}", // URL del controlador
+                                        method: "GET",
+                                        xhrFields: {
+                                            responseType: 'blob' // Para manejar la respuesta como un archivo
+                                        },
+                                        success: function (data) {
+                                            // Crear un enlace invisible para descargar el archivo
+                                            const link = document.createElement('a');
+                                            const url = window.URL.createObjectURL(data);
+                                            link.href = url;
+                                            link.download = 'iniciativas.pdf'; // Nombre del archivo
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            window.URL.revokeObjectURL(url); // Liberar memoria
+                                            document.body.removeChild(link);
+                                        },
+                                        error: function () {
+                                            alert('Ocurrió un error al generar el PDF. Intenta nuevamente.');
+                                        },
+                                        complete: function () {
+                                            // Restaurar el texto original y habilitar el botón
+                                            button.html(originalText);
+                                            button.prop('disabled', false);
+                                        }
+                                    });
+                                }
+                            </script>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3 col-lg-3 col-xl-3">
@@ -421,18 +470,24 @@
                         var coberturaUrl = '{{ route('admin.cobertura.index', ':codigo') }}'.replace(':codigo', row.inic_codigo);
                         var resultadosUrl = '{{ route('admin.resultados.listado', ':codigo') }}'.replace(':codigo', row.inic_codigo);
                         var evidenciasUrl = '{{ route('admin.evidencias.listar', ':codigo') }}'.replace(':codigo', row.inic_codigo);
-                        var evaluarUrl = evaluaRuta .replace(':codigo', row.inic_codigo);
+                        var evaluarUrl = evaluaRuta.replace(':codigo', row.inic_codigo);
+
                         console.log(evaluarUrl);
 
+                        // Condición para mostrar el botón "Editar" solo si inic_estado no es 6
+                        var editButton = '';
+                        if (row.inic_estado !== 6) {
+                            editButton = `
+                                <a href="${editUrl}" class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>`;
+                        }
+
                         return `<div class="dropdown d-inline">
-                                    <button class="btn btn-primary dropdown-toggle"
-                                        id="dropdownMenuButton2" data-toggle="dropdown" title="Opciones">
+                                    <button class="btn btn-primary dropdown-toggle" id="dropdownMenuButton2" data-toggle="dropdown" title="Opciones">
                                         <i class="fas fa-cog"></i>
                                     </button>
                                     <div class="dropdown-menu dropright">
-                                        <a href="${editUrl}" class="dropdown-item has-icon">
-                                            <i class="fas fa-edit"></i> Editar Iniciativa
-                                        </a>
                                         @if (Session::has('admin'))
                                         <a href="${deleteUrl}" class="dropdown-item has-icon" onclick="eliminarIniciativa(${row.inic_codigo})" data-toggle="tooltip" data-placement="top" title="Eliminar">
                                             Eliminar Iniciativa <i class="fas fa-trash"></i>
@@ -441,6 +496,7 @@
                                         <a href="${detailsUrl}" class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top" title="Ver detalles">
                                             <i class="fas fa-eye"></i> Ver detalles
                                         </a>
+                                        ${editButton} <!-- Botón Editar, solo si inic_estado no es 6 -->
                                         <a href="${calcularUrl}" class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top" title="Calcular INVI" onclick="calcularIndice(${row.inic_codigo})">
                                             <i class="fas fa-tachometer-alt"></i> Calcular INVI
                                         </a>
@@ -472,23 +528,43 @@
                                         Estados
                                     </button>
                                     <div class="dropdown-menu dropright">
-
-                                        <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 3)" data-toggle="tooltip" data-placement="top" title="Eliminar">
-                                            Aprobar Iniciativa <i class="fas fa-check"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 2)" data-toggle="tooltip" data-placement="top" title="Eliminar">
-                                            En ejecución <i class="fas fa-cog"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 4)" data-toggle="tooltip" data-placement="top" title="Eliminar">
-                                            Falta información <i class="fas fa-info-circle"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 5)" data-toggle="tooltip" data-placement="top" title="Eliminar">
-                                            Cerrar iniciativa <i class="fas fa-lock"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 6)" data-toggle="tooltip" data-placement="top" title="Eliminar">
-                                            Finalizar Iniciativa <i class="fas fa-check-double"></i>
-                                        </a>
-
+                                        @if (Session::has('admin'))
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 3)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Aprobar Iniciativa <i class="fas fa-check"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 2)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                En ejecución <i class="fas fa-cog"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 4)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Falta información <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 5)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Cerrar iniciativa <i class="fas fa-lock"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 6)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Finalizar Iniciativa <i class="fas fa-check-double"></i>
+                                            </a>
+                                        @elseif(Session::has('observador'))
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 3)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Aprobar Iniciativa <i class="fas fa-check"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 2)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                En ejecución <i class="fas fa-cog"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 4)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Falta información <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 5)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Cerrar iniciativa <i class="fas fa-lock"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 6)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                Finalizar Iniciativa <i class="fas fa-check-double"></i>
+                                            </a>
+                                        @elseif (Session::has('digitador'))
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalUpdateState(${row.inic_codigo}, 2)" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                En ejecución <i class="fas fa-cog"></i>
+                                            </a>
+                                        @endif
 
                                     </div>
                                 </div>

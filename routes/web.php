@@ -398,10 +398,13 @@ Route::middleware('verificar.admin')->group(function () {
 
     //fin de rutas para ODS
 });
-
+Route::get('admin/iniciativas/excel',[IniciativasController::class,'generarExcel'])->name('admin.iniciativas.excel');
+Route::get('/iniciativas/pdf', [IniciativasController::class, 'descargarPDF'])->name('iniciativas.resumenPDF');
 
 Route::middleware('verificar.digitador')->group(function () {
     Route::get('digitador/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('digitador.iniciativa.listar');
+
+
     Route::get('digitador/iniciativas/{inic_codigo}/detalles', [IniciativasController::class, 'mostrarDetalles'])->name('digitador.iniciativas.detalles');
     Route::get('digitador/iniciativas/{inic_codigo}/pdf', [IniciativasController::class, 'mostrarPDF'])->name('digitador.iniciativas.pdf');
     Route::get('digitador/iniciativas/{inic_codigo}/listar/resultado',[IniciativasController::class,'listadoResultados'])->name('digitador.resultados.listado');
