@@ -1857,7 +1857,7 @@
                                                                                         Fecha de registro: <em>{{ $motivo->fecha_registro }}</em>
                                                                                     </p>
                                                                                     <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem">
-                                                                                        Validado por: <strong>{{ $motivo->usua_nickname_corrector }}</strong><br>
+                                                                                        Corregido por: <strong>{{ $motivo->usua_nickname_corrector }}</strong><br>
                                                                                         Fecha de validación: <em>{{ $motivo->fecha_correccion }}</em>
                                                                                     </p>
                                                                                     <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">

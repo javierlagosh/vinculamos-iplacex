@@ -1411,9 +1411,13 @@ class IniciativasController extends Controller
 
             $rolCreador = Session::get('admin')->rous_codigo ?? Session::get('digitador')->rous_codigo;
             if ($rolCreador == 1) {
-                return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+                return redirect()->route('admin.editar.paso2', $inic_codigo)
+                    ->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente')
+                    ->with('tipo', $tipo);
             } else {
-                return redirect()->route('digitador.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+                return redirect()->route('digitador.editar.paso2', $inic_codigo)
+                    ->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente')
+                    ->with('tipo', $tipo);
             }
         } catch (\Throwable $th) {
             dd($th->getMessage());
