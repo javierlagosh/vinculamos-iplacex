@@ -292,6 +292,60 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalValidaciones" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table style="width: 100%" class="table" id="table-1">
+                            <thead>
+                                <tr>
+                                    <th>Sección</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="mb-2" style="border: 1px solid #ddd; border-radius: 0.5rem; margin-bottom: 10px;">
+                                    <td style="padding: 10px;">
+                                        <strong>Sección 1</strong>
+                                    </td>
+                                    <td id="modalSeccion1" style="padding: 10px;"></td>
+                                </tr>
+                                <tr class="mb-2" style="border: 1px solid #ddd; border-radius: 0.5rem; margin-bottom: 10px;">
+                                    <td style="padding: 10px;">
+                                        <strong>Sección 2</strong>
+                                    </td>
+                                    <td id="modalSeccion2" style="padding: 10px;"></td>
+                                </tr>
+                                <tr class="mb-2" style="border: 1px solid #ddd; border-radius: 0.5rem; margin-bottom: 10px;">
+                                    <td style="padding: 10px;">
+                                        <strong>Sección 3</strong>
+                                    </td>
+                                    <td id="modalSeccion3" style="padding: 10px;"></td>
+                                </tr>                                <tr class="mb-2" style="border: 1px solid #ddd; border-radius: 0.5rem; margin-bottom: 10px;">
+                                    <td style="padding: 10px;">
+                                        <strong>Sección 4</strong>
+                                    </td>
+                                    <td id="modalSeccion4" style="padding: 10px;"></td>
+                                </tr>                                <tr class="mb-2" style="border: 1px solid #ddd; border-radius: 0.5rem; margin-bottom: 10px;">
+                                    <td style="padding: 10px;">
+                                        <strong>Sección 5</strong>
+                                    </td>
+                                    <td id="modalSeccion5" style="padding: 10px;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <link rel="stylesheet" href="{{ asset('/bundles/datatables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -299,7 +353,190 @@
     <script src="{{ asset('/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('/bundles/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
+    <script>
+        function abrirModalValidacion(inicCodigo) {
+            // Llamada AJAX para obtener los datos
+            fetch(`/admin/iniciativas-estado/${inicCodigo}`)
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            return {
+                                seccion_1: "Aún no se ha validado esta iniciativa",
+                                seccion_2: "Aún no se ha validado esta iniciativa",
+                                seccion_3: "Aún no se ha validado esta iniciativa",
+                                seccion_4: "Aún no se ha validado esta iniciativa",
+                                seccion_5: "Aún no se ha validado esta iniciativa",
+                            };
+                        } else {
+                            throw new Error("Error al obtener los datos");
+                        }
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Limpia las celdas del modal para evitar duplicados
+                    document.getElementById("modalSeccion1").innerHTML = '';
+                    document.getElementById("modalSeccion2").innerHTML = '';
+                    document.getElementById("modalSeccion3").innerHTML = '';
+                    document.getElementById("modalSeccion4").innerHTML = '';
+                    document.getElementById("modalSeccion5").innerHTML = '';
 
+                    // Usamos un objeto para almacenar los motivos y estados para cada sección
+                    const secciones = {
+                        1: '',
+                        2: '',
+                        3: '',
+                        4: '',
+                        5: '',
+                    };
+
+                    // Recorre cada item de data y concatena el motivo y estado a la sección correspondiente
+                    data.forEach(item => {
+                    const seccionId = `modalSeccion${item.seccion}`;
+                    let estadoText = '';
+                    let backgroundColor = '';
+                    let additionalInfo = '';
+
+                    // Define el texto y color según el estado
+                    if (item.estado === 0) {
+                        estadoText = 'Estado: Pendiente';
+                        backgroundColor = 'background-color: #6c757d;'; // Gris
+                    } else if (item.estado === 1) {
+                        estadoText = 'Estado: Aprobado';
+                        backgroundColor = 'background-color: #007219;'; // Verde
+                    } else if (item.estado === 2) {
+                        estadoText = 'Estado: Corregido';
+                        backgroundColor = 'background-color: #708a00;'; // Amarillo verdoso
+                    }
+
+                        // Determinar la URL de redirección usando Laravel para procesar las rutas
+                        const adminPaso1Url = `{{ route('admin.editar.paso1', ['inic_codigo' => ':inic_codigo']) }}`.replace(':inic_codigo', item.inic_codigo);
+                        const adminPaso2Url = `{{ route('admin.editar.paso2', ['inic_codigo' => ':inic_codigo']) }}`.replace(':inic_codigo', item.inic_codigo);
+                        const adminPaso3Url = `{{ route('admin.editar.paso3', ['inic_codigo' => ':inic_codigo']) }}`.replace(':inic_codigo', item.inic_codigo);
+
+                        if (item.seccion == 1) {
+                            redirectionUrl = adminPaso1Url;
+                        } else if (item.seccion == 2 || item.seccion == 3 || item.seccion == 4) {
+                            redirectionUrl = adminPaso2Url
+                        } else if (item.seccion == 5){
+                            redirectionUrl = adminPaso3Url;
+                        }
+
+                    // Información adicional dinámica
+                    if (item.estado === 1 && (item.usua_nickname_corrector || item.fecha_correccion)) {
+                        // Estado aprobado con corrector
+                        additionalInfo = `
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                Comentario ingresado por: <strong>${item.usua_nickname}</strong><br>
+                                Fecha de registro: <em>${item.fecha_registro}</em><br>
+                            </p>
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                Corregido por: <strong>${item.usua_nickname_corrector}</strong><br>
+                                Fecha de corrección: <em>${item.fecha_correccion}</em>
+                            </p>
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                Corregido por: <strong>${item.usua_nickname_validador}</strong><br>
+                                Fecha de corrección: <em>${item.fecha_validacion}</em>
+                            </p>
+                        `;
+                    } else if (item.estado === 1) {
+                        // Estado aprobado sin corrector
+                        additionalInfo = `
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                Comentario ingresado por: <strong>${item.usua_nickname}</strong><br>
+                                Fecha de validación: <em>${item.fecha_validacion}</em>
+                            </p>
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                Corregido por: <strong>${item.usua_nickname_validador}</strong><br>
+                                Fecha de corrección: <em>${item.fecha_validacion}</em>
+                            </p>
+                        `;
+                    } else if (item.estado === 2) {
+                        // Estado corregido
+                        additionalInfo = `
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                Comentario ingresado por: <strong>${item.usua_nickname}</strong><br>
+                                Fecha de registro: <em>${item.fecha_registro}</em>
+                            </p>
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                Corregido por: <strong>${item.usua_nickname_corrector}</strong><br>
+                                Fecha de corrección: <em>${item.fecha_correccion}</em>
+                            </p>
+                        `;
+                    } else {
+                        // Estado pendiente
+                        additionalInfo = `
+                            <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.5rem;">
+                                Comentario ingresado por: <strong>${item.usua_nickname}</strong><br>
+                                Fecha de registro: <em>${item.fecha_registro}</em>
+                            </p>
+                        `;
+                    }
+
+                    // Construir el contenido de la tarjeta
+                    const content = `
+                        <a class="card mb-2 w-100" style="max-width: 20rem; padding: 0.5rem; margin-top: 15px; ${backgroundColor} color: white; border: none; cursor: pointer;" href='${redirectionUrl}'>
+                            <div class="card-body p-2">
+                                <h5 class="card-title" style="font-size: 1.25rem;">${estadoText}</h5>
+                                <p class="card-text" style="font-size: 1rem;">
+                                    Comentario: ${item.motivo || 'Sin motivo especificado'}
+                                </p>
+                                ${additionalInfo}
+                            </div>
+                        </a>
+                    `;
+
+                    // Agregar el contenido a la sección correspondiente
+                    secciones[item.seccion] += content;
+                });
+
+                // Validar y completar contenido faltante para las secciones
+                Object.keys(secciones).forEach(seccionId => {
+                    const sectionContent = secciones[seccionId];
+                    if (sectionContent) {
+                        document.getElementById('modalSeccion' + seccionId).innerHTML = sectionContent;
+                    } else {
+                        document.getElementById('modalSeccion' + seccionId).innerHTML = `
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sin Validar</h5>
+                                    <p class="card-text"><small>No hay información disponible.</small></p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                // Mostrar el modal
+                $('#modalValidaciones').modal('show');
+                }).catch(err => {
+                    console.error("Error al obtener datos:", err);
+                    // Si hay un error o no se encuentran datos, asegurarse de que el modal se muestre con 'Sin Validar' en todas las secciones
+                    const secciones = {
+                        1: '',
+                        2: '',
+                        3: '',
+                        4: '',
+                        5: '',
+                    };
+
+                    // Actualizamos todas las secciones con "Sin Validar"
+                    Object.keys(secciones).forEach(seccionId => {
+                        document.getElementById('modalSeccion' + seccionId).innerHTML = `
+                            <div class="card mb-2" style="max-width: 20rem; padding: 0.5rem; margin-top: 15px">
+                                <div class="card-body p-2">
+                                    <h5 class="card-title" style="font-size: 1.25rem;">Sin Validar</h5>
+                                    <p class="card-text" style="font-size: 1rem;"><small>No hay información disponible.</small></p>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // Mostrar el modal
+                    $('#modalValidaciones').modal('show');
+            });
+        }
+    </script>
     <script>
          var amacData = @json($amac);
          var amacObj = {};
@@ -398,9 +635,22 @@
                         const badge = estadoBadges[data];
 
                         if (badge) {
+                        // Condición para el estado "3"
+                            if (data == 4) {
+                                return `<a href="javascript:void(0)"
+                                        class=""
+                                        style="display: inline-flex; align-items: center; gap: 5px;
+                                              vertical-align: middle; padding: 7px 12px; font-weight: 600;
+                                              letter-spacing: .3px; border-radius: 30px; font-size: 12px;
+                                              background-color: #3abaf4; color: #fff; text-decoration: none;
+                                              box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.15);"
+                                              onclick="abrirModalValidacion(${row.inic_codigo})">
+                                            <i class="fas fa-info-circle"></i> Falta Info
+                                        </a>`;
+                            }
+                            // Caso general para los demás estados
                             return `<div class="badge badge-${badge.class} badge-shadow">
-                                        <i class="fas fa-${badge.icon}"></i>
-                                        ${badge.text}
+                                        <i class="fas fa-${badge.icon}"></i> ${badge.text}
                                     </div>`;
                         } else {
                             return data; // En caso de que el estado no esté definido, devuelve el valor tal cual
@@ -451,6 +701,15 @@
                                         <a href="${calcularUrl}" class="dropdown-item has-icon" data-toggle="tooltip" data-placement="top" title="Calcular INVI" onclick="calcularIndice(${row.inic_codigo})">
                                             <i class="fas fa-tachometer-alt"></i> Calcular INVI
                                         </a>
+                                        @if(Session::has('digitador'))
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalValidacion(${row.inic_codigo})" data-toggle="tooltip" data-placement="top" title="Validar">
+                                                Validaciones <i class="fas fa-check-double"></i>
+                                            </a>
+                                        @elseif(Session::has('admin'))
+                                            <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="abrirModalValidacion(${row.inic_codigo})" data-toggle="tooltip" data-placement="top" title="Validar">
+                                                Validaciones <i class="fas fa-check-double"></i>
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="dropdown d-inline">

@@ -1705,15 +1705,351 @@
 
                             </div>
 
-                            <div class="row mb-3 mr-2">
+                            <div class="row">
                                 <div class="col-xl-12 col-md-12 col-lg-12">
-                                    <div class="text-right">
-                                        <button type="submit" class="btn btn-primary mr-1 waves-effect">Siguiente <i
-                                                class="fas fa-chevron-right"></i></button>
+                                    <div class="row">
+                                        <div class="col-xl-12 col-md-12 col-lg-12">
+                                            <div class="d-flex justify-content-between" style="padding-left: 20px; margin-bottom:20px;" >
+                                                <!-- Botones a la izquierda -->
+                                                {{-- TODOOCULTAR: CAMBIAR DE OCULTAR A EDITAR -> $tipo === "editar" --}}
+                                                @if ($tipo === "editar")
+                                                    @if(Session::has('admin') or Session::has('digitador'))
+                                                        @if($estadoIniciativa->isNotEmpty())
+                                                            {{-- Filtramos la colección para obtener los registros de la sección 2 --}}
+                                                            @php
+                                                                $motivosSeccion = $estadoIniciativa->where('seccion', 1);
+                                                                $motivosFaltaInfoSeccion = $motivosSeccion->where('estado',0)->count(); // Contar motivos no validados
+                                                                $motivosCorregidosSeccion = $motivosSeccion->where('estado',2)->count();
+                                                                $estadoSeccion = $motivosSeccion->first(); // Obtener el primer registro de la sección
+                                                            @endphp
+                                                            {{-- @dd($estadoSeccion3) --}}
+                                                            {{-- Si existe un registro para la sección 3 --}}
+                                                            @if($estadoSeccion)
+                                                                {{-- Si el estado de la sección 3 es 1, muestra el botón Validado --}}
+                                                                @if($estadoSeccion->estado == 1)
+                                                                    <div>
+                                                                        <button type="button" class="btn btn-success mr-1" id="btnFaltaInfoSeccion1">Validado</button>
+                                                                    </div>
+                                                                @else
+                                                                    <div>
+                                                                        @if ($motivosFaltaInfoSeccion > 0)
+                                                                            <button type="button" class="btn btn-warning mr-1" id="btnFaltaInfoSeccion1">
+                                                                                Falta Información ({{ $motivosFaltaInfoSeccion }})
+                                                                            </button>
+                                                                        @elseif($motivosCorregidosSeccion >= 1)
+                                                                            <button type="button" class="btn btn-warning mr-1" id="btnFaltaInfoSeccion1">
+                                                                                Resueltos ({{ $motivosCorregidosSeccion }})
+                                                                            </button>
+                                                                        @endif
+                                                                    </div>
+                                                                @endif
+                                                            @else
+                                                                <div class="d-flex align-items-center mb-4">
+                                                                    <button type="button" class="btn btn-warning mr-2" id="btnFaltaInfoSeccion1">Falta Información</button>
+                                                                    @if (Session::has('admin'))
+                                                                        @if ($motivosSeccion->where('seccion', 1)->isEmpty())
+                                                                            <button type="button" class="btn" style="background-color: #28a745; color: white;" onclick="submitValidarSeccionForm()">Validar Sección</button>
+                                                                        @endif
+                                                                    @endif
+                                                                </div>
+                                                            @endif
+                                                        @else
+                                                            <div class="d-flex align-items-center mb-4">
+                                                                <button type="button" class="btn btn-warning mr-2" id="btnFaltaInfoSeccion1">Falta Información</button>
+                                                                @if (Session::has('admin'))
+                                                                    @if ($estadoIniciativa->where('seccion', 1)->isEmpty())
+                                                                       <button type="button" class="btn" style="background-color: #28a745; color: white;" onclick="submitValidarSeccionForm()">Validar Sección</button>
+                                                                    @endif
+                                                                @endif
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                                <div>
+
+                                                </div>
+                                                <div class="text-right" style="margin-right:20px">
+                                                    <button type="submit" class="btn btn-primary mr-1 waves-effect">Siguiente <i
+                                                            class="fas fa-chevron-right"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                </form>
+                                <script>
+                                    function submitValidarSeccionForm() {
+                                        const form = document.createElement('form');
+                                        form.method = 'POST';
+                                        form.action = "{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/1/ok') }}";
+
+                                        const csrfInput = document.createElement('input');
+                                        csrfInput.type = 'hidden';
+                                        csrfInput.name = '_token';
+                                        csrfInput.value = "{{ csrf_token() }}";
+                                        form.appendChild(csrfInput);
+
+                                        document.body.appendChild(form);
+                                        form.submit();
+                                    }
+                                </script>
                                 </div>
                             </div>
-                            </form>
+                                @if($tipo ==='editar')
+                                <style>
+                                    .modal-body {
+                                        max-height: 50vh; /* Limitar la altura máxima del contenido al 80% de la altura de la pantalla */
+                                        overflow-y: auto; /* Habilitar el scroll vertical */
+                                        padding: 1rem; /* Asegurar un espacio interno adecuado */
+                                    }
+
+                                    .modal {
+                                        justify-content: center;
+                                        align-items: center;
+                                    }
+
+                                    .modal-dialog {
+                                        max-width: 90%; /* Ajustar el ancho del modal */
+                                        margin: auto; /* Centrar el modal */
+                                    }
+                                    .modal-open {
+                                        overflow: hidden;
+                                    }
+                                </style>
+                                <div class="modal fade" id="modalFaltaInfoSeccion1" tabindex="-1" role="dialog" aria-labelledby="modalFaltaInfoSeccion1Label" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered custom-modal" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalFaltaInfoSeccion1Label">Falta Información - Sección 1</h5>
+                                                <!-- Botón de cerrar modal -->
+                                                <button type="button" class="close" id="closeModalFaltaInfoSeccion1" aria-label="Close">
+                                                    <span >&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div>
+                                                    @if ($tipo === "editar")
+                                                        @if($estadoIniciativa->isNotEmpty())
+                                                            @foreach($estadoIniciativa as $motivo)
+                                                                @if ($motivo->seccion == 1)
+                                                                    @if ($motivo->estado === 0)
+                                                                        <div class="card mb-2 w-100" style="max-width: 20rem; padding: 0.5rem; margin-top: 15px; background-color: #6c757d; color: white;">
+                                                                            <div class="card-body p-2">
+                                                                                <h5 class="card-title" style="font-size: 1.25rem;">Estado: Pendiente</h5>
+                                                                                <p class="card-text" style="font-size: 1rem;">
+                                                                                    Comentario: {{ $motivo->motivo }}
+                                                                                </p>
+                                                                                <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.5rem;">
+                                                                                    Comentario ingresado por: <strong>{{ $motivo->usua_nickname }}</strong><br>
+                                                                                    Fecha de registro: <em>{{ $motivo->fecha_registro }}</em>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    @elseif ($motivo->estado === 1)
+                                                                        <div class="card mb-2 w-100" style="max-width: 20rem; padding: 0.5rem; margin-top: 15px; background-color: #007219; color: white;">
+                                                                            <div class="card-body p-2">
+                                                                                <h5 class="card-title" style="font-size: 1.25rem;">Estado: Aprobado</h5>
+                                                                                <p class="card-text" style="font-size: 1rem;">
+                                                                                    Comentario: {{ $motivo->motivo }}
+                                                                                </p>
+                                                                                @if($motivo->usua_nickname_corrector!=null or $motivo->usua_nickname_corrector != '')
+                                                                                    <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                                                                        Comentario ingresado por: <strong>{{ $motivo->usua_nickname }}</strong><br>
+                                                                                        Fecha de registro: <em>{{ $motivo->fecha_registro }}</em>
+                                                                                    </p>
+                                                                                    <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem">
+                                                                                        Validado por: <strong>{{ $motivo->usua_nickname_corrector }}</strong><br>
+                                                                                        Fecha de validación: <em>{{ $motivo->fecha_correccion }}</em>
+                                                                                    </p>
+                                                                                    <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                                                                        Validado por: <strong>{{ $motivo->usua_nickname_validador }}</strong><br>
+                                                                                        Fecha de validación: <em>{{ $motivo->fecha_validacion }}</em>
+                                                                                    </p>
+                                                                                @else
+                                                                                    <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                                                                        Comentario ingresado por: <strong>{{ $motivo->usua_nickname }}</strong><br>
+                                                                                        Fecha de validación: <em>{{ $motivo->fecha_validacion }}</em>
+                                                                                    </p>
+                                                                                    <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem">
+                                                                                        Validado por: <strong>{{ $motivo->usua_nickname_validador }}</strong><br>
+                                                                                        Fecha de validación: <em>{{ $motivo->fecha_validacion }}</em>
+                                                                                    </p>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                    @elseif ($motivo->estado === 2)
+                                                                        <div class="card mb-2 w-100" style="max-width: 20rem; padding: 0.5rem; margin-top: 15px; background-color: #708a00; color: white;">
+                                                                            <div class="card-body p-2">
+                                                                                <h5 class="card-title" style="font-size: 1.25rem;">Estado: Corregido</h5>
+                                                                                <p class="card-text" style="font-size: 1.2rem;">
+                                                                                    Comentario: {{ $motivo->motivo }}
+                                                                                </p>
+                                                                                <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.5rem;">
+                                                                                    Comentario ingresado por: <strong>{{ $motivo->usua_nickname }}</strong><br>
+                                                                                    Fecha de registro: <em>{{ $motivo->fecha_registro }}</em>
+                                                                                </p>
+                                                                                <p class="card-meta" style="font-size: 0.875rem; margin-top: 0.3rem;">
+                                                                                    Corregido por: <strong>{{ $motivo->usua_nickname_corrector }}</strong><br>
+                                                                                    Fecha de corrección: <em>{{ $motivo->fecha_correccion }}</em>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            @if(!$estadoIniciativa->contains('estado', 1))
+                                                @if (Session::has('admin'))
+                                                    <p>Por favor, ingresa el motivo de la falta de información:</p>
+                                                    <form id="formFaltaInfoSeccion1" action="{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/1/falta-info') }}" method="POST">
+                                                        @csrf
+                                                        <textarea name="motivo" class="form-control auto-expand" placeholder="Motivo de la falta de información" rows="3" required></textarea>
+                                                    </div>
+                                                    <div class="modal-footer bg-whitesmoke br" style="display: flex; justify-content: center; gap: 10px;">
+                                                    <!-- Botón "Guardar Falta Información" con color naranjo y ocupando todo el ancho -->
+                                                    <button type="submit" class="btn h-100" style="background-color: #FFA500; color: white;">Guardar falta información</button>
+                                                    </form>
+                                                    <!-- Botón "Validar Sección" con color verde y ocupando todo el ancho -->
+                                                    @if (!$estadoIniciativa->where('seccion', 1)->isEmpty())
+                                                        <form action="{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/1/ok') }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn h-100" style="background-color: #28a745; color: white;">Validar Sección</button>
+                                                        </form>
+                                                    @endif
+                                                @elseif (Session::has('digitador'))
+                                                    @if ($estadoIniciativa->isNotEmpty() && !$estadoIniciativa->every(fn($item) => $item->estado === 2))
+                                                        <form action="{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/1/corregido') }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn h-200" style="background-color: #28a745; color: white; width: -webkit-fill-available;">Comentarios Resueltos</button>
+                                                        </form>
+                                                    @else
+                                                        <p class="text-center">No hay comentarios por corregir.</p>
+                                                    @endif
+
+                                                @endif
+                                            @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Fondo oscuro para cuando el modal está abierto -->
+                            <div id="modalBackdrop" class="modal-backdrop"></div>
+
+                            <!-- Estilos personalizados para los modales y el fondo oscuro -->
+                            <style>
+                                .custom-modal {
+                                    max-width: 400px;
+                                    height: 500px;
+                                }
+                                .modal-backdrop {
+                                    position: fixed;
+                                    top: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    background-color: rgba(0, 0, 0, 0); /* Fondo transparente inicialmente */
+                                    opacity: 0;
+                                    transition: opacity 0.4s ease-in-out;
+                                    z-index: 1040; /* Aseguramos que el fondo esté por debajo del modal */
+                                    display: none; /* Inicialmente oculto */
+                                }
+                                .modal-backdrop.show {
+                                    display: block; /* Mostrar cuando se activa */
+                                    opacity: 0.5; /* Nivel de opacidad deseado */
+                                }
+                                .fade {
+                                    opacity: 0;
+                                    transition: opacity 0.4s ease-in-out;
+                                }
+                                .fade.show {
+                                    opacity: 1;
+                                }
+
+                                /* Personaliza el fondo opaco del modal */
+                                .modal-backdrop {
+                                    background-color: rgba(0, 0, 0, 0.7); /* Cambia la opacidad */
+                                    transition: opacity 0.3s ease-in-out; /* Añade una transición suave */
+                                }
+
+                                /* Asegúrate de que el modal tenga la transición suave también */
+                                .modal.fade .modal-dialog {
+                                    transition: transform 0.3s ease-out;
+                                }
+                            </style>
+
+                            <!-- Script para manejar los modales con animación y fondo oscuro -->
+                            <script>
+                                document.addEventListener("input", function(event) {
+                                    if (event.target.classList.contains("auto-expand")) {
+                                        const textarea = event.target;
+                                        textarea.style.height = "auto";
+                                        textarea.style.height = (textarea.scrollHeight) + "px";
+                                    }
+                                });
+
+                                function showModal(modalId) {
+                                    const modal = document.getElementById(modalId);
+                                    const backdrop = document.getElementById("modalBackdrop");
+
+                                    // Mostrar el fondo oscuro con transición
+                                    backdrop.classList.add("show");
+
+                                    // Mostrar el modal con transición
+                                    modal.style.display = "block";
+                                    setTimeout(() => {
+                                        modal.classList.add("show");
+                                    }, 10);
+                                    document.body.classList.add("modal-open");
+
+                                    // Cerrar al hacer clic fuera del modal
+                                    modal.addEventListener("click", function(event) {
+                                        if (event.target === modal) {
+                                            hideModal(modalId);
+                                        }
+                                    });
+                                }
+
+                                function hideModal(modalId) {
+                                    const modal = document.getElementById(modalId);
+                                    const backdrop = document.getElementById("modalBackdrop");
+
+                                    // Ocultar el modal
+                                    modal.classList.remove("show");
+                                    setTimeout(() => {
+                                        modal.style.display = "none";
+                                        document.body.classList.remove("modal-open");
+                                    }, 400);
+
+                                    // Ocultar el fondo oscuro con transición
+                                    backdrop.classList.remove("show");
+                                }
+
+                                // Verificar si el botón existe antes de añadir los event listeners
+                                const btnFaltaInfoSeccion1 = document.getElementById("btnFaltaInfoSeccion1");
+                                const closeModalFaltaInfoSeccion1 = document.getElementById("closeModalFaltaInfoSeccion1");
+                                const cancelModalFaltaInfoSeccion1 = document.getElementById("cancelModalFaltaInfoSeccion1");
+
+                                if (btnFaltaInfoSeccion1) {
+                                    btnFaltaInfoSeccion1.addEventListener("click", function() {
+                                        showModal("modalFaltaInfoSeccion1");
+                                    });
+                                }
+
+                                if (closeModalFaltaInfoSeccion1) {
+                                    closeModalFaltaInfoSeccion1.addEventListener("click", function() {
+                                        hideModal("modalFaltaInfoSeccion1");
+                                    });
+                                }
+
+                                if (cancelModalFaltaInfoSeccion1) {
+                                    cancelModalFaltaInfoSeccion1.addEventListener("click", function() {
+                                        hideModal("modalFaltaInfoSeccion1");
+                                    });
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>
