@@ -32,9 +32,6 @@ function cargarRecursos() {
             dinero = respuesta.resultado.dinero;
             console.log("dinero");
             console.log(dinero);
-            sumaDineroCodi = respuesta.resultado.sumaDineroCodi;
-            console.log("sumaDineroCodi");
-            console.log(sumaDineroCodi);
 
             infraestructura = respuesta.resultado.infraestructura;
             rrhh = respuesta.resultado.rrhh;
@@ -44,8 +41,7 @@ function cargarRecursos() {
                     if (registro.enti_codigo == 1)
                         totalEmpresa =
                             totalEmpresa +
-                            parseInt(registro.suma_dinero) +
-                            sumaDineroCodi;
+                            parseInt(registro.suma_dinero)
                     else
                         totalExterno =
                             totalExterno + parseInt(registro.suma_dinero);
@@ -97,9 +93,6 @@ function cargarDinero() {
     let inic_codigo = $("#codigo").val();
     let respuesta, dinero;
     let totalEmpresa = 0;
-    let total_vcm_sede = 0;
-    let total_vcm_escuela = 0;
-    let total_vra = 0;
     let totalExterno = 0;
     $("#aporteempresa").val("");
     $("#aporteexterno").val("");
@@ -122,109 +115,26 @@ function cargarDinero() {
                 return;
             }
             dinero = respuesta.resultado;
+            console.log(respuesta);
             if (dinero.length > 0) {
                 dinero.forEach((registro) => {
                     if (registro.enti_codigo == 1) {
                         totalEmpresa =
                             totalEmpresa + parseInt(registro.suma_dinero);
-                        total_vcm_sede =
-                            total_vcm_sede +
-                            parseInt(registro.suma_dinero_vcm_sede);
-                        total_vcm_escuela =
-                            total_vcm_escuela +
-                            parseInt(registro.suma_dinero_vcm_escuela);
-                        total_vra =
-                            total_vra + parseInt(registro.suma_dinero_vra);
                     } else {
                         totalExterno =
                             totalExterno + parseInt(registro.suma_dinero);
                     }
                 });
             }
-            $("#empresadinero").text(
+            $("#empresa-dinero-interno").text(
                 "$" +
                     new Intl.NumberFormat("es-CL", {
                         maximumSignificantDigits: 13,
                     }).format(totalEmpresa)
             );
-            //cambiar el value al input de empresadinerovalue
-            $("#empresadinerovalue").val(totalEmpresa);
-            $("#vcm_sede").text(
-                "$" +
-                    new Intl.NumberFormat("es-CL", {
-                        maximumSignificantDigits: 13,
-                    }).format(total_vcm_sede)
-            );
-            $("#vcm_sedevalue").val(total_vcm_sede);
-            $("#vcm_escuela").text(
-                "$" +
-                    new Intl.NumberFormat("es-CL", {
-                        maximumSignificantDigits: 13,
-                    }).format(total_vcm_escuela)
-            );
-            $("#vcm_escuelavalue").val(total_vcm_escuela);
-            $("#vra").text(
-                "$" +
-                    new Intl.NumberFormat("es-CL", {
-                        maximumSignificantDigits: 13,
-                    }).format(total_vra)
-            );
-            $("#vravalue").val(total_vra);
 
             $("#externodinero").text(
-                "$" +
-                    new Intl.NumberFormat("es-CL", {
-                        maximumSignificantDigits: 13,
-                    }).format(totalExterno)
-            );
-        },
-        error: function (error) {
-            //console.error(error);
-        },
-    });
-}
-
-function cargarEspecies() {
-    let inic_codigo = $("#codigo").val();
-    let respuesta, especies;
-    let totalEmpresa = 0;
-    let totalExterno = 0;
-
-    // petición que trae la suma total del recurso especies organizado por entidad
-    $.ajax({
-        type: "GET",
-        url:
-            "/admin/crear-iniciativa/consultar-especies",
-        data: {
-            iniciativa: inic_codigo,
-        },
-        success: function (resListar) {
-            respuesta = JSON.parse(resListar);
-            if (!respuesta.estado) {
-                if (respuesta.resultado != "") {
-                    alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
-                    $("#div-alert-recursos").html(alertError);
-                }
-                return;
-            }
-            especies = respuesta.resultado;
-            if (especies.length > 0) {
-                especies.forEach((registro) => {
-                    if (registro.enti_codigo == 1)
-                        totalEmpresa =
-                            totalEmpresa + parseInt(registro.suma_especies);
-                    else
-                        totalExterno =
-                            totalExterno + parseInt(registro.suma_especies);
-                });
-            }
-            $("#empresa-especies-total").text(
-                "$" +
-                    new Intl.NumberFormat("es-CL", {
-                        maximumSignificantDigits: 13,
-                    }).format(totalEmpresa)
-            );
-            $("#externo-especies-total").text(
                 "$" +
                     new Intl.NumberFormat("es-CL", {
                         maximumSignificantDigits: 13,
@@ -347,7 +257,7 @@ function cargarRrhh() {
 
 function guardarDinero(enti_codigo) {
     let inic_codigo = $("#codigo").val();
-    let aporteEmpresa = $("#aporteempresa").val();
+    let aporteEmpresa = $("#dineroInterno").val();
     let aporteExterno = $("#aporteexterno").val();
     let dinero, alertError, alertExito,centro;
     $("#div-alert-dineroInterno").html("");
@@ -373,9 +283,7 @@ function guardarDinero(enti_codigo) {
         }
         centro = $('#centroExterno').val()
         dinero = aporteExterno;
-        tipoaporteempresa = "externo";
     }
-    console.log("guardando..");
     // petición para guardar/actualizar el monto de dinero aportado por la entidad
     $.ajax({
         type: "POST",
@@ -389,12 +297,7 @@ function guardarDinero(enti_codigo) {
             centro: centro,
             aporteExterno: aporteExterno,
             valorizacion: dinero,
-            tipoaporteempresa: tipoaporteempresa,
-            empresadinerovalue: empresadinerovalue,
-            vcm_sedevalue: vcm_sedevalue,
-            vcm_escuelavalue: vcm_escuelavalue,
-            vravalue: vravalue,
-
+            aporteInterno: aporteEmpresa,
         },
         success: function (resGuardar) {
             respuesta = JSON.parse(resGuardar);
@@ -410,7 +313,7 @@ function guardarDinero(enti_codigo) {
             cargarRecursos();
         },
         error: function (error) {
-            //console.error(error);
+            console.error(error);
         },
     });
 }
@@ -500,8 +403,6 @@ function guardarInfra() {
     let respuesta, alertError, alertExito;
     $("#div-alert-infraestructura").html("");
     $("#div-alert-recursos").html("");
-    console.log(inic_codigo, enti_codigo, tinf_codigo, coin_horas);
-
     // petición para guardar infraestructura aportada por la entidad
     $.ajax({
         type: "POST",

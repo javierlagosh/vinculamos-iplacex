@@ -749,10 +749,7 @@ class IniciativasController extends Controller
 
         $codiListar = CostosDinero::select(
             'enti_codigo',
-            DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'),
-            DB::raw('COALESCE(SUM(codi_valorizacion_vcm_sede), 0) AS suma_dinero_vcm_sede'),
-            DB::raw('COALESCE(SUM(codi_valorizacion_vcm_escuela), 0) AS suma_dinero_vcm_escuela'),
-            DB::raw('COALESCE(SUM(codi_valorizacion_vra), 0) AS suma_dinero_vra')
+            DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero')
         )->where('inic_codigo', $inic_codigo)
             ->groupBy('enti_codigo')
             ->get();
@@ -766,11 +763,7 @@ class IniciativasController extends Controller
         $totaldineroenti2 = 0;
         foreach ($codiListar as $codi) {
             if ($codi->enti_codigo == 1) {
-                $totaldineroenti1 += $codi->suma_dinero + $codi->suma_dinero_vcm_sede + $codi->suma_dinero_vcm_escuela + $codi->suma_dinero_vra;
-                $sedeDinero = $codi->suma_dinero;
-                $vcmSedeDinero = $codi->suma_dinero_vcm_sede;
-                $vcmEscuelaDinero = $codi->suma_dinero_vcm_escuela;
-                $vra = $codi->suma_dinero_vra;
+                $totaldineroenti1 += $codi->suma_dinero;
             } else {
                 $totaldineroenti2 += $codi->suma_dinero;
             }
@@ -2624,23 +2617,19 @@ class IniciativasController extends Controller
 
         // Determinación de valores según entidad
         $isEntidad2 = $request->entidad == 2;
-        $codi_valorizacion = $isEntidad2 ? $request->aporteExterno : $request->empresadinerovalue;
+        $codi_valorizacion = $isEntidad2 ? $request->aporteExterno : $request->aporteInterno;
         $ceco_data = [
             'inic_codigo' => $request->iniciativa,
             'enti_codigo' => $request->entidad,
-            // 'ceco_codigo' => $request->centro,
         ];
 
         // Verificar si ya existe el registro
-        $codiVerificar = CostosDinero::where($ceco_data)->first();
+        $codiVerificar = CostosDinero::where($ceco_data)->where('ceco_codigo',null)->first();
 
         // Preparar datos comunes para inserción o actualización
         $data = [
             'ceco_codigo' => $request->centro,
             'codi_valorizacion' => $codi_valorizacion,
-            'codi_valorizacion_vcm_sede' => $request->vcm_sedevalue ?? null,
-            'codi_valorizacion_vcm_escuela' => $request->vcm_escuelavalue ?? null,
-            'codi_valorizacion_vra' => $request->vravalue ?? null,
             'codi_nickname_mod' => Session::get('admin')->usua_nickname,
             'codi_rol_mod' => Session::get('admin')->rous_codigo
         ];
@@ -2721,9 +2710,6 @@ class IniciativasController extends Controller
         $codiListar = CostosDinero::select(
             'enti_codigo',
             DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'),
-            DB::raw('COALESCE(SUM(codi_valorizacion_vcm_sede), 0) AS suma_dinero_vcm_sede'),
-            DB::raw('COALESCE(SUM(codi_valorizacion_vcm_escuela), 0) AS suma_dinero_vcm_escuela'),
-            DB::raw('COALESCE(SUM(codi_valorizacion_vra), 0) AS suma_dinero_vra')
         )->where('inic_codigo', $request->iniciativa)
             ->groupBy('enti_codigo')
             ->get();
@@ -2939,17 +2925,12 @@ class IniciativasController extends Controller
             return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $codiListar1 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
-        $codiListar2 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion_vcm_escuela), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
-        $codiListar3 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion_vcm_sede), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
-        $codiListar4 = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion_vra), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
-
-        $sumaCODIS = $codiListar2[0]->suma_dinero + $codiListar3[0]->suma_dinero + $codiListar4[0]->suma_dinero;
 
 
         //$coesListar = CostosEspecies::select('enti_codigo', DB::raw('COALESCE(SUM(coes_valorizacion), 0) AS suma_especies'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         $coinListar = CostosInfraestructura::select('enti_codigo', DB::raw('COALESCE(SUM(coin_valorizacion), 0) AS suma_infraestructura'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         $corhListar = CostosRrhh::select('enti_codigo', DB::raw('COALESCE(SUM(corh_valorizacion), 0) AS suma_rrhh'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
-        $resultado = ['dinero' => $codiListar1, 'sumaDineroCodi' => $sumaCODIS, 'infraestructura' => $coinListar, 'rrhh' => $corhListar];
+        $resultado = ['dinero' => $codiListar1, 'infraestructura' => $coinListar, 'rrhh' => $corhListar];
         return json_encode(['estado' => true, 'resultado' => $resultado]);
     }
 

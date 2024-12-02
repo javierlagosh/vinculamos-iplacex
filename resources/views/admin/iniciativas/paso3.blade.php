@@ -152,84 +152,32 @@
                                     <tr>
                                         <td><strong>Aportado por la institución</strong></td>
                                         <td>
-                                            <div class="row mb-2">
-                                                <table class="table">
-
-                                                    <thead></thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="text-center"><strong></strong>Sede</td>
-                                                            <td id="empresadinero" hidden></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="empresadinerovalue"
-                                                                    value="0" placeholder="Ingrese el monto..."></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-center">VcM Sede</td>
-                                                            <td class="text-center" hidden id="vcm_sede"></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="vcm_sedevalue"
-                                                                    value="0" placeholder="Ingrese el monto..."></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-center">VcM Escuela</td>
-                                                            <td class="text-center" id="vcm_escuela" hidden></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="vcm_escuelavalue"
-                                                                    value="0" placeholder="Ingrese el monto..."></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-center">Unidad de titulados</td>
-                                                            <td class="text-center" id="vra" hidden></td>
-                                                            <td class="text-center"><input type="number"
-                                                                    class="form-control" id="vravalue" value="0"
-                                                                    placeholder="Ingrese el monto..."></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
-                                            </div>
                                             <div class="row">
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center" hidden>
-                                                    <label for="tipoaporteempresa">Seleccione una opción:</label>
-                                                    <select name="tipoaporteempresa" id="tipoaporteempresa"
-                                                        class="form-control">
-                                                        <option value="" selected disabled>Seleccione...</option>
-                                                        <option value="primero">Sede</option>
-                                                        <option value="vcmsede">VcM Sede</option>
-                                                        <option value="vcmescuela">VcM Escuela</option>
-                                                        <option value="vra">VRA</option>
-
-                                                    </select>
-
-                                                </div>
-                                                <div class="col-xl-12">
-                                                    <select class="select2" style="width: 100%" name="centroInterno"
-                                                        id="centroInterno">
-                                                        <option value="" selected disabled>Seleccione...</option>
-                                                        @foreach ($centroCostos as $ceco)
-                                                            <option value="{{ $ceco->ceco_codigo }}">
-                                                                {{ $ceco->ceco_nombre }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-xl-12 col-md-12 col-lg-12 text-center">
-                                                    <input hidden type="number" class="form-control" id="aporteempresa"
-                                                        placeholder="Ingrese el monto..." name="aporteempresa"
-                                                        autocomplete="off">
-                                                    <div class="mt-2">
-                                                        <button type="button" class="btn btn-icon btn-primary"
+                                                <div class="col-xl-9 col-md-9 col-lg-9 mt-2 text-center"
+                                                        id="empresa-dinero-interno"></div>
+                                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                                    <button type="button" class="btn btn-icon btn-primary"
                                                             data-toggle="modal" data-target="#modalDineroInterno"><i
                                                                 class="fas fa-plus"></i></button>
-                                                    </div>
                                                 </div>
+                                            </div>
+                                            <div class="row mt-2 mr-1 ml-1">
+                                                <table class="table table-bordered table-hover small table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Centro de costo</th>
+                                                            <th>Valorización</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tabla-empresa-dinero">
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="row">
                                                 <div class="col-xl-9 col-md-9 col-lg-9 mt-2 text-center"
                                                     id="empresa-infra-total">
-
                                                 </div>
                                                 <div class="col-xl-3 col-md-3 col-lg-3">
                                                     <button type="button" class="btn btn-icon btn-primary"
