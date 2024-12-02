@@ -66,6 +66,7 @@ use App\Models\SubUnidades;
 use App\Models\SedesCarreras;
 use App\Models\CentroCostos;
 //evaluacion
+use App\Models\IniciativaEstado;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormMail;
 use App\Models\Evaluacion;
@@ -210,6 +211,207 @@ class IniciativasController extends Controller
         $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
 
         return view('admin.iniciativas.listar', compact('iniciativas', 'sedes', 'tiac', 'amac'));
+    }
+
+    public function confirmarSeccionCorregido($inic_codigo, $seccion){
+
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        }
+
+        $fechaMotivo = Carbon::now('America/Santiago')->format('d-m-Y H:i:s');
+        $nickname = Session::get($rolePrefix)->usua_nickname;
+
+        $iniciativa = IniciativaEstado::where('inic_codigo', $inic_codigo)
+        ->where('seccion', $seccion)
+        ->first();
+
+        IniciativaEstado::where('inic_codigo', $inic_codigo)
+            ->where('seccion', $seccion)
+            ->update(['estado' => 2,
+                      'usua_nickname_corrector' => $nickname,
+                      'fecha_correccion' => $fechaMotivo]);
+
+        // Redirigir con un mensaje de éxito
+        switch ($seccion) {
+            case 1:
+                $redirectRoute = 'admin.editar.paso1';
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $redirectRoute = 'admin.editar.paso2';
+                break;
+            case 5:
+                $redirectRoute = 'admin.editar.paso3';
+                break;
+            default:
+                $redirectRoute = 'admin.editar.paso2'; // Valor predeterminado en caso de que `seccion` sea inesperado.
+                break;
+        }
+
+        return redirect()->route($redirectRoute, ['inic_codigo' => $inic_codigo])
+            ->with('success', 'Motivo de falta de información guardado exitosamente');
+
+    }
+
+    public function confirmarSeccionOk($inic_codigo, $seccion)
+    {
+
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        }
+
+        $fechaMotivo = Carbon::now('America/Santiago')->format('d-m-Y H:i:s');
+        $nickname = Session::get($rolePrefix)->usua_nickname;
+
+        // dd($fechaMotivo, $nickname);
+
+
+        // Buscar el registro correspondiente
+        $iniciativa = IniciativaEstado::where('inic_codigo', $inic_codigo)
+            ->where('seccion', $seccion)
+            ->first();
+
+        // Si no existe, crear un nuevo registro
+        if (!$iniciativa) {
+            $iniciativa = IniciativaEstado::create([
+                'inic_codigo' => $inic_codigo,
+                'seccion' => $seccion,
+                'motivo' => 'Seccion correcta',
+                'estado' => 1,
+                'usua_nickname' => $nickname,
+                'fecha_validacion' => $fechaMotivo,
+                'usua_nickname_validador' => $nickname,
+            ]);
+        } else {
+            // Guardar los cambios en la base de datos
+            IniciativaEstado::where('inic_codigo', $inic_codigo)
+            ->where('seccion', $seccion)
+            ->update(['estado' => 1,
+                      'usua_nickname_validador' => $nickname,
+                      'fecha_validacion' => $fechaMotivo]);
+        }
+
+        // Verificar si todas las secciones (1, 2, y 3) están validadas para esta iniciativa
+        $seccionesValidadas = IniciativaEstado::where('inic_codigo', $inic_codigo)
+            ->whereIn('seccion', [1, 2, 3, 4, 5])
+            ->where('estado', 1)
+            ->distinct('seccion') // Asegura contar solo las secciones únicas
+            ->count('seccion');   // Cuenta las secciones únicas validadas
+
+        // dd($seccionesValidadas);
+
+        // Si todas las secciones están validadas, actualizar el estado de la iniciativa a 'Aprobada' (inic_estado = 2)
+        if ($seccionesValidadas === 5) {
+            DB::table('iniciativas')
+                ->where('inic_codigo', $inic_codigo)
+                ->update(['inic_estado' => 3]); // 2 = Aprobada
+        }
+
+
+
+        // Redirigir con un mensaje de éxito
+        switch ($seccion) {
+            case 1:
+                $redirectRoute = 'admin.editar.paso1';
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $redirectRoute = 'admin.editar.paso2';
+                break;
+            case 5:
+                $redirectRoute = 'admin.editar.paso3';
+                break;
+            default:
+                $redirectRoute = 'admin.editar.paso2'; // Valor predeterminado en caso de que `seccion` sea inesperado.
+                break;
+        }
+
+        return redirect()->route($redirectRoute, ['inic_codigo' => $inic_codigo])
+            ->with('success', 'Motivo de falta de información guardado exitosamente');
+    }
+
+    public function obtenerEstado($inic_codigo)
+    {
+        // Obtener todos los registros para el inic_codigo
+        $estadoIniciativa = IniciativaEstado::where('inic_codigo', $inic_codigo)->get();
+
+        // Verificar si existen registros
+        if ($estadoIniciativa->isNotEmpty()) {
+            return response()->json($estadoIniciativa); // Retornar los registros encontrados
+        } else {
+            return response()->json(['error' => 'Iniciativas no encontradas para el código especificado'], 404);
+        }
+    }
+
+    public function faltaInfoSeccion(Request $request, $inic_codigo, $seccion)
+    {
+        // Validar la solicitud para que incluya un motivo
+        $request->validate([
+            'motivo' => 'required|string|max:255',
+        ]);
+
+        if (Session::has('admin')) {
+            $rolePrefix = 'admin';
+        } elseif (Session::has('digitador')) {
+            $rolePrefix = 'digitador';
+        }
+
+        $fechaMotivo = Carbon::now('America/Santiago')->format('d-m-Y H:i:s');
+        $nickname = Session::get($rolePrefix)->usua_nickname;
+
+        // dd($fechaMotivo, $nickname);
+
+
+        // Crear un nuevo registro en la tabla de motivos
+        DB::table('iniciativas_estado')->insert([
+            'inic_codigo' => $inic_codigo,
+            'seccion' => $seccion,
+            'motivo' => $request->motivo,
+            'estado' => 0, // Estado de falta de información
+            'usua_nickname' => $nickname,
+            'fecha_registro' => $fechaMotivo,
+        ]);
+
+        // Verificar si existe al menos un registro con estado = 0 (Falta de información)
+        $faltaInformacion = DB::table('iniciativas_estado')
+            ->where('inic_codigo', $inic_codigo)
+            ->where('estado', 0)
+            ->exists();
+
+        // Si existe, actualizar el estado de la iniciativa a 'Falta Info' (inic_estado = 3)
+        if ($faltaInformacion) {
+            DB::table('iniciativas')
+                ->where('inic_codigo', $inic_codigo)
+                ->update(['inic_estado' => 4]); // 3 = Falta Info
+        }
+
+        // Redirigir con un mensaje de éxito
+        switch ($seccion) {
+            case 1:
+                $redirectRoute = 'admin.editar.paso1';
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $redirectRoute = 'admin.editar.paso2';
+                break;
+            case 5:
+                $redirectRoute = 'admin.editar.paso3';
+                break;
+            default:
+                $redirectRoute = 'admin.editar.paso2'; // Valor predeterminado en caso de que `seccion` sea inesperado.
+                break;
+        }
+
+        return redirect()->route($redirectRoute, ['inic_codigo' => $inic_codigo])
+            ->with('success', 'Motivo de falta de información guardado exitosamente');
     }
 
     private function getIniciativasQuery(Request $request)
@@ -790,7 +992,7 @@ class IniciativasController extends Controller
 
     public function crearPaso1()
     {
-
+        $tipo = "crear";
         $iniciativa = Iniciativas::all();
         $mecanismo = Mecanismos::all();
         $tipoActividad = TipoActividades::all();
@@ -816,6 +1018,7 @@ class IniciativasController extends Controller
 
         return view('admin.iniciativas.paso1', [
             'editar' => false,
+            'tipo' => $tipo,
             //para saber si se esta editando o creando una nueva iniciativa
             'iniciativa' => $iniciativa,
             'ambitos' => $ambitos,
@@ -1193,6 +1396,7 @@ class IniciativasController extends Controller
         //         'fund_ods' => $fundamentoValue
         //     ]);
         // }
+        $tipo = 'crear';
 
         $painCrear = ParticipantesInternos::insert($pain);
         if (!$painCrear) {
@@ -1200,14 +1404,20 @@ class IniciativasController extends Controller
             return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de las unidades, intente más tarde.')->withInput();
         }
         if (isset($errorODS)) {
-            return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente, Lamentablemente ocurrió un error al registrar los ODS, por favor intente nuevamente...');
+            return redirect()->route('admin.editar.paso2', $inic_codigo)
+                ->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente, Lamentablemente ocurrió un error al registrar los ODS, por favor intente nuevamente...')
+                ->with('tipo', $tipo);
         }
 
             $rolCreador = Session::get('admin')->rous_codigo ?? Session::get('digitador')->rous_codigo;
             if ($rolCreador == 1) {
-                return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+                return redirect()->route('admin.editar.paso2', $inic_codigo)
+                    ->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente')
+                    ->with('tipo', $tipo);
             } else {
-                return redirect()->route('digitador.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente');
+                return redirect()->route('digitador.editar.paso2', $inic_codigo)
+                    ->with('exitoPaso1', 'Los datos de la iniciativa se registraron correctamente')
+                    ->with('tipo', $tipo);
             }
         } catch (\Throwable $th) {
             dd($th->getMessage());
@@ -1292,6 +1502,11 @@ class IniciativasController extends Controller
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $asignaturas = Asignaturas::all();
         $ods = pivoteOds::select('id_ods')->where('inic_codigo', $inic_codigo)->get();
+
+        $tipo = "editar";
+        $estadoIniciativa =  IniciativaEstado::where('inic_codigo', $inic_codigo)
+            ->where('seccion', 1)
+            ->get();
 
         $iniciativaData = Iniciativas::join('tipo_actividades', 'tipo_actividades.tiac_codigo', '=', 'iniciativas.tiac_codigo')
             ->where('inic_codigo', $inic_codigo)
@@ -1389,6 +1604,9 @@ class IniciativasController extends Controller
         return view('admin.iniciativas.paso1', [
             'editar' => true,
             //para que se muestre el boton de editar en el formulario
+            'tipo' => $tipo,
+            'estadoIniciativa' => $estadoIniciativa,
+            'inic_codigo' => $inic_codigo,
             'iniciativa' => $iniciativa,
             'iniciativaData' => $iniciativaData[0],
             'iniciativaPais' => $iniciativaPais,
@@ -1799,8 +2017,10 @@ class IniciativasController extends Controller
         }
 
 
-
-        return redirect()->route('admin.editar.paso2', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa se actualizaron correctamente');
+        $tipo = 'editar';
+        return redirect()->route('admin.editar.paso2', $inic_codigo)
+            ->with('exitoPaso1', 'Los datos de la iniciativa se actualizaron correctamente')
+            ->with('tipo', $tipo);
     }
 
 
@@ -1847,8 +2067,15 @@ class IniciativasController extends Controller
         }
 
         // return $grupoIniCod;
+        $estadoIniciativa = IniciativaEstado::where('inic_codigo', $inic_codigo)->get();
+        $motivosSeccion2 = $estadoIniciativa->where('seccion', 2);
+        $motivosSeccion3 = $estadoIniciativa->where('seccion', 3);
 
         return view('admin.iniciativas.paso2', [
+            'estadoIniciativa' => $estadoIniciativa,
+            'motivosSeccion2' => $motivosSeccion2,
+            'motivosSeccion3' => $motivosSeccion3,
+            'inic_codigo' => $inic_codigo,
             'iniciativa' => $iniciativaActual,
             'subgrupos' => $subGrupos,
             'grupos' => $grupos,
@@ -2305,13 +2532,36 @@ class IniciativasController extends Controller
         return response()->json($pais);
     }
 
-
-
-
+    public function crearPaso3($inic_codigo)
+    {
+        $tipo = 'crear';
+        $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
+        $infraestructura = TipoInfraestructura::select('tinf_codigo', 'tinf_nombre')->get();
+        $rrhh = TipoRRHH::select('trrhh_codigo', 'trrhh_nombre')->get();
+        // $inicEditar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
+        // $listarRegiones = Regiones::select('regi_codigo', 'regi_nombre')->orderBy('regi_codigo')->get();
+        // $listarParticipantes = DB::table('participantes')
+        //     ->select('inic_codigo', 'participantes.sube_codigo', 'sube_nombre')
+        //     ->join('subentornos', 'subentornos.sube_codigo', '=', 'participantes.sube_codigo')
+        //     ->where('inic_codigo', $inic_codigo)
+        //     ->orderBy('part_creado', 'asc')
+        //     ->get();
+        return view('admin.iniciativas.paso3', [
+            'tipo' => $tipo,
+            'inic_codigo' => $inic_codigo,
+            'iniciativa' => $iniciativa,
+            'infraestructura' => $infraestructura,
+            'rrhh' => $rrhh
+        ]);
+    }
 
     // FUNCIONES PARA EL PASO 3
     public function editarPaso3($inic_codigo)
     {
+        $tipo = 'editar';
+        $estadoIniciativa =  IniciativaEstado::where('inic_codigo', $inic_codigo)
+            ->where('seccion', 5)
+            ->get();
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $costo = CostosDinero::where('inic_codigo', $inic_codigo)->first();
         $centroCostos = CentroCostos::all();
@@ -2341,6 +2591,9 @@ class IniciativasController extends Controller
 
 
         return view('admin.iniciativas.paso3', [
+            'tipo' => $tipo,
+            'estadoIniciativa' => $estadoIniciativa,
+            'inic_codigo' => $inic_codigo,
             'iniciativa' => $iniciativa,
             'costo' => $costo,
             'centroCostos' => $centroCostos,

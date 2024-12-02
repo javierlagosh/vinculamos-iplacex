@@ -303,6 +303,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/iniciativa/eliminar-resultado', [IniciativasController::class, 'eliminarResultado'])->name('admin.resultado.eliminar');
     // TODO: PASO 3
     Route::get('admin/iniciativa/{inic_codigo}/editar/paso3', [IniciativasController::class, 'editarPaso3'])->name('admin.editar.paso3');
+    Route::get('admin/iniciativa/{inic_codigo}/crear/paso3', [IniciativasController::class, 'crearPaso3'])->name('admin.crear.paso3');
     Route::post('admin/crear-iniciativa/guardar-dinero', [IniciativasController::class, 'guardarDinero'])->name('admin.dinero.guardar');
     Route::get('admin/crear-iniciativa/consultar-dinero', [IniciativasController::class, 'consultarDinero'])->name('admin.dinero.consultar');
     Route::get('admin/crear-iniciativa/buscar-tipoinfra', [IniciativasController::class, 'buscarTipoInfra'])->name('admin.tipoinfra.buscar');
@@ -559,3 +560,8 @@ Route::get('evaluaciones/{evatotal_encriptado}/qr', [IniciativasController::clas
 
 
 Route::post('/recuperar/send-email', [ForgotPasswordController::class, 'sendRecoveryEmail'])->name('enviar.correo.recuperacion');
+
+Route::post('admin/iniciativas/{inic_codigo}/seccion/{seccion}/ok', [IniciativasController::class, 'confirmarSeccionOk']);
+Route::post('admin/iniciativas/{inic_codigo}/seccion/{seccion}/corregido', [IniciativasController::class, 'confirmarSeccionCorregido']);
+Route::get('admin/iniciativas-estado/{inic_codigo}', [IniciativasController::class, 'obtenerEstado'])->name('admin.iniciativas.estado');
+Route::post('admin/iniciativas/{inic_codigo}/seccion/{seccion}/falta-info', [IniciativasController::class, 'faltaInfoSeccion']);
