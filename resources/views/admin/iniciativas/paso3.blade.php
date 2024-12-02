@@ -724,523 +724,523 @@ if (cancelModalFaltaInfoSeccion5) {
     });
 }
 </script>
-    <div class="modal fade" id="modalDineroInterno" tabindex="-1" role="dialog" aria-label="formModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Agregar dinero aportado por institución</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
 
-                <div class="modal-body">
-                    <form>
-                        <div class="text-center" id="div-alert-dineroInterno"></div>
-                        <div class="form-group">
-                            <label>Monto aportado</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="dineroInterno" name="dineroInterno">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="cetnroCostosInterno">Centro de costos</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-bank"></i>
-                                    </div>
-                                </div>
-                                <select class="select2" style="width: 90%" name="centroInterno" id="centroInterno">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                    @foreach ($centroCostos as $ceco)
-                                        <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <button type="button" class="btn btn-primary waves-effect"
-                            onclick="guardarDinero(1)"><i class="fas fa-save"></i> Guardar</button>
-                        </div>
-                    </form>
-                </div>
+<div class="modal fade" id="modalDineroInterno" tabindex="-1" role="dialog" aria-label="formModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formModal">Agregar dinero aportado por institución</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
-    </div>
 
-    <div class="modal fade" id="modalInfraestructura" tabindex="-1" role="dialog" aria-labelledby="formModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Agregar infraestructura</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="text-center" id="div-alert-infraestructura">
-                        </div>
-                        <div class="form-group">
-                            <label>Tipo infraestructura</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-building"></i>
-                                    </div>
-                                </div>
-                                <select class="form-control" id="codigoinfra" name="codigoinfra"
-                                    onchange="buscarTipoInfra()">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Centro de costos</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-bank"></i>
-                                    </div>
-                                </div>
-                                <select class="select2" style="width: 90%" name="centroCostos" id="centroCostos">
-                                    <option value="" selected disabled>Seleccione...</option>
-                                    @foreach ($centroCostos as $ceco)
-                                        <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Horas de uso</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-stopwatch"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="horasinfra" name="horasinfra"
-                                    autocomplete="off">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cantidad de Infraestructuras</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-home"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="cantidadinfra" name="cantidadinfra"
-                                    autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Valorización</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="valorinfra" name="valorinfra" disabled>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <input type="hidden" id="entidadinfra" name="entidadinfra">
-                            <input type="hidden" id="valorinfra" name="valorinfra">
-                            <button type="button" class="btn btn-primary waves-effect"
-                                onclick="guardarInfra()">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalEditarInfraestructura" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editarModalLabel">Editar Infraestructura</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{route('admin.infra.actualizar')}}" method="post">
-                        @method('POST')
-                        @csrf
-                        <div class="text-center" id="div-alert-editar-infraestructura">
-                        </div>
-                        <div class="form-group">
-
-                            <label>Tipo de Infraestructura</label>
-
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-building"></i>
-                                    </div>
-                                </div>
-                                <p id="editar-nombretipoinfra" class="form-control">Nombre infraestructura</p>
-
-
-                                <input type="number" id="editar-tipoinfra" hidden name="tipoinfra" value="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Horas de uso</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-stopwatch"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="editar-horasinfra" name="horasinfra" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Cantidad de Infraestructuras</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-home"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="editar-cantidadinfra" name="cantidadinfra" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="form-group" hidden>
-                            <label>Valorización</label>
-                            <div class="input-group" >
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                </div>
-                                <input type="number"  class="form-control" id="editar-valorinfra" name="editar-valorinfra" disabled>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <input type="hidden" id="editar-entidadinfra" name="entidadinfra">
-                            <input type="hidden" id="editar-iniccodigo" name="iniccodigo">
-                            <input type="hidden" id="editar-tinf_codigo" name="tinf_codigo">
-                            <button type="submit" class="btn btn-primary waves-effect" >Actualizar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalRrhh" tabindex="-1" role="dialog" aria-labelledby="formModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Agregar RRHH</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-xl-12">
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <form>
-                                    <div class="text-center" id="div-alert-rrhh">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Tipo RRHH</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-user-tie"></i>
-                                                </div>
-                                            </div>
-                                            <select class="form-control" id="codigorrhh" name="codigorrhh"
-                                                onchange="buscarTipoRrhh()">
-                                                <option value="" selected disabled>Seleccione...</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Centro de costos</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-bank"></i>
-                                                </div>
-                                            </div>
-                                            <select class="select2" style="width: 85%" name="centroRrhh" id="centroRrhh">
-                                                <option value="" selected disabled>Seleccione...</option>
-                                                @foreach ($centroCostos as $ceco)
-                                                    <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Cantidad de horas</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-stopwatch"></i>
-                                                </div>
-                                            </div>
-                                            <input type="number" class="form-control" id="horasrrhh" name="horasrrhh"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Cantidad de personal</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-users"></i>
-                                                </div>
-                                            </div>
-                                            <input type="number" class="form-control" id="cantidadhh" name="cantidadhh"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Valorización</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-dollar-sign"></i>
-                                                </div>
-                                            </div>
-                                            <input type="number" class="form-control" id="valorrrhh" name="valorrrhh" disabled>
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2">Resumen de RRHH estimados</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Total de estudiantes contemplados:</td>
-                                                <td>{{$estudiantes != null ? $estudiantes : 'Sin registrar'}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total de docentes contemplados:</td>
-                                                <td>{{$docentes != null ? $docentes : 'Sin registrar'}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total de funcionarios contemplados:</td>
-                                                <td>{{$funcionarios != null ? $funcionarios : 'Sin registrar'}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+            <div class="modal-body">
+                <form>
+                    <div class="text-center" id="div-alert-dineroInterno"></div>
+                    <div class="form-group">
+                        <label>Monto aportado</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-dollar-sign"></i>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="text-center">
-                                    <input type="hidden" id="entidadrrhh" name="entidadrrhh">
-                                    <input type="hidden" id="valorrrhh" name="valorrrhh">
-                                    <button type="button" class="btn btn-primary waves-effect"
-                                        onclick="guardarRrhh()">Guardar</button>
-                                </div>
-                            </div>
+                            <input type="number" class="form-control" id="dineroInterno" name="dineroInterno">
                         </div>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label for="cetnroCostosInterno">Centro de costos</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-bank"></i>
+                                </div>
+                            </div>
+                            <select class="select2" style="width: 90%" name="centroInterno" id="centroInterno">
+                                <option value="" selected disabled>Seleccione...</option>
+                                @foreach ($centroCostos as $ceco)
+                                    <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary waves-effect"
+                        onclick="guardarDinero(1)"><i class="fas fa-save"></i> Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="modalEditarRrhh" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editarModalLabel">Editar RRHH</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action=" {{route('admin.rrhh.actualizar')}} " method="post">
-                        @method('POST')
-                        @csrf
-                        <div class="text-center" id="div-alert-editar-rrhh"></div>
-
-                        <div class="form-group">
-                            <label>Tipo RRHH</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-user-tie"></i>
-                                    </div>
-                                </div>
-                                <p id="editar-nombrerrhh" class="form-control">Nombre infraestructura</p>
-                                <!-- Cambiado de <select> a <input> para edición directa -->
-                                <input type="text" hidden class="form-control" id="editar-codigorrhh" name="codigorrhh" autocomplete="off">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cantidad de horas</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-stopwatch"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh" autocomplete="off">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cantidad de personal</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh" autocomplete="off">
-                            </div>
-                        </div>
-
-                        <div class="form-group" hidden>
-                            <label>Valorización</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                </div>
-                                <input type="number" class="form-control" id="editar-valorrrhh" name="valorrrhh" disabled>
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <input type="hidden" id="editar-entidadrrhh" name="entidadrrhh">
-                            <input type="hidden" id="editar-iniccodigorrhh" name="iniccodigo">
-                            <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
-                        </div>
-                    </form>
-                </div>
+<div class="modal fade" id="modalInfraestructura" tabindex="-1" role="dialog" aria-labelledby="formModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formModal">Agregar infraestructura</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
-    </div>
+            <div class="modal-body">
+                <form>
+                    <div class="text-center" id="div-alert-infraestructura">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo infraestructura</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                            </div>
+                            <select class="form-control" id="codigoinfra" name="codigoinfra"
+                                onchange="buscarTipoInfra()">
+                                <option value="" selected disabled>Seleccione...</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <label>Centro de costos</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-bank"></i>
+                                </div>
+                            </div>
+                            <select class="select2" style="width: 90%" name="centroCostos" id="centroCostos">
+                                <option value="" selected disabled>Seleccione...</option>
+                                @foreach ($centroCostos as $ceco)
+                                    <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-    <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="tituloModalFinalizar"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="tituloModalFinalizar">Registro de iniciativa</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <i class="fas fa-check-circle text-success" style="font-size: 50px; color"></i>
-                    <h6 class="mt-2">Todos los datos de la iniciativa han sido ingresados con éxito.</h6>
-                </div>
-                <div class="modal-footer bg-whitesmoke br">
-                    <a href="{{-- {{ route('admin.iniciativa.listar') }} --}}" type="button" class="btn btn-primary">Continuar</a>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <div class="form-group">
+                        <label>Horas de uso</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="horasinfra" name="horasinfra"
+                                autocomplete="off">
+                        </div>
+                    </div>
 
-    <div class="modal fade" id="modalINVI" tabindex="-1" role="dialog" aria-labelledby="formModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Índice de vinculación INVI</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-md" id="table-1"
-                            style="border-top: 1px ghostwhite solid;">
-                            <tbody>
-                                <tr>
-                                    <td><strong>Mecanismo</strong></td>
-                                    <td id="mecanismo-nombre"></td>
-                                    <td id="mecanismo-puntaje"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Frecuencia</strong></td>
-                                    <td id="frecuencia-nombre"></td>
-                                    <td id="frecuencia-puntaje"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Resultados</strong></td>
-                                    <td id="resultados-nombre"></td>
-                                    <td id="resultados-puntaje"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Cobertura</strong></td>
-                                    <td id="cobertura-nombre"></td>
-                                    <td id="cobertura-puntaje"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Evaluación</strong></td>
-                                    <td id="evaluacion-nombre"></td>
-                                    <td id="evaluacion-puntaje"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <h6>INVI Total</h6>
-                                    </td>
-                                    <td id="valor-indice"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="form-group">
+                        <label>Cantidad de Infraestructuras</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="cantidadinfra" name="cantidadinfra"
+                                autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Valorización</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="valorinfra" name="valorinfra" disabled>
+                        </div>
                     </div>
                     <div class="text-center">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                        <input type="hidden" id="entidadinfra" name="entidadinfra">
+                        <input type="hidden" id="valorinfra" name="valorinfra">
+                        <button type="button" class="btn btn-primary waves-effect"
+                            onclick="guardarInfra()">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEditarInfraestructura" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalLabel">Editar Infraestructura</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route('admin.infra.actualizar')}}" method="post">
+                    @method('POST')
+                    @csrf
+                    <div class="text-center" id="div-alert-editar-infraestructura">
+                    </div>
+                    <div class="form-group">
+
+                        <label>Tipo de Infraestructura</label>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                            </div>
+                            <p id="editar-nombretipoinfra" class="form-control">Nombre infraestructura</p>
+
+
+                            <input type="number" id="editar-tipoinfra" hidden name="tipoinfra" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Horas de uso</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="editar-horasinfra" name="horasinfra" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad de Infraestructuras</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="editar-cantidadinfra" name="cantidadinfra" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label>Valorización</label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <input type="number"  class="form-control" id="editar-valorinfra" name="editar-valorinfra" disabled>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <input type="hidden" id="editar-entidadinfra" name="entidadinfra">
+                        <input type="hidden" id="editar-iniccodigo" name="iniccodigo">
+                        <input type="hidden" id="editar-tinf_codigo" name="tinf_codigo">
+                        <button type="submit" class="btn btn-primary waves-effect" >Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalRrhh" tabindex="-1" role="dialog" aria-labelledby="formModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formModal">Agregar RRHH</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-xl-12">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <form>
+                                <div class="text-center" id="div-alert-rrhh">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo RRHH</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-user-tie"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control" id="codigorrhh" name="codigorrhh"
+                                            onchange="buscarTipoRrhh()">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Centro de costos</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-bank"></i>
+                                            </div>
+                                        </div>
+                                        <select class="select2" style="width: 85%" name="centroRrhh" id="centroRrhh">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @foreach ($centroCostos as $ceco)
+                                                <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Cantidad de horas</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-stopwatch"></i>
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control" id="horasrrhh" name="horasrrhh"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Cantidad de personal</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control" id="cantidadhh" name="cantidadhh"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Valorización</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control" id="valorrrhh" name="valorrrhh" disabled>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Resumen de RRHH estimados</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Total de estudiantes contemplados:</td>
+                                            <td>{{$estudiantes != null ? $estudiantes : 'Sin registrar'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total de docentes contemplados:</td>
+                                            <td>{{$docentes != null ? $docentes : 'Sin registrar'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total de funcionarios contemplados:</td>
+                                            <td>{{$funcionarios != null ? $funcionarios : 'Sin registrar'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="text-center">
+                                <input type="hidden" id="entidadrrhh" name="entidadrrhh">
+                                <input type="hidden" id="valorrrhh" name="valorrrhh">
+                                <button type="button" class="btn btn-primary waves-effect"
+                                    onclick="guardarRrhh()">Guardar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="{{ '/js/admin/iniciativas/paso3.js' }}"></script>
-    <script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
-    <script>
-        function MostrarIngreso() {
-            var alerta = document.getElementById("exito_ingresar");
-            alerta.style.display = "block";
-            setTimeout(function() {
-                alerta.style.display = "none";
-            }, 3000);
-        }
-    </script>
+</div>
+
+<div class="modal fade" id="modalEditarRrhh" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalLabel">Editar RRHH</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action=" {{route('admin.rrhh.actualizar')}} " method="post">
+                    @method('POST')
+                    @csrf
+                    <div class="text-center" id="div-alert-editar-rrhh"></div>
+
+                    <div class="form-group">
+                        <label>Tipo RRHH</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                            </div>
+                            <p id="editar-nombrerrhh" class="form-control">Nombre infraestructura</p>
+                            <!-- Cambiado de <select> a <input> para edición directa -->
+                            <input type="text" hidden class="form-control" id="editar-codigorrhh" name="codigorrhh" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantidad de horas</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantidad de personal</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group" hidden>
+                        <label>Valorización</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="editar-valorrrhh" name="valorrrhh" disabled>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <input type="hidden" id="editar-entidadrrhh" name="entidadrrhh">
+                        <input type="hidden" id="editar-iniccodigorrhh" name="iniccodigo">
+                        <button type="submit" class="btn btn-primary waves-effect">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="tituloModalFinalizar"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModalFinalizar">Registro de iniciativa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-check-circle text-success" style="font-size: 50px; color"></i>
+                <h6 class="mt-2">Todos los datos de la iniciativa han sido ingresados con éxito.</h6>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+                <a href="{{-- {{ route('admin.iniciativa.listar') }} --}}" type="button" class="btn btn-primary">Continuar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalINVI" tabindex="-1" role="dialog" aria-labelledby="formModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formModal">Índice de vinculación INVI</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-md" id="table-1"
+                        style="border-top: 1px ghostwhite solid;">
+                        <tbody>
+                            <tr>
+                                <td><strong>Mecanismo</strong></td>
+                                <td id="mecanismo-nombre"></td>
+                                <td id="mecanismo-puntaje"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Frecuencia</strong></td>
+                                <td id="frecuencia-nombre"></td>
+                                <td id="frecuencia-puntaje"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Resultados</strong></td>
+                                <td id="resultados-nombre"></td>
+                                <td id="resultados-puntaje"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cobertura</strong></td>
+                                <td id="cobertura-nombre"></td>
+                                <td id="cobertura-puntaje"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Evaluación</strong></td>
+                                <td id="evaluacion-nombre"></td>
+                                <td id="evaluacion-puntaje"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <h6>INVI Total</h6>
+                                </td>
+                                <td id="valor-indice"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="{{ '/js/admin/iniciativas/paso3.js' }}"></script>
+<script src="{{ asset('/js/admin/iniciativas/INVI.js') }}"></script>
+<script>
+    function MostrarIngreso() {
+        var alerta = document.getElementById("exito_ingresar");
+        alerta.style.display = "block";
+        setTimeout(function() {
+            alerta.style.display = "none";
+        }, 3000);
+    }
+</script>
 @endsection
