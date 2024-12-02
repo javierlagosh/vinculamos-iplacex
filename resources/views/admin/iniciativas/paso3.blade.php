@@ -516,7 +516,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalFaltaInfoSeccion5Label">Falta Información - Sección 5</h5>
                         <!-- Botón de cerrar modal -->
-                        <button type="button" class="close" id="closeModalFaltaInfoSeccion5" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
