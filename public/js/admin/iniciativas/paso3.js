@@ -349,18 +349,13 @@ function guardarDinero(enti_codigo) {
     let inic_codigo = $("#codigo").val();
     let aporteEmpresa = $("#aporteempresa").val();
     let aporteExterno = $("#aporteexterno").val();
-    let tipoaporteempresa = $("#tipoaporteempresa").val();
-    let empresadinerovalue = $("#empresadinerovalue").val();
-    let vcm_sedevalue = $("#vcm_sedevalue").val();
-    let vcm_escuelavalue = $("#vcm_escuelavalue").val();
-    let vravalue = $("#vravalue").val();
     let dinero, alertError, alertExito,centro;
-    $("#div-alert-recursos").html("");
+    $("#div-alert-dineroInterno").html("");
 
     if (enti_codigo == 1) {
         if($('#centroInterno').val() == null || $('#centroInterno').val() == ''){
             alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe seleccionar un centro de costo asociado.</strong></div></div>`;
-            $("#div-alert-recursos").html(alertError);
+            $("#div-alert-dineroInterno").html(alertError);
             return;
         }
         dinero = aporteEmpresa;

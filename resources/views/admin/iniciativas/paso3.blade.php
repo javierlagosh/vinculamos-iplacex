@@ -208,7 +208,7 @@
                                                         autocomplete="off">
                                                     <div class="mt-2">
                                                         <button type="button" class="btn btn-icon btn-primary"
-                                                            onclick="guardarDinero(1)"><i
+                                                            data-toggle="modal" data-target="#modalDineroInterno"><i
                                                                 class="fas fa-plus"></i></button>
                                                     </div>
                                                 </div>
@@ -405,6 +405,58 @@
 
         </div>
     </section>
+
+    <div class="modal fade" id="modalDineroInterno" tabindex="-1" role="dialog" aria-label="formModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formModal">Agregar dinero aportado por institución</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form>
+                        <div class="text-center" id="div-alert-dineroInterno"></div>
+                        <div class="form-group">
+                            <label>Monto aportado</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="dineroInterno" name="dineroInterno">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cetnroCostosInterno">Centro de costos</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-bank"></i>
+                                    </div>
+                                </div>
+                                <select class="select2" style="width: 90%" name="centroInterno" id="centroInterno">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    @foreach ($centroCostos as $ceco)
+                                        <option value="{{ $ceco->ceco_codigo }}">{{ $ceco->ceco_nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary waves-effect"
+                            onclick="guardarDinero(1)"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="modalInfraestructura" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
