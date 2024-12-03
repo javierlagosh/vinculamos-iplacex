@@ -306,6 +306,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/iniciativa/{inic_codigo}/crear/paso3', [IniciativasController::class, 'crearPaso3'])->name('admin.crear.paso3');
     Route::post('admin/crear-iniciativa/guardar-dinero', [IniciativasController::class, 'guardarDinero'])->name('admin.dinero.guardar');
     Route::get('admin/crear-iniciativa/consultar-dinero', [IniciativasController::class, 'consultarDinero'])->name('admin.dinero.consultar');
+    Route::get('admin/crear-iniciativa/listar-dinero', [IniciativasController::class, 'listarDinero']);
     Route::get('admin/crear-iniciativa/buscar-tipoinfra', [IniciativasController::class, 'buscarTipoInfra'])->name('admin.tipoinfra.buscar');
     Route::get('admin/crear-iniciativa/listar-tipoinfra', [IniciativasController::class, 'listarTipoInfra'])->name('admin.tipoinfra.listar');
     Route::post('admin/crear-iniciativa/guardar-infraestructura', [IniciativasController::class, 'guardarInfraestructura'])->name('admin.infra.guardar');

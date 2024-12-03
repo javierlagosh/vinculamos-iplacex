@@ -2717,6 +2717,27 @@ class IniciativasController extends Controller
     }
 
 
+    public function listarDinero(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
+            ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
+        );
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+
+        $coinListar = DB::table('costos_dinero')
+            ->select('inic_codigo', 'enti_codigo', 'codi_valorizacion','ceco_nombre')
+            ->join('centro_costos', 'centro_costos.ceco_codigo', '=', 'costos_dinero.ceco_codigo')
+            ->where('inic_codigo', $request->iniciativa)
+            ->orderBy('codi_creado', 'asc')
+            ->get();
+        if (sizeof($coinListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
+        return json_encode(['estado' => true, 'resultado' => $coinListar]);
+    }
+
     public function guardarResultado(Request $request)
     {
         $validacion = Validator::make(

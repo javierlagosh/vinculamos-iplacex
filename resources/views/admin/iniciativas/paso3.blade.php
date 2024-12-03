@@ -157,7 +157,7 @@
                                                         id="empresa-dinero-interno"></div>
                                                 <div class="col-xl-3 col-md-3 col-lg-3">
                                                     <button type="button" class="btn btn-icon btn-primary"
-                                                            data-toggle="modal" data-target="#modalDineroInterno"><i
+                                                            onclick="creaDinero(1)"><i
                                                                 class="fas fa-plus"></i></button>
                                                 </div>
                                             </div>
@@ -238,48 +238,26 @@
                                     <tr>
                                         <td><strong>Aportado por externos</strong></td>
                                         <td>
-                                            <div class="row mb-2">
-                                                <div class="col-12 col-md-12 col-lg-12 text-center" id="externodinero">
-
+                                            <div class="row">
+                                                <div class="col-xl-9 col-md-9 col-lg-9 mt-2 text-center"
+                                                        id="empresa-dinero-externo"></div>
+                                                <div class="col-xl-3 col-md-3 col-lg-3">
+                                                    <button type="button" class="btn btn-icon btn-primary"
+                                                            onclick="creaDinero(2)"><i
+                                                                class="fas fa-plus"></i></button>
                                                 </div>
-                                                <table class="table">
-                                                    <tbody>
+                                            </div>
+                                            <div class="row mt-2 mr-1 ml-1">
+                                                <table class="table table-bordered table-hover small table-sm">
+                                                    <thead>
                                                         <tr>
-                                                            <td>
-                                                                <input type="number" class="form-control"
-                                                                    id="aporteexterno" placeholder="Ingrese el monto..."
-                                                                    name="aporteexterno"
-                                                                    style="display: inline-block; margin-right: 5px;"
-                                                                    autocomplete="off">
-                                                            </td>
+                                                            <th>Centro de costo</th>
+                                                            <th>Valorización</th>
                                                         </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <select class="select2" style="width: 100%"
-                                                                    name="centroExterno" id="centroExterno">
-                                                                    <option value="" selected disabled>Seleccione
-                                                                        centro de costos...
-                                                                    </option>
-                                                                    @foreach ($centroCostos as $ceco)
-                                                                        <option value="{{ $ceco->ceco_codigo }}">
-                                                                            {{ $ceco->ceco_nombre }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="mt-2 text-center">
-                                                                    <button type="button"
-                                                                        class="btn btn-icon btn-primary"
-                                                                        onclick="guardarDinero(2)"><i
-                                                                            class="fas fa-plus"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tabla-externo-dinero">
                                                     </tbody>
                                                 </table>
-
                                             </div>
                                         </td>
                                         <td>
@@ -1086,7 +1064,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Agregar dinero aportado por institución</h5>
+                    <h5 class="modal-title" id="formModal">Agregar dinero aportado por <p id="entidadD"></p></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1106,6 +1084,8 @@
                                 <input type="number" class="form-control" id="dineroInterno" name="dineroInterno">
                             </div>
                         </div>
+
+                        <input type="hidden" name="entidadDinero" id="entidadDinero">
 
                         <div class="form-group">
                             <label for="cetnroCostosInterno">Centro de costos</label>

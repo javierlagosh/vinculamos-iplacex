@@ -1,9 +1,9 @@
 $(document).ready(function () {
     cargarRecursos();
     cargarDinero();
-    // listarEspecies();
     listarInfraestructura();
     listarRrhh();
+    listarDinero();
 });
 
 function cargarRecursos() {
@@ -134,7 +134,7 @@ function cargarDinero() {
                     }).format(totalEmpresa)
             );
 
-            $("#externodinero").text(
+            $("#empresa-dinero-externo").text(
                 "$" +
                     new Intl.NumberFormat("es-CL", {
                         maximumSignificantDigits: 13,
@@ -308,6 +308,7 @@ function guardarDinero(enti_codigo) {
                 return;
             }
             alertExito = `<div class="alert alert-success alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
+            $("#modalDineroInterno").modal("hide");
             $("#div-alert-recursos").html(alertExito);
             cargarDinero();
             cargarRecursos();
@@ -318,12 +319,53 @@ function guardarDinero(enti_codigo) {
     });
 }
 
-function crearEspecie(enti_codigo) {
-    $("#div-alert-especie").html("");
-    $("#nombreespecie").val("");
-    $("#valorespecie").val("");
-    $("#entidadespecie").val(enti_codigo);
-    $("#modalEspecies").modal("show");
+function creaDinero(enti_codigo) {
+    $("#div-alert-dineroInterno").html("");
+    $("#dineroInterno").val("");
+    $("#entidadD").html("");
+    $("#cetnroCostosInterno").val("").change();
+    $("#entidadDinero").val(enti_codigo);
+    if(enti_codigo == 1){
+        $("#entidadD").html("Intitución")
+    }else{
+        $("#entidadD").html("Externo")
+    }
+    $("#modalDineroInterno").modal("show");
+}
+
+function listarDinero(){
+    let inic_codigo = $("#codigo").val();
+    let datosDinero, fila;
+
+    $.ajax({
+        type:"GET",
+        url: "/admin/crear-iniciativa/listar-dinero",
+        data: {
+            iniciativa: inic_codigo,
+        },
+        success: (resLista) => {
+            respuesta = JSON.parse(resLista);
+            $("#tabla-empresa-dinero").empty();
+            $("#tabla-externo-dinero").empty();
+            cargarDinero();
+            cargarRecursos();
+
+            datosDinero = respuesta.resultado;
+            datosDinero.forEach((registro)=>{
+                fila = `
+                    <tr>
+                        <td>${registro.ceco_nombre}</td>
+                        <td>${registro.codi_valorizacion}</td>
+                    </tr>
+                `
+                if(registro.enti_codigo == 1){
+                    $("#tabla-empresa-dinero").append(fila);
+                } else {
+                    $("#tabla-externo-dinero").append(fila);
+                }
+            })
+        }
+    })
 }
 
 function crearInfra(enti_codigo) {
