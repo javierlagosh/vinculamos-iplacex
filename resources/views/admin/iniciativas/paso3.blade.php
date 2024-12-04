@@ -1105,7 +1105,7 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="button" class="btn btn-primary waves-effect" onclick="guardarDinero(1)"><i
+                            <button type="button" class="btn btn-primary waves-effect" onclick="guardarDinero()"><i
                                     class="fas fa-save"></i> Guardar</button>
                         </div>
                     </form>

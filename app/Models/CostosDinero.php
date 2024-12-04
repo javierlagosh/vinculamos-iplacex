@@ -9,7 +9,7 @@ class CostosDinero extends Model {
     use HasFactory;
 
     protected $table = 'costos_dinero';
-
+    protected $primaryKey = 'codi_codigo';
     public $timestamps = false;
 
     protected $fillable = [

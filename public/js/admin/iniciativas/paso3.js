@@ -30,8 +30,8 @@ function cargarRecursos() {
             }
 
             dinero = respuesta.resultado.dinero;
-            console.log("dinero");
-            console.log(dinero);
+
+
 
             infraestructura = respuesta.resultado.infraestructura;
             rrhh = respuesta.resultado.rrhh;
@@ -115,7 +115,7 @@ function cargarDinero() {
                 return;
             }
             dinero = respuesta.resultado;
-            console.log(respuesta);
+
             if (dinero.length > 0) {
                 dinero.forEach((registro) => {
                     if (registro.enti_codigo == 1) {
@@ -255,10 +255,10 @@ function cargarRrhh() {
     });
 }
 
-function guardarDinero(enti_codigo) {
+function guardarDinero() {
+    let enti_codigo = $('#entidadDinero').val();
     let inic_codigo = $("#codigo").val();
-    let aporteEmpresa = $("#dineroInterno").val();
-    let aporteExterno = $("#aporteexterno").val();
+    let aporte = $("#dineroInterno").val();
     let dinero, alertError, alertExito,centro;
     $("#div-alert-dineroInterno").html("");
 
@@ -268,21 +268,21 @@ function guardarDinero(enti_codigo) {
             $("#div-alert-dineroInterno").html(alertError);
             return;
         }
-        dinero = aporteEmpresa;
+        dinero = aporte;
         centro = $('#centroInterno').val()
     } else {
-        if (aporteExterno == "" || aporteExterno == null) {
+        if (aporte == "" || aporte == null) {
             alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe ingresar el monto de dinero aportado por externos.</strong></div></div>`;
             $("#div-alert-recursos").html(alertError);
             return;
         }
-        if($('#centroExterno').val() == null || $('#centroExterno').val() == ''){
+        if($('#centroInterno').val() == null || $('#centroInterno').val() == ''){
             alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe seleccionar un centro de costo asociado.</strong></div></div>`;
             $("#div-alert-recursos").html(alertError);
             return;
         }
-        centro = $('#centroExterno').val()
-        dinero = aporteExterno;
+        centro = $('#centroInterno').val()
+        dinero = aporte;
     }
     // petición para guardar/actualizar el monto de dinero aportado por la entidad
     $.ajax({
@@ -295,13 +295,11 @@ function guardarDinero(enti_codigo) {
             iniciativa: inic_codigo,
             entidad: enti_codigo,
             centro: centro,
-            aporteExterno: aporteExterno,
             valorizacion: dinero,
-            aporteInterno: aporteEmpresa,
         },
         success: function (resGuardar) {
-            respuesta = JSON.parse(resGuardar);
-            console.log(respuesta);
+            respuesta = resGuardar;
+
             if (!respuesta.estado) {
                 alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
                 $("#div-alert-recursos").html(alertError);
@@ -310,8 +308,7 @@ function guardarDinero(enti_codigo) {
             alertExito = `<div class="alert alert-success alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
             $("#modalDineroInterno").modal("hide");
             $("#div-alert-recursos").html(alertExito);
-            cargarDinero();
-            cargarRecursos();
+            listarDinero();
         },
         error: function (error) {
             console.error(error);
@@ -420,7 +417,7 @@ function buscarTipoInfra() {
         },
         success: function (resConsultar) {
             respuesta = JSON.parse(resConsultar);
-            console.log(respuesta);
+
             if (respuesta.tinf_codigo == tinf_codigo) {
                 if (coin_horas != "")
                     $("#valorinfra").val(coin_horas * respuesta.tinf_valor);
@@ -610,7 +607,7 @@ function crearRrhh(enti_codigo) {
         type: "GET",
         url: "/admin/crear-iniciativa/listar-tiporrhh",
         success: function (resListar) {
-            console.log(resListar);
+
             $("#codigorrhh").find("option").not(":first").remove();
             $("#codigorrhh").prop("selectedIndex", 0);
             datosRrhh = JSON.parse(resListar);
@@ -733,7 +730,7 @@ function listarRrhh() {
             }
 
             datosRrhh = respuesta.resultado;
-            console.log(datosRrhh);
+
             datosRrhh.forEach((registro) => {
                 fila =
                     "<tr>" +

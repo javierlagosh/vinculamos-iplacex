@@ -2616,15 +2616,15 @@ class IniciativasController extends Controller
         }
 
         // Determinación de valores según entidad
-        $isEntidad2 = $request->entidad == 2;
-        $codi_valorizacion = $isEntidad2 ? $request->aporteExterno : $request->aporteInterno;
+        $codi_valorizacion = $request->valorizacion;
         $ceco_data = [
             'inic_codigo' => $request->iniciativa,
             'enti_codigo' => $request->entidad,
         ];
 
         // Verificar si ya existe el registro
-        $codiVerificar = CostosDinero::where($ceco_data)->where('ceco_codigo',null)->first();
+        $codiVerificar = CostosDinero::where($ceco_data)->where('ceco_codigo',null)->exists();
+        $codiVerificarCentro = CostosDinero::where($ceco_data)->where('ceco_codigo',$request->centro)->exists();
 
         // Preparar datos comunes para inserción o actualización
         $data = [
@@ -2634,12 +2634,12 @@ class IniciativasController extends Controller
             'codi_rol_mod' => Session::get('admin')->rous_codigo
         ];
 
-        if (!$codiVerificar) {
+        if($codiVerificarCentro ){
+            $data['codi_actualizado'] = Carbon::now()->format('Y-m-d H:i:s');
+            $codiGuardar = CostosDinero::where($ceco_data)->where('ceco_codigo',$request->centro)->update($data);
+        } else {
             $data['codi_creado'] = Carbon::now()->format('Y-m-d H:i:s');
             $codiGuardar = CostosDinero::create($ceco_data + $data);
-        } else {
-            $data['codi_actualizado'] = Carbon::now()->format('Y-m-d H:i:s');
-            $codiGuardar = CostosDinero::where($ceco_data)->update($data);
         }
 
         // Respuesta de éxito o error
