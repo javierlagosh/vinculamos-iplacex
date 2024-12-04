@@ -60,6 +60,10 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route('admin.ingresar.donaciones')}}">Ingresar donación</a></li> --}}
             </ul>
         </li>
+        <li class="dropdown">
+            <a href="{{route('reportes.ver')}}" class="nav-link">
+                <i data-feather="bar-chart-2" id="saludo"></i><span>Reportes</span></a>
+        </li>
         @endif
         <li class="{{ Route::is('admin.listar.sedes') ||
             Route::is('admin.listar.escuelas')||
