@@ -2631,7 +2631,10 @@ class IniciativasController extends Controller
             'codi_rol_mod' => Session::get('admin')->rous_codigo
         ];
 
-        if ($codiVerificarCentro) {
+        if($codiVerificar){
+            $data['codi_actualizado'] = Carbon::now()->format('Y-m-d H:i:s');
+            $codiGuardar = CostosDinero::where($ceco_data)->where('ceco_codigo', null)->update($data);
+        }else if ($codiVerificarCentro) {
             $data['codi_actualizado'] = Carbon::now()->format('Y-m-d H:i:s');
             $codiGuardar = CostosDinero::where($ceco_data)->where('ceco_codigo', $request->centro)->update($data);
         } else {
