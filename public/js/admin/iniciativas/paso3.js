@@ -353,6 +353,11 @@ function listarDinero(){
                     <tr>
                         <td>${registro.ceco_nombre}</td>
                         <td>${registro.codi_valorizacion}</td>
+                        <td>
+                            <button type="button" class="btn btn-icon btn-sm btn-danger"
+                            onclick="eliminarDinero(${registro.codi_codigo})">
+                            <i class="fas fa-trash"></i></button>
+                        </td>
                     </tr>
                 `
                 if(registro.enti_codigo == 1){
@@ -363,6 +368,36 @@ function listarDinero(){
             })
         }
     })
+}
+
+function eliminarDinero(codi_codigo){
+    let alertError, alertExito;
+    $("#div-alert-recursos").html("");
+    $.ajax({
+        type: "POST",
+        url:
+            "/admin/crear-iniciativa/eliminar-dinero",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: {
+            codi_codigo: codi_codigo,
+        },
+        success: function (resEliminar) {
+            respuesta = JSON.parse(resEliminar);
+            if (!respuesta.estado) {
+                alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
+                $("#div-alert-recursos").html(alertError);
+                return;
+            }
+            alertExito = `<div class="alert alert-success alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
+            listarDinero();
+            $("#div-alert-recursos").html(alertExito);
+        },
+        error: function (error) {
+            //console.error(error);
+        },
+    });
 }
 
 function crearInfra(enti_codigo) {

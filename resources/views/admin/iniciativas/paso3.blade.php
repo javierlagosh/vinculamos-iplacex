@@ -167,6 +167,7 @@
                                                         <tr>
                                                             <th>Centro de costo</th>
                                                             <th>Valorización</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tabla-empresa-dinero">
@@ -253,6 +254,7 @@
                                                         <tr>
                                                             <th>Centro de costo</th>
                                                             <th>Valorización</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tabla-externo-dinero">
