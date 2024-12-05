@@ -2729,7 +2729,7 @@ class IniciativasController extends Controller
 
         $coinListar = DB::table('costos_dinero')
             ->select('codi_codigo', 'inic_codigo', 'enti_codigo', 'codi_valorizacion', 'ceco_nombre')
-            ->join('centro_costos', 'centro_costos.ceco_codigo', '=', 'costos_dinero.ceco_codigo')
+            ->leftJoin('centro_costos', 'centro_costos.ceco_codigo', '=', 'costos_dinero.ceco_codigo')
             ->where('inic_codigo', $request->iniciativa)
             ->orderBy('codi_creado', 'asc')
             ->get();
@@ -2907,8 +2907,9 @@ class IniciativasController extends Controller
             return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $coinListar = DB::table('costos_infraestructura')
-            ->select('inic_codigo', 'enti_codigo', 'costos_infraestructura.tinf_codigo', 'tinf_nombre', 'coin_horas', 'coin_cantidad', 'coin_valorizacion')
+            ->select('inic_codigo', 'enti_codigo','ceco_nombre', 'costos_infraestructura.tinf_codigo', 'tinf_nombre', 'coin_horas', 'coin_cantidad', 'coin_valorizacion')
             ->join('tipo_infraestructura', 'tipo_infraestructura.tinf_codigo', '=', 'costos_infraestructura.tinf_codigo')
+            ->leftJoin('centro_costos','centro_costos.ceco_codigo','=','costos_infraestructura.ceco_codigo')
             ->where('inic_codigo', $request->iniciativa)
             ->orderBy('coin_creado', 'asc')
             ->get();
@@ -2992,8 +2993,9 @@ class IniciativasController extends Controller
             return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $corhListar = DB::table('costos_rrhh')
-            ->select('inic_codigo', 'enti_codigo', 'costos_rrhh.trrhh_codigo', 'trrhh_nombre', 'corh_horas', 'corh_cantidad', 'corh_valorizacion')
+            ->select('inic_codigo', 'ceco_nombre', 'enti_codigo', 'costos_rrhh.trrhh_codigo', 'trrhh_nombre', 'corh_horas', 'corh_cantidad', 'corh_valorizacion')
             ->join('tipo_rrhh', 'tipo_rrhh.trrhh_codigo', '=', 'costos_rrhh.trrhh_codigo')
+            ->leftJoin('centro_costos', 'centro_costos.ceco_codigo', '=', 'costos_rrhh.ceco_codigo')
             ->where('inic_codigo', $request->iniciativa)
             ->orderBy('corh_creado', 'asc')
             ->get();

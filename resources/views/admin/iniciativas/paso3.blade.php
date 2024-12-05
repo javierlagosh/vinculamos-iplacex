@@ -190,6 +190,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Recurso</th>
+                                                            <th>Centro de costos</th>
                                                             <th>Horas</th>
                                                             <th>Cantidad</th>
                                                             <th>Valorización</th>
@@ -217,6 +218,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Recurso</th>
+                                                            <th>Centro de costos</th>
                                                             <th>Horas</th>
                                                             <th>Cantidad</th>
                                                             <th>Valorización</th>
@@ -278,6 +280,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Recurso</th>
+                                                            <th>Centro de costos</th>
                                                             <th>Cantidad</th>
                                                             <th>Horas</th>
                                                             <th>Valorización</th>
@@ -305,6 +308,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Recurso</th>
+                                                            <th>Centro de costos</th>
                                                             <th>Horas</th>
                                                             <th>Cantidad</th>
                                                             <th>Valorización</th>
@@ -648,7 +652,7 @@
                                         <i class="fas fa-stopwatch"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="horasinfra" name="horasinfra"
+                                <input type="number" class="form-control" id="horasinfra" name="horasinfra" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -661,7 +665,7 @@
                                         <i class="fas fa-home"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="cantidadinfra" name="cantidadinfra"
+                                <input type="number" class="form-control" id="cantidadinfra" name="cantidadinfra" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -740,7 +744,7 @@
                                         <i class="fas fa-home"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="editar-cantidadinfra"
+                                <input type="number" class="form-control" id="editar-cantidadinfra" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                     name="cantidadinfra" autocomplete="off">
                             </div>
                         </div>
@@ -827,7 +831,7 @@
                                                     <i class="fas fa-stopwatch"></i>
                                                 </div>
                                             </div>
-                                            <input type="number" class="form-control" id="horasrrhh" name="horasrrhh"
+                                            <input type="number" class="form-control" id="horasrrhh" name="horasrrhh" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                                 autocomplete="off">
                                         </div>
                                     </div>
@@ -840,7 +844,7 @@
                                                     <i class="fas fa-users"></i>
                                                 </div>
                                             </div>
-                                            <input type="number" class="form-control" id="cantidadhh" name="cantidadhh"
+                                            <input type="number" class="form-control" id="cantidadhh" name="cantidadhh" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                                 autocomplete="off">
                                         </div>
                                     </div>
@@ -940,7 +944,7 @@
                                         <i class="fas fa-stopwatch"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh"
+                                <input type="number" class="form-control" id="editar-horasrrhh" name="horasrrhh" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -953,7 +957,7 @@
                                         <i class="fas fa-users"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh"
+                                <input type="number" class="form-control" id="editar-cantidadhh" name="cantidadhh" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -1083,7 +1087,7 @@
                                         <i class="fas fa-dollar-sign"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="dineroInterno" name="dineroInterno">
+                                <input type="number" class="form-control" id="dineroInterno" name="dineroInterno" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                             </div>
                         </div>
 
