@@ -110,6 +110,11 @@ class IniciativasController extends Controller
             if ($request->sede != 'all' && $request->sede != null) {
                 $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
             }
+
+            if ($request->uejecutora != 'all' && $request->uejecutora != null) {
+                $iniciativas = $iniciativas->where('escuelas.escu_codigo', $request->uejecutora);
+            }
+
             if ($request->tiac != 'all' && $request->tiac != null) {
                 $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
             }
@@ -216,8 +221,41 @@ class IniciativasController extends Controller
         $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
         $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
         $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
+        $uEjecutoras = Escuelas::select('escu_codigo', 'escu_nombre')->get();
 
-        return view('admin.iniciativas.listar', compact('iniciativas', 'sedes', 'tiac', 'amac'));
+        return view('admin.iniciativas.listar', compact('iniciativas', 'sedes', 'tiac', 'amac', 'uEjecutoras', 'role'));
+    }
+
+    private function getIniciativasQuery(Request $request)
+    {
+        $iniciativas = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', 'iniciativas.meca_codigo')
+            ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
+            ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
+            ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
+            ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
+            ->leftJoin('escuelas', function($join) {
+                $join->on('escuelas.escu_codigo', '=', 'participantes_internos.escu_codigo');
+            })
+            ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
+            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
+            ->select(
+                'iniciativas.inic_codigo',
+                'iniciativas.inic_nombre',
+                'iniciativas.amac_codigo',
+
+                'iniciativas.inic_estado',
+                'iniciativas.meca_codigo',
+                'mecanismos.meca_nombre',
+                'tipo_actividades.tiac_nombre',
+                'componentes.comp_nombre',
+                //'ambito_accion.amac_nombre',
+                // DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
+                DB::raw('GROUP_CONCAT(DISTINCT escuelas.escu_nombre SEPARATOR ", ") as carreras'),
+                DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
+                DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
+            );
+
+        return $iniciativas;
     }
 
     public function generarExcel()
@@ -465,37 +503,7 @@ private function formatearFecha($fecha, $meses)
 }
 
 
-    private function getIniciativasQuery(Request $request)
-    {
-        $iniciativas = Iniciativas::join('mecanismos', 'mecanismos.meca_codigo', 'iniciativas.meca_codigo')
-            ->leftjoin('tipo_actividades', 'tipo_actividades.tiac_codigo', 'iniciativas.tiac_codigo')
-            ->leftjoin('componentes', 'componentes.comp_codigo', 'tipo_actividades.comp_codigo')
-            ->leftjoin('participantes_internos', 'participantes_internos.inic_codigo', 'iniciativas.inic_codigo')
-            ->leftjoin('sedes', 'sedes.sede_codigo', 'participantes_internos.sede_codigo')
-            ->leftJoin('escuelas', function($join) {
-                $join->on('escuelas.escu_codigo', '=', 'participantes_internos.escu_codigo');
-            })
-            ->leftjoin('tipoactividad_ambitosaccion', 'tipoactividad_ambitosaccion.tiac_codigo', 'tipo_actividades.tiac_codigo')
-            ->leftjoin('ambito_accion', 'ambito_accion.amac_codigo', 'iniciativas.amac_codigo')
-            ->select(
-                'iniciativas.inic_codigo',
-                'iniciativas.inic_nombre',
-                'iniciativas.amac_codigo',
 
-                'iniciativas.inic_estado',
-                'iniciativas.meca_codigo',
-                'mecanismos.meca_nombre',
-                'tipo_actividades.tiac_nombre',
-                'componentes.comp_nombre',
-                //'ambito_accion.amac_nombre',
-                // DB::raw('GROUP_CONCAT(DISTINCT ambito_accion.amac_nombre SEPARATOR " / ") as amacs'),
-                DB::raw('GROUP_CONCAT(DISTINCT escuelas.escu_nombre SEPARATOR ", ") as carreras'),
-                DB::raw('GROUP_CONCAT(DISTINCT sedes.sede_nombre SEPARATOR " / ") as sedes'),
-                DB::raw('DATE_FORMAT(iniciativas.inic_creado, "%d/%m/%Y") as inic_creado')
-            );
-
-        return $iniciativas;
-    }
 
     public function completarCobertura($inic_codigo)
     {

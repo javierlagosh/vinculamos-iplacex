@@ -177,21 +177,39 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group"><label for="uejecutora">Unidad ejecutora</label>
+                                        <select name="uejecutora" id="uejecutora" class="form-control select2"
+                                            style="width: 100%">
+                                            <option value="" selected>Seleccione...</option>
+                                            <option value="all">Todas</option>
+                                            @forelse ($uEjecutoras as $uejecutora)
+                                                <option value="{{ $uejecutora->escu_codigo }}"
+                                                    {{ Request::get('escuela') == $uejecutora->escu_codigo ? 'selected' : '' }}>
+                                                    {{ $uejecutora->escu_nombre }}</option>
+                                            @empty
+                                                <option value="-1">No existen registros</option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-lg-9 col-xl-9">
+                                    <div class="form-group"><label for="search">Buscar por coincidencias</label>
                                     <input
                                         type="text"
                                         class="form-control mb-0"
                                         name="search"
                                         placeholder="Buscar iniciativas..."
                                         value="{{ request()->input('search') }}">
-                                </div>
-                                <div class="col-4">
-                                <button
+
+                                    </div>
+                                    <button
                                     class="btn btn-primary waves-effect text-white float-right"
                                     id="btnLimpiar">
                                     <i class="fas fa-broom"></i> Limpiar
                                 </button>
                                 </div>
+
                             </div>
 
                             <div id="iniciativas-container">
@@ -368,6 +386,7 @@
                 data: function (d) {
                     d.search = $('input[name="search"]').val();
                     d.sede = $('select[name="sede"]').val();
+                    d.uejecutora = $('select[name="uejecutora"]').val();
                     d.tiac = $('select[name="tiac"]').val();
                     d.amac = $('select[name="amac"]').val();
                     d.estadoInput = $('select[name="estadoInput"]').val();
@@ -580,12 +599,13 @@
         });
 
         $(document).ready(function(){
-            $(document).on('change', 'select[name="sede"], select[name="tiac"], select[name="amac"], select[name="estadoInput"]', function() {
+            $(document).on('change', 'select[name="sede"], select[name="uejecutora"], select[name="tiac"], select[name="amac"], select[name="estadoInput"]', function() {
                 table.draw();  //Refresca la tabla con los nuevos datos
             });
 
             $(document).on('click', '#btnLimpiar', function(){
                 $('select[name="sede"]').val('').trigger('change');
+                $('select[name="uejecutora"]').val('').trigger('change');
                 $('select[name="tiac"]').val('').trigger('change');
                 $('select[name="amac"]').val('').trigger('change');
                 $('select[name="estadoInput"]').val('').trigger('change');
