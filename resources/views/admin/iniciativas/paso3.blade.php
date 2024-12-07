@@ -154,11 +154,10 @@
                                         <td>
                                             <div class="row">
                                                 <div class="col-xl-9 col-md-9 col-lg-9 mt-2 text-center"
-                                                        id="empresa-dinero-interno"></div>
+                                                    id="empresa-dinero-interno"></div>
                                                 <div class="col-xl-3 col-md-3 col-lg-3">
                                                     <button type="button" class="btn btn-icon btn-primary"
-                                                            onclick="creaDinero(1)"><i
-                                                                class="fas fa-plus"></i></button>
+                                                        onclick="creaDinero(1)"><i class="fas fa-plus"></i></button>
                                                 </div>
                                             </div>
                                             <div class="row mt-2 mr-1 ml-1">
@@ -240,11 +239,10 @@
                                         <td>
                                             <div class="row">
                                                 <div class="col-xl-9 col-md-9 col-lg-9 mt-2 text-center"
-                                                        id="empresa-dinero-externo"></div>
+                                                    id="empresa-dinero-externo"></div>
                                                 <div class="col-xl-3 col-md-3 col-lg-3">
                                                     <button type="button" class="btn btn-icon btn-primary"
-                                                            onclick="creaDinero(2)"><i
-                                                                class="fas fa-plus"></i></button>
+                                                        onclick="creaDinero(2)"><i class="fas fa-plus"></i></button>
                                                 </div>
                                             </div>
                                             <div class="row mt-2 mr-1 ml-1">
@@ -349,18 +347,18 @@
                                                     @if ($estadoSeccion5->estado == 1)
                                                         <div>
                                                             <button type="button" class="btn btn-success mr-1"
-                                                                id="btnFaltaInfoSeccion5">Validado</button>
+                                                                id="btnFaltaInfoSeccion5" data-toggle="modal" data-target="#modalFaltaInfoSeccion5">Validado</button>
                                                         </div>
                                                     @else
                                                         <div>
                                                             @if ($motivosFaltaInfoSeccion5 > 0)
                                                                 <button type="button" class="btn btn-warning mr-1"
-                                                                    id="btnFaltaInfoSeccion5">
+                                                                    id="btnFaltaInfoSeccion5" data-toggle="modal" data-target="#modalFaltaInfoSeccion5">
                                                                     Falta Información ({{ $motivosFaltaInfoSeccion5 }})
                                                                 </button>
                                                             @elseif($motivosCorregidosSeccion5 >= 1)
                                                                 <button type="button" class="btn btn-warning mr-1"
-                                                                    id="btnFaltaInfoSeccion5">
+                                                                    id="btnFaltaInfoSeccion5" data-toggle="modal" data-target="#modalFaltaInfoSeccion5">
                                                                     Resueltos ({{ $motivosCorregidosSeccion5 }})
                                                                 </button>
                                                             @endif
@@ -545,53 +543,43 @@
                                     @endforeach
                                 @endif
                             @endif
+                            @if (!$estadoIniciativa->filter(fn($item) => $item->seccion == 5)->contains('estado', 1))
+                                @if (Session::has('admin'))
+                                    <p>Por favor, ingresa el motivo de la falta de información:</p>
+                                    <form id="formFaltaInfoSeccion4" action="{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/5/falta-info') }}" method="POST">
+                                        @csrf
+                                        <textarea name="motivo" class="form-control auto-expand" placeholder="Motivo de la falta de información" rows="3" required></textarea>
+                                    </div>
+                                    <div class="modal-footer bg-whitesmoke br" style="display: flex; justify-content: center; gap: 10px;">
+                                    <!-- Botón "Guardar Falta Información" con color naranjo y ocupando todo el ancho -->
+                                    <button type="submit" class="btn h-100" style="background-color: #FFA500; color: white;">Guardar falta información</button>
+                                    </form>
+                                    <!-- Botón "Validar Sección" con color verde y ocupando todo el ancho -->
+                                    @if (!$estadoIniciativa->where('seccion', 5)->isEmpty())
+                                        <form action="{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/5/ok') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn h-100" style="background-color: #28a745; color: white;">Validar Sección</button>
+                                        </form>
+                                    @endif
+                                @elseif (Session::has('digitador'))
+                                    @if($estadoIniciativa->isNotEmpty() &&
+                                        $estadoIniciativa->filter(fn($item) => $item->seccion == 5)->isNotEmpty() &&
+                                        !$estadoIniciativa->filter(fn($item) => $item->seccion == 5)->every(fn($item) => $item->estado === 2))
+                                        <form action="{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/5/corregido') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn h-200" style="background-color: #28a745; color: white; width: -webkit-fill-available;">Comentarios Resueltos</button>
+                                        </form>
+                                    @else
+                                        <p class="text-center" style="margin-top:2rem;">No hay comentarios por corregir.</p>
+                                    @endif
+                                @endif
+                            @endif
                         </div>
-                        @if (!$estadoIniciativa->filter(fn($item) => $item->seccion == 5)->contains('estado', 1))
-                            @if (Session::has('admin'))
-                                <p>Por favor, ingresa el motivo de la falta de información:</p>
-                                <form id="formFaltaInfoSeccion4"
-                                    action="{{ url('/admin/iniciativas/' . $inic_codigo . '/seccion/5/falta-info') }}"
-                                    method="POST">
-                                    @csrf
-                                    <textarea name="motivo" class="form-control auto-expand" placeholder="Motivo de la falta de información"
-                                        rows="3" required></textarea>
                     </div>
-                    <div class="modal-footer bg-whitesmoke br" style="display: flex; justify-content: center; gap: 10px;">
-                        <!-- Botón "Guardar Falta Información" con color naranjo y ocupando todo el ancho -->
-                        <button type="submit" class="btn h-100" style="background-color: #FFA500; color: white;">Guardar
-                            falta información</button>
-                        </form>
-                        <!-- Botón "Validar Sección" con color verde y ocupando todo el ancho -->
-                        @if (!$estadoIniciativa->where('seccion', 5)->isEmpty())
-                            <form action="{{ url('/admin/iniciativas/' . $inic_codigo . '/seccion/5/ok') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn h-100"
-                                    style="background-color: #28a745; color: white;">Validar Sección</button>
-                            </form>
-                        @endif
-                    @elseif (Session::has('digitador'))
-                        @if (
-                            $estadoIniciativa->isNotEmpty() &&
-                                $estadoIniciativa->filter(fn($item) => $item->seccion == 5)->isNotEmpty() &&
-                                !$estadoIniciativa->filter(fn($item) => $item->seccion == 5)->every(fn($item) => $item->estado === 2))
-                            <form action="{{ url('/admin/iniciativas/' . $inic_codigo . '/seccion/5/corregido') }}"
-                                method="POST">
-                                @csrf
-                                <button type="submit" class="btn h-200"
-                                    style="background-color: #28a745; color: white; width: -webkit-fill-available;">Comentarios
-                                    Resueltos</button>
-                            </form>
-                        @else
-                            <p class="text-center" style="margin-top:2rem;">No hay comentarios por corregir.</p>
-                        @endif
+                </div>
+            </div>
+        </div>
     @endif
-    @endif
-    </div>
-    </div>
-    </div>
-    </div>
-    @endif
-
     <div class="modal fade" id="modalInfraestructura" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1064,7 +1052,8 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Agregar dinero aportado por <p id="entidadD"></p></h5>
+                    <h5 class="modal-title" id="formModal">Agregar dinero aportado por <p id="entidadD"></p>
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

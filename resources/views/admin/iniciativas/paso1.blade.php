@@ -1776,22 +1776,25 @@
                                         </div>
                                     </div>
                                 </form>
-                                <script>
-                                    function submitValidarSeccionForm() {
-                                        const form = document.createElement('form');
-                                        form.method = 'POST';
-                                        form.action = "{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/1/ok') }}";
+                                @if($tipo ==='editar')
+                                    <script>
+                                        function submitValidarSeccionForm() {
+                                            const form = document.createElement('form');
+                                            form.method = 'POST';
+                                            form.action = "{{ url('/admin/iniciativas/'.$inic_codigo.'/seccion/1/ok') }}";
 
-                                        const csrfInput = document.createElement('input');
-                                        csrfInput.type = 'hidden';
-                                        csrfInput.name = '_token';
-                                        csrfInput.value = "{{ csrf_token() }}";
-                                        form.appendChild(csrfInput);
+                                            const csrfInput = document.createElement('input');
+                                            csrfInput.type = 'hidden';
+                                            csrfInput.name = '_token';
+                                            csrfInput.value = "{{ csrf_token() }}";
+                                            form.appendChild(csrfInput);
 
-                                        document.body.appendChild(form);
-                                        form.submit();
-                                    }
-                                </script>
+                                            document.body.appendChild(form);
+                                            form.submit();
+                                        }
+
+                                    </script>
+                                @endif
                                 </div>
                             </div>
                                 @if($tipo ==='editar')
