@@ -31,8 +31,6 @@ function cargarRecursos() {
 
             dinero = respuesta.resultado.dinero;
 
-
-
             infraestructura = respuesta.resultado.infraestructura;
             rrhh = respuesta.resultado.rrhh;
 
@@ -40,8 +38,7 @@ function cargarRecursos() {
                 dinero.forEach((registro) => {
                     if (registro.enti_codigo == 1)
                         totalEmpresa =
-                            totalEmpresa +
-                            parseInt(registro.suma_dinero)
+                            totalEmpresa + parseInt(registro.suma_dinero);
                     else
                         totalExterno =
                             totalExterno + parseInt(registro.suma_dinero);
@@ -100,8 +97,7 @@ function cargarDinero() {
     // petición que trae la suma total del recurso dinero organizado por entidad
     $.ajax({
         type: "GET",
-        url:
-            "/admin/crear-iniciativa/consultar-dinero",
+        url: "/admin/crear-iniciativa/consultar-dinero",
         data: {
             iniciativa: inic_codigo,
         },
@@ -156,8 +152,7 @@ function cargarInfraestructura() {
     // petición que trae la suma total del recurso infraestructura organizado por entidad
     $.ajax({
         type: "GET",
-        url:
-            "/admin/crear-iniciativa/consultar-infraestructura",
+        url: "/admin/crear-iniciativa/consultar-infraestructura",
         data: {
             iniciativa: inic_codigo,
         },
@@ -211,8 +206,7 @@ function cargarRrhh() {
     // petición que trae la suma total del recurso humano organizado por entidad
     $.ajax({
         type: "GET",
-        url:
-            "/admin/crear-iniciativa/consultar-rrhh",
+        url: "/admin/crear-iniciativa/consultar-rrhh",
         data: {
             iniciativa: inic_codigo,
         },
@@ -256,32 +250,38 @@ function cargarRrhh() {
 }
 
 function guardarDinero() {
-    let enti_codigo = $('#entidadDinero').val();
+    let enti_codigo = $("#entidadDinero").val();
     let inic_codigo = $("#codigo").val();
     let aporte = $("#dineroInterno").val();
-    let dinero, alertError, alertExito,centro;
+    let dinero, alertError, alertExito, centro;
     $("#div-alert-dineroInterno").html("");
 
     if (enti_codigo == 1) {
-        if($('#centroInterno').val() == null || $('#centroInterno').val() == ''){
+        if (
+            $("#centroInterno").val() == null ||
+            $("#centroInterno").val() == ""
+        ) {
             alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe seleccionar un centro de costo asociado.</strong></div></div>`;
             $("#div-alert-dineroInterno").html(alertError);
             return;
         }
         dinero = aporte;
-        centro = $('#centroInterno').val()
+        centro = $("#centroInterno").val();
     } else {
         if (aporte == "" || aporte == null) {
             alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe ingresar el monto de dinero aportado por externos.</strong></div></div>`;
             $("#div-alert-recursos").html(alertError);
             return;
         }
-        if($('#centroInterno').val() == null || $('#centroInterno').val() == ''){
+        if (
+            $("#centroInterno").val() == null ||
+            $("#centroInterno").val() == ""
+        ) {
             alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe seleccionar un centro de costo asociado.</strong></div></div>`;
             $("#div-alert-recursos").html(alertError);
             return;
         }
-        centro = $('#centroInterno').val()
+        centro = $("#centroInterno").val();
         dinero = aporte;
     }
     // petición para guardar/actualizar el monto de dinero aportado por la entidad
@@ -322,20 +322,20 @@ function creaDinero(enti_codigo) {
     $("#entidadD").html("");
     $("#cetnroCostosInterno").val("").change();
     $("#entidadDinero").val(enti_codigo);
-    if(enti_codigo == 1){
-        $("#entidadD").html("Intitución")
-    }else{
-        $("#entidadD").html("Externo")
+    if (enti_codigo == 1) {
+        $("#entidadD").html("Intitución");
+    } else {
+        $("#entidadD").html("Externo");
     }
     $("#modalDineroInterno").modal("show");
 }
 
-function listarDinero(){
+function listarDinero() {
     let inic_codigo = $("#codigo").val();
     let datosDinero, fila;
 
     $.ajax({
-        type:"GET",
+        type: "GET",
         url: "/admin/crear-iniciativa/listar-dinero",
         data: {
             iniciativa: inic_codigo,
@@ -348,21 +348,59 @@ function listarDinero(){
             cargarRecursos();
 
             datosDinero = respuesta.resultado;
-            datosDinero.forEach((registro)=>{
+            datosDinero.forEach((registro) => {
                 fila = `
                     <tr>
-                        <td>${registro.ceco_nombre}</td>
-                        <td>${registro.codi_valorizacion}</td>
+                        <td>${registro.ceco_nombre != null ? registro.ceco_nombre : 'Sin asociar'}</td>
+                        <td>
+                            $${new Intl.NumberFormat("es-CL", {
+                                    maximumSignificantDigits: 13,
+                                }).format(registro.codi_valorizacion)}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-icon btn-sm btn-danger"
+                            onclick="eliminarDinero(${registro.codi_codigo})">
+                            <i class="fas fa-trash"></i></button>
+                        </td>
                     </tr>
-                `
-                if(registro.enti_codigo == 1){
+                `;
+                if (registro.enti_codigo == 1) {
                     $("#tabla-empresa-dinero").append(fila);
                 } else {
                     $("#tabla-externo-dinero").append(fila);
                 }
-            })
-        }
-    })
+            });
+        },
+    });
+}
+
+function eliminarDinero(codi_codigo) {
+    let alertError, alertExito;
+    $("#div-alert-recursos").html("");
+    $.ajax({
+        type: "POST",
+        url: "/admin/crear-iniciativa/eliminar-dinero",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: {
+            codi_codigo: codi_codigo,
+        },
+        success: function (resEliminar) {
+            respuesta = JSON.parse(resEliminar);
+            if (!respuesta.estado) {
+                alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
+                $("#div-alert-recursos").html(alertError);
+                return;
+            }
+            alertExito = `<div class="alert alert-success alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
+            listarDinero();
+            $("#div-alert-recursos").html(alertExito);
+        },
+        error: function (error) {
+            //console.error(error);
+        },
+    });
 }
 
 function crearInfra(enti_codigo) {
@@ -377,8 +415,7 @@ function crearInfra(enti_codigo) {
     // petición para consultar los tipos de infraestructura disponibles
     $.ajax({
         type: "GET",
-        url:
-            "/admin/crear-iniciativa/listar-tipoinfra",
+        url: "/admin/crear-iniciativa/listar-tipoinfra",
         success: function (resListar) {
             $("#codigoinfra").find("option").not(":first").remove();
             $("#codigoinfra").prop("selectedIndex", 0);
@@ -410,8 +447,7 @@ function buscarTipoInfra() {
     // petición para consultar información del tipo infraestructura seleccionada
     $.ajax({
         type: "GET",
-        url:
-            "/admin/crear-iniciativa/buscar-tipoinfra",
+        url: "/admin/crear-iniciativa/buscar-tipoinfra",
         data: {
             tipoinfra: tinf_codigo,
         },
@@ -445,8 +481,7 @@ function guardarInfra() {
     // petición para guardar infraestructura aportada por la entidad
     $.ajax({
         type: "POST",
-        url:
-            "/admin/crear-iniciativa/guardar-infraestructura",
+        url: "/admin/crear-iniciativa/guardar-infraestructura",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -482,9 +517,7 @@ function listarInfraestructura() {
 
     $.ajax({
         type: "GET",
-        url:
-
-            "/admin/crear-iniciativa/listar-infraestructura",
+        url: "/admin/crear-iniciativa/listar-infraestructura",
         data: {
             iniciativa: inic_codigo,
         },
@@ -505,33 +538,30 @@ function listarInfraestructura() {
 
             datosInfra = respuesta.resultado;
             datosInfra.forEach((registro) => {
-                fila =
-                    "<tr>" +
-                    "<td>" +
-                    registro.tinf_nombre +
-                    "</td>" +
-                    "<td>" +
-                    registro.coin_horas +
-                    "</td>" +
-                    "<td>" +
-                    registro.coin_cantidad +
-                    "</td>" +
-                    "<td>" +
-                    "$" +
-                    new Intl.NumberFormat("es-CL", {
-                        maximumSignificantDigits: 13,
-                    }).format(registro.coin_valorizacion) +
-                    "</td>" +
-                    "<td>" +
-                    '<button type="button" class="btn btn-icon btn-sm btn-danger" onclick="eliminarInfraestructura(' +
-                    registro.inic_codigo +
-                    ", " +
-                    registro.enti_codigo +
-                    ", " +
-                    registro.tinf_codigo +
-                    ')"><i class="fas fa-trash"></i></button>' +
-                    "</td>" +
-                    "</tr>";
+                fila = `
+                        <tr>
+                            <td>${registro.tinf_nombre}</td>
+                            <td>${registro.ceco_nombre != null ? registro.ceco_nombre : 'Sin asociar'}</td>
+                            <td>${registro.coin_horas}</td>
+                            <td>${registro.coin_cantidad}</td>
+                            <td>
+                                $${new Intl.NumberFormat("es-CL", {
+                                    maximumSignificantDigits: 13,
+                                }).format(registro.coin_valorizacion)}
+                            </td>
+                            <td>
+                                <button
+                                    type="button"
+                                    class="btn btn-icon btn-sm btn-danger"
+                                    onclick="eliminarInfraestructura(${registro.inic_codigo}, ${
+                                        registro.enti_codigo
+                                    }, ${registro.tinf_codigo})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+
                 if (registro.enti_codigo == 1)
                     $("#tabla-empresa-infra").append(fila);
                 else $("#tabla-externo-infra").append(fila);
@@ -550,8 +580,7 @@ function eliminarInfraestructura(inic_codigo, enti_codigo, tiin_codigo) {
     // petición para eliminar una infraestructura aportada por la entidad
     $.ajax({
         type: "POST",
-        url:
-            "/admin/crear-iniciativa/eliminar-infraestructura",
+        url: "/admin/crear-iniciativa/eliminar-infraestructura",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -577,20 +606,26 @@ function eliminarInfraestructura(inic_codigo, enti_codigo, tiin_codigo) {
     });
 }
 
-function editarInfraestructura(inic_codigo, enti_codigo, tinf_codigo, coin_horas, coin_cantidad) {
+function editarInfraestructura(
+    inic_codigo,
+    enti_codigo,
+    tinf_codigo,
+    coin_horas,
+    coin_cantidad
+) {
     // Asignar los valores a los campos del modal
-    $('#editar-iniccodigo').val(inic_codigo);
-    $('#editar-entidadinfra').val(enti_codigo);
-    $('#editar-tipoinfra').val(tinf_codigo);
-    $('#editar-codigoinfra').val(tinf_codigo);
-    $('#editar-horasinfra').val(coin_horas);
-    $('#editar-cantidadinfra').val(coin_cantidad);
+    $("#editar-iniccodigo").val(inic_codigo);
+    $("#editar-entidadinfra").val(enti_codigo);
+    $("#editar-tipoinfra").val(tinf_codigo);
+    $("#editar-codigoinfra").val(tinf_codigo);
+    $("#editar-horasinfra").val(coin_horas);
+    $("#editar-cantidadinfra").val(coin_cantidad);
 
     // Llamar a la función para mostrar el nombre de la infraestructura basado en el tinf_codigo
     mostrarNombreInfraestructura(tinf_codigo);
 
     // Mostrar el modal
-    $('#modalEditarInfraestructura').modal('show');
+    $("#modalEditarInfraestructura").modal("show");
 }
 
 function crearRrhh(enti_codigo) {
@@ -607,7 +642,6 @@ function crearRrhh(enti_codigo) {
         type: "GET",
         url: "/admin/crear-iniciativa/listar-tiporrhh",
         success: function (resListar) {
-
             $("#codigorrhh").find("option").not(":first").remove();
             $("#codigorrhh").prop("selectedIndex", 0);
             datosRrhh = JSON.parse(resListar);
@@ -672,8 +706,7 @@ function guardarRrhh() {
     // petición para guardar RRHH aportado por la entidad
     $.ajax({
         type: "POST",
-        url:
-            "/admin/crear-iniciativa/guardar-rrhh",
+        url: "/admin/crear-iniciativa/guardar-rrhh",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -732,33 +765,26 @@ function listarRrhh() {
             datosRrhh = respuesta.resultado;
 
             datosRrhh.forEach((registro) => {
-                fila =
-                    "<tr>" +
-                    "<td>" +
-                    registro.trrhh_nombre +
-                    "</td>" +
-                    "<td>" +
-                    registro.corh_horas +
-                    "</td>" +
-                    "<td>" +
-                    registro.corh_cantidad +
-                    "</td>" +
-                    "<td>" +
-                    "$" +
-                    new Intl.NumberFormat("es-CL", {
-                        maximumSignificantDigits: 13,
-                    }).format(registro.corh_valorizacion) +
-                    "</td>" +
-                    "<td>" +
-                    '<button type="button" class="btn btn-icon btn-sm btn-danger" onclick="eliminarRrhh(' +
-                    registro.inic_codigo +
-                    ", " +
-                    registro.enti_codigo +
-                    ", " +
-                    registro.trrhh_codigo +
-                    ')"><i class="fas fa-trash"></i></button>' +
-                    "</td>" +
-                    "</tr>";
+            fila = `
+                <tr>
+                    <td>${registro.trrhh_nombre}</td>
+                    <td>${registro.ceco_nombre != null ? registro.ceco_nombre : 'Sin asociar'}</td>
+                    <td>${registro.corh_horas}</td>
+                    <td>${registro.corh_cantidad}</td>
+                    <td>
+                        $${new Intl.NumberFormat("es-CL", { maximumSignificantDigits: 13 }).format(registro.corh_valorizacion)}
+                    </td>
+                    <td>
+                        <button
+                            type="button"
+                            class="btn btn-icon btn-sm btn-danger"
+                            onclick="eliminarRrhh(${registro.inic_codigo}, ${registro.enti_codigo}, ${registro.trrhh_codigo})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+
                 if (registro.enti_codigo == 1)
                     $("#tabla-empresa-rrhh").append(fila);
                 else $("#tabla-externo-rrhh").append(fila);
@@ -770,20 +796,27 @@ function listarRrhh() {
     });
 }
 
-function editarRrhh(inic_codigo, enti_codigo, trrhh_codigo, corh_horas, corh_cantidad, corh_valorizacion) {
+function editarRrhh(
+    inic_codigo,
+    enti_codigo,
+    trrhh_codigo,
+    corh_horas,
+    corh_cantidad,
+    corh_valorizacion
+) {
     // Rellenar los campos del formulario con los valores seleccionados
-    $('#editar-iniccodigorrhh').val(inic_codigo);
-    $('#editar-entidadrrhh').val(enti_codigo);
-    $('#editar-codigorrhh').val(trrhh_codigo);  // Tipo RRHH ahora es editable
-    $('#editar-horasrrhh').val(corh_horas);
-    $('#editar-cantidadhh').val(corh_cantidad);
-    $('#editar-valorrrhh').val(corh_valorizacion);
+    $("#editar-iniccodigorrhh").val(inic_codigo);
+    $("#editar-entidadrrhh").val(enti_codigo);
+    $("#editar-codigorrhh").val(trrhh_codigo); // Tipo RRHH ahora es editable
+    $("#editar-horasrrhh").val(corh_horas);
+    $("#editar-cantidadhh").val(corh_cantidad);
+    $("#editar-valorrrhh").val(corh_valorizacion);
 
     // Llamar a la función para mostrar el nombre de la infraestructura basado en el tinf_codigo
     mostrarNombreRrhh(trrhh_codigo);
 
     // Mostrar el modal de edición
-    $('#modalEditarRrhh').modal('show');
+    $("#modalEditarRrhh").modal("show");
 }
 
 function eliminarRrhh(inic_codigo, enti_codigo, trrhh_codigo) {
@@ -793,8 +826,7 @@ function eliminarRrhh(inic_codigo, enti_codigo, trrhh_codigo) {
     // petición para eliminar un RRHH aportado por la entidad
     $.ajax({
         type: "POST",
-        url:
-            "/admin/crear-iniciativa/eliminar-rrhh",
+        url: "/admin/crear-iniciativa/eliminar-rrhh",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
