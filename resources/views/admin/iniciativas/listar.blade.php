@@ -538,6 +538,8 @@
         }
     </script>
     <script>
+        const role = '{{ $role }}';
+        console.log(role);
          var amacData = @json($amac);
          var amacObj = {};
         amacData.forEach(function(amac) {
@@ -664,14 +666,16 @@
                     orderable: false,
                     searchable: false,
                     render: function(data, type, row) {
-                        var editUrl = '{{ route('admin.editar.paso1', ':codigo') }}'.replace(':codigo', row.inic_codigo);
+                        var editUrl = '{{ route('admin.editar.paso1', ':codigo') }}'.replace(':codigo', row.inic_codigo).replace('admin', role);
+                        console.log(editUrl);
+
                         var deleteUrl = `javascript:void(0)`;
-                        var detailsUrl = '{{ route('admin.iniciativas.detalles', ':codigo') }}'.replace(':codigo', row.inic_codigo);
+                        var detailsUrl = '{{ route('admin.iniciativas.detalles', ':codigo') }}'.replace(':codigo', row.inic_codigo).replace('admin', role);
                         var calcularUrl = `javascript:void(0)`;
-                        var coberturaUrl = '{{ route('admin.cobertura.index', ':codigo') }}'.replace(':codigo', row.inic_codigo);
-                        var resultadosUrl = '{{ route('admin.resultados.listado', ':codigo') }}'.replace(':codigo', row.inic_codigo);
-                        var evidenciasUrl = '{{ route('admin.evidencias.listar', ':codigo') }}'.replace(':codigo', row.inic_codigo);
-                        var evaluarUrl = evaluaRuta.replace(':codigo', row.inic_codigo);
+                        var coberturaUrl = '{{ route('admin.cobertura.index', ':codigo') }}'.replace(':codigo', row.inic_codigo).replace('admin', role);
+                        var resultadosUrl = '{{ route('admin.resultados.listado', ':codigo') }}'.replace(':codigo', row.inic_codigo).replace('admin', role);
+                        var evidenciasUrl = '{{ route('admin.evidencias.listar', ':codigo') }}'.replace(':codigo', row.inic_codigo).replace('admin', role);
+                        var evaluarUrl = evaluaRuta.replace(':codigo', row.inic_codigo).replace('admin', role);
 
                         console.log(evaluarUrl);
 

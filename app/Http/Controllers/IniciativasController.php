@@ -213,6 +213,126 @@ class IniciativasController extends Controller
         return view('admin.iniciativas.listar', compact('iniciativas', 'sedes', 'tiac', 'amac'));
     }
 
+    public function listarIniciativasDigitador(Request $request)
+    {
+        $role = $this->getUserRole();
+        $iniciativas = $this->getIniciativasQuery($request);
+
+        if ($request->ajax()) {
+            // Aplicar filtros
+            if ($request->sede != 'all' && $request->sede != null) {
+                $iniciativas = $iniciativas->where('sedes.sede_codigo', $request->sede);
+            }
+            if ($request->tiac != 'all' && $request->tiac != null) {
+                $iniciativas = $iniciativas->where('tipo_actividades.tiac_codigo', $request->tiac);
+            }
+            if ($request->amac != 'all' && $request->amac != null) {
+                $iniciativas = $iniciativas->where('iniciativas.amac_codigo', $request->amac);
+            }
+
+            if ($request->estadoInput != 'all' && $request->estadoInput != null) {
+                $iniciativas = $iniciativas->where('iniciativas.inic_estado', $request->estadoInput);
+            }
+
+            // Total records before GROUP BY
+            $recordsTotal = $iniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
+
+            // Page Length
+            $pageNumber = ($request->start / $request->length) + 1;
+            $pageLength = $request->length;
+            $skip       = ($pageNumber - 1) * $pageLength;
+
+            // Search
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+
+                $iniciativas->where(function ($query) use ($search) {
+                    $query->where('iniciativas.inic_nombre', 'like', "%{$search}%")
+                        ->orWhere('iniciativas.inic_codigo', 'like', "%{$search}%")
+                        ->orWhere('mecanismos.meca_nombre', 'like', "%{$search}%")
+                        //->orWhere('componentes.comp_nombre', 'like', "%{$search}%")
+                        ->orWhere('tipo_actividades.tiac_nombre', 'like', "%{$search}%");
+                });
+            }
+
+            // Total records after applying the search filter
+            $recordsFiltered = $iniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
+
+            // Page Order
+            $orderColumnIndex = $request->order[0]['column'] ?? '0';
+            $orderBy = $request->order[0]['dir'] ?? 'desc';
+            $orderByName = 'name';
+
+            switch ($orderColumnIndex) {
+                case '0':
+                    $orderByName = 'iniciativas.inic_codigo';
+                    break;
+                case '1':
+                    $orderByName = 'iniciativas.inic_nombre';
+                    break;
+                case '2':
+                    $orderByName = 'carreras';
+                    break;
+                case '3':
+                    $orderByName = 'iniciativas.amac_codigo';
+                    break;
+                    // case '4':
+                    //     $orderByName = 'amacs';
+                    //     break;
+                case '4':
+                    $orderByName = 'tipo_actividades.tiac_nombre';
+                    break;
+                case '5':
+                    $orderByName = 'sedes';
+                    break;
+                case '6':
+                    $orderByName = 'iniciativas.inic_estado';
+                    break;
+                case '7':
+                    $orderByName = 'inic_creado';
+                    break;
+            }
+
+            $iniciativas = $iniciativas
+                ->groupBy(
+                    'iniciativas.meca_codigo',
+                    'iniciativas.inic_codigo',
+                    'componentes.comp_nombre',
+                    'iniciativas.inic_nombre',
+                    'iniciativas.amac_codigo',
+                    'iniciativas.inic_estado',
+                    'mecanismos.meca_nombre',
+                    'inic_creado',
+                    'tipo_actividades.tiac_nombre',
+                );
+
+            //quitar duplicados
+            $iniciativas = $iniciativas->distinct();
+
+            $iniciativas = $iniciativas
+                ->orderBy($orderByName, $orderBy);
+
+            $iniciativas = $iniciativas
+                ->skip($skip)
+                ->take($pageLength)
+                ->get();
+
+            return response()->json([
+                "draw" => $request->draw,
+                "recordsTotal" => $recordsTotal,
+                "recordsFiltered" => $recordsFiltered,
+                'data' => $iniciativas
+            ], 200);
+        }
+
+        // No AJAX, renderizar vista
+        $sedes = Sedes::select('sede_codigo', 'sede_nombre')->orderBy('sede_nombre', 'asc')->get();
+        $tiac = TipoActividades::select('tiac_codigo', 'tiac_nombre')->get();
+        $amac = AmbitosAccion::select('amac_codigo', 'amac_nombre')->get();
+
+        return view('digitador.iniciativas.listar', compact('iniciativas', 'sedes', 'tiac', 'amac'));
+    }
+
     public function confirmarSeccionCorregido($inic_codigo, $seccion)
     {
 

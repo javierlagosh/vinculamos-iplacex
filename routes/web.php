@@ -82,6 +82,7 @@ Route::get('reportes', [DashboardController::class, 'reportes'])->name('reportes
 
 Route::post('dashboard/sedes-datos', [DashboardController::class, 'sedesDatos']);
 Route::post('dashboard/componentes-datos', [DashboardController::class, 'componentesDatos']);
+Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
 
 Route::middleware('verificar.admin')->group(function () {
 
@@ -281,8 +282,8 @@ Route::middleware('verificar.admin')->group(function () {
 
 
     //TODO: Inicio de rutas para iniciativas
-    Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
-    Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
+
+    //Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
     Route::get('admin/iniciativas/{inic_codigo}/detalles', [IniciativasController::class, 'mostrarDetalles'])->name('admin.iniciativas.detalles');
     Route::get('admin/iniciativas/{inic_codigo}/pdf', [IniciativasController::class, 'mostrarPDF'])->name('admin.iniciativas.pdf');
     Route::get('admin/iniciativas/{inic_codigo}/listar/resultado',[IniciativasController::class,'listadoResultados'])->name('admin.resultados.listado');
