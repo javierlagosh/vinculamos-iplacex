@@ -26,7 +26,7 @@ class GPTController extends Controller
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
-            'OpenAI-Beta' => 'assistants=v1'
+            'OpenAI-Beta' => 'assistants=v2'
         ])->post('https://api.openai.com/v1/threads', []);
 
 
@@ -51,7 +51,7 @@ class GPTController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
-                'OpenAI-Beta' => 'assistants=v1'
+                'OpenAI-Beta' => 'assistants=v2'
             ])->post("https://api.openai.com/v1/threads/{$threadId}/messages", $data);
 
             // Verifica si la solicitud fue exitosa
@@ -66,7 +66,7 @@ class GPTController extends Controller
                 $responseRun = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
                     'Content-Type' => 'application/json',
-                    'OpenAI-Beta' => 'assistants=v1'
+                    'OpenAI-Beta' => 'assistants=v2'
                 ])->post("https://api.openai.com/v1/threads/{$threadId}/runs", $runData);
 
                 // Verifica si la solicitud fue exitosa
@@ -91,7 +91,7 @@ class GPTController extends Controller
                         // Obtener el resultado
                         $resultResponse = Http::withHeaders([
                             'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
-                            'OpenAI-Beta' => 'assistants=v1',
+                            'OpenAI-Beta' => 'assistants=v2'
                         ])->get("https://api.openai.com/v1/threads/{$threadId}/messages");
 
                         if ($resultResponse->successful()) {
@@ -154,14 +154,13 @@ class GPTController extends Controller
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
-            'OpenAI-Beta' => 'assistants=v1'
+            'OpenAI-Beta' => 'assistants=v2'
         ])->post('https://api.openai.com/v1/threads', []);
 
 
         // Verifica si la solicitud fue exitosa
         if ($response->successful()) {
             $responseData = $response->json();
-
 
 
             // Verifica si el array contiene el thread_id
@@ -181,7 +180,7 @@ class GPTController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
-                'OpenAI-Beta' => 'assistants=v1'
+                'OpenAI-Beta' => 'assistants=v2'
             ])->post("https://api.openai.com/v1/threads/{$threadId}/messages", $data);
 
             // Verifica si la solicitud fue exitosa
@@ -196,7 +195,7 @@ class GPTController extends Controller
                 $responseRun = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
                     'Content-Type' => 'application/json',
-                    'OpenAI-Beta' => 'assistants=v1'
+                    'OpenAI-Beta' => 'assistants=v2'
                 ])->post("https://api.openai.com/v1/threads/{$threadId}/runs", $runData);
 
 
@@ -222,7 +221,7 @@ class GPTController extends Controller
                         // Obtener el resultado
                         $resultResponse = Http::withHeaders([
                             'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
-                            'OpenAI-Beta' => 'assistants=v1',
+                            'OpenAI-Beta' => 'assistants=v2',
                         ])->get("https://api.openai.com/v1/threads/{$threadId}/messages");
 
 
@@ -261,8 +260,8 @@ class GPTController extends Controller
 
 
         } else {
-            // Si la solicitud falla, puedes manejar el error aquí
-            return "Error: " . $response->status();
+
+            return "Error: " . $response;
         }
 
     }
@@ -273,7 +272,7 @@ class GPTController extends Controller
 
         $responseStatus = Http::withHeaders([
             'Authorization' => 'Bearer ' . $OPENAI_API_KEY,
-            'OpenAI-Beta' => 'assistants=v1',
+            'OpenAI-Beta' => 'assistants=v2'
         ])->get('https://api.openai.com/v1/threads/' . $threadId . '/runs/' . $RunId);
 
         if ($responseStatus->successful()) {
