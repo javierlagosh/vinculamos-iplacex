@@ -95,7 +95,7 @@
                                             <button class="btn btn-warning dropdown-toggle" id="dropdownMenuButton2"
                                                 data-toggle="dropdown"> Agenda 2030</button>
                                             <div class="dropdown-menu dropright">
-                                            <a href="{{ route($role . '.iniciativas.agendaods', $iniciativa->inic_codigo) }}"
+                                            <a href="{{ route('admin.iniciativas.agendaods', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon" data-toggle="tooltip"
                                                 data-placement="top" title="Agenda 2030"><i
                                                     class="fas  fa-star-half"></i> Contribucion externa</a>

@@ -60,11 +60,16 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route('admin.ingresar.donaciones')}}">Ingresar donación</a></li> --}}
             </ul>
         </li>
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
         <li class="dropdown">
             <a href="{{route('reportes.ver')}}" class="nav-link">
                 <i data-feather="bar-chart-2" id="saludo"></i><span>Reportes</span></a>
         </li>
         @endif
+
         <li class="{{ Route::is('admin.listar.sedes') ||
             Route::is('admin.listar.escuelas')||
             Route::is('admin.listar.carreras')||
@@ -108,6 +113,7 @@
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.subgrupos")}}">Sub-Grupos de interés</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.rrhh")}}">Tipos de RRHH</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tipoinfra")}}">Tipos de Infraestructuras</a></li>
+                <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.ccostos")}}">Centro de costos</a></li>
                 {{-- <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.tipoiniciativa")}}">Tipos de iniciativa</a></li> --}}
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.unidades")}}">Unidades</a></li>
                 <li><a style="font-size: 90%;" class="nav-link" href="{{route("admin.listar.subunidades")}}">SubUnidades</a></li>

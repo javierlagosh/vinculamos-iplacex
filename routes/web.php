@@ -82,6 +82,7 @@ Route::get('reportes', [DashboardController::class, 'reportes'])->name('reportes
 
 Route::post('dashboard/sedes-datos', [DashboardController::class, 'sedesDatos']);
 Route::post('dashboard/componentes-datos', [DashboardController::class, 'componentesDatos']);
+Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
 
 Route::middleware('verificar.admin')->group(function () {
 
@@ -157,6 +158,12 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/crear-asignatura/', [ParametrosController::class, 'crearAsignatura'])->name('admin.crear.asignatura');
     Route::put('admin/editar-carreras/{asignatura_id}', [ParametrosController::class, 'actualizarAsignatura'])->name('admin.actualizar.asignatura');
     Route::delete('admin/eliminar-asignatura/', [ParametrosController::class, 'eliminarAsignatura'])->name('admin.eliminar.asignatura');
+
+    //Centro de costos
+    Route::get('admin/listar-centro-costos', [ParametrosController::class, 'listarCentroCostos'])->name('admin.listar.ccostos');
+    Route::post('admin/crear-centro-costos', [ParametrosController::class, 'crearCentroCostos'])->name('admin.crear.ccostos');
+    Route::put('admin/editar-centro-costos/{ceco_codigo}', [ParametrosController::class, 'actualizarCentroCostos'])->name('admin.actualizar.ccostos');
+    Route::delete('admin/eliminar-centro-costos/', [ParametrosController::class, 'eliminarCentroCosotos'])->name('admin.eliminar.ccostos');
 
     //Centro de simulacion
     Route::get('admin/listar-centro-simulacion', [ParametrosController::class, 'listarCentroSimulacion'])->name('admin.listar.centro-simulacion');
@@ -275,8 +282,8 @@ Route::middleware('verificar.admin')->group(function () {
 
 
     //TODO: Inicio de rutas para iniciativas
-    Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
-    Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
+
+    //Route::get('admin/iniciativas/listar', [IniciativasController::class, 'listarIniciativas'])->name('admin.iniciativa.listar');
     Route::get('admin/iniciativas/{inic_codigo}/detalles', [IniciativasController::class, 'mostrarDetalles'])->name('admin.iniciativas.detalles');
     Route::get('admin/iniciativas/{inic_codigo}/pdf', [IniciativasController::class, 'mostrarPDF'])->name('admin.iniciativas.pdf');
     Route::get('admin/iniciativas/{inic_codigo}/listar/resultado',[IniciativasController::class,'listadoResultados'])->name('admin.resultados.listado');
@@ -297,8 +304,11 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/iniciativa/eliminar-resultado', [IniciativasController::class, 'eliminarResultado'])->name('admin.resultado.eliminar');
     // TODO: PASO 3
     Route::get('admin/iniciativa/{inic_codigo}/editar/paso3', [IniciativasController::class, 'editarPaso3'])->name('admin.editar.paso3');
+    Route::get('admin/iniciativa/{inic_codigo}/crear/paso3', [IniciativasController::class, 'crearPaso3'])->name('admin.crear.paso3');
     Route::post('admin/crear-iniciativa/guardar-dinero', [IniciativasController::class, 'guardarDinero'])->name('admin.dinero.guardar');
     Route::get('admin/crear-iniciativa/consultar-dinero', [IniciativasController::class, 'consultarDinero'])->name('admin.dinero.consultar');
+    Route::get('admin/crear-iniciativa/listar-dinero', [IniciativasController::class, 'listarDinero']);
+    Route::post('admin/crear-iniciativa/eliminar-dinero', [IniciativasController::class, 'eliminarDinero']);
     Route::get('admin/crear-iniciativa/buscar-tipoinfra', [IniciativasController::class, 'buscarTipoInfra'])->name('admin.tipoinfra.buscar');
     Route::get('admin/crear-iniciativa/listar-tipoinfra', [IniciativasController::class, 'listarTipoInfra'])->name('admin.tipoinfra.listar');
     Route::post('admin/crear-iniciativa/guardar-infraestructura', [IniciativasController::class, 'guardarInfraestructura'])->name('admin.infra.guardar');
@@ -556,3 +566,8 @@ Route::get('evaluaciones/{evatotal_encriptado}/qr', [IniciativasController::clas
 
 
 Route::post('/recuperar/send-email', [ForgotPasswordController::class, 'sendRecoveryEmail'])->name('enviar.correo.recuperacion');
+
+Route::post('admin/iniciativas/{inic_codigo}/seccion/{seccion}/ok', [IniciativasController::class, 'confirmarSeccionOk']);
+Route::post('admin/iniciativas/{inic_codigo}/seccion/{seccion}/corregido', [IniciativasController::class, 'confirmarSeccionCorregido']);
+Route::get('admin/iniciativas-estado/{inic_codigo}', [IniciativasController::class, 'obtenerEstado'])->name('admin.iniciativas.estado');
+Route::post('admin/iniciativas/{inic_codigo}/seccion/{seccion}/falta-info', [IniciativasController::class, 'faltaInfoSeccion']);

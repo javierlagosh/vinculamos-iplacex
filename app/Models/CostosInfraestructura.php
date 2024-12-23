@@ -15,6 +15,7 @@ class CostosInfraestructura extends Model {
     protected $fillable = [
         'inic_codigo',
         'enti_codigo',
+        'ceco_codigo',
         'tinf_codigo',
         'coin_horas',
         'coin_cantidad',

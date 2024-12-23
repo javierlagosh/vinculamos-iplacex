@@ -425,12 +425,13 @@ function crearInfra(enti_codigo) {
     $('#codigoinfra').val('');
     $('#horasinfra').val('')
     $('#valorinfra').val('');
+    $('#centroCostos').val('').change();
     $('#entidadinfra').val(enti_codigo);
 
     // petición para consultar los tipos de infraestructura disponibles
     $.ajax({
         type: 'GET',
-        url: window.location.origin+'/digitador/crear-iniciativa/listar-tipoinfra',
+        url: `${window.location.origin}/digitador/crear-iniciativa/listar-tipoinfra`,
         success: function(resListar) {
             $('#codigoinfra').find('option').not(':first').remove();
             $('#codigoinfra').prop('selectedIndex', 0);
@@ -480,6 +481,7 @@ function buscarTipoInfra() {
 function guardarInfra() {
     let inic_codigo = $('#codigo').val();
     let enti_codigo = $('#entidadinfra').val();
+    let ceco_codigo = $('#centroCostos').val();
     let tiin_codigo = $('#codigoinfra').val();
     let coin_horas = $('#horasinfra').val();
     let respuesta, alertError, alertExito;
@@ -496,6 +498,7 @@ function guardarInfra() {
         data: {
             iniciativa: inic_codigo,
             entidad: enti_codigo,
+            centro: ceco_codigo,
             tipoinfra: tiin_codigo,
             horas: coin_horas
         },
@@ -600,6 +603,7 @@ function crearRrhh(enti_codigo) {
     let datosRrhh;
     $('#div-alert-rrhh').html('');
     $('#codigorrhh').val('');
+    $('#centroCostos').val('').change();
     $('#horasrrhh').val('')
     $('#valorrrhh').val('');
     $('#entidadrrhh').val(enti_codigo);
@@ -657,6 +661,7 @@ function buscarTipoRrhh() {
 function guardarRrhh() {
     let inic_codigo = $('#codigo').val();
     let enti_codigo = $('#entidadrrhh').val();
+    let ceco_codigo = $('#centroRrhh').val();
     let tirh_codigo = $('#codigorrhh').val();
     let corh_horas = $('#horasrrhh').val();
     let respuesta, alertError, alertExito;
@@ -673,6 +678,7 @@ function guardarRrhh() {
         data: {
             iniciativa: inic_codigo,
             entidad: enti_codigo,
+            centro: ceco_codigo,
             tiporrhh: tirh_codigo,
             horas: corh_horas
         },

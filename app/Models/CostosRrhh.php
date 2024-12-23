@@ -15,6 +15,7 @@ class CostosRrhh extends Model {
     protected $fillable = [
         'inic_codigo',
         'enti_codigo',
+        'ceco_codigo',
         'trrhh_codigo',
         'corh_horas',
         'corh_cantidad',
